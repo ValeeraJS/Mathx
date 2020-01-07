@@ -1,2 +1,2 @@
-# Mathambly
+# Mathembly
 Math + WebAssembly = Mathembly
