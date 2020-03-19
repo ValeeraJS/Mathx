@@ -1,4 +1,4 @@
-export default interface IColor3 {
+export default interface IRGBColor {
     r: number;
     g: number;
     b: number;

@@ -61,4 +61,12 @@ export default class RGBColor implements IRGBColor {
             return this.fromHex(ColorName[str]);
         }
     }
+
+    toJson() {
+        return {
+            r: this.r,
+            g: this.g,
+            b: this.b
+        };
+    }
 }
