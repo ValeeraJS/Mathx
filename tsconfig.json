@@ -9,7 +9,7 @@
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,
 		"noImplicitAny": true,
-		"target": "esnext",
+		"target": "es2020",
 		"lib": [
 			"dom",
 			"es2017"
