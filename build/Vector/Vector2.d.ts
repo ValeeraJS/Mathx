@@ -62,8 +62,8 @@ export default class Vector2 implements IVector2 {
     toArray(arr?: number[]): number[];
     toJson(json?: IVector2): IVector2;
     toPalorJson(p?: {
-        r: number;
         a: number;
+        r: number;
     }): IPolar;
     toString(): string;
 }

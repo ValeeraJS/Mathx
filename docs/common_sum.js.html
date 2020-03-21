@@ -244,7 +244,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="polar_interfaces_IPolar.js.html">Source: polar/interfaces/IPolar.js</h1>
+        <h1 class="page-title" data-filename="common_sum.js.html">Source: common/sum.js</h1>
         
 
 
@@ -252,17 +252,29 @@
     <section>
         <header>
             <div class="header content-size">
-                <h2>polar/interfaces/IPolar.js</h2>
+                <h2>common/sum.js</h2>
             </div>
         </header>
         <article>
             <pre id="source-code" class="prettyprint source linenums"><code>"use strict";
-/**
- * 极坐标接口
- * @memberof Mathx
- * @interface Mathx.IPolar
- */
 exports.__esModule = true;
+var sumArray_1 = require("./sumArray");
+/**
+ * @function sum
+ * @desc 求参数之和
+ * @see sumArray
+ * @param {number[]} arr
+ * @returns {number} 和
+ * @example Mathx.sumArray(1, 2, 3); // 6;
+ * Mathx.sumArray(1, 2, 3, 4, 5); // 15;
+ */
+exports["default"] = (function () {
+    var arr = [];
+    for (var _i = 0; _i &lt; arguments.length; _i++) {
+        arr[_i] = arguments[_i];
+    }
+    return sumArray_1["default"](arr);
+});
 </code></pre>
         </article>
     </section>

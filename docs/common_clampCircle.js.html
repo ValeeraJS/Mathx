@@ -244,7 +244,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="polar_interfaces_IPolar.js.html">Source: polar/interfaces/IPolar.js</h1>
+        <h1 class="page-title" data-filename="common_clampCircle.js.html">Source: common/clampCircle.js</h1>
         
 
 
@@ -252,17 +252,28 @@
     <section>
         <header>
             <div class="header content-size">
-                <h2>polar/interfaces/IPolar.js</h2>
+                <h2>common/clampCircle.js</h2>
             </div>
         </header>
         <article>
             <pre id="source-code" class="prettyprint source linenums"><code>"use strict";
-/**
- * 极坐标接口
- * @memberof Mathx
- * @interface Mathx.IPolar
- */
 exports.__esModule = true;
+var floorToZero_1 = require("./floorToZero");
+var circle;
+/**
+ * @function clampCircle
+ * @desc 将目标值限定在指定周期区间内。假定min小于等于max才能得到正确的结果。
+ * @param {number} val 目标值
+ * @param {number} min 最小值，必须小于等于max
+ * @param {number} max 最大值，必须大于等于min
+ * @returns {number} 限制之后的值
+ * @example Mathx.clampCircle(3 * Math.PI, 0, 2 * Math.PI); // Math.PI;
+ * Mathx.clampCircle(2 * Math.PI, -Math.PI, Math.PI); // 0;
+ */
+exports["default"] = (function (val, min, max) {
+    circle = max - min;
+    return floorToZero_1["default"](min / circle) * circle + (val % circle);
+});
 </code></pre>
         </article>
     </section>

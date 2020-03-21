@@ -244,7 +244,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="polar_interfaces_IPolar.js.html">Source: polar/interfaces/IPolar.js</h1>
+        <h1 class="page-title" data-filename="common_sumArray.js.html">Source: common/sumArray.js</h1>
         
 
 
@@ -252,17 +252,29 @@
     <section>
         <header>
             <div class="header content-size">
-                <h2>polar/interfaces/IPolar.js</h2>
+                <h2>common/sumArray.js</h2>
             </div>
         </header>
         <article>
             <pre id="source-code" class="prettyprint source linenums"><code>"use strict";
-/**
- * 极坐标接口
- * @memberof Mathx
- * @interface Mathx.IPolar
- */
 exports.__esModule = true;
+var len = 0, sum = 0;
+/**
+ * @function sumArray
+ * @desc 求数组的和
+ * @see sum
+ * @param {number[]} arr
+ * @returns {number} 和
+ * @example Mathx.sumArray([1, 2, 3]); // 6;
+ */
+exports["default"] = (function (arr) {
+    sum = 0;
+    len = arr.length;
+    for (var i = 0; i &lt; len; i++) {
+        sum += arr[i];
+    }
+    return sum;
+});
 </code></pre>
         </article>
     </section>

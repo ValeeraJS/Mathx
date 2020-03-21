@@ -25,7 +25,7 @@
 		"build-closure": "google-closure-compiler --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT_NEXT --js build/Mathx.js --js_output_file build/Mathx.min.js",
 		"build-closure-legacy": "google-closure-compiler --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs scripts/externs.js --language_in=ECMASCRIPT5 --js build/Mathx.legacy.js --js_output_file build/Mathx.legacy.min.js",
 		"build-all": "npm run build && npm run build-legacy && npm run build-closure && npm run build-closure-legacy",
-		"build-docs": "yarn run tsc && jsdoc -c jsdoc.json",
+		"docs": "yarn run tsc && jsdoc -c jsdoc.json",
 		"tsc": "tsc src/index.ts",
 		"start": "npm run dev",
 		"lint": "eslint src --ext js --ext ts",

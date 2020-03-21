@@ -5,6 +5,123 @@
 }(this, (function (exports) { 'use strict';
 
 	/**
+	 * @function clamp
+	 * @desc 将目标值限定在指定区间内。假定min小于等于max才能得到正确的结果。
+	 * @see clampSafe
+	 * @param {number} val 目标值
+	 * @param {number} min 最小值，必须小于等于max
+	 * @param {number} max 最大值，必须大于等于min
+	 * @returns {number} 限制之后的值
+	 * @example Mathx.clamp(1, 0, 2); // 1;
+	 * Mathx.clamp(-1, 0, 2); // 0;
+	 * Mathx.clamp(3, 0, 2); // 2;
+	 */
+	var clamp = (val, min, max) => {
+	    return Math.max(min, Math.min(max, val));
+	};
+
+	/**
+	 * @function floorToZero
+	 * @desc 以0为中心取整
+	 * @param {number} num 数值
+	 * @return {number} 取整之后的结果
+	 * @example Mathx.roundToZero(0.8 ); // 0;
+	 * Mathx.roundToZero(-0.8); // 0;
+	 * Mathx.roundToZero(-1.1); // -1;
+	 */
+	var floorToZero = (num) => {
+	    return num < 0 ? Math.ceil(num) : Math.floor(num);
+	};
+
+	let circle;
+	/**
+	 * @function clampCircle
+	 * @desc 将目标值限定在指定周期区间内。假定min小于等于max才能得到正确的结果。
+	 * @param {number} val 目标值
+	 * @param {number} min 最小值，必须小于等于max
+	 * @param {number} max 最大值，必须大于等于min
+	 * @returns {number} 限制之后的值
+	 * @example Mathx.clampCircle(3 * Math.PI, 0, 2 * Math.PI); // Math.PI;
+	 * Mathx.clampCircle(2 * Math.PI, -Math.PI, Math.PI); // 0;
+	 */
+	var clampCircle = (val, min, max) => {
+	    circle = max - min;
+	    return floorToZero(min / circle) * circle + (val % circle);
+	};
+
+	/**
+	 * @function clampSafe
+	 * @desc 与clamp函数功能一样，将目标值限定在指定区间内。但此函数是安全的，不要求第二个参数必须小于第三个参数
+	 * @see clamp
+	 * @param {number} val 目标值
+	 * @param {number} a 区间中一个最值
+	 * @param {number} b 区间中另一个最值
+	 * @returns {number} 限制之后的值
+	 * @example Mathx.clamp(1, 0, 2); // 1;
+	 * Mathx.clamp(1, 2, 0); // 1;
+	 * Mathx.clamp(-1, 0, 2); // 0;
+	 * Mathx.clamp(-1, 2, 0); // 0;
+	 * Mathx.clamp(3, 0, 2); // 2;
+	 * Mathx.clamp(3, 2, 0); // 2;
+	 */
+	var clampSafe = (val, a, b) => {
+	    if (a > b) {
+	        return Math.max(b, Math.min(a, val));
+	    }
+	    else if (b > a) {
+	        return Math.max(a, Math.min(b, val));
+	    }
+	    return a;
+	};
+
+	const EPSILON = Math.pow(2, -52);
+
+	/**
+	 * @function closeTo
+	 * @desc 判断一个数是否在另一个数的邻域内，通常用于检验浮点计算是否精度在EPSILON以内
+	 * @param {number} val 需要判断的数值
+	 * @param {number} target 目标数值
+	 * @param {number} [epsilon = Number.EPSILON] 邻域半径
+	 * @example Mathx.closeTo(0.1 + 0.2, 0.3); // true;
+	 * Mathx.clamp(2, 3, 1); // true;
+	 * Mathx.clamp(2, 3, 0.5); // false;
+	 */
+	var closeTo = (val, target, epsilon = EPSILON) => {
+	    return Math.abs(val - target) <= epsilon;
+	};
+
+	let len = 0, sum = 0;
+	/**
+	 * @function sumArray
+	 * @desc 求数组的和
+	 * @see sum
+	 * @param {number[]} arr
+	 * @returns {number} 和
+	 * @example Mathx.sumArray([1, 2, 3]); // 6;
+	 */
+	var sumArray = (arr) => {
+	    sum = 0;
+	    len = arr.length;
+	    for (let i = 0; i < len; i++) {
+	        sum += arr[i];
+	    }
+	    return sum;
+	};
+
+	/**
+	 * @function sum
+	 * @desc 求参数之和
+	 * @see sumArray
+	 * @param {number[]} arr
+	 * @returns {number} 和
+	 * @example Mathx.sumArray(1, 2, 3); // 6;
+	 * Mathx.sumArray(1, 2, 3, 4, 5); // 15;
+	 */
+	var sum$1 = (...arr) => {
+	    return sumArray(arr);
+	};
+
+	/**
 	 * @class
 	 * @classdesc 极坐标
 	 * @implements {Mathx.IPolar}
@@ -181,77 +298,7 @@
 	    }
 	}
 
-	/**
-	 * @function clamp
-	 * @desc 将目标值限定在指定区间内。假定min小于等于max才能得到正确的结果。
-	 * @see clampSafe
-	 * @param {number} val 目标值
-	 * @param {number} min 最小值，必须小于等于max
-	 * @param {number} max 最大值，必须大于等于min
-	 * @returns {number} 限制之后的值
-	 * @example Mathx.clamp(1, 0, 2); // 1;
-	 * Mathx.clamp(-1, 0, 2); // 0;
-	 * Mathx.clamp(3, 0, 2); // 2;
-	 */
-	var clamp = (val, min, max) => {
-	    return Math.max(min, Math.min(max, val));
-	};
-
-	/**
-	 * @function clampSafe
-	 * @desc 与clamp函数功能一样，将目标值限定在指定区间内。但此函数是安全的，不要求第二个参数必须小于第三个参数
-	 * @see clamp
-	 * @param {number} val 目标值
-	 * @param {number} a 区间中一个最值
-	 * @param {number} b 区间中另一个最值
-	 * @returns {number} 限制之后的值
-	 * @example Mathx.clamp(1, 0, 2); // 1;
-	 * Mathx.clamp(1, 2, 0); // 1;
-	 * Mathx.clamp(-1, 0, 2); // 0;
-	 * Mathx.clamp(-1, 2, 0); // 0;
-	 * Mathx.clamp(3, 0, 2); // 2;
-	 * Mathx.clamp(3, 2, 0); // 2;
-	 */
-	var clampSafe = (val, a, b) => {
-	    if (a > b) {
-	        return Math.max(b, Math.min(a, val));
-	    }
-	    else if (b > a) {
-	        return Math.max(a, Math.min(b, val));
-	    }
-	    return a;
-	};
-
-	const EPSILON = Math.pow(2, -52);
-
-	/**
-	 * @function closeTo
-	 * @desc 判断一个数是否在另一个数的邻域内，通常用于检验浮点计算是否精度在EPSILON以内
-	 * @param {number} val 需要判断的数值
-	 * @param {number} target 目标数值
-	 * @param {number} [epsilon = Number.EPSILON] 邻域半径
-	 * @example Mathx.closeTo(0.1 + 0.2, 0.3); // true;
-	 * Mathx.clamp(2, 3, 1); // true;
-	 * Mathx.clamp(2, 3, 0.5); // false;
-	 */
-	var closeTo = (val, target, epsilon = EPSILON) => {
-	    return Math.abs(val - target) <= epsilon;
-	};
-
-	/**
-	 * @function floorToZero
-	 * @desc 以0为中心取整
-	 * @param {number} num 数值
-	 * @return {number} 取整之后的结果
-	 * @example Mathx.roundToZero(0.8 ); // 0;
-	 * Mathx.roundToZero(-0.8); // 0;
-	 * Mathx.roundToZero(-1.1); // -1;
-	 */
-	var floorToZero = (num) => {
-	    return num < 0 ? Math.ceil(num) : Math.floor(num);
-	};
-
-	let len, x, y, c, s;
+	let len$1, x, y, c, s;
 	/**
 	 * @class
 	 * @classdesc 二维向量
@@ -280,8 +327,8 @@
 	        return this;
 	    }
 	    addVectors(...vecArr) {
-	        len = vecArr.length;
-	        for (let i = 0; i < len; i++) {
+	        len$1 = vecArr.length;
+	        for (let i = 0; i < len$1; i++) {
 	            this.add(vecArr[i]);
 	        }
 	        return this;
@@ -305,8 +352,8 @@
 	        return this;
 	    }
 	    clampLength(min, max) {
-	        len = this.length();
-	        return this.divideScalar(len || 1).multiplyScalar(clamp(len, min, max));
+	        len$1 = this.length();
+	        return this.divideScalar(len$1 || 1).multiplyScalar(clamp(len$1, min, max));
 	    }
 	    clampScalar(min, max) {
 	        this.x = clamp(this.x, min, max);
@@ -412,8 +459,8 @@
 	        return this;
 	    }
 	    minusVectors(...vecArr) {
-	        len = vecArr.length;
-	        for (let i = 0; i < len; i++) {
+	        len$1 = vecArr.length;
+	        for (let i = 0; i < len$1; i++) {
 	            this.minus(vecArr[i]);
 	        }
 	        return this;
@@ -476,7 +523,7 @@
 	        json.y = this.y;
 	        return json;
 	    }
-	    toPalorJson(p = { r: 0, a: 0 }) {
+	    toPalorJson(p = { a: 0, r: 0 }) {
 	        p.r = this.length();
 	        p.a = this.angle();
 	        return p;
@@ -497,6 +544,13 @@
 	exports.Polar = Polar;
 	exports.Vector2 = Vector2;
 	exports.Vector3 = Vector3;
+	exports.clamp = clamp;
+	exports.clampCircle = clampCircle;
+	exports.clampSafe = clampSafe;
+	exports.closeTo = closeTo;
+	exports.floorToZero = floorToZero;
+	exports.sum = sum$1;
+	exports.sumArray = sumArray;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 

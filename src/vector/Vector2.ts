@@ -317,7 +317,7 @@ export default class Vector2 implements IVector2 {
 		return json;
 	}
 
-	public toPalorJson(p = {r: 0, a: 0}): IPolar {
+	public toPalorJson(p = { a: 0, r: 0 }): IPolar {
 		p.r = this.length();
 		p.a = this.angle();
 
