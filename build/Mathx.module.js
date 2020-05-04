@@ -292,6 +292,18 @@ class Polar {
     }
 }
 
+var rndFloat = (low, high) => {
+    return low + Math.random() * (high - low);
+};
+
+var rndFloatRange = (range) => {
+    return range * (0.5 - Math.random());
+};
+
+var rndInt = (low, high) => {
+    return low + Math.floor(Math.random() * (high - low + 1));
+};
+
 let len$1, x, y, c, s;
 /**
  * @class
@@ -535,5 +547,5 @@ class Vector2 {
 class Vector3 {
 }
 
-export { Polar, Vector2, Vector3, clamp, clampCircle, clampSafe, closeTo, floorToZero, sum$1 as sum, sumArray };
+export { Polar, Vector2, Vector3, clamp, clampCircle, clampSafe, closeTo, floorToZero, rndFloat, rndFloatRange, rndInt, sum$1 as sum, sumArray };
 //# sourceMappingURL=Mathx.module.js.map

@@ -298,6 +298,18 @@
 	    }
 	}
 
+	var rndFloat = (low, high) => {
+	    return low + Math.random() * (high - low);
+	};
+
+	var rndFloatRange = (range) => {
+	    return range * (0.5 - Math.random());
+	};
+
+	var rndInt = (low, high) => {
+	    return low + Math.floor(Math.random() * (high - low + 1));
+	};
+
 	let len$1, x, y, c, s;
 	/**
 	 * @class
@@ -549,6 +561,9 @@
 	exports.clampSafe = clampSafe;
 	exports.closeTo = closeTo;
 	exports.floorToZero = floorToZero;
+	exports.rndFloat = rndFloat;
+	exports.rndFloatRange = rndFloatRange;
+	exports.rndInt = rndInt;
 	exports.sum = sum$1;
 	exports.sumArray = sumArray;
 

@@ -6,7 +6,7 @@
 	"repository": "ValeeraJS/Mathx",
 	"jsnext:main": "build/Mathx.module.js",
 	"module": "build/Mathx.module.js",
-	"types": "build/Mathx.d.ts",
+	"types": "build/index.d.ts",
 	"files": [
 		"build",
 		"LICENSE",
