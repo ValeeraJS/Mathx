@@ -12,5 +12,6 @@ export default class RGBColor implements IRGBColor {
     fromHex(hex: number): this;
     fromScalar(scalar: number): this;
     fromString(str: string): this;
+    set(r?: number, g?: number, b?: number): this;
     toJson(): IRGBColor;
 }

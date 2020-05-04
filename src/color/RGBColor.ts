@@ -64,6 +64,14 @@ export default class RGBColor implements IRGBColor {
 		return this;
 	}
 
+	public set(r = 0, g = 0, b = 0) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+
+		return this;
+	}
+
 	public toJson(): IRGBColor {
 		return {
 			b: this.b,

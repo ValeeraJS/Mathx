@@ -68,7 +68,7 @@ export default class RGBAColor implements IRGBAColor {
 		this.r = scalar;
 		this.g = scalar;
 		this.b = scalar;
-		this.a = a
+		this.a = a;
 
 		return this;
 	}
@@ -77,6 +77,15 @@ export default class RGBAColor implements IRGBAColor {
 		if (str in ColorName) {
 			return this.fromHex(ColorName[str]);
 		}
+		this.a = a;
+
+		return this;
+	}
+
+	public set(r = 0, g = 0, b = 0, a = 1): this {
+		this.r = r;
+		this.g = g;
+		this.b = b;
 		this.a = a;
 
 		return this;

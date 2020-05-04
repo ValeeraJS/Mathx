@@ -795,11 +795,6 @@ escape-string-regexp@^2.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
   integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
 
-eslint-config-alloy@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-alloy/-/eslint-config-alloy-3.6.0.tgz#86bb9663730de7f5cc664d0427ff5eba1986a398"
-  integrity sha512-6sI8cCGrcPwP14OMANTQhJSQo9SsW45zRBBs4hrjeGDXHlNlSmpbR3ETPsTbqfKodl28ICIcW3zQ7C+6Cw0W1w==
-
 eslint-config-valeera@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/eslint-config-valeera/-/eslint-config-valeera-0.1.1.tgz#0d6694974f42d284e4f6b536fa7307a719680aec"
