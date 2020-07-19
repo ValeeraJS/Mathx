@@ -1,11 +1,59 @@
-import IVector3 from "./interfaces/IVector3";
-/**
- * @classdesc 三维向量
- * @class
- * @name Mathx.Vector3
- */
-export default class Vector3 implements IVector3 {
-    x: number;
-    y: number;
-    z: number;
+import IVector3, { IVector3Data } from "./interfaces/IVector3";
+import { IMatrix4Data } from "../matrix/interfaces/IMatrix4";
+import { IMatrix3Data } from "../matrix/interfaces/IMatrix3";
+import { IQuaternionData } from "../quaternion/interfaces/IQuaternion";
+export default class Vector3 extends Float32Array implements IVector3 {
+    readonly isVector3 = true;
+    readonly length = 3;
+    constructor(x?: number, y?: number, z?: number);
+    get x(): number;
+    set x(val: number);
+    get y(): number;
+    set y(val: number);
+    get z(): number;
+    set z(val: number);
 }
+export declare const add: (a: IVector3Data, b: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const addScalar: (a: IVector3Data, b: number, out?: IVector3Data) => IVector3Data;
+export declare const angle: (a: IVector3Data, b: IVector3Data) => number;
+export declare const clamp: (a: IVector3Data, min: IVector3Data, max: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const clampSafe: (a: IVector3Data, min: IVector3Data, max: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const clampScalar: (a: IVector3Data, min: number, max: number, out?: IVector3Data) => IVector3Data;
+export declare const clone: (a: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const closeTo: (a: IVector3Data, b: IVector3Data) => boolean;
+export declare const cross: (a: IVector3Data, b: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const divide: (a: IVector3Data, b: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const divideScalar: (a: IVector3Data, b: number, out?: IVector3Data) => IVector3Data;
+export declare const dot: (a: IVector3Data, b: IVector3Data) => number;
+export declare const equals: (a: IVector3Data, b: IVector3Data) => boolean;
+export declare const from: (a: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const fromArray: (a: ArrayLike<number>, offset?: number, out?: IVector3Data) => IVector3Data;
+export declare const fromScalar: (num: number, out?: IVector3Data) => IVector3Data;
+export declare const fromValues: (x: number, y: number, z: number, out?: IVector3Data) => IVector3Data;
+export declare const hermite: (a: IVector3Data, b: IVector3Data, c: IVector3Data, d: IVector3Data, t: number, out?: IVector3Data) => IVector3Data;
+export declare const inverse: (a: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const length: (a: IVector3Data) => number;
+export declare const lengthManhattan: (a: IVector3Data) => number;
+export declare const lengthSquared: (a: IVector3Data) => number;
+export declare const lerp: (a: IVector3Data, b: IVector3Data, alpha: number, out?: IVector3Data) => IVector3Data;
+export declare const minus: (a: IVector3Data, b: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const minusScalar: (a: IVector3Data, b: number, out?: IVector3Data) => IVector3Data;
+export declare const multiplyScalar: (a: IVector3Data, scalar: number, out?: IVector3Data) => IVector3Data;
+export declare const normalize: (a: IVector3Data, out?: IVector3Data) => IVector3Data;
+export declare const rotateX: (a: IVector3Data, b: IVector3Data, rad: number, out: IVector3Data) => IVector3Data;
+export declare const rotateY: (a: IVector3Data, b: IVector3Data, rad: number, out: IVector3Data) => IVector3Data;
+export declare const rotateZ: (a: IVector3Data, b: IVector3Data, rad: number, out: IVector3Data) => IVector3Data;
+export declare const set: (x?: number, y?: number, z?: number, out?: IVector3Data) => IVector3Data;
+export declare const setLength: (a: IVector3Data, len: number, out?: IVector3Data) => IVector3Data;
+export declare const slerp: (a: IVector3Data, b: IVector3Data, t: number, out?: IVector3Data) => IVector3Data;
+export declare const toString: (a: IVector3Data) => string;
+export declare const transformMatrix3: (a: IVector3Data, m: IMatrix3Data, out: IVector3Data) => IVector3Data;
+export declare function transformMatrix4(a: IVector3Data, m: IMatrix4Data, out?: IVector3Data): IVector3Data;
+export declare const transformQuat: (a: IVector3Data, q: IQuaternionData, out?: IVector3Data) => IVector3Data;
+export declare const VECTOR3_ZERO: Vector3;
+export declare const VECTOR3_Top: Vector3;
+export declare const VECTOR3_Bottom: Vector3;
+export declare const VECTOR3_Left: Vector3;
+export declare const VECTOR3_RIGHT: Vector3;
+export declare const VECTOR3_FRONT: Vector3;
+export declare const VECTOR3_BACK: Vector3;

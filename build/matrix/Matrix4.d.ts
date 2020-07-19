@@ -1,0 +1,35 @@
+import IMatrix4, { IMatrix4Data } from "./interfaces/IMatrix4";
+import { IVector3 } from "../vector";
+import { IQuaternionData } from "../quaternion/interfaces/IQuaternion";
+import { IVector3Data } from "../vector/interfaces/IVector3";
+export declare const UNIT_MATRIX_DATA: IMatrix4Data;
+export default class Matrix4 extends Float32Array implements IMatrix4 {
+    readonly isMatrix4 = true;
+    readonly length: 16;
+    static readonly UNIT_MATRIX: Readonly<Matrix4>;
+    constructor(data?: IMatrix4Data);
+}
+export declare const create: () => Matrix4;
+export declare const determinant: (a: IMatrix4Data) => number;
+export declare const from: (a: IMatrix4Data, out?: IMatrix4Data) => IMatrix4Data;
+export declare function fromQuaternion(q: IQuaternionData, out: IMatrix4Data): IMatrix4Data;
+export declare const fromRotation: (rad: number, axis: IVector3, out: IMatrix4Data) => IMatrix4Data | null;
+export declare const fromRotationX: (rad: number, out: IMatrix4Data) => IMatrix4Data;
+export declare const fromRotationY: (rad: number, out: IMatrix4Data) => IMatrix4Data;
+export declare const fromRotationZ: (rad: number, out: IMatrix4Data) => IMatrix4Data;
+export declare const fromScaling: (v: IVector3, out?: IMatrix4Data) => IMatrix4Data;
+export declare const fromTranslation: (v: IVector3, out?: IMatrix4Data) => IMatrix4Data;
+export declare const identity: (out?: IMatrix4Data) => IMatrix4Data;
+export declare function invert(a: IMatrix4Data, out?: IMatrix4Data): IMatrix4Data | null;
+export declare const lookAt: (eye: IVector3Data, center: IVector3Data, up: IVector3Data, out: IMatrix4Data) => IMatrix4Data;
+export declare const multiply: (a: IMatrix4Data, b: IMatrix4Data, out?: IMatrix4Data) => IMatrix4Data;
+export declare const orthogonal: (left: number, right: number, bottom: number, top: number, near: number, far: number, out: IMatrix4Data) => IMatrix4Data;
+export declare const perspective: (fovy: number, aspect: number, near: number, far: number, out: IMatrix4Data) => IMatrix4Data;
+export declare const rotate: (a: IMatrix4Data, rad: number, axis: IVector3, out: IMatrix4Data) => IMatrix4Data | null;
+export declare const rotateX: (a: IMatrix4Data, rad: number, out: IMatrix4Data) => IMatrix4Data;
+export declare function rotateY(a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatrix4Data;
+export declare const rotateZ: (a: IMatrix4Data, rad: number, out: IMatrix4Data) => IMatrix4Data;
+export declare const scale: (a: IMatrix4Data, v: IVector3, out?: IMatrix4Data) => IMatrix4Data;
+export declare const targetTo: (eye: IVector3Data, target: IVector3Data, up: IVector3Data, out?: IMatrix4Data) => IMatrix4Data;
+export declare const translate: (a: IMatrix4Data, v: IVector3, out?: IMatrix4Data) => IMatrix4Data;
+export declare const transpose: (a: IMatrix4Data, out?: IMatrix4Data) => IMatrix4Data;

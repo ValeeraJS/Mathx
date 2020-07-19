@@ -1,4 +1,4 @@
-declare const ColorName: {
+declare const COLOR_HEX_MAP: {
     [key: string]: number;
 };
-export default ColorName;
+export default COLOR_HEX_MAP;

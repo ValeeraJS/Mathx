@@ -1,0 +1,32 @@
+import IMatrix3, { IMatrix3Data } from "./interfaces/IMatrix3";
+import IVector2 from "../vector/interfaces/IVector2";
+export declare const UNIT_MATRIX3_DATA: IMatrix3Data;
+export default class Matrix3 extends Float32Array implements IMatrix3 {
+    readonly isMatrix3 = true;
+    readonly length = 9;
+    static readonly UNIT_MATRIX: Readonly<Matrix3>;
+    constructor(data?: IMatrix3Data);
+}
+export declare const cofactor00: (a: IMatrix3Data) => number;
+export declare const cofactor01: (a: IMatrix3Data) => number;
+export declare const cofactor02: (a: IMatrix3Data) => number;
+export declare const cofactor10: (a: IMatrix3Data) => number;
+export declare const cofactor11: (a: IMatrix3Data) => number;
+export declare const cofactor12: (a: IMatrix3Data) => number;
+export declare const cofactor20: (a: IMatrix3Data) => number;
+export declare const cofactor21: (a: IMatrix3Data) => number;
+export declare const cofactor22: (a: IMatrix3Data) => number;
+export declare const create: () => IMatrix3Data;
+export declare const determinant: (a: IMatrix3Data) => number;
+export declare const from: (arr: ArrayLike<number>, out?: IMatrix3Data) => IMatrix3Data;
+export declare const fromMatrix4: (mat4: IMatrix3Data, out?: IMatrix3Data) => IMatrix3Data;
+export declare const fromRotation: (rad: number, out?: IMatrix3Data) => IMatrix3Data;
+export declare const fromScaling: (v: IVector2, out: IMatrix3Data) => IMatrix3Data;
+export declare function fromTranslation(v: IVector2, out?: IMatrix3Data): IMatrix3Data;
+export declare const identity: (out?: IMatrix3Data) => IMatrix3Data;
+export declare const invert: (a: IMatrix3Data, out: IMatrix3Data) => IMatrix3Data | null;
+export declare const multiply: () => (a: IMatrix3Data, b: IMatrix3Data, out?: IMatrix3Data) => IMatrix3Data;
+export declare const rotate: (a: IMatrix3Data, rad: number, out?: IMatrix3Data) => IMatrix3Data;
+export declare function scale(a: IMatrix3Data, v: IVector2, out?: IMatrix3Data): IMatrix3Data;
+export declare const translate: (a: IMatrix3Data, v: IVector2, out?: IMatrix3Data) => IMatrix3Data;
+export declare const transpose: (a: IMatrix3Data, out?: IMatrix3Data) => IMatrix3Data;

@@ -1,69 +1,68 @@
-import IPolar from "../polar/interfaces/IPolar";
-import IVector2 from "./interfaces/IVector2";
-/**
- * @class
- * @classdesc 二维向量
- * @implements {Mathx.IVector2}
- * @name Mathx.Vector2
- * @desc 极坐标，遵守数学右手定则。规定逆时针方向为正方向。
- * @param {number} [x=0] | 距离极点距离
- * @param {number} [y=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
- */
-export default class Vector2 implements IVector2 {
-    static create(x?: number, y?: number): Vector2;
-    x: number;
-    y: number;
+import { IPolar } from "../polar";
+import IVector2, { IVector2Data, IVector2Json } from "./interfaces/IVector2";
+import IMatrix3 from "../matrix/interfaces/IMatrix3";
+export default class Vector2 extends Float32Array implements IVector2 {
+    readonly isVector2 = true;
+    readonly length = 2;
     constructor(x?: number, y?: number);
-    add(vec2: IVector2): this;
-    addScalar(num: number): this;
-    addVectors(...vecArr: IVector2[]): this;
-    angle(): number;
-    ceil(): this;
-    clamp(min: IVector2, max: IVector2): this;
-    clampSafe(min: IVector2, max: IVector2): this;
-    clampLength(min: number, max: number): this;
-    clampScalar(min: number, max: number): this;
-    closeTo(vec2: IVector2, epsilon?: number): boolean;
-    closeToRect(vec2: IVector2, epsilon?: number): boolean;
-    closeToManhattan(vec2: IVector2, epsilon?: number): boolean;
-    clone(): Vector2;
-    cross(vec2: IVector2): number;
-    distanceTo(vec2: IVector2): number;
-    distanceToManhattan(vec2: IVector2): number;
-    distanceToSquared(vec2: IVector2): number;
-    divide(v: IVector2): this;
-    divideScalar(scalar: number): this;
-    dot(vec2: IVector2): number;
-    equals(vec2: IVector2): boolean;
-    floor(): this;
-    from(vec2: IVector2): this;
-    fromArray(arr: number[], index?: number): this;
-    fromPolar(p: IPolar): this;
-    fromScalar(value?: number): this;
-    length(): number;
-    lengthManhattan(): number;
-    lengthSquared(): number;
-    lerp(vec2: IVector2, alpha: number): this;
-    max(vec2: IVector2): this;
-    min(vec2: IVector2): this;
-    minus(vec2: IVector2): this;
-    minusScalar(num: number): this;
-    minusVectors(...vecArr: IVector2[]): this;
-    multiplyScalar(scalar: number): this;
-    negate(): this;
-    normalize(): this;
-    rotate(angle: number, center?: IVector2): this;
-    round(): this;
-    floorToZero(): this;
-    set(x?: number, y?: number): this;
-    setLength(length: number): this;
-    setX(x?: number): this;
-    setY(y?: number): this;
-    toArray(arr?: number[]): number[];
-    toJson(json?: IVector2): IVector2;
-    toPalorJson(p?: {
-        a: number;
-        r: number;
-    }): IPolar;
-    toString(): string;
+    get x(): number;
+    set x(val: number);
+    get y(): number;
+    set y(val: number);
 }
+export declare const add: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const addScalar: (a: IVector2Data, b: number, out?: IVector2Data) => IVector2Data;
+export declare const angle: (a: IVector2Data) => number;
+export declare const ceil: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const clamp: (a: IVector2Data, min: IVector2Data, max: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const clampSafe: (a: IVector2Data, min: IVector2, max: IVector2, out?: IVector2Data) => IVector2Data;
+export declare const clampLength: (a: IVector2Data, min: IVector2, max: IVector2, out?: IVector2Data) => IVector2Data;
+export declare const clampScalar: (a: IVector2Data, min: number, max: number, out?: IVector2Data) => IVector2Data;
+export declare const closeTo: (a: IVector2Data, b: IVector2Data, epsilon?: number) => boolean;
+export declare const closeToRect: (a: IVector2Data, b: IVector2Data, epsilon?: number) => boolean;
+export declare const closeToManhattan: (a: IVector2Data, b: IVector2Data, epsilon?: number) => boolean;
+export declare const clone: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const cross: (a: IVector2Data, b: IVector2Data) => number;
+export declare const distanceTo: (a: IVector2Data, b: IVector2Data) => number;
+export declare const distanceToManhattan: (a: IVector2Data, b: IVector2Data) => number;
+export declare const distanceToSquared: (a: IVector2Data, b: IVector2Data) => number;
+export declare const divide: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const divideScalar: (a: IVector2Data, scalar: number, out?: IVector2Data) => IVector2Data;
+export declare const dot: (a: IVector2Data, b: IVector2Data) => number;
+export declare const equals: (a: IVector2Data, b: IVector2Data) => boolean;
+export declare const floor: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const floorToZero: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const from: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const fromArray: (arr: number[], index?: number, out?: IVector2Data) => IVector2Data;
+export declare const fromPolar: (p: IPolar, out?: IVector2Data) => IVector2Data;
+export declare const fromScalar: (value?: number, out?: IVector2Data) => IVector2Data;
+export declare const inverse: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const length: (a: IVector2Data) => number;
+export declare const lengthManhattan: (a: IVector2Data) => number;
+export declare const lengthSquared: (a: IVector2Data) => number;
+export declare const lerp: (a: IVector2Data, b: IVector2Data, alpha: number, out?: IVector2Data) => IVector2Data;
+export declare const max: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const min: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const minus: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const minusScalar: (a: IVector2Data, num: number, out?: IVector2Data) => IVector2Data;
+export declare const multiplyScalar: (a: IVector2Data, scalar: number, out?: IVector2Data) => IVector2Data;
+export declare const negate: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const normalize: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const random: (length?: number, out?: IVector2Data) => IVector2Data;
+export declare const rotate: (a: IVector2Data, angle: number, center?: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const round: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
+export declare const set: (x?: number, y?: number, out?: IVector2Data) => IVector2Data;
+export declare const setLength: (a: IVector2Data, length: number, out?: IVector2Data) => IVector2Data;
+export declare const toArray: (a: IVector2Data, arr?: number[]) => number[];
+export declare const toJson: (a: IVector2Data, json?: IVector2Json) => IVector2Json;
+export declare const toPalorJson: (a: IVector2Data, p?: {
+    a: number;
+    r: number;
+}) => IPolar;
+export declare const toString: (a: IVector2Data) => string;
+export declare const transformMatrix3: (a: IVector2Data, m: IMatrix3, out: IVector2Data) => IVector2Data;
+export declare const VECTOR2_ZERO: Vector2;
+export declare const VECTOR2_TOP: Vector2;
+export declare const VECTOR2_BOTTOM: Vector2;
+export declare const VECTOR2_LEFT: Vector2;
+export declare const VECTOR2_RIGHT: Vector2;

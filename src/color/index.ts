@@ -1,5 +1,5 @@
-export { default as ColorName } from "./ColorName";
-export { default as IRGBAColor } from "./interfaces/IRGBAColor";
-export { default as IRGBColor } from "./interfaces/IRGBColor";
-export { default as RGBAColor } from "./RGBAColor";
-export { default as RGBColor } from "./RGBColor";
+export { default as COLOR_HEX_MAP } from "./ColorName";
+export { default as IColorRGBA, IColorRGBAData, IColorRGBAJson } from "./interfaces/IColorRGBA";
+export { default as IColorRGB, IColorRGBData, IColorRGBJson } from "./interfaces/IColorRGB";
+export { default as ColorRGBA } from "./ColorRGBA";
+export { default as ColorRGB } from "./ColorRGB";

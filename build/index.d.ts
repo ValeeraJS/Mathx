@@ -1,5 +1,6 @@
 export * from "./color";
 export * from "./common";
-export * from "./polar";
+export * from "./matrix";
+export * from "./quaternion";
 export * from "./random";
 export * from "./vector";

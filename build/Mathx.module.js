@@ -1,4 +1,4 @@
-const ColorName = {
+const COLOR_HEX_MAP = {
     aliceblue: 0xF0F8FF,
     antiquewhite: 0xFAEBD7,
     aqua: 0x00FFFF,
@@ -149,140 +149,72 @@ const ColorName = {
     yellowgreen: 0x9ACD32
 };
 
-class RGBAColor {
-    constructor(r = 0, g = 0, b = 0, a = 1) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
+class ColorRGBA extends Uint8Array {
+    constructor(r = 0, g = 0, b = 0, a = 255) {
+        super(4);
+        this.length = 4;
+        this[0] = r;
+        this[1] = g;
+        this[2] = b;
+        this[3] = a;
     }
-    static create(r = 0, g = 0, b = 0, a = 1) {
-        return new RGBAColor(r, g, b, a);
+    get r() {
+        return this[0];
     }
-    clone() {
-        return new RGBAColor(this.r, this.g, this.b, this.a);
+    set r(val) {
+        this[0] = val;
     }
-    equals(color) {
-        return color.r === this.r && color.g === this.g && color.b === this.b && color.a === this.a;
+    get g() {
+        return this[1];
     }
-    from(color) {
-        this.r = color.r;
-        this.g = color.g;
-        this.b = color.b;
-        this.a = color.a;
-        return this;
+    set g(val) {
+        this[1] = val;
     }
-    fromRGB(color) {
-        this.r = color.r;
-        this.g = color.g;
-        this.b = color.b;
-        this.a = 1;
-        return this;
+    get b() {
+        return this[2];
     }
-    fromArray(array, offset = 0) {
-        this.r = array[offset];
-        this.g = array[offset + 1];
-        this.b = array[offset + 2];
-        this.a = array[offset + 3];
-        return this;
+    set b(val) {
+        this[2] = val;
     }
-    fromHex(hex, a = 1) {
-        this.r = hex >> 16;
-        this.g = hex >> 8 & 255;
-        this.b = hex & 255;
-        this.a = a;
-        return this;
+    get a() {
+        return this[3];
     }
-    fromScalar(scalar, a = 1) {
-        this.r = scalar;
-        this.g = scalar;
-        this.b = scalar;
-        this.a = a;
-        return this;
-    }
-    fromString(str, a = 1) {
-        if (str in ColorName) {
-            return this.fromHex(ColorName[str]);
-        }
-        this.a = a;
-        return this;
-    }
-    set(r = 0, g = 0, b = 0, a = 1) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
-        return this;
-    }
-    toJson() {
-        return {
-            r: this.r,
-            g: this.g,
-            b: this.b,
-            a: this.a
-        };
+    set a(val) {
+        this[3] = val;
     }
 }
 
-class RGBColor {
+class ColorRGB extends Uint8Array {
     constructor(r = 0, g = 0, b = 0) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
+        super(3);
+        this.length = 3;
+        this[0] = r;
+        this[1] = g;
+        this[2] = b;
     }
-    static create(r = 0, g = 0, b = 0) {
-        return new RGBColor(r, g, b);
+    get r() {
+        return this[0];
     }
-    clone() {
-        return new RGBColor(this.r, this.g, this.b);
+    set r(val) {
+        this[0] = val;
     }
-    equals(color) {
-        return color.r === this.r && color.g === this.g && color.b === this.b;
+    get g() {
+        return this[1];
     }
-    from(color) {
-        this.r = color.r;
-        this.g = color.g;
-        this.b = color.b;
-        return this;
+    set g(val) {
+        this[1] = val;
     }
-    fromArray(array, offset = 0) {
-        this.r = array[offset];
-        this.g = array[offset + 1];
-        this.b = array[offset + 2];
-        return this;
+    get b() {
+        return this[2];
     }
-    fromHex(hex) {
-        this.r = hex >> 16;
-        this.g = (hex >> 8) & 255;
-        this.b = hex & 255;
-        return this;
-    }
-    fromScalar(scalar) {
-        this.r = scalar;
-        this.g = scalar;
-        this.b = scalar;
-        return this;
-    }
-    fromString(str) {
-        if (str in ColorName) {
-            return this.fromHex(ColorName[str]);
-        }
-        return this;
-    }
-    set(r = 0, g = 0, b = 0) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        return this;
-    }
-    toJson() {
-        return {
-            b: this.b,
-            g: this.g,
-            r: this.r
-        };
+    set b(val) {
+        this[2] = val;
     }
 }
+
+var ceilPowerOfTwo = (value) => {
+    return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2));
+};
 
 /**
  * @function clamp
@@ -296,7 +228,7 @@ class RGBColor {
  * Mathx.clamp(-1, 0, 2); // 0;
  * Mathx.clamp(3, 0, 2); // 2;
  */
-var clamp = (val, min, max) => {
+var clampCommon = (val, min, max) => {
     return Math.max(min, Math.min(max, val));
 };
 
@@ -309,11 +241,11 @@ var clamp = (val, min, max) => {
  * Mathx.roundToZero(-0.8); // 0;
  * Mathx.roundToZero(-1.1); // -1;
  */
-var floorToZero = (num) => {
+var floorToZeroCommon = (num) => {
     return num < 0 ? Math.ceil(num) : Math.floor(num);
 };
 
-let circle;
+let circle, v;
 /**
  * @function clampCircle
  * @desc 将目标值限定在指定周期区间内。假定min小于等于max才能得到正确的结果。
@@ -326,7 +258,14 @@ let circle;
  */
 var clampCircle = (val, min, max) => {
     circle = max - min;
-    return floorToZero(min / circle) * circle + (val % circle);
+    v = floorToZeroCommon(min / circle) * circle + (val % circle);
+    if (v < min) {
+        return v + circle;
+    }
+    else if (v > max) {
+        return v - circle;
+    }
+    return v;
 };
 
 /**
@@ -344,7 +283,7 @@ var clampCircle = (val, min, max) => {
  * Mathx.clamp(3, 0, 2); // 2;
  * Mathx.clamp(3, 2, 0); // 2;
  */
-var clampSafe = (val, a, b) => {
+var clampSafeCommon = (val, a, b) => {
     if (a > b) {
         return Math.max(b, Math.min(a, val));
     }
@@ -366,8 +305,24 @@ const EPSILON = Math.pow(2, -52);
  * Mathx.clamp(2, 3, 1); // true;
  * Mathx.clamp(2, 3, 0.5); // false;
  */
-var closeTo = (val, target, epsilon = EPSILON) => {
+var closeToCommon = (val, target, epsilon = EPSILON) => {
     return Math.abs(val - target) <= epsilon;
+};
+
+var floorPowerOfTwo = (value) => {
+    return Math.pow(2, Math.floor(Math.log(value) / Math.LN2));
+};
+
+var isPowerOfTwo = (value) => {
+    return (value & (value - 1)) === 0 && value !== 0;
+};
+
+var randFloat = (min = 0, max = 1) => {
+    return min + Math.random() * (max - min);
+};
+
+var randInt = (min = 0, max = 1) => {
+    return min + Math.floor(Math.random() * (max - min + 1));
 };
 
 let len = 0, sum = 0;
@@ -401,180 +356,103 @@ var sum$1 = (...arr) => {
     return sumArray(arr);
 };
 
-/**
- * @class
- * @classdesc 极坐标
- * @implements {Mathx.IPolar}
- * @name Mathx.Polar
- * @desc 极坐标，遵守数学右手定则。规定逆时针方向为正方向。
- * @param {number} [r=0] | 距离极点距离
- * @param {number} [a=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
- */
-class Polar {
-    /**
-     * @public
-     * @member {number} Mathx.Polar.prototype.a
-     * @desc 旋转弧度
-     * @default 0
-     */
-    /**
-     * @public
-     * @member {number} Mathx.Polar.prototype.r
-     * @desc 距离
-     * @default 0
-     */
-    constructor(r = 0, a = 0) {
-        this.r = r;
-        this.a = a;
+const UNIT_MATRIX2_DATA = [
+    1, 0,
+    0, 1,
+];
+class Matrix2 extends Float32Array {
+    constructor(data = UNIT_MATRIX2_DATA) {
+        super(data);
+        this.isMatrix2 = true;
+        this.length = 4;
     }
-    /**
-     * @public
-     * @method create
-     * @memberof Mathx.Polar
-     * @desc 创建一个极坐标
-     * @param {number} [r=0] 距离
-     * @param {number} [a=0] 弧度
-     * @returns {Mathx.Polar} 新的极坐标实例
-     */
-    static create(r = 0, a = 0) {
-        return new Polar(r, a);
+}
+Matrix2.UNIT_MATRIX = new Matrix2();
+
+const UNIT_MATRIX3_DATA = [
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, 1
+];
+class Matrix3 extends Float32Array {
+    constructor(data = UNIT_MATRIX3_DATA) {
+        super(data);
+        this.isMatrix3 = true;
+        this.length = 9;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.distanceTo
-     * @desc 求该坐标到另一个极坐标的欧几里得距离
-     * @param {Mathx.IPolar} p | 目标极坐标
-     * @returns {number} 欧几里得距离
-     */
-    distanceTo(p) {
-        return Math.sqrt(this.distanceToSquared(p));
+}
+Matrix3.UNIT_MATRIX = new Matrix3();
+
+class Vector3 extends Float32Array {
+    constructor(x = 0, y = 0, z = 0) {
+        super(3);
+        this.isVector3 = true;
+        this.length = 3;
+        this[0] = x;
+        this[1] = y;
+        this[2] = z;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.distanceToManhattan
-     * @desc 求该坐标到另一个极坐标的曼哈顿距离
-     * @param {Mathx.IPolar} p | 目标极坐标
-     * @returns {number} 曼哈顿距离
-     */
-    distanceToManhattan({ r, a }) {
-        return Math.cos(a) * r - this.x() + Math.sin(a) * r - this.y();
+    get x() {
+        return this[0];
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.distanceToSquared
-     * @desc 求该坐标到另一个极坐标的欧几里得距离平方
-     * @param {Mathx.IPolar} p | 目标极坐标
-     * @returns {number} 欧几里得距离平方
-     */
-    distanceToSquared({ r, a }) {
-        return this.r * this.r + r * r - 2 * r * this.r * Math.cos(a - this.a);
+    set x(val) {
+        this[0] = val;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.fromVector2
-     * @desc 将一个二维向量数据转化为自身的极坐标值
-     * @param {Mathx.IVector2} vector2 | 二维向量
-     * @returns {number} this
-     */
-    fromVector2({ x, y }) {
-        this.r = Math.sqrt(x * x + y * y);
-        this.a = Math.atan2(y, x);
-        return this;
+    get y() {
+        return this[1];
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.lengthManhattan
-     * @desc 求自身离原点的曼哈顿距离
-     * @returns {number} 曼哈顿距离
-     */
-    lengthManhattan() {
-        return (Math.cos(this.a) + Math.sin(this.a)) * this.r;
+    set y(val) {
+        this[1] = val;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.set
-     * @desc 设置极坐标值
-     * @param {number} [r=0] 距离
-     * @param {number} [a=0] 弧度
-     * @returns {number} this
-     */
-    set(r = 0, a = 0) {
-        this.r = r;
-        this.a = a;
-        return this;
+    get z() {
+        return this[2];
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.setA
-     * @desc 设置极坐标的弧度
-     * @param {number} [a=0] 角度
-     * @returns {number} this
-     */
-    setA(a = 0) {
-        this.a = a;
-        return this;
+    set z(val) {
+        this[2] = val;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.setR
-     * @desc 设置极坐标的弧度
-     * @param {number} [r=0] 距离
-     * @returns {number} this
-     */
-    setR(r = 0) {
-        this.r = r;
-        return this;
+}
+const VECTOR3_ZERO = new Vector3(0, 0, 0);
+const VECTOR3_Top = new Vector3(0, 1, 0);
+const VECTOR3_Bottom = new Vector3(0, -1, 0);
+const VECTOR3_Left = new Vector3(-1, 0, 0);
+const VECTOR3_RIGHT = new Vector3(1, 0, 0);
+const VECTOR3_FRONT = new Vector3(0, 0, -1);
+const VECTOR3_BACK = new Vector3(0, 0, 1);
+
+let tmpVec3 = new Vector3();
+class Quaternion extends Float32Array {
+    constructor(x = 0, y = 0, z = 0, w = 1) {
+        super(4);
+        this.isQuaternion = true;
+        this.length = 4;
+        this[0] = x;
+        this[1] = y;
+        this[2] = z;
+        this[3] = w;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.toJson
-     * @desc 将极坐标转化为纯json对象，纯数据
-     * @param {IPolar} [json] 被修改的json对象，如果不传则会新创建json对象。
-     * @returns {Mathx.IPolar} json
-     */
-    toJson(json = { a: 0, r: 0 }) {
-        json.r = this.r;
-        json.a = this.a;
-        return json;
+    get x() {
+        return this[0];
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.toString
-     * @desc 将极坐标转化为字符串
-     * @returns {string} 形式为"(r, a)"的字符串
-     */
-    toString() {
-        return `(${this.r}, ${this.a})`;
+    set x(val) {
+        this[0] = val;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.toVector2Json
-     * @desc 将极坐标转化为二维向量的json形式，纯数据
-     * @param {IVector2} [json] 被修改的json对象，如果不传则会新创建json对象。
-     * @returns {IVector2} json
-     */
-    toVector2Json(vec2 = { x: 0, y: 0 }) {
-        vec2.x = this.x();
-        vec2.y = this.y();
-        return vec2;
+    get y() {
+        return this[1];
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.x
-     * @desc 获取极坐标对应二维向量的x的值
-     * @returns {number} x
-     */
-    x() {
-        return Math.cos(this.a) * this.r;
+    set y(val) {
+        this[1] = val;
     }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.y
-     * @desc 获取极坐标对应二维向量的y的值
-     * @returns {number} y
-     */
-    y() {
-        return Math.sin(this.a) * this.r;
+    get z() {
+        return this[2];
+    }
+    set z(val) {
+        this[2] = val;
+    }
+    get w() {
+        return this[3];
+    }
+    set w(val) {
+        this[3] = val;
     }
 }
 
@@ -590,248 +468,32 @@ var rndInt = (low, high) => {
     return low + Math.floor(Math.random() * (high - low + 1));
 };
 
-let len$1, x, y, c, s;
-/**
- * @class
- * @classdesc 二维向量
- * @implements {Mathx.IVector2}
- * @name Mathx.Vector2
- * @desc 极坐标，遵守数学右手定则。规定逆时针方向为正方向。
- * @param {number} [x=0] | 距离极点距离
- * @param {number} [y=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
- */
-class Vector2 {
+class Vector2 extends Float32Array {
     constructor(x = 0, y = 0) {
-        this.x = x;
-        this.y = y;
+        super(2);
+        this.isVector2 = true;
+        this.length = 2;
+        this[0] = x;
+        this[1] = y;
     }
-    static create(x = 0, y = 0) {
-        return new Vector2(x, y);
+    get x() {
+        return this[0];
     }
-    add(vec2) {
-        this.x += vec2.x;
-        this.y += vec2.y;
-        return this;
+    set x(val) {
+        this[0] = val;
     }
-    addScalar(num) {
-        this.x += num;
-        this.y += num;
-        return this;
+    get y() {
+        return this[1];
     }
-    addVectors(...vecArr) {
-        len$1 = vecArr.length;
-        for (let i = 0; i < len$1; i++) {
-            this.add(vecArr[i]);
-        }
-        return this;
-    }
-    angle() {
-        return Math.atan2(this.y, this.x);
-    }
-    ceil() {
-        this.x = Math.ceil(this.x);
-        this.y = Math.ceil(this.y);
-        return this;
-    }
-    clamp(min, max) {
-        this.x = clamp(this.x, min.x, max.x);
-        this.y = clamp(this.y, min.y, max.y);
-        return this;
-    }
-    clampSafe(min, max) {
-        this.x = clampSafe(this.x, min.x, max.x);
-        this.y = clampSafe(this.y, min.y, max.y);
-        return this;
-    }
-    clampLength(min, max) {
-        len$1 = this.length();
-        return this.divideScalar(len$1 || 1).multiplyScalar(clamp(len$1, min, max));
-    }
-    clampScalar(min, max) {
-        this.x = clamp(this.x, min, max);
-        this.y = clamp(this.y, min, max);
-        return this;
-    }
-    closeTo(vec2, epsilon = EPSILON) {
-        return this.distanceTo(vec2) <= epsilon;
-    }
-    closeToRect(vec2, epsilon = EPSILON) {
-        return closeTo(this.x, vec2.x, epsilon) && closeTo(this.y, vec2.y, epsilon);
-    }
-    closeToManhattan(vec2, epsilon = EPSILON) {
-        return this.distanceToManhattan(vec2) <= epsilon;
-    }
-    clone() {
-        return new Vector2(this.x, this.y);
-    }
-    cross(vec2) {
-        return this.x * vec2.y - this.y * vec2.x;
-    }
-    distanceTo(vec2) {
-        return Math.sqrt(this.distanceToSquared(vec2));
-    }
-    distanceToManhattan(vec2) {
-        return Math.abs(this.x - vec2.x) + Math.abs(this.y - vec2.y);
-    }
-    distanceToSquared(vec2) {
-        x = this.x - vec2.x;
-        y = this.y - vec2.y;
-        return x * x + y * y;
-    }
-    divide(v) {
-        this.x /= v.x;
-        this.y /= v.y;
-        return this;
-    }
-    divideScalar(scalar) {
-        return this.multiplyScalar(1 / scalar);
-    }
-    dot(vec2) {
-        return this.x * vec2.x + this.y * vec2.y;
-    }
-    equals(vec2) {
-        return vec2.x === this.x && vec2.y === this.y;
-    }
-    floor() {
-        this.x = Math.floor(this.x);
-        this.y = Math.floor(this.y);
-        return this;
-    }
-    from(vec2) {
-        this.x = vec2.x;
-        this.y = vec2.y;
-        return this;
-    }
-    fromArray(arr, index = 0) {
-        this.x = arr[index];
-        this.y = arr[index + 1];
-        return this;
-    }
-    fromPolar(p) {
-        this.x = Math.cos(p.a) * p.r;
-        this.y = Math.sin(p.a) * p.r;
-        return this;
-    }
-    fromScalar(value = 0) {
-        this.x = this.y = value;
-        return this;
-    }
-    length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-    lengthManhattan() {
-        return Math.abs(this.x) + Math.abs(this.y);
-    }
-    lengthSquared() {
-        return this.x * this.x + this.y * this.y;
-    }
-    lerp(vec2, alpha) {
-        this.x += (vec2.x - this.x) * alpha;
-        this.y += (vec2.y - this.y) * alpha;
-        return this;
-    }
-    max(vec2) {
-        this.x = Math.max(this.x, vec2.x);
-        this.y = Math.max(this.y, vec2.y);
-        return this;
-    }
-    min(vec2) {
-        this.x = Math.min(this.x, vec2.x);
-        this.y = Math.min(this.y, vec2.y);
-        return this;
-    }
-    minus(vec2) {
-        this.x -= vec2.x;
-        this.y -= vec2.y;
-        return this;
-    }
-    minusScalar(num) {
-        this.x -= num;
-        this.y -= num;
-        return this;
-    }
-    minusVectors(...vecArr) {
-        len$1 = vecArr.length;
-        for (let i = 0; i < len$1; i++) {
-            this.minus(vecArr[i]);
-        }
-        return this;
-    }
-    multiplyScalar(scalar) {
-        this.x *= scalar;
-        this.y *= scalar;
-        return this;
-    }
-    negate() {
-        this.x = -this.x;
-        this.y = -this.y;
-        return this;
-    }
-    normalize() {
-        return this.divideScalar(this.length() || 1);
-    }
-    rotate(angle, center = { x: 0, y: 0 }) {
-        c = Math.cos(angle);
-        s = Math.sin(angle);
-        x = this.x - center.x;
-        y = this.y - center.y;
-        this.x = x * c - y * s + center.x;
-        this.y = x * s + y * c + center.y;
-        return this;
-    }
-    round() {
-        this.x = Math.round(this.x);
-        this.y = Math.round(this.y);
-        return this;
-    }
-    floorToZero() {
-        this.x = floorToZero(this.x);
-        this.y = floorToZero(this.y);
-        return this;
-    }
-    set(x = 0, y = 0) {
-        this.x = x;
-        this.y = y;
-        return this;
-    }
-    setLength(length) {
-        return this.normalize().multiplyScalar(length);
-    }
-    setX(x = 0) {
-        this.x = x;
-        return this;
-    }
-    setY(y = 0) {
-        this.y = y;
-        return this;
-    }
-    toArray(arr = []) {
-        arr[0] = this.x;
-        arr[1] = this.y;
-        return arr;
-    }
-    toJson(json = { x: 0, y: 0 }) {
-        json.x = this.x;
-        json.y = this.y;
-        return json;
-    }
-    toPalorJson(p = { a: 0, r: 0 }) {
-        p.r = this.length();
-        p.a = this.angle();
-        return p;
-    }
-    toString() {
-        return `(${this.x}, ${this.y})`;
+    set y(val) {
+        this[1] = val;
     }
 }
+const VECTOR2_ZERO = new Vector2(0, 0);
+const VECTOR2_TOP = new Vector2(0, 1);
+const VECTOR2_BOTTOM = new Vector2(0, -1);
+const VECTOR2_LEFT = new Vector2(-1, 0);
+const VECTOR2_RIGHT = new Vector2(1, 0);
 
-/**
- * @classdesc 三维向量
- * @class
- * @name Mathx.Vector3
- */
-class Vector3 {
-}
-
-export { ColorName, Polar, RGBAColor, RGBColor, Vector2, Vector3, clamp, clampCircle, clampSafe, closeTo, floorToZero, rndFloat, rndFloatRange, rndInt, sum$1 as sum, sumArray };
+export { COLOR_HEX_MAP, ColorRGB, ColorRGBA, Matrix2, Matrix3, Quaternion, Vector2, Vector3, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum$1 as sum, sumArray };
 //# sourceMappingURL=Mathx.module.js.map
