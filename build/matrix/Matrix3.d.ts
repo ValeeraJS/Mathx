@@ -3,7 +3,7 @@ import IVector2 from "../vector/interfaces/IVector2";
 export declare const UNIT_MATRIX3_DATA: IMatrix3Data;
 export default class Matrix3 extends Float32Array implements IMatrix3 {
     readonly isMatrix3 = true;
-    readonly length = 9;
+    readonly length: 9;
     static readonly UNIT_MATRIX: Readonly<Matrix3>;
     constructor(data?: IMatrix3Data);
 }

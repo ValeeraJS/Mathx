@@ -3,7 +3,7 @@ import IVector2, { IVector2Data, IVector2Json } from "./interfaces/IVector2";
 import IMatrix3 from "../matrix/interfaces/IMatrix3";
 export default class Vector2 extends Float32Array implements IVector2 {
     readonly isVector2 = true;
-    readonly length = 2;
+    readonly length: 2;
     constructor(x?: number, y?: number);
     get x(): number;
     set x(val: number);
@@ -45,6 +45,7 @@ export declare const max: (a: IVector2Data, b: IVector2Data, out?: IVector2Data)
 export declare const min: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
 export declare const minus: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
 export declare const minusScalar: (a: IVector2Data, num: number, out?: IVector2Data) => IVector2Data;
+export declare const multiply: (a: IVector2Data, b: IVector2Data, out?: IVector2Data) => IVector2Data;
 export declare const multiplyScalar: (a: IVector2Data, scalar: number, out?: IVector2Data) => IVector2Data;
 export declare const negate: (a: IVector2Data, out?: IVector2Data) => IVector2Data;
 export declare const normalize: (a: IVector2Data, out?: IVector2Data) => IVector2Data;

@@ -3,7 +3,7 @@ import IVector3 from "../vector/interfaces/IVector3";
 import { IMatrix3 } from "../matrix";
 export default class Quaternion extends Float32Array implements IQuaternion {
     readonly isQuaternion = true;
-    readonly length = 4;
+    readonly length: 4;
     constructor(x?: number, y?: number, z?: number, w?: number);
     get x(): number;
     set x(val: number);
@@ -22,7 +22,7 @@ export declare const fromAxisAngle: (axis: IVector3, rad: number, out: IQuaterni
 export declare function fromMatrix3(m: IMatrix3, out: IQuaternionData): IQuaternionData;
 export declare const identity: (out?: IQuaternionData) => IQuaternionData;
 export declare const invert: (a: IQuaternionData, out: IQuaternionData) => IQuaternionData;
-export declare const lerp: (a: import("../vector/interfaces/IVector4").IVector4Data, b: import("../vector/interfaces/IVector4").IVector4Data, t: number, out: import("../vector/interfaces/IVector4").IVector4Data) => import("../vector/interfaces/IVector4").IVector4Data;
+export declare const lerp: (a: import("../vector/interfaces/IVector4").IVector4Data, b: import("../vector/interfaces/IVector4").IVector4Data, t: number, out?: import("../vector/interfaces/IVector4").IVector4Data) => import("../vector/interfaces/IVector4").IVector4Data;
 export declare const multiply: (a: IQuaternionData, b: IQuaternionData, out: IQuaternionData) => IQuaternionData;
 export declare const random: (out: IQuaternionData) => IQuaternionData;
 export declare const rotationTo: (a: IVector3, b: IVector3, out: IQuaternionData) => IQuaternionData;

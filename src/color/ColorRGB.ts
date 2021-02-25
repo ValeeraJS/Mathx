@@ -2,7 +2,7 @@ import COLOR_HEX_MAP from "./ColorName";
 import IColorRGB, { IColorRGBData } from "./interfaces/IColorRGB";
 
 export default class ColorRGB extends Uint8Array implements IColorRGB {
-	readonly length = 3;
+	readonly length: 3;
 
 	public constructor(r = 0, g = 0, b = 0) {
 		super(3);
@@ -63,6 +63,9 @@ export const fromScalar = (scalar: number, out: IColorRGBData) => {
 export const fromString = (str: string, out: IColorRGBData) => {
 	if (str in COLOR_HEX_MAP) {
 		return fromHex(COLOR_HEX_MAP[str], out);
+	} else if (str.startsWith('#')) {
+		str = str.substr(1);
+		return fromScalar(parseInt(str, 16), out);
 	}
 
 	return out;

@@ -1,65 +1,18 @@
-import IQuaternion, { IQuaternionData } from "./interfaces/IQuaternion";
-import Vector3, { VECTOR3_Top, cross as crossVec3, length as lengthVec3, normalize as normalizeVec3, dot as dotVec3, VECTOR3_Left } from "../vector/Vector3";
+import { VECTOR3_TOP, cross as crossVec3, length as lengthVec3, normalize as normalizeVec3, dot as dotVec3, VECTOR3_LEFT } from "../vector/Vector3";
 import { EPSILON } from "../constants";
-import IVector3 from "../vector/interfaces/IVector3";
 import { dot as dotVec4, lerp as lerpVec4, normalize as normalizeVec4 } from '../vector/Vector4';
-import { IMatrix3 } from "../matrix";
 
 let ax: number, ay: number, az: number, aw: number, bx: number, by: number, bz: number, bw: number;
 let s = 0, c = 0, rad = 0, dotTmp = 0, omega = 0, scale0 = 0, scale1 = 0;
-let tmpVec3 = new Vector3();
+let tmpVec3 = new Float32Array(3);
 
-export default class Quaternion extends Float32Array implements IQuaternion {
-    readonly isQuaternion = true;
-    readonly length = 4;
-    constructor(x = 0, y = 0, z = 0, w = 1) {
-        super(4);
-        this[0] = x;
-        this[1] = y;
-        this[2] = z;
-        this[3] = w;
-    }
-
-    get x() {
-        return this[0];
-    }
-
-    set x(val: number) {
-        this[0] = val;
-    }
-
-    get y() {
-        return this[1];
-    }
-
-    set y(val: number) {
-        this[1] = val;
-    }
-
-    get z() {
-        return this[2];
-    }
-
-    set z(val: number) {
-        this[2] = val;
-    }
-
-    get w() {
-        return this[3];
-    }
-
-    set w(val: number) {
-        this[3] = val;
-    }
-}
-
-export const angleTo = (a: IQuaternionData, b: IQuaternionData) => {
+export const angleTo = (a: Float32Array, b: Float32Array) => {
     dotTmp = dot(a, b);
 
     return Math.acos(2 * dotTmp * dotTmp - 1);
 }
 
-export const conjugate = (a: IQuaternionData, out: IQuaternionData) => {
+export const conjugate = (a: Float32Array, out: Float32Array = new Float32Array(4)) => {
     out[0] = -a[0];
     out[1] = -a[1];
     out[2] = -a[2];
@@ -67,13 +20,18 @@ export const conjugate = (a: IQuaternionData, out: IQuaternionData) => {
     return out;
 }
 
-export const create = (x = 0, y = 0, z = 0, w = 1) => {
-    return new Quaternion(x, y, z, w);
+export const create = (x = 0, y = 0, z = 0, w = 1, out = new Float32Array(4)) => {
+    out[0] = x;
+	out[1] = y;
+	out[2] = z;
+	out[3] = w;
+
+	return out;
 }
 
 export const dot = dotVec4;
 
-export const fromAxisAngle = (axis: IVector3, rad: number, out: IQuaternionData) => {
+export const fromAxisAngle = (axis: Float32Array, rad: number, out: Float32Array = new Float32Array(4)) => {
     rad = rad * 0.5;
     s = Math.sin(rad);
     out[0] = s * axis[0];
@@ -83,7 +41,7 @@ export const fromAxisAngle = (axis: IVector3, rad: number, out: IQuaternionData)
     return out;
 }
 
-export function fromMatrix3(m: IMatrix3, out: IQuaternionData) {
+export function fromMatrix3(m: Float32Array, out: Float32Array) {
     let fTrace = m[0] + m[4] + m[8];
     let fRoot;
 
@@ -112,7 +70,7 @@ export function fromMatrix3(m: IMatrix3, out: IQuaternionData) {
     return out;
 }
 
-export const identity = (out: IQuaternionData = new Quaternion()): IQuaternionData => {
+export const identity = (out: Float32Array = new Float32Array(4)): Float32Array => {
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
@@ -120,7 +78,7 @@ export const identity = (out: IQuaternionData = new Quaternion()): IQuaternionDa
     return out;
 }
 
-export const invert = (a: IQuaternionData, out: IQuaternionData) => {
+export const invert = (a: Float32Array, out: Float32Array = new Float32Array(4)) => {
     ax = a[0],
         ay = a[1],
         az = a[2],
@@ -145,7 +103,7 @@ export const invert = (a: IQuaternionData, out: IQuaternionData) => {
 
 export const lerp = lerpVec4;
 
-export const multiply = (a: IQuaternionData, b: IQuaternionData, out: IQuaternionData) => {
+export const multiply = (a: Float32Array, b: Float32Array, out: Float32Array) => {
     ax = a[0],
         ay = a[1],
         az = a[2],
@@ -162,7 +120,7 @@ export const multiply = (a: IQuaternionData, b: IQuaternionData, out: IQuaternio
     return out;
 }
 
-export const random = (out: IQuaternionData) => {
+export const random = (out: Float32Array) => {
     ax = Math.random();
     ay = Math.random();
     az = Math.random();
@@ -177,12 +135,12 @@ export const random = (out: IQuaternionData) => {
     return out;
 }
 
-export const rotationTo = (a: IVector3, b: IVector3, out: IQuaternionData) => {
+export const rotationTo = (a: Float32Array, b: Float32Array, out: Float32Array) => {
     dotTmp = dotVec3(a, b);
     if (dotTmp < -0.999999) {
-        crossVec3(VECTOR3_Left, a, tmpVec3);
+        crossVec3(VECTOR3_LEFT, a, tmpVec3);
         if (lengthVec3(tmpVec3) < 0.000001) {
-            crossVec3(VECTOR3_Top, a, tmpVec3);
+            crossVec3(VECTOR3_TOP, a, tmpVec3);
         }
         normalizeVec3(tmpVec3, tmpVec3);
         fromAxisAngle(tmpVec3, Math.PI, out);
@@ -203,7 +161,7 @@ export const rotationTo = (a: IVector3, b: IVector3, out: IQuaternionData) => {
     }
 }
 
-export const rotateX = (a: IQuaternionData, rad: number, out: IQuaternionData) => {
+export const rotateX = (a: Float32Array, rad: number, out: Float32Array) => {
     rad *= 0.5;
 
     ax = a[0],
@@ -220,7 +178,7 @@ export const rotateX = (a: IQuaternionData, rad: number, out: IQuaternionData) =
     return out;
 }
 
-export const rotateY = (a: IQuaternionData, rad: number, out: IQuaternionData) => {
+export const rotateY = (a: Float32Array, rad: number, out: Float32Array) => {
     rad *= 0.5;
 
     ax = a[0],
@@ -237,7 +195,7 @@ export const rotateY = (a: IQuaternionData, rad: number, out: IQuaternionData) =
     return out;
 }
 
-export const rotateZ = (a: IQuaternionData, rad: number, out: IQuaternionData) => {
+export const rotateZ = (a: Float32Array, rad: number, out: Float32Array) => {
     rad *= 0.5;
 
     ax = a[0],
@@ -254,7 +212,7 @@ export const rotateZ = (a: IQuaternionData, rad: number, out: IQuaternionData) =
     return out;
 }
 
-export const slerp = (a: IQuaternionData, b: IQuaternionData, t: number, out: IQuaternionData) => {
+export const slerp = (a: Float32Array, b: Float32Array, t: number, out: Float32Array) => {
     ax = a[0],
         ay = a[1],
         az = a[2],
@@ -291,7 +249,7 @@ export const slerp = (a: IQuaternionData, b: IQuaternionData, t: number, out: IQ
     return out;
 }
 
-export const toAxisAngle = (q: IQuaternionData, outAxis: IVector3 = new Vector3()): number => {
+export const toAxisAngle = (q: Float32Array, outAxis: Float32Array = new Float32Array(3)): number => {
     rad = Math.acos(q[3]) * 2.0;
     s = Math.sin(rad / 2.0);
     if (s > EPSILON) {
@@ -306,6 +264,6 @@ export const toAxisAngle = (q: IQuaternionData, outAxis: IVector3 = new Vector3(
     return rad;
 }
 
-export const toString = (a: IQuaternionData) => {
+export const toString = (a: Float32Array) => {
     return `quat("${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 }

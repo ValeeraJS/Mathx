@@ -1,6 +1,6 @@
 import IColorRGBA, { IColorRGBAData } from "./interfaces/IColorRGBA";
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
-    readonly length = 4;
+    readonly length: 4;
     constructor(r?: number, g?: number, b?: number, a?: number);
     get r(): number;
     set r(val: number);

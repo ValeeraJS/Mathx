@@ -1,6 +1,6 @@
 import IColorRGB, { IColorRGBData } from "./interfaces/IColorRGB";
 export default class ColorRGB extends Uint8Array implements IColorRGB {
-    readonly length = 3;
+    readonly length: 3;
     constructor(r?: number, g?: number, b?: number);
     get r(): number;
     set r(val: number);

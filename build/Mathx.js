@@ -158,7 +158,6 @@
 	class ColorRGBA extends Uint8Array {
 	    constructor(r = 0, g = 0, b = 0, a = 255) {
 	        super(4);
-	        this.length = 4;
 	        this[0] = r;
 	        this[1] = g;
 	        this[2] = b;
@@ -193,7 +192,6 @@
 	class ColorRGB extends Uint8Array {
 	    constructor(r = 0, g = 0, b = 0) {
 	        super(3);
-	        this.length = 3;
 	        this[0] = r;
 	        this[1] = g;
 	        this[2] = b;
@@ -370,7 +368,6 @@
 	    constructor(data = UNIT_MATRIX2_DATA) {
 	        super(data);
 	        this.isMatrix2 = true;
-	        this.length = 4;
 	    }
 	}
 	Matrix2.UNIT_MATRIX = new Matrix2();
@@ -384,7 +381,6 @@
 	    constructor(data = UNIT_MATRIX3_DATA) {
 	        super(data);
 	        this.isMatrix3 = true;
-	        this.length = 9;
 	    }
 	}
 	Matrix3.UNIT_MATRIX = new Matrix3();
@@ -393,7 +389,6 @@
 	    constructor(x = 0, y = 0, z = 0) {
 	        super(3);
 	        this.isVector3 = true;
-	        this.length = 3;
 	        this[0] = x;
 	        this[1] = y;
 	        this[2] = z;
@@ -418,6 +413,7 @@
 	    }
 	}
 	const VECTOR3_ZERO = new Vector3(0, 0, 0);
+	const VECTOR3_ONE = new Vector3(1, 1, 1);
 	const VECTOR3_Top = new Vector3(0, 1, 0);
 	const VECTOR3_Bottom = new Vector3(0, -1, 0);
 	const VECTOR3_Left = new Vector3(-1, 0, 0);
@@ -430,7 +426,6 @@
 	    constructor(x = 0, y = 0, z = 0, w = 1) {
 	        super(4);
 	        this.isQuaternion = true;
-	        this.length = 4;
 	        this[0] = x;
 	        this[1] = y;
 	        this[2] = z;
@@ -478,7 +473,6 @@
 	    constructor(x = 0, y = 0) {
 	        super(2);
 	        this.isVector2 = true;
-	        this.length = 2;
 	        this[0] = x;
 	        this[1] = y;
 	    }

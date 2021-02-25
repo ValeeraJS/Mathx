@@ -3,7 +3,7 @@ import IMatrix2, { IMatrix2Data } from "./interfaces/IMatrix2";
 export declare const UNIT_MATRIX2_DATA: IMatrix2Data;
 export default class Matrix2 extends Float32Array implements IMatrix2 {
     readonly isMatrix2 = true;
-    readonly length = 4;
+    readonly length: 4;
     static readonly UNIT_MATRIX: Readonly<Matrix2>;
     constructor(data?: IMatrix2Data);
 }

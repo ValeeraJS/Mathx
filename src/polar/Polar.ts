@@ -1,5 +1,7 @@
 import IPolar from "./interfaces/IPolar";
-import IVector2 from "../vector/interfaces/IVector2";
+
+let x: number, y: number;
+
 /**
  * @class
  * @classdesc 极坐标
@@ -82,7 +84,9 @@ export default class Polar implements IPolar {
 	 * @param {Mathx.IVector2} vector2 | 二维向量
 	 * @returns {number} this
 	 */
-	public fromVector2({ x, y }: IVector2): this {
+	public fromVector2(v: Float32Array): this {
+		x = v[0];
+		y = v[1];
 		this.r = Math.sqrt(x * x + y * y);
 		this.a = Math.atan2(y, x);
 
@@ -171,9 +175,9 @@ export default class Polar implements IPolar {
 	 * @param {IVector2} [json] 被修改的json对象，如果不传则会新创建json对象。
 	 * @returns {IVector2} json
 	 */
-	public toVector2Json(vec2: IVector2 = { x: 0, y: 0 }): IVector2 {
-		vec2.x = this.x();
-		vec2.y = this.y();
+	public toVector2Json(vec2: Float32Array): Float32Array {
+		vec2[0] = this.x();
+		vec2[1] = this.y();
 
 		return vec2;
 	}

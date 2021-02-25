@@ -1,51 +1,11 @@
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
-import IVector3, { IVector3Data } from "./interfaces/IVector3";
-import { IMatrix4Data } from "../matrix/interfaces/IMatrix4";
-import { IMatrix3Data } from "../matrix/interfaces/IMatrix3";
-import { IQuaternionData } from "../quaternion/interfaces/IQuaternion";
 
 let ax: number, ay: number, az: number, bx: number, by: number, bz: number;
 let ag: number, s: number;
 
-export default class Vector3 extends Float32Array implements IVector3 {
-	readonly isVector3 = true;
-	readonly length = 3;
-
-	public constructor(x = 0, y = 0, z = 0) {
-		super(3);
-		this[0] = x;
-		this[1] = y;
-		this[2] = z;
-	}
-
-	get x() {
-		return this[0];
-	}
-
-	set x(val: number) {
-		this[0] = val;
-	}
-
-	get y() {
-		return this[1];
-	}
-
-	set y(val: number) {
-		this[1] = val;
-	}
-
-	get z() {
-		return this[2];
-	}
-
-	set z(val: number) {
-		this[2] = val;
-	}
-}
-
-export const add = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const add = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0] + b[0];
 	out[1] = a[1] + b[1];
 	out[2] = a[2] + b[2];
@@ -53,7 +13,7 @@ export const add = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new Ve
 	return out;
 }
 
-export const addScalar = (a: IVector3Data, b: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const addScalar = (a: Float32Array, b: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0] + b;
 	out[1] = a[1] + b;
 	out[2] = a[2] + b;
@@ -61,7 +21,7 @@ export const addScalar = (a: IVector3Data, b: number, out: IVector3Data = new Ve
 	return out;
 }
 
-export const angle = (a: IVector3Data, b: IVector3Data): number => {
+export const angle = (a: Float32Array, b: Float32Array): number => {
 	ax = a[0],
 		ay = a[1],
 		az = a[2],
@@ -75,7 +35,7 @@ export const angle = (a: IVector3Data, b: IVector3Data): number => {
 	return Math.acos(clampCommon(cosine, -1, 1));
 }
 
-export const clamp = (a: IVector3Data, min: IVector3Data, max: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const clamp = (a: Float32Array, min: Float32Array, max: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = clampCommon(a[0], min[0], max[0]);
 	out[1] = clampCommon(a[1], min[1], max[1]);
 	out[2] = clampCommon(a[2], min[2], max[2]);
@@ -83,7 +43,7 @@ export const clamp = (a: IVector3Data, min: IVector3Data, max: IVector3Data, out
 	return out;
 }
 
-export const clampSafe = (a: IVector3Data, min: IVector3Data, max: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const clampSafe = (a: Float32Array, min: Float32Array, max: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = clampSafeCommon(a[0], min[0], max[0]);
 	out[1] = clampSafeCommon(a[1], min[1], max[1]);
 	out[1] = clampSafeCommon(a[2], min[2], max[2]);
@@ -91,7 +51,7 @@ export const clampSafe = (a: IVector3Data, min: IVector3Data, max: IVector3Data,
 	return out;
 };
 
-export const clampScalar = (a: IVector3Data, min: number, max: number, out: IVector3Data = new Vector3()) => {
+export const clampScalar = (a: Float32Array, min: number, max: number, out: Float32Array = new Float32Array(3)) => {
 	out[0] = clampCommon(a[0], min, max);
 	out[1] = clampCommon(a[1], min, max);
 	out[2] = clampCommon(a[2], min, max);
@@ -99,7 +59,7 @@ export const clampScalar = (a: IVector3Data, min: number, max: number, out: IVec
 	return out;
 }
 
-export const clone = (a: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const clone = (a: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0];
 	out[1] = a[1];
 	out[2] = a[2];
@@ -107,11 +67,19 @@ export const clone = (a: IVector3Data, out: IVector3Data = new Vector3()): IVect
 	return out;
 }
 
-export const closeTo = (a: IVector3Data, b: IVector3Data): boolean => {
+export const closeTo = (a: Float32Array, b: Float32Array): boolean => {
 	return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 }
 
-export const cross = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const create = (x: number, y: number= 0, z: number, out: Float32Array = new Float32Array(3)): Float32Array => {
+	out[0] = x;
+	out[1] = y;
+	out[2] = z;
+
+	return out;
+}
+
+export const cross = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	ax = a[0], ay = a[1], az = a[2];
 	bx = b[0], by = b[1], bz = b[2];
 
@@ -122,7 +90,26 @@ export const cross = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new 
 	return out;
 }
 
-export const divide = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const distanceTo = (a: Float32Array, b: Float32Array): number => {
+	ax = b[0] - a[0];
+	ay = b[1] - a[1];
+	az = b[2] - a[2];
+	return Math.hypot(ax, ay, az);
+};
+
+export const distanceToManhattan = (a: Float32Array, b: Float32Array): number => {
+	return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
+};
+
+export const distanceToSquared = (a: Float32Array, b: Float32Array): number => {
+	ax = a[0] - b[0];
+	ay = a[1] - b[1];
+	az = a[2] - b[2];
+
+	return ax * ax + ay * ay + az * az;
+};
+
+export const divide = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0] / b[0];
 	out[1] = a[1] / b[1];
 	out[2] = a[2] / b[2];
@@ -130,7 +117,7 @@ export const divide = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new
 	return out;
 }
 
-export const divideScalar = (a: IVector3Data, b: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const divideScalar = (a: Float32Array, b: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0] / b;
 	out[1] = a[1] / b;
 	out[2] = a[2] / b;
@@ -138,15 +125,15 @@ export const divideScalar = (a: IVector3Data, b: number, out: IVector3Data = new
 	return out;
 }
 
-export const dot = (a: IVector3Data, b: IVector3Data): number => {
+export const dot = (a: Float32Array, b: Float32Array): number => {
 	return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
-export const equals = (a: IVector3Data, b: IVector3Data): boolean => {
+export const equals = (a: Float32Array, b: Float32Array): boolean => {
 	return ((a[0] === b[0]) && (a[1] === b[1]) && (a[2] === b[2]));
 }
 
-export const from = (a: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const from = (a: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0];
 	out[1] = a[1];
 	out[2] = a[2];
@@ -154,7 +141,7 @@ export const from = (a: IVector3Data, out: IVector3Data = new Vector3()): IVecto
 	return out;
 }
 
-export const fromArray = (a: ArrayLike<number>, offset: number = 0, out: IVector3Data = new Vector3()): IVector3Data => {
+export const fromArray = (a: ArrayLike<number>, offset: number = 0, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[offset];
 	out[1] = a[offset + 1];
 	out[2] = a[offset + 2];
@@ -162,13 +149,13 @@ export const fromArray = (a: ArrayLike<number>, offset: number = 0, out: IVector
 	return out;
 }
 
-export const fromScalar = (num: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const fromScalar = (num: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = out[1] = out[2] = num;
 
 	return out;
 }
 
-export const fromValues = (x: number, y: number, z: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const fromValues = (x: number, y: number, z: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = x;
 	out[1] = y;
 	out[2] = z;
@@ -176,7 +163,7 @@ export const fromValues = (x: number, y: number, z: number, out: IVector3Data = 
 	return out;
 }
 
-export const hermite = (a: IVector3Data, b: IVector3Data, c: IVector3Data, d: IVector3Data, t: number, out: IVector3Data = new Vector3()) => {
+export const hermite = (a: Float32Array, b: Float32Array, c: Float32Array, d: Float32Array, t: number, out: Float32Array = new Float32Array(3)) => {
 	ag = t * t;
 	let factor1 = ag * (2 * t - 3) + 1;
 	let factor2 = ag * (t - 2) + t;
@@ -190,26 +177,26 @@ export const hermite = (a: IVector3Data, b: IVector3Data, c: IVector3Data, d: IV
 	return out;
 }
 
-export const inverse = (a: IVector3Data, out: IVector3Data = new Vector3()) => {
+export const inverse = (a: Float32Array, out: Float32Array = new Float32Array(3)) => {
 	out[0] = 1.0 / a[0];
 	out[1] = 1.0 / a[1];
 	out[2] = 1.0 / a[2];
 	return out;
 }
 
-export const length = (a: IVector3Data): number => {
+export const length = (a: Float32Array): number => {
 	return Math.sqrt(lengthSquared(a));
 }
 
-export const lengthManhattan = (a: IVector3Data): number => {
+export const lengthManhattan = (a: Float32Array): number => {
 	return Math.abs(a[0]) + Math.abs(a[1]) + Math.abs(a[2]);
 }
 
-export const lengthSquared = (a: IVector3Data): number => {
+export const lengthSquared = (a: Float32Array): number => {
 	return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
 }
 
-export const lerp = (a: IVector3Data, b: IVector3Data, alpha: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const lerp = (a: Float32Array, b: Float32Array, alpha: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] += (b[0] - a[0]) * alpha;
 	out[1] += (b[1] - a[1]) * alpha;
 	out[2] += (b[2] - a[2]) * alpha;
@@ -217,7 +204,23 @@ export const lerp = (a: IVector3Data, b: IVector3Data, alpha: number, out: IVect
 	return out;
 }
 
-export const minus = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new Vector3()) => {
+export const max = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
+	out[0] = Math.max(a[0], b[0]);
+	out[1] = Math.max(a[1], b[1]);
+	out[2] = Math.max(a[2], b[2]);
+
+	return out;
+}
+
+export const min = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
+	out[0] = Math.min(a[0], b[0]);
+	out[1] = Math.min(a[1], b[1]);
+	out[2] = Math.min(a[2], b[2]);
+
+	return out;
+}
+
+export const minus = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)) => {
 	out[0] = a[0] - b[0];
 	out[1] = a[1] - b[1];
 	out[2] = a[2] - b[2];
@@ -225,7 +228,7 @@ export const minus = (a: IVector3Data, b: IVector3Data, out: IVector3Data = new 
 	return out;
 }
 
-export const minusScalar = (a: IVector3Data, b: number, out: IVector3Data = new Vector3()) => {
+export const minusScalar = (a: Float32Array, b: number, out: Float32Array = new Float32Array(3)) => {
 	out[0] = a[0] - b;
 	out[1] = a[1] - b;
 	out[2] = a[2] - b;
@@ -233,7 +236,15 @@ export const minusScalar = (a: IVector3Data, b: number, out: IVector3Data = new 
 	return out;
 }
 
-export const multiplyScalar = (a: IVector3Data, scalar: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const multiply = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(3)) => {
+	out[0] = a[0] * b[0];
+	out[1] = a[1] * b[1];
+	out[2] = a[2] * b[2];
+
+	return out;
+}
+
+export const multiplyScalar = (a: Float32Array, scalar: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = a[0] * scalar;
 	out[1] = a[1] * scalar;
 	out[2] = a[2] * scalar;
@@ -241,11 +252,18 @@ export const multiplyScalar = (a: IVector3Data, scalar: number, out: IVector3Dat
 	return out;
 }
 
-export const normalize = (a: IVector3Data, out: IVector3Data = new Vector3()): IVector3Data => {
+export const negate = (a: Float32Array, out: Float32Array = new Float32Array(3)) => {
+	out[0] = -a[0];
+	out[1] = -a[1];
+	out[2] = -a[2];
+	return out;
+}
+
+export const normalize = (a: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
 	return divideScalar(a, length(a) || 1, out);
 }
 
-export const rotateX = (a: IVector3Data, b: IVector3Data, rad: number, out: IVector3Data) => {
+export const rotateX = (a: Float32Array, b: Float32Array, rad: number, out: Float32Array) => {
 	ax = a[0] - b[0];
 	ay = a[1] - b[1];
 	az = a[2] - b[2];
@@ -261,7 +279,7 @@ export const rotateX = (a: IVector3Data, b: IVector3Data, rad: number, out: IVec
 	return out;
 }
 
-export const rotateY = (a: IVector3Data, b: IVector3Data, rad: number, out: IVector3Data) => {
+export const rotateY = (a: Float32Array, b: Float32Array, rad: number, out: Float32Array) => {
 	ax = a[0] - b[0];
 	ay = a[1] - b[1];
 	az = a[2] - b[2];
@@ -277,7 +295,7 @@ export const rotateY = (a: IVector3Data, b: IVector3Data, rad: number, out: IVec
 	return out;
 }
 
-export const rotateZ = (a: IVector3Data, b: IVector3Data, rad: number, out: IVector3Data) => {
+export const rotateZ = (a: Float32Array, b: Float32Array, rad: number, out: Float32Array) => {
 	ax = a[0] - b[0];
 	ay = a[1] - b[1];
 	az = a[2] - b[2];
@@ -293,7 +311,15 @@ export const rotateZ = (a: IVector3Data, b: IVector3Data, rad: number, out: IVec
 	return out;
 }
 
-export const set = (x = 0, y = 0, z = 0, out: IVector3Data = new Vector3()): IVector3Data => {
+export const round = (a: Float32Array, out: Float32Array = new Float32Array(3)): Float32Array => {
+	out[0] = Math.round(a[0]);
+	out[1] = Math.round(a[1]);
+	out[2] = Math.round(a[2]);
+
+	return out;
+}
+
+export const set = (x = 0, y = 0, z = 0, out: Float32Array = new Float32Array(3)): Float32Array => {
 	out[0] = x;
 	out[1] = y;
 	out[2] = z;
@@ -301,11 +327,11 @@ export const set = (x = 0, y = 0, z = 0, out: IVector3Data = new Vector3()): IVe
 	return out;
 }
 
-export const setLength = (a: IVector3Data, len: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const setLength = (a: Float32Array, len: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	return multiplyScalar(normalize(a, out), len, out);
 }
 
-export const slerp = (a: IVector3Data, b: IVector3Data, t: number, out: IVector3Data = new Vector3()): IVector3Data => {
+export const slerp = (a: Float32Array, b: Float32Array, t: number, out: Float32Array = new Float32Array(3)): Float32Array => {
 	ag = Math.acos(Math.min(Math.max(dot(a, b), -1), 1));
 	s = Math.sin(ag);
 
@@ -318,11 +344,11 @@ export const slerp = (a: IVector3Data, b: IVector3Data, t: number, out: IVector3
 	return out;
 }
 
-export const toString = (a: IVector3Data) => {
+export const toString = (a: Float32Array) => {
 	return `vec3(${a[0]}, ${a[1]}, ${a[2]})`;
 }
 
-export const transformMatrix3 = (a: IVector3Data, m: IMatrix3Data, out: IVector3Data) => {
+export const transformMatrix3 = (a: Float32Array, m: Float32Array, out: Float32Array) => {
 	ax = a[0],
 		ay = a[1],
 		az = a[2];
@@ -332,7 +358,7 @@ export const transformMatrix3 = (a: IVector3Data, m: IMatrix3Data, out: IVector3
 	return out;
 }
 
-export function transformMatrix4(a: IVector3Data, m: IMatrix4Data, out: IVector3Data = new Vector3()) {
+export function transformMatrix4(a: Float32Array, m: Float32Array, out: Float32Array = new Float32Array(3)) {
 	ax = a[0],
 		ay = a[1],
 		az = a[2];
@@ -344,7 +370,7 @@ export function transformMatrix4(a: IVector3Data, m: IMatrix4Data, out: IVector3
 	return out;
 }
 
-export const transformQuat = (a: IVector3Data, q: IQuaternionData, out: IVector3Data = new Vector3()) => {
+export const transformQuat = (a: Float32Array, q: Float32Array, out: Float32Array = new Float32Array(3)) => {
 	let qx = q[0],
 		qy = q[1],
 		qz = q[2],
@@ -377,11 +403,12 @@ export const transformQuat = (a: IVector3Data, q: IQuaternionData, out: IVector3
 	return out;
 }
 
-export const VECTOR3_ZERO = new Vector3(0, 0, 0);
-export const VECTOR3_Top = new Vector3(0, 1, 0);
-export const VECTOR3_Bottom = new Vector3(0, -1, 0);
-export const VECTOR3_Left = new Vector3(-1, 0, 0);
-export const VECTOR3_RIGHT = new Vector3(1, 0, 0);
-export const VECTOR3_FRONT = new Vector3(0, 0, -1);
-export const VECTOR3_BACK = new Vector3(0, 0, 1);
+export const VECTOR3_ZERO = new Float32Array([0, 0, 0]);
+export const VECTOR3_ONE = new Float32Array([1, 1, 1]);
+export const VECTOR3_TOP = new Float32Array([0, 1, 0]);
+export const VECTOR3_BOTTOM = new Float32Array([0, -1, 0]);
+export const VECTOR3_LEFT = new Float32Array([-1, 0, 0]);
+export const VECTOR3_RIGHT = new Float32Array([1, 0, 0]);
+export const VECTOR3_FRONT = new Float32Array([0, 0, -1]);
+export const VECTOR3_BACK = new Float32Array([0, 0, 1]);
 

@@ -1,69 +1,56 @@
-import IMatrix3, { IMatrix3Data } from "./interfaces/IMatrix3";
-import IVector2 from "../vector/interfaces/IVector2";
-
 let a00 = 0, a01 = 0, a02 = 0, a11 = 0, a10 = 0, a12 = 0, a20 = 0, a21 = 0, a22 = 0;
 let b00 = 0, b01 = 0, b02 = 0, b11 = 0, b10 = 0, b12 = 0, b20 = 0, b21 = 0, b22 = 0;
 let x = 0, y = 0;
 
-export const UNIT_MATRIX3_DATA = [
+const UNIT_MATRIX3_DATA = [
     1, 0, 0,
     0, 1, 0,
     0, 0, 1
-] as IMatrix3Data;
+];
 
+export const UNIT_MATRIX3 = new Float32Array(UNIT_MATRIX3_DATA);
 
-export default class Matrix3 extends Float32Array implements IMatrix3 {
-
-    public readonly isMatrix3 = true;
-    public readonly length = 9;
-    public static readonly UNIT_MATRIX: Readonly<Matrix3> = new Matrix3();
-
-    constructor(data: IMatrix3Data = UNIT_MATRIX3_DATA) {
-        super(data);
-    }
-}
-
-export const cofactor00 = (a: IMatrix3Data): number => {
+export const cofactor00 = (a: Float32Array): number => {
     return a[4] * a[8] - a[5] * a[7];
 }
 
-export const cofactor01 = (a: IMatrix3Data): number => {
+export const cofactor01 = (a: Float32Array): number => {
     return a[1] * a[8] - a[7] * a[2];
 }
 
-export const cofactor02 = (a: IMatrix3Data): number => {
+export const cofactor02 = (a: Float32Array): number => {
     return a[1] * a[5] - a[4] * a[2];
 }
 
-export const cofactor10 = (a: IMatrix3Data): number => {
+export const cofactor10 = (a: Float32Array): number => {
     return a[3] * a[8] - a[6] * a[5];
 }
 
-export const cofactor11 = (a: IMatrix3Data): number => {
+export const cofactor11 = (a: Float32Array): number => {
     return a[0] * a[8] - a[6] * a[2];
 }
 
-export const cofactor12 = (a: IMatrix3Data): number => {
+export const cofactor12 = (a: Float32Array): number => {
     return a[0] * a[5] - a[3] * a[2];
 }
 
-export const cofactor20 = (a: IMatrix3Data): number => {
+export const cofactor20 = (a: Float32Array): number => {
     return a[3] * a[7] - a[6] * a[4];
 }
 
-export const cofactor21 = (a: IMatrix3Data): number => {
+export const cofactor21 = (a: Float32Array): number => {
     return a[0] * a[7] - a[6] * a[1];
 }
 
-export const cofactor22 = (a: IMatrix3Data): number => {
+export const cofactor22 = (a: Float32Array): number => {
     return a[0] * a[4] - a[3] * a[1];
 }
 
-export const create = (): IMatrix3Data => {
-    return new Matrix3(UNIT_MATRIX3_DATA);
+export const create = (): Float32Array => {
+    return new Float32Array(UNIT_MATRIX3_DATA);
 };
 
-export const determinant = (a: IMatrix3Data): number => {
+export const determinant = (a: Float32Array): number => {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2];
@@ -81,7 +68,7 @@ export const determinant = (a: IMatrix3Data): number => {
     );
 }
 
-export const from = (arr: ArrayLike<number>, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
+export const from = (arr: ArrayLike<number>, out: Float32Array = new Float32Array(9)): Float32Array => {
     out[0] = arr[0];
     out[1] = arr[1];
     out[2] = arr[2];
@@ -97,7 +84,7 @@ export const from = (arr: ArrayLike<number>, out: IMatrix3Data = new Matrix3()):
     return out;
 }
 
-export const fromMatrix4 = (mat4: IMatrix3Data, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
+export const fromMatrix4 = (mat4: Float32Array, out: Float32Array = new Float32Array(9)): Float32Array => {
     out[0] = mat4[0];
     out[1] = mat4[1];
     out[2] = mat4[2];
@@ -113,9 +100,9 @@ export const fromMatrix4 = (mat4: IMatrix3Data, out: IMatrix3Data = new Matrix3(
     return out;
 }
 
-export const fromRotation = (rad: number, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
-    y = Math.sin(rad),
-        x = Math.cos(rad);
+export const fromRotation = (rad: number, out: Float32Array = new Float32Array(9)): Float32Array => {
+    y = Math.sin(rad);
+    x = Math.cos(rad);
 
     out[0] = x;
     out[1] = y;
@@ -131,13 +118,13 @@ export const fromRotation = (rad: number, out: IMatrix3Data = new Matrix3()): IM
     return out;
 }
 
-export const fromScaling = (v: IVector2, out: IMatrix3Data): IMatrix3Data => {
-    out[0] = v.x;
+export const fromScaling = (v: Float32Array, out: Float32Array): Float32Array => {
+    out[0] = v[0];
     out[1] = 0;
     out[2] = 0;
 
     out[3] = 0;
-    out[4] = v.y;
+    out[4] = v[1];
     out[5] = 0;
 
     out[6] = 0;
@@ -147,21 +134,21 @@ export const fromScaling = (v: IVector2, out: IMatrix3Data): IMatrix3Data => {
     return out;
 }
 
-export function fromTranslation(v: IVector2, out: IMatrix3Data = new Matrix3()): IMatrix3Data {
+export function fromTranslation(v: Float32Array, out: Float32Array = new Float32Array(9)): Float32Array {
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
     out[3] = 0;
     out[4] = 1;
     out[5] = 0;
-    out[6] = v.x;
-    out[7] = v.y;
+    out[6] = v[0];
+    out[7] = v[1];
     out[8] = 1;
 
     return out;
 }
 
-export const identity = (out: IMatrix3Data = new Matrix3()) => {
+export const identity = (out: Float32Array = new Float32Array(9)) => {
     out[0] = 1; out[1] = 0; out[2] = 0;
     out[3] = 0; out[4] = 1; out[5] = 0;
     out[6] = 0; out[7] = 0; out[8] = 1;
@@ -169,7 +156,7 @@ export const identity = (out: IMatrix3Data = new Matrix3()) => {
     return out;
 }
 
-export const invert = (a: IMatrix3Data, out: IMatrix3Data): IMatrix3Data | null => {
+export const invert = (a: Float32Array, out: Float32Array): Float32Array | null => {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2];
@@ -205,7 +192,7 @@ export const invert = (a: IMatrix3Data, out: IMatrix3Data): IMatrix3Data | null 
     return out;
 }
 
-export const multiply = () => (a: IMatrix3Data, b: IMatrix3Data, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
+export const multiply = () => (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(9)): Float32Array => {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2];
@@ -241,7 +228,7 @@ export const multiply = () => (a: IMatrix3Data, b: IMatrix3Data, out: IMatrix3Da
     return out;
 }
 
-export const rotate = (a: IMatrix3Data, rad: number, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
+export const rotate = (a: Float32Array, rad: number, out: Float32Array = new Float32Array(9)): Float32Array => {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2],
@@ -269,9 +256,9 @@ export const rotate = (a: IMatrix3Data, rad: number, out: IMatrix3Data = new Mat
     return out;
 }
 
-export function scale(a: IMatrix3Data, v: IVector2, out: IMatrix3Data = new Matrix3()) {
-    x = v.x,
-        y = v.y;
+export function scale(a: Float32Array, v: Float32Array, out: Float32Array = new Float32Array(9)) {
+    x = v[0];
+    y = v[1];
 
     out[0] = x * a[0];
     out[1] = x * a[1];
@@ -288,18 +275,18 @@ export function scale(a: IMatrix3Data, v: IVector2, out: IMatrix3Data = new Matr
     return out;
 }
 
-export const translate = (a: IMatrix3Data, v: IVector2, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
-    a00 = a[0],
-        a01 = a[1],
-        a02 = a[2],
-        a10 = a[3],
-        a11 = a[4],
-        a12 = a[5],
-        a20 = a[6],
-        a21 = a[7],
-        a22 = a[8],
-        x = v.x,
-        y = v.y;
+export const translate = (a: Float32Array, v: Float32Array, out: Float32Array = new Float32Array(9)): Float32Array => {
+    a00 = a[0];
+    a01 = a[1];
+    a02 = a[2];
+    a10 = a[3];
+    a11 = a[4];
+    a12 = a[5];
+    a20 = a[6];
+    a21 = a[7];
+    a22 = a[8];
+    x = v[0];
+    y = v[1];
 
     out[0] = a00;
     out[1] = a01;
@@ -316,11 +303,11 @@ export const translate = (a: IMatrix3Data, v: IVector2, out: IMatrix3Data = new 
     return out;
 }
 
-export const transpose = (a: IMatrix3Data, out: IMatrix3Data = new Matrix3()): IMatrix3Data => {
+export const transpose = (a: Float32Array, out: Float32Array = new Float32Array(9)): Float32Array => {
     if (out === a) {
-        a01 = a[1],
-            a02 = a[2],
-            a12 = a[5];
+        a01 = a[1];
+        a02 = a[2];
+        a12 = a[5];
         out[1] = a[3];
         out[2] = a[6];
         out[3] = a01;

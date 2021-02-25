@@ -1,36 +1,24 @@
-import IMatrix4, { IMatrix4Data } from "./interfaces/IMatrix4";
-import { IVector3 } from "../vector";
 import { EPSILON } from "../constants";
-import { IQuaternionData } from "../quaternion/interfaces/IQuaternion";
-import { IVector3Data } from "../vector/interfaces/IVector3";
+import IEuler, { EulerRotationOrders } from "../euler/IEuler";
 
 let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
-let x = 0, y = 0, z = 0, det = 0, len = 0, s = 0, c = 0, t = 0;
+let x = 0, y = 0, z = 0, det = 0, len = 0, s = 0, c = 0, t = 0, a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
 
-export const UNIT_MATRIX_DATA = [
+const UNIT_MATRIX4_DATA = Object.freeze([
     1, 0, 0, 0,
     0, 1, 0, 0,
     0, 0, 1, 0,
     0, 0, 0, 1
-] as IMatrix4Data;
+]);
 
-export default class Matrix4 extends Float32Array implements IMatrix4 {
-
-    public readonly isMatrix4 = true;
-    public readonly length: 16;
-    public static readonly UNIT_MATRIX: Readonly<Matrix4> = new Matrix4();
-
-    constructor(data: IMatrix4Data = UNIT_MATRIX_DATA) {
-        super(data);
-    }
-}
+export const UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
 
 export const create = () => {
-    return new Matrix4();
+    return new Float32Array(UNIT_MATRIX4_DATA);
 }
 
-export const determinant = (a: IMatrix4Data): number => {
+export const determinant = (a: Float32Array): number => {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2],
@@ -62,7 +50,7 @@ export const determinant = (a: IMatrix4Data): number => {
     return a13 * b12 - a03 * b13 + a33 * b20 - a23 * b21;
 }
 
-export const from = (a: IMatrix4Data, out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
+export const from = (a: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array => {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -82,7 +70,116 @@ export const from = (a: IMatrix4Data, out: IMatrix4Data = new Matrix4()): IMatri
     return out;
 }
 
-export function fromQuaternion(q: IQuaternionData, out: IMatrix4Data) {
+export const fromEuler = (euler: IEuler, out: Float32Array = new Float32Array(16)): Float32Array => {
+    x = euler.x;
+    y = euler.y;
+    z = euler.z;
+
+    a = Math.cos(x), b = Math.sin(x);
+    c = Math.cos(y), d = Math.sin(y);
+    e = Math.cos(z), f = Math.sin(z);
+
+    if (euler.order === EulerRotationOrders.XYZ) {
+        const ae = a * e, af = a * f, be = b * e, bf = b * f;
+
+        out[0] = c * e;
+        out[4] = - c * f;
+        out[8] = d;
+
+        out[1] = af + be * d;
+        out[5] = ae - bf * d;
+        out[9] = - b * c;
+
+        out[2] = bf - ae * d;
+        out[6] = be + af * d;
+        out[10] = a * c;
+    } else if (euler.order === EulerRotationOrders.YXZ) {
+        const ce = c * e, cf = c * f, de = d * e, df = d * f;
+
+        out[0] = ce + df * b;
+        out[4] = de * b - cf;
+        out[8] = a * d;
+
+        out[1] = a * f;
+        out[5] = a * e;
+        out[9] = - b;
+
+        out[2] = cf * b - de;
+        out[6] = df + ce * b;
+        out[10] = a * c;
+    } else if (euler.order === EulerRotationOrders.ZXY) {
+        const ce = c * e, cf = c * f, de = d * e, df = d * f;
+
+        out[0] = ce - df * b;
+        out[4] = - a * f;
+        out[8] = de + cf * b;
+
+        out[1] = cf + de * b;
+        out[5] = a * e;
+        out[9] = df - ce * b;
+
+        out[2] = - a * d;
+        out[6] = b;
+        out[10] = a * c;
+    } else if (euler.order === EulerRotationOrders.ZYX) {
+        const ae = a * e, af = a * f, be = b * e, bf = b * f;
+
+        out[0] = c * e;
+        out[4] = be * d - af;
+        out[8] = ae * d + bf;
+
+        out[1] = c * f;
+        out[5] = bf * d + ae;
+        out[9] = af * d - be;
+
+        out[2] = - d;
+        out[6] = b * c;
+        out[10] = a * c;
+    } else if (euler.order === EulerRotationOrders.YZX) {
+        const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+
+        out[0] = c * e;
+        out[4] = bd - ac * f;
+        out[8] = bc * f + ad;
+
+        out[1] = f;
+        out[5] = a * e;
+        out[9] = - b * e;
+
+        out[2] = - d * e;
+        out[6] = ad * f + bc;
+        out[10] = ac - bd * f;
+    } else if (euler.order === EulerRotationOrders.XZY) {
+        const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+
+        out[0] = c * e;
+        out[4] = - f;
+        out[8] = d * e;
+
+        out[1] = ac * f + bd;
+        out[5] = a * e;
+        out[9] = ad * f - bc;
+
+        out[2] = bc * f - ad;
+        out[6] = b * e;
+        out[10] = bd * f + ac;
+    }
+
+    // bottom row
+    out[3] = 0;
+    out[7] = 0;
+    out[11] = 0;
+
+    // last column
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+
+    return out;
+}
+
+export function fromQuaternion(q: Float32Array, out: Float32Array) {
     let x = q[0],
         y = q[1],
         z = q[2],
@@ -124,10 +221,10 @@ export function fromQuaternion(q: IQuaternionData, out: IMatrix4Data) {
     return out;
 }
 
-export const fromRotation = (rad: number, axis: IVector3, out: IMatrix4Data): IMatrix4Data | null => {
-    x = axis.x,
-        y = axis.y,
-        z = axis.z;
+export const fromRotation = (rad: number, axis: Float32Array, out: Float32Array): Float32Array | null => {
+    x = axis[0];
+    y = axis[1];
+    z = axis[2];
     len = Math.hypot(x, y, z);
 
     if (len < EPSILON) {
@@ -162,7 +259,7 @@ export const fromRotation = (rad: number, axis: IVector3, out: IMatrix4Data): IM
     return out;
 }
 
-export const fromRotationX = (rad: number, out: IMatrix4Data): IMatrix4Data => {
+export const fromRotationX = (rad: number, out: Float32Array): Float32Array => {
     s = Math.sin(rad);
     c = Math.cos(rad);
 
@@ -185,7 +282,7 @@ export const fromRotationX = (rad: number, out: IMatrix4Data): IMatrix4Data => {
     return out;
 }
 
-export const fromRotationY = (rad: number, out: IMatrix4Data): IMatrix4Data => {
+export const fromRotationY = (rad: number, out: Float32Array): Float32Array => {
     s = Math.sin(rad);
     c = Math.cos(rad);
 
@@ -208,7 +305,7 @@ export const fromRotationY = (rad: number, out: IMatrix4Data): IMatrix4Data => {
     return out;
 }
 
-export const fromRotationZ = (rad: number, out: IMatrix4Data): IMatrix4Data => {
+export const fromRotationZ = (rad: number, out: Float32Array): Float32Array => {
     s = Math.sin(rad);
     c = Math.cos(rad);
 
@@ -231,18 +328,18 @@ export const fromRotationZ = (rad: number, out: IMatrix4Data): IMatrix4Data => {
     return out;
 }
 
-export const fromScaling = (v: IVector3, out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
-    out[0] = v.x;
+export const fromScaling = (v: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array => {
+    out[0] = v[0];
     out[1] = 0;
     out[2] = 0;
     out[3] = 0;
     out[4] = 0;
-    out[5] = v.y;
+    out[5] = v[1];
     out[6] = 0;
     out[7] = 0;
     out[8] = 0;
     out[9] = 0;
-    out[10] = v.z;
+    out[10] = v[2];
     out[11] = 0;
     out[12] = 0;
     out[13] = 0;
@@ -251,7 +348,7 @@ export const fromScaling = (v: IVector3, out: IMatrix4Data = new Matrix4()): IMa
     return out;
 }
 
-export const fromTranslation = (v: IVector3, out: IMatrix4Data = new Matrix4()) => {
+export const fromTranslation = (v: Float32Array, out: Float32Array = new Float32Array(16)) => {
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
@@ -264,14 +361,14 @@ export const fromTranslation = (v: IVector3, out: IMatrix4Data = new Matrix4()) 
     out[9] = 0;
     out[10] = 1;
     out[11] = 0;
-    out[12] = v.x;
-    out[13] = v.y;
-    out[14] = v.z;
+    out[12] = v[0];
+    out[13] = v[1];
+    out[14] = v[2];
     out[15] = 1;
     return out;
 }
 
-export const identity = (out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
+export const identity = (out: Float32Array = new Float32Array(16)): Float32Array => {
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
@@ -292,7 +389,7 @@ export const identity = (out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
     return out;
 }
 
-export function invert(a: IMatrix4Data, out: IMatrix4Data = new Matrix4()): IMatrix4Data | null {
+export function invert(a: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array | null {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2],
@@ -351,7 +448,7 @@ export function invert(a: IMatrix4Data, out: IMatrix4Data = new Matrix4()): IMat
     return out;
 }
 
-export const lookAt = (eye: IVector3Data, center: IVector3Data, up: IVector3Data, out: IMatrix4Data) => {
+export const lookAt = (eye: Float32Array, center: Float32Array, up: Float32Array, out: Float32Array) => {
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
     let eyex = eye[0];
     let eyey = eye[1];
@@ -431,7 +528,7 @@ export const lookAt = (eye: IVector3Data, center: IVector3Data, up: IVector3Data
     return out;
 }
 
-export const multiply = (a: IMatrix4Data, b: IMatrix4Data, out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
+export const multiply = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array => {
     a00 = a[0],
         a01 = a[1],
         a02 = a[2],
@@ -487,7 +584,7 @@ export const multiply = (a: IMatrix4Data, b: IMatrix4Data, out: IMatrix4Data = n
     return out;
 }
 
-export const orthogonal = (left: number, right: number, bottom: number, top: number, near: number, far: number, out: IMatrix4Data) => {
+export const orthogonal = (left: number, right: number, bottom: number, top: number, near: number, far: number, out: Float32Array) => {
     let lr = 1 / (left - right);
     let bt = 1 / (bottom - top);
     let nf = 1 / (near - far);
@@ -510,7 +607,7 @@ export const orthogonal = (left: number, right: number, bottom: number, top: num
     return out;
 }
 
-export const perspective = (fovy: number, aspect: number, near: number, far: number, out: IMatrix4Data) => {
+export const perspective = (fovy: number, aspect: number, near: number, far: number, out: Float32Array) => {
     let f = 1.0 / Math.tan(fovy / 2),
         nf;
     out[0] = f / aspect;
@@ -538,10 +635,10 @@ export const perspective = (fovy: number, aspect: number, near: number, far: num
     return out;
 }
 
-export const rotate = (a: IMatrix4Data, rad: number, axis: IVector3, out: IMatrix4Data): IMatrix4Data | null => {
-    x = axis.x,
-        y = axis.y,
-        z = axis.z;
+export const rotate = (a: Float32Array, rad: number, axis: Float32Array, out: Float32Array): Float32Array | null => {
+    x = axis[0];
+    y = axis[1];
+    z = axis[2];
     len = Math.hypot(x, y, z);
 
     if (len < EPSILON) {
@@ -602,7 +699,7 @@ export const rotate = (a: IMatrix4Data, rad: number, axis: IVector3, out: IMatri
     return out;
 }
 
-export const rotateX = (a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatrix4Data => {
+export const rotateX = (a: Float32Array, rad: number, out: Float32Array): Float32Array => {
     s = Math.sin(rad);
     c = Math.cos(rad);
     a10 = a[4];
@@ -636,7 +733,7 @@ export const rotateX = (a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatri
     return out;
 }
 
-export function rotateY(a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatrix4Data {
+export function rotateY(a: Float32Array, rad: number, out: Float32Array): Float32Array {
     s = Math.sin(rad);
     c = Math.cos(rad);
     a00 = a[0];
@@ -670,7 +767,7 @@ export function rotateY(a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatri
     return out;
 }
 
-export const rotateZ = (a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatrix4Data => {
+export const rotateZ = (a: Float32Array, rad: number, out: Float32Array): Float32Array => {
     s = Math.sin(rad);
     c = Math.cos(rad);
     a00 = a[0];
@@ -704,10 +801,10 @@ export const rotateZ = (a: IMatrix4Data, rad: number, out: IMatrix4Data): IMatri
     return out;
 }
 
-export const scale = (a: IMatrix4Data, v: IVector3, out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
-    x = v.x,
-        y = v.y,
-        z = v.z;
+export const scale = (a: Float32Array, v: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array => {
+    x = v[0];
+    y = v[1];
+    z = v[2];
 
     out[0] = a[0] * x;
     out[1] = a[1] * x;
@@ -730,7 +827,7 @@ export const scale = (a: IMatrix4Data, v: IVector3, out: IMatrix4Data = new Matr
     return out;
 }
 
-export const targetTo = (eye: IVector3Data, target: IVector3Data, up: IVector3Data, out: IMatrix4Data = new Matrix4()) => {
+export const targetTo = (eye: Float32Array, target: Float32Array, up: Float32Array, out: Float32Array = new Float32Array(16)) => {
     let eyex = eye[0],
         eyey = eye[1],
         eyez = eye[2],
@@ -781,13 +878,10 @@ export const targetTo = (eye: IVector3Data, target: IVector3Data, up: IVector3Da
     return out;
 }
 
-export const translate = (a: IMatrix4Data, v: IVector3, out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
-    let x = v.x,
-        y = v.y,
-        z = v.z;
-    let a00, a01, a02, a03;
-    let a10, a11, a12, a13;
-    let a20, a21, a22, a23;
+export const translate = (a: Float32Array, v: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array => {
+    x = v[0];
+    y = v[1];
+    z = v[2];
 
     if (a === out) {
         out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
@@ -830,7 +924,7 @@ export const translate = (a: IMatrix4Data, v: IVector3, out: IMatrix4Data = new 
     return out;
 }
 
-export const transpose = (a: IMatrix4Data, out: IMatrix4Data = new Matrix4()): IMatrix4Data => {
+export const transpose = (a: Float32Array, out: Float32Array = new Float32Array(16)): Float32Array => {
     if (out === a) {
         a01 = a[1],
             a02 = a[2],

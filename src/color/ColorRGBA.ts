@@ -2,7 +2,7 @@ import COLOR_HEX_MAP from "./ColorName";
 import IColorRGBA, { IColorRGBAData } from "./interfaces/IColorRGBA";
 
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
-	readonly length = 4;
+	readonly length: 4;
 
 	public constructor(r = 0, g = 0, b = 0, a = 255) {
 		super(4);
