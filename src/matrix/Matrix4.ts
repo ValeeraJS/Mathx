@@ -3,7 +3,7 @@ import IEuler, { EulerRotationOrders } from "../euler/IEuler";
 
 let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
-let x = 0, y = 0, z = 0, det = 0, len = 0, s = 0, c = 0, t = 0, a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
+let x = 0, y = 0, z = 0, det = 0, len = 0, s = 0, t = 0, a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
 
 const UNIT_MATRIX4_DATA = Object.freeze([
     1, 0, 0, 0,
