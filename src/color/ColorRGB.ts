@@ -1,4 +1,4 @@
-import COLOR_HEX_MAP from "./ColorName";
+import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGB, { IColorRGBData } from "./interfaces/IColorRGB";
 
 export default class ColorRGB extends Uint8Array implements IColorRGB {

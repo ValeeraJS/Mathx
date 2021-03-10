@@ -280,6 +280,46 @@ var ColorRGB = /** @class */ (function (_super) {
     return ColorRGB;
 }(Uint8Array));
 
+var create = function (r, g, b, a, out) {
+    if (r === void 0) { r = 0; }
+    if (g === void 0) { g = 0; }
+    if (b === void 0) { b = 0; }
+    if (a === void 0) { a = 1; }
+    if (out === void 0) { out = new Float32Array(4); }
+    out[0] = r;
+    out[1] = g;
+    out[2] = b;
+    out[3] = a;
+    return out;
+};
+var createJson = function (r, g, b, a) {
+    if (r === void 0) { r = 0; }
+    if (g === void 0) { g = 0; }
+    if (b === void 0) { b = 0; }
+    if (a === void 0) { a = 1; }
+    return {
+        r: r,
+        g: g,
+        b: b,
+        a: a
+    };
+};
+var fromScalar = function (scalar, a, out) {
+    if (a === void 0) { a = 1; }
+    out[0] = scalar;
+    out[1] = scalar;
+    out[2] = scalar;
+    out[3] = a;
+    return out;
+};
+
+var ColorGPU = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	create: create,
+	createJson: createJson,
+	fromScalar: fromScalar
+});
+
 var ceilPowerOfTwo = (function (value) {
     return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2));
 });
@@ -468,7 +508,7 @@ var closeTo = function (a, b) {
     b11 = b[3];
     return closeToCommon(a00, b00) && closeToCommon(a01, b01) && closeToCommon(a10, b10) && closeToCommon(a11, b11);
 };
-var create = function (a) {
+var create$1 = function (a) {
     if (a === void 0) { a = UNIT_MATRIX2_DATA; }
     return new Float32Array(a);
 };
@@ -617,7 +657,7 @@ var Matrix2 = /*#__PURE__*/Object.freeze({
 	add: add,
 	adjoint: adjoint,
 	closeTo: closeTo,
-	create: create,
+	create: create$1,
 	determinant: determinant,
 	equals: equals,
 	frobNorm: frobNorm,
@@ -671,7 +711,7 @@ var cofactor21 = function (a) {
 var cofactor22 = function (a) {
     return a[0] * a[4] - a[3] * a[1];
 };
-var create$1 = function () {
+var create$2 = function () {
     return new Float32Array(UNIT_MATRIX3_DATA);
 };
 var determinant$1 = function (a) {
@@ -929,7 +969,7 @@ var Matrix3 = /*#__PURE__*/Object.freeze({
 	cofactor20: cofactor20,
 	cofactor21: cofactor21,
 	cofactor22: cofactor22,
-	create: create$1,
+	create: create$2,
 	determinant: determinant$1,
 	from: from$1,
 	fromMatrix4: fromMatrix4,
@@ -965,7 +1005,7 @@ var UNIT_MATRIX4_DATA = Object.freeze([
     0, 0, 0, 1
 ]);
 var UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
-var create$2 = function () {
+var create$3 = function () {
     return new Float32Array(UNIT_MATRIX4_DATA);
 };
 var determinant$2 = function (a) {
@@ -1822,7 +1862,7 @@ var transpose$2 = function (a, out) {
 var Matrix4 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	UNIT_MATRIX4: UNIT_MATRIX4,
-	create: create$2,
+	create: create$3,
 	determinant: determinant$2,
 	from: from$2,
 	fromEuler: fromEuler,
@@ -1906,7 +1946,7 @@ var clone = function (a, out) {
 var closeTo$1 = function (a, b) {
     return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 };
-var create$3 = function (x, y, z, out) {
+var create$4 = function (x, y, z, out) {
     if (y === void 0) { y = 0; }
     if (out === void 0) { out = new Float32Array(3); }
     out[0] = x;
@@ -1973,7 +2013,7 @@ var fromArray = function (a, offset, out) {
     out[2] = a[offset + 2];
     return out;
 };
-var fromScalar = function (num, out) {
+var fromScalar$1 = function (num, out) {
     if (out === void 0) { out = new Float32Array(3); }
     out[0] = out[1] = out[2] = num;
     return out;
@@ -2208,7 +2248,7 @@ var Vector3 = /*#__PURE__*/Object.freeze({
 	clampScalar: clampScalar,
 	clone: clone,
 	closeTo: closeTo$1,
-	create: create$3,
+	create: create$4,
 	cross: cross,
 	distanceTo: distanceTo,
 	distanceToManhattan: distanceToManhattan,
@@ -2219,7 +2259,7 @@ var Vector3 = /*#__PURE__*/Object.freeze({
 	equals: equals$1,
 	from: from$3,
 	fromArray: fromArray,
-	fromScalar: fromScalar,
+	fromScalar: fromScalar$1,
 	fromValues: fromValues,
 	hermite: hermite,
 	inverse: inverse,
@@ -2279,7 +2319,7 @@ function ceil(a, out) {
 var closeTo$2 = function (a, b) {
     return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
 };
-var create$4 = function (x, y, z, w, out) {
+var create$5 = function (x, y, z, w, out) {
     if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
     if (z === void 0) { z = 0; }
@@ -2502,7 +2542,7 @@ var Vector4 = /*#__PURE__*/Object.freeze({
 	add: add$2,
 	ceil: ceil,
 	closeTo: closeTo$2,
-	create: create$4,
+	create: create$5,
 	cross: cross$1,
 	distanceTo: distanceTo$1,
 	distanceToSquared: distanceToSquared$1,
@@ -2544,7 +2584,7 @@ var conjugate = function (a, out) {
     out[3] = a[3];
     return out;
 };
-var create$5 = function (x, y, z, w, out) {
+var create$6 = function (x, y, z, w, out) {
     if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
     if (z === void 0) { z = 0; }
@@ -2779,7 +2819,7 @@ var Quaternion = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	angleTo: angleTo,
 	conjugate: conjugate,
-	create: create$5,
+	create: create$6,
 	dot: dot$2,
 	fromAxisAngle: fromAxisAngle,
 	fromMatrix3: fromMatrix3,
@@ -2876,7 +2916,7 @@ var clone$1 = function (a, out) {
 var cross$2 = function (a, b) {
     return a[0] * b[1] - a[1] * b[0];
 };
-var create$6 = function (x, y, out) {
+var create$7 = function (x, y, out) {
     if (out === void 0) { out = new Float32Array(2); }
     out[0] = x;
     out[1] = y;
@@ -2948,7 +2988,7 @@ var fromPolar = function (p, out) {
     out[1] = Math.sin(p.a) * p.r;
     return out;
 };
-var fromScalar$1 = function (value, out) {
+var fromScalar$2 = function (value, out) {
     if (value === void 0) { value = 0; }
     if (out === void 0) { out = new Float32Array(2); }
     out[0] = out[1] = value;
@@ -3103,7 +3143,7 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	closeToManhattan: closeToManhattan,
 	clone: clone$1,
 	cross: cross$2,
-	create: create$6,
+	create: create$7,
 	distanceTo: distanceTo$2,
 	distanceToManhattan: distanceToManhattan$1,
 	distanceToSquared: distanceToSquared$2,
@@ -3117,7 +3157,7 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	fromArray: fromArray$1,
 	fromJson: fromJson,
 	fromPolar: fromPolar,
-	fromScalar: fromScalar$1,
+	fromScalar: fromScalar$2,
 	inverse: inverse$2,
 	length: length$2,
 	lengthManhattan: lengthManhattan$1,
@@ -3147,5 +3187,5 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	VECTOR2_RIGHT: VECTOR2_RIGHT
 });
 
-export { COLOR_HEX_MAP, ColorRGB, ColorRGBA, Matrix2, Matrix3, Matrix4, Quaternion, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum$1 as sum, sumArray };
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Matrix2, Matrix3, Matrix4, Quaternion, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum$1 as sum, sumArray };
 //# sourceMappingURL=Mathx.legacy.module.js.map

@@ -1,4 +1,4 @@
-import COLOR_HEX_MAP from "./ColorName";
+import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGBA, { IColorRGBAData } from "./interfaces/IColorRGBA";
 
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
@@ -62,7 +62,7 @@ export const fromHex = (hex: number, a = 1, out: IColorRGBAData) => {
 	return out;
 }
 
-export const fromScalar = (scalar: number, a = 1, out: IColorRGBAData) => {
+export const fromScalar = (scalar: number, a = 255, out: IColorRGBAData) => {
 	out[0] = scalar;
 	out[1] = scalar;
 	out[2] = scalar;
