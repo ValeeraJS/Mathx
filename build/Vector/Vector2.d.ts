@@ -1,4 +1,5 @@
 import { IPolar } from "../polar";
+declare let x: number, y: number;
 export declare const add: (a: Float32Array, b: Float32Array, out?: Float32Array) => Float32Array;
 export declare const addScalar: (a: Float32Array, b: number, out?: Float32Array) => Float32Array;
 export declare const angle: (a: Float32Array) => number;
@@ -60,3 +61,4 @@ export declare const VECTOR2_TOP: Float32Array;
 export declare const VECTOR2_BOTTOM: Float32Array;
 export declare const VECTOR2_LEFT: Float32Array;
 export declare const VECTOR2_RIGHT: Float32Array;
+export {};

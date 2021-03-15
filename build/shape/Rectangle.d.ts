@@ -14,6 +14,6 @@ export declare const getSize: (a: IRectangle, out?: any) => Float32Array;
 export declare const height: (a: IRectangle) => number;
 export declare const intersect: (a: IRectangle, b: IRectangle, out?: IRectangle) => IRectangle;
 export declare const stretch: (a: IRectangle, b: any, c: any, out?: IRectangle) => IRectangle;
-export declare const translate: (a: IRectangle, b: any, out?: IRectangle) => typeof globalThis;
+export declare const translate: (a: IRectangle, b: any, out?: IRectangle) => undefined;
 export declare const union: (a: IRectangle, b: IRectangle, out?: IRectangle) => IRectangle;
 export declare const width: (a: IRectangle) => number;
