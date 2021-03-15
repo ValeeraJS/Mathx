@@ -480,6 +480,51 @@
 	    return sumArray(arr);
 	});
 
+	var EulerRotationOrders;
+	(function (EulerRotationOrders) {
+	    EulerRotationOrders["XYZ"] = "xyz";
+	    EulerRotationOrders["ZXY"] = "zxy";
+	    EulerRotationOrders["YZX"] = "yzx";
+	    EulerRotationOrders["XZY"] = "xzy";
+	    EulerRotationOrders["ZYX"] = "zyx";
+	    EulerRotationOrders["YXZ"] = "yxz";
+	})(EulerRotationOrders || (EulerRotationOrders = {}));
+
+	var createDefault = function () {
+	    return {
+	        x: 0,
+	        y: 0,
+	        z: 0,
+	        order: EulerRotationOrders.XYZ
+	    };
+	};
+	var create$1 = function (x, y, z, order, out) {
+	    if (x === void 0) { x = 0; }
+	    if (y === void 0) { y = 0; }
+	    if (z === void 0) { z = 0; }
+	    if (order === void 0) { order = EulerRotationOrders.XYZ; }
+	    if (out === void 0) { out = createDefault(); }
+	    out.x = x;
+	    out.y = y;
+	    out.z = z;
+	    out.order = order;
+	    return out;
+	};
+	var from = function (euler, out) {
+	    if (out === void 0) { out = createDefault(); }
+	    out.x = euler.x;
+	    out.y = euler.y;
+	    out.z = euler.z;
+	    out.order = euler.order;
+	    return out;
+	};
+
+	var Euler = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		create: create$1,
+		from: from
+	});
+
 	var a00 = 0, a01 = 0, a10 = 0, a11 = 0;
 	var b00 = 0, b01 = 0, b10 = 0, b11 = 0, det = 0;
 	var x = 0, y = 0;
@@ -514,7 +559,7 @@
 	    b11 = b[3];
 	    return closeToCommon(a00, b00) && closeToCommon(a01, b01) && closeToCommon(a10, b10) && closeToCommon(a11, b11);
 	};
-	var create$1 = function (a) {
+	var create$2 = function (a) {
 	    if (a === void 0) { a = UNIT_MATRIX2_DATA; }
 	    return new Float32Array(a);
 	};
@@ -527,7 +572,7 @@
 	var frobNorm = function (a) {
 	    return Math.hypot(a[0], a[1], a[2], a[3]);
 	};
-	var from = function (a, out) {
+	var from$1 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(4); }
 	    out[0] = a[0];
 	    out[1] = a[1];
@@ -663,11 +708,11 @@
 		add: add,
 		adjoint: adjoint,
 		closeTo: closeTo,
-		create: create$1,
+		create: create$2,
 		determinant: determinant,
 		equals: equals,
 		frobNorm: frobNorm,
-		from: from,
+		from: from$1,
 		fromRotation: fromRotation,
 		fromScaling: fromScaling,
 		identity: identity,
@@ -717,7 +762,7 @@
 	var cofactor22 = function (a) {
 	    return a[0] * a[4] - a[3] * a[1];
 	};
-	var create$2 = function () {
+	var create$3 = function () {
 	    return new Float32Array(UNIT_MATRIX3_DATA);
 	};
 	var determinant$1 = function (a) {
@@ -734,7 +779,7 @@
 	        a01$1 * (-a22 * a10$1 + a12 * a20) +
 	        a02 * (a21 * a10$1 - a11$1 * a20));
 	};
-	var from$1 = function (arr, out) {
+	var from$2 = function (arr, out) {
 	    if (out === void 0) { out = new Float32Array(9); }
 	    out[0] = arr[0];
 	    out[1] = arr[1];
@@ -975,9 +1020,9 @@
 		cofactor20: cofactor20,
 		cofactor21: cofactor21,
 		cofactor22: cofactor22,
-		create: create$2,
+		create: create$3,
 		determinant: determinant$1,
-		from: from$1,
+		from: from$2,
 		fromMatrix4: fromMatrix4,
 		fromRotation: fromRotation$1,
 		fromScaling: fromScaling$1,
@@ -991,16 +1036,6 @@
 		transpose: transpose$1
 	});
 
-	var EulerRotationOrders;
-	(function (EulerRotationOrders) {
-	    EulerRotationOrders["XYZ"] = "xyz";
-	    EulerRotationOrders["ZXY"] = "zxy";
-	    EulerRotationOrders["YZX"] = "yzx";
-	    EulerRotationOrders["XZY"] = "xzy";
-	    EulerRotationOrders["ZYX"] = "zyx";
-	    EulerRotationOrders["YXZ"] = "yxz";
-	})(EulerRotationOrders || (EulerRotationOrders = {}));
-
 	var a00$2 = 0, a01$2 = 0, a02$1 = 0, a03 = 0, a11$2 = 0, a10$2 = 0, a12$1 = 0, a13 = 0, a20$1 = 0, a21$1 = 0, a22$1 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 	var b00$2 = 0, b01$2 = 0, b02$1 = 0, b03 = 0, b11$2 = 0, b10$2 = 0, b12$1 = 0, b13 = 0, b20$1 = 0, b21$1 = 0, b22$1 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
 	var x$2 = 0, y$2 = 0, z = 0, det$1 = 0, len$1 = 0, s = 0, t = 0, a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
@@ -1011,7 +1046,7 @@
 	    0, 0, 0, 1
 	]);
 	var UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
-	var create$3 = function () {
+	var create$4 = function () {
 	    return new Float32Array(UNIT_MATRIX4_DATA);
 	};
 	var determinant$2 = function (a) {
@@ -1043,7 +1078,7 @@
 	    b21$1 = a30 * b02$1 - a31 * b01$2 + a32 * b00$2;
 	    return a13 * b12$1 - a03 * b13 + a33 * b20$1 - a23 * b21$1;
 	};
-	var from$2 = function (a, out) {
+	var from$3 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(16); }
 	    out[0] = a[0];
 	    out[1] = a[1];
@@ -1868,9 +1903,9 @@
 	var Matrix4 = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		UNIT_MATRIX4: UNIT_MATRIX4,
-		create: create$3,
+		create: create$4,
 		determinant: determinant$2,
-		from: from$2,
+		from: from$3,
 		fromEuler: fromEuler,
 		fromQuaternion: fromQuaternion,
 		fromRotation: fromRotation$2,
@@ -1952,7 +1987,7 @@
 	var closeTo$1 = function (a, b) {
 	    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 	};
-	var create$4 = function (x, y, z, out) {
+	var create$5 = function (x, y, z, out) {
 	    if (y === void 0) { y = 0; }
 	    if (out === void 0) { out = new Float32Array(3); }
 	    out[0] = x;
@@ -2004,7 +2039,7 @@
 	var equals$1 = function (a, b) {
 	    return ((a[0] === b[0]) && (a[1] === b[1]) && (a[2] === b[2]));
 	};
-	var from$3 = function (a, out) {
+	var from$4 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(3); }
 	    out[0] = a[0];
 	    out[1] = a[1];
@@ -2254,7 +2289,7 @@
 		clampScalar: clampScalar,
 		clone: clone,
 		closeTo: closeTo$1,
-		create: create$4,
+		create: create$5,
 		cross: cross,
 		distanceTo: distanceTo,
 		distanceToManhattan: distanceToManhattan,
@@ -2263,7 +2298,7 @@
 		divideScalar: divideScalar,
 		dot: dot,
 		equals: equals$1,
-		from: from$3,
+		from: from$4,
 		fromArray: fromArray,
 		fromScalar: fromScalar$1,
 		fromValues: fromValues,
@@ -2325,7 +2360,7 @@
 	var closeTo$2 = function (a, b) {
 	    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
 	};
-	var create$5 = function (x, y, z, w, out) {
+	var create$6 = function (x, y, z, w, out) {
 	    if (x === void 0) { x = 0; }
 	    if (y === void 0) { y = 0; }
 	    if (z === void 0) { z = 0; }
@@ -2390,7 +2425,7 @@
 	    out[3] = Math.floor(a[3]);
 	    return out;
 	}
-	var from$4 = function (a, out) {
+	var from$5 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(4); }
 	    out[0] = a[0];
 	    out[1] = a[1];
@@ -2548,7 +2583,7 @@
 		add: add$2,
 		ceil: ceil,
 		closeTo: closeTo$2,
-		create: create$5,
+		create: create$6,
 		cross: cross$1,
 		distanceTo: distanceTo$1,
 		distanceToSquared: distanceToSquared$1,
@@ -2556,7 +2591,7 @@
 		dot: dot$1,
 		equals: equals$2,
 		floor: floor,
-		from: from$4,
+		from: from$5,
 		fromValues: fromValues$1,
 		inverse: inverse$1,
 		length: length$1,
@@ -2590,7 +2625,7 @@
 	    out[3] = a[3];
 	    return out;
 	};
-	var create$6 = function (x, y, z, w, out) {
+	var create$7 = function (x, y, z, w, out) {
 	    if (x === void 0) { x = 0; }
 	    if (y === void 0) { y = 0; }
 	    if (z === void 0) { z = 0; }
@@ -2825,7 +2860,7 @@
 		__proto__: null,
 		angleTo: angleTo,
 		conjugate: conjugate,
-		create: create$6,
+		create: create$7,
 		dot: dot$2,
 		fromAxisAngle: fromAxisAngle,
 		fromMatrix3: fromMatrix3,
@@ -2922,7 +2957,7 @@
 	var cross$2 = function (a, b) {
 	    return a[0] * b[1] - a[1] * b[0];
 	};
-	var create$7 = function (x, y, out) {
+	var create$8 = function (x, y, out) {
 	    if (out === void 0) { out = new Float32Array(2); }
 	    out[0] = x;
 	    out[1] = y;
@@ -2969,7 +3004,7 @@
 	    out[1] = floorToZeroCommon(a[1]);
 	    return out;
 	};
-	var from$5 = function (a, out) {
+	var from$6 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(2); }
 	    out[0] = a[0];
 	    out[1] = a[1];
@@ -3149,7 +3184,7 @@
 		closeToManhattan: closeToManhattan,
 		clone: clone$1,
 		cross: cross$2,
-		create: create$7,
+		create: create$8,
 		distanceTo: distanceTo$2,
 		distanceToManhattan: distanceToManhattan$1,
 		distanceToSquared: distanceToSquared$2,
@@ -3159,7 +3194,7 @@
 		equals: equals$3,
 		floor: floor$1,
 		floorToZero: floorToZero,
-		from: from$5,
+		from: from$6,
 		fromArray: fromArray$1,
 		fromJson: fromJson,
 		fromPolar: fromPolar,
@@ -3197,6 +3232,7 @@
 	exports.ColorGPU = ColorGPU;
 	exports.ColorRGB = ColorRGB;
 	exports.ColorRGBA = ColorRGBA;
+	exports.Euler = Euler;
 	exports.Matrix2 = Matrix2;
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;

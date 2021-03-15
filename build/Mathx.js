@@ -391,6 +391,45 @@
 	    return sumArray(arr);
 	};
 
+	var EulerRotationOrders;
+	(function (EulerRotationOrders) {
+	    EulerRotationOrders["XYZ"] = "xyz";
+	    EulerRotationOrders["ZXY"] = "zxy";
+	    EulerRotationOrders["YZX"] = "yzx";
+	    EulerRotationOrders["XZY"] = "xzy";
+	    EulerRotationOrders["ZYX"] = "zyx";
+	    EulerRotationOrders["YXZ"] = "yxz";
+	})(EulerRotationOrders || (EulerRotationOrders = {}));
+
+	const createDefault = () => {
+	    return {
+	        x: 0,
+	        y: 0,
+	        z: 0,
+	        order: EulerRotationOrders.XYZ
+	    };
+	};
+	const create$1 = (x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ, out = createDefault()) => {
+	    out.x = x;
+	    out.y = y;
+	    out.z = z;
+	    out.order = order;
+	    return out;
+	};
+	const from = (euler, out = createDefault()) => {
+	    out.x = euler.x;
+	    out.y = euler.y;
+	    out.z = euler.z;
+	    out.order = euler.order;
+	    return out;
+	};
+
+	var Euler = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		create: create$1,
+		from: from
+	});
+
 	let a00 = 0, a01 = 0, a10 = 0, a11 = 0;
 	let b00 = 0, b01 = 0, b10 = 0, b11 = 0, det = 0;
 	let x = 0, y = 0;
@@ -425,7 +464,7 @@
 	    b11 = b[3];
 	    return closeToCommon(a00, b00) && closeToCommon(a01, b01) && closeToCommon(a10, b10) && closeToCommon(a11, b11);
 	};
-	const create$1 = (a = UNIT_MATRIX2_DATA) => {
+	const create$2 = (a = UNIT_MATRIX2_DATA) => {
 	    return new Float32Array(a);
 	};
 	const determinant = (a) => {
@@ -437,7 +476,7 @@
 	const frobNorm = (a) => {
 	    return Math.hypot(a[0], a[1], a[2], a[3]);
 	};
-	const from = (a, out = new Float32Array(4)) => {
+	const from$1 = (a, out = new Float32Array(4)) => {
 	    out[0] = a[0];
 	    out[1] = a[1];
 	    out[2] = a[2];
@@ -562,11 +601,11 @@
 		add: add,
 		adjoint: adjoint,
 		closeTo: closeTo,
-		create: create$1,
+		create: create$2,
 		determinant: determinant,
 		equals: equals,
 		frobNorm: frobNorm,
-		from: from,
+		from: from$1,
 		fromRotation: fromRotation,
 		fromScaling: fromScaling,
 		identity: identity,
@@ -616,7 +655,7 @@
 	const cofactor22 = (a) => {
 	    return a[0] * a[4] - a[3] * a[1];
 	};
-	const create$2 = () => {
+	const create$3 = () => {
 	    return new Float32Array(UNIT_MATRIX3_DATA);
 	};
 	const determinant$1 = (a) => {
@@ -633,7 +672,7 @@
 	        a01$1 * (-a22 * a10$1 + a12 * a20) +
 	        a02 * (a21 * a10$1 - a11$1 * a20));
 	};
-	const from$1 = (arr, out = new Float32Array(9)) => {
+	const from$2 = (arr, out = new Float32Array(9)) => {
 	    out[0] = arr[0];
 	    out[1] = arr[1];
 	    out[2] = arr[2];
@@ -864,9 +903,9 @@
 		cofactor20: cofactor20,
 		cofactor21: cofactor21,
 		cofactor22: cofactor22,
-		create: create$2,
+		create: create$3,
 		determinant: determinant$1,
-		from: from$1,
+		from: from$2,
 		fromMatrix4: fromMatrix4,
 		fromRotation: fromRotation$1,
 		fromScaling: fromScaling$1,
@@ -880,16 +919,6 @@
 		transpose: transpose$1
 	});
 
-	var EulerRotationOrders;
-	(function (EulerRotationOrders) {
-	    EulerRotationOrders["XYZ"] = "xyz";
-	    EulerRotationOrders["ZXY"] = "zxy";
-	    EulerRotationOrders["YZX"] = "yzx";
-	    EulerRotationOrders["XZY"] = "xzy";
-	    EulerRotationOrders["ZYX"] = "zyx";
-	    EulerRotationOrders["YXZ"] = "yxz";
-	})(EulerRotationOrders || (EulerRotationOrders = {}));
-
 	let a00$2 = 0, a01$2 = 0, a02$1 = 0, a03 = 0, a11$2 = 0, a10$2 = 0, a12$1 = 0, a13 = 0, a20$1 = 0, a21$1 = 0, a22$1 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 	let b00$2 = 0, b01$2 = 0, b02$1 = 0, b03 = 0, b11$2 = 0, b10$2 = 0, b12$1 = 0, b13 = 0, b20$1 = 0, b21$1 = 0, b22$1 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
 	let x$2 = 0, y$2 = 0, z = 0, det$1 = 0, len$1 = 0, s = 0, t = 0, a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
@@ -900,7 +929,7 @@
 	    0, 0, 0, 1
 	]);
 	const UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
-	const create$3 = () => {
+	const create$4 = () => {
 	    return new Float32Array(UNIT_MATRIX4_DATA);
 	};
 	const determinant$2 = (a) => {
@@ -932,7 +961,7 @@
 	    b21$1 = a30 * b02$1 - a31 * b01$2 + a32 * b00$2;
 	    return a13 * b12$1 - a03 * b13 + a33 * b20$1 - a23 * b21$1;
 	};
-	const from$2 = (a, out = new Float32Array(16)) => {
+	const from$3 = (a, out = new Float32Array(16)) => {
 	    out[0] = a[0];
 	    out[1] = a[1];
 	    out[2] = a[2];
@@ -1746,9 +1775,9 @@
 	var Matrix4 = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		UNIT_MATRIX4: UNIT_MATRIX4,
-		create: create$3,
+		create: create$4,
 		determinant: determinant$2,
-		from: from$2,
+		from: from$3,
 		fromEuler: fromEuler,
 		fromQuaternion: fromQuaternion,
 		fromRotation: fromRotation$2,
@@ -1824,7 +1853,7 @@
 	const closeTo$1 = (a, b) => {
 	    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 	};
-	const create$4 = (x, y = 0, z, out = new Float32Array(3)) => {
+	const create$5 = (x, y = 0, z, out = new Float32Array(3)) => {
 	    out[0] = x;
 	    out[1] = y;
 	    out[2] = z;
@@ -1871,7 +1900,7 @@
 	const equals$1 = (a, b) => {
 	    return ((a[0] === b[0]) && (a[1] === b[1]) && (a[2] === b[2]));
 	};
-	const from$3 = (a, out = new Float32Array(3)) => {
+	const from$4 = (a, out = new Float32Array(3)) => {
 	    out[0] = a[0];
 	    out[1] = a[1];
 	    out[2] = a[2];
@@ -2096,7 +2125,7 @@
 		clampScalar: clampScalar,
 		clone: clone,
 		closeTo: closeTo$1,
-		create: create$4,
+		create: create$5,
 		cross: cross,
 		distanceTo: distanceTo,
 		distanceToManhattan: distanceToManhattan,
@@ -2105,7 +2134,7 @@
 		divideScalar: divideScalar,
 		dot: dot,
 		equals: equals$1,
-		from: from$3,
+		from: from$4,
 		fromArray: fromArray,
 		fromScalar: fromScalar$1,
 		fromValues: fromValues,
@@ -2165,7 +2194,7 @@
 	const closeTo$2 = (a, b) => {
 	    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
 	};
-	const create$5 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
+	const create$6 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
 	    out[0] = x;
 	    out[1] = y;
 	    out[2] = z;
@@ -2223,7 +2252,7 @@
 	    out[3] = Math.floor(a[3]);
 	    return out;
 	}
-	const from$4 = (a, out = new Float32Array(4)) => {
+	const from$5 = (a, out = new Float32Array(4)) => {
 	    out[0] = a[0];
 	    out[1] = a[1];
 	    out[2] = a[2];
@@ -2367,7 +2396,7 @@
 		add: add$2,
 		ceil: ceil,
 		closeTo: closeTo$2,
-		create: create$5,
+		create: create$6,
 		cross: cross$1,
 		distanceTo: distanceTo$1,
 		distanceToSquared: distanceToSquared$1,
@@ -2375,7 +2404,7 @@
 		dot: dot$1,
 		equals: equals$2,
 		floor: floor,
-		from: from$4,
+		from: from$5,
 		fromValues: fromValues$1,
 		inverse: inverse$1,
 		length: length$1,
@@ -2408,7 +2437,7 @@
 	    out[3] = a[3];
 	    return out;
 	};
-	const create$6 = (x = 0, y = 0, z = 0, w = 1, out = new Float32Array(4)) => {
+	const create$7 = (x = 0, y = 0, z = 0, w = 1, out = new Float32Array(4)) => {
 	    out[0] = x;
 	    out[1] = y;
 	    out[2] = z;
@@ -2634,7 +2663,7 @@
 		__proto__: null,
 		angleTo: angleTo,
 		conjugate: conjugate,
-		create: create$6,
+		create: create$7,
 		dot: dot$2,
 		fromAxisAngle: fromAxisAngle,
 		fromMatrix3: fromMatrix3,
@@ -2720,7 +2749,7 @@
 	const cross$2 = (a, b) => {
 	    return a[0] * b[1] - a[1] * b[0];
 	};
-	const create$7 = (x, y, out = new Float32Array(2)) => {
+	const create$8 = (x, y, out = new Float32Array(2)) => {
 	    out[0] = x;
 	    out[1] = y;
 	    return out;
@@ -2762,7 +2791,7 @@
 	    out[1] = floorToZeroCommon(a[1]);
 	    return out;
 	};
-	const from$5 = (a, out = new Float32Array(2)) => {
+	const from$6 = (a, out = new Float32Array(2)) => {
 	    out[0] = a[0];
 	    out[1] = a[1];
 	    return out;
@@ -2914,7 +2943,7 @@
 		closeToManhattan: closeToManhattan,
 		clone: clone$1,
 		cross: cross$2,
-		create: create$7,
+		create: create$8,
 		distanceTo: distanceTo$2,
 		distanceToManhattan: distanceToManhattan$1,
 		distanceToSquared: distanceToSquared$2,
@@ -2924,7 +2953,7 @@
 		equals: equals$3,
 		floor: floor$1,
 		floorToZero: floorToZero,
-		from: from$5,
+		from: from$6,
 		fromArray: fromArray$1,
 		fromJson: fromJson,
 		fromPolar: fromPolar,
@@ -2962,6 +2991,7 @@
 	exports.ColorGPU = ColorGPU;
 	exports.ColorRGB = ColorRGB;
 	exports.ColorRGBA = ColorRGBA;
+	exports.Euler = Euler;
 	exports.Matrix2 = Matrix2;
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;

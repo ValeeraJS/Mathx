@@ -1,20 +1,6 @@
 import IEuler, { EulerRotationOrders } from "./IEuler";
 
-export class Euler implements IEuler{
-    static RotationOrders = EulerRotationOrders;
-    x: number;
-    y: number;
-    z: number;
-    order: EulerRotationOrders;
-    constructor(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.order = order;
-    }
-}
-
-const createDefault = ()  => {
+const createDefault = () => {
     return {
         x: 0,
         y: 0,
