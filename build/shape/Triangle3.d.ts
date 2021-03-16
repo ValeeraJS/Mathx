@@ -1,9 +1,14 @@
 import ITriangle3 from "./interfaces/ITriangle";
-import { IVector3Data } from "../vector/interfaces/IVector3";
 export default class Triangle3 implements ITriangle3 {
-    a: IVector3Data;
-    b: IVector3Data;
-    c: IVector3Data;
-    constructor(a: IVector3Data, b: IVector3Data, c: IVector3Data);
+    a: Float32Array;
+    b: Float32Array;
+    c: Float32Array;
+    constructor(a?: Float32Array, b?: Float32Array, c?: Float32Array);
 }
-export declare const normal: (t: ITriangle3, out?: any) => Float32Array;
+export declare const area: (t: ITriangle3) => number;
+export declare const create: (a?: Float32Array, b?: Float32Array, c?: Float32Array) => ITriangle3;
+export declare const getABLength: (t: ITriangle3) => number;
+export declare const getBCLength: (t: ITriangle3) => number;
+export declare const getCALength: (t: ITriangle3) => number;
+export declare const normal: (t: ITriangle3, out?: Float32Array) => Float32Array;
+export declare const toFloat32Array: (t: ITriangle3, out?: Float32Array) => Float32Array;

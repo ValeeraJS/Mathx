@@ -282,7 +282,7 @@ var ColorRGB = /** @class */ (function (_super) {
     return ColorRGB;
 }(Uint8Array));
 
-var create$9 = function (r, g, b, a, out) {
+var create$a = function (r, g, b, a, out) {
     if (r === void 0) { r = 0; }
     if (g === void 0) { g = 0; }
     if (b === void 0) { b = 0; }
@@ -317,7 +317,7 @@ var fromScalar$2 = function (scalar, a, out) {
 
 var ColorGPU = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	create: create$9,
+	create: create$a,
 	createJson: createJson,
 	fromScalar: fromScalar$2
 });
@@ -494,7 +494,7 @@ var createDefault = function () {
         z: 0
     };
 };
-var create$8 = function (x, y, z, order, out) {
+var create$9 = function (x, y, z, order, out) {
     if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
     if (z === void 0) { z = 0; }
@@ -592,7 +592,7 @@ var fromMatrix4$1 = function (matrix, out) {
 
 var Euler = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	create: create$8,
+	create: create$9,
 	from: from$6,
 	fromMatrix4: fromMatrix4$1
 });
@@ -631,7 +631,7 @@ var closeTo$3 = function (a, b) {
         closeToCommon(a10$2, b10$2) &&
         closeToCommon(a11$2, b11$2));
 };
-var create$7 = function (a) {
+var create$8 = function (a) {
     if (a === void 0) { a = UNIT_MATRIX2_DATA; }
     return new Float32Array(a);
 };
@@ -780,7 +780,7 @@ var Matrix2 = /*#__PURE__*/Object.freeze({
 	add: add$3,
 	adjoint: adjoint,
 	closeTo: closeTo$3,
-	create: create$7,
+	create: create$8,
 	determinant: determinant$2,
 	equals: equals$4,
 	frobNorm: frobNorm,
@@ -830,7 +830,7 @@ var cofactor21 = function (a) {
 var cofactor22 = function (a) {
     return a[0] * a[4] - a[3] * a[1];
 };
-var create$6 = function () {
+var create$7 = function () {
     return new Float32Array(UNIT_MATRIX3_DATA);
 };
 var determinant$1 = function (a) {
@@ -1088,7 +1088,7 @@ var Matrix3 = /*#__PURE__*/Object.freeze({
 	cofactor20: cofactor20,
 	cofactor21: cofactor21,
 	cofactor22: cofactor22,
-	create: create$6,
+	create: create$7,
 	determinant: determinant$1,
 	from: from$4,
 	fromMatrix4: fromMatrix4,
@@ -1110,7 +1110,7 @@ var b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 
 var x$1 = 0, y$1 = 0, z = 0, det = 0, len$1 = 0, s$3 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
 var UNIT_MATRIX4_DATA = Object.freeze([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 var UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
-var create$5 = function () {
+var create$6 = function () {
     return new Float32Array(UNIT_MATRIX4_DATA);
 };
 var determinant = function (a) {
@@ -1969,7 +1969,7 @@ var transpose = function (a, out) {
 var Matrix4 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	UNIT_MATRIX4: UNIT_MATRIX4,
-	create: create$5,
+	create: create$6,
 	determinant: determinant,
 	from: from$3,
 	fromEuler: fromEuler,
@@ -2053,8 +2053,10 @@ var clone$1 = function (a, out) {
 var closeTo$2 = function (a, b) {
     return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 };
-var create$4 = function (x, y, z, out) {
+var create$5 = function (x, y, z, out) {
+    if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
+    if (z === void 0) { z = 0; }
     if (out === void 0) { out = new Float32Array(3); }
     out[0] = x;
     out[1] = y;
@@ -2359,7 +2361,7 @@ var Vector3 = /*#__PURE__*/Object.freeze({
 	clampScalar: clampScalar$1,
 	clone: clone$1,
 	closeTo: closeTo$2,
-	create: create$4,
+	create: create$5,
 	cross: cross$2,
 	distanceTo: distanceTo$2,
 	distanceToManhattan: distanceToManhattan$1,
@@ -2430,7 +2432,7 @@ function ceil$1(a, out) {
 var closeTo$1 = function (a, b) {
     return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
 };
-var create$3 = function (x, y, z, w, out) {
+var create$4 = function (x, y, z, w, out) {
     if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
     if (z === void 0) { z = 0; }
@@ -2653,7 +2655,7 @@ var Vector4 = /*#__PURE__*/Object.freeze({
 	add: add$1,
 	ceil: ceil$1,
 	closeTo: closeTo$1,
-	create: create$3,
+	create: create$4,
 	cross: cross$1,
 	distanceTo: distanceTo$1,
 	distanceToSquared: distanceToSquared$1,
@@ -2695,7 +2697,7 @@ var conjugate = function (a, out) {
     out[3] = a[3];
     return out;
 };
-var create$2 = function (x, y, z, w, out) {
+var create$3 = function (x, y, z, w, out) {
     if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
     if (z === void 0) { z = 0; }
@@ -2930,7 +2932,7 @@ var Quaternion = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	angleTo: angleTo,
 	conjugate: conjugate,
-	create: create$2,
+	create: create$3,
 	dot: dot$1,
 	fromAxisAngle: fromAxisAngle,
 	fromMatrix3: fromMatrix3,
@@ -3027,7 +3029,7 @@ var clone = function (a, out) {
 var cross = function (a, b) {
     return a[0] * b[1] - a[1] * b[0];
 };
-var create$1 = function (x, y, out) {
+var create$2 = function (x, y, out) {
     if (x === void 0) { x = 0; }
     if (y === void 0) { y = 0; }
     if (out === void 0) { out = new Float32Array(2); }
@@ -3256,7 +3258,7 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	closeToManhattan: closeToManhattan,
 	clone: clone,
 	cross: cross,
-	create: create$1,
+	create: create$2,
 	distanceTo: distanceTo,
 	distanceToManhattan: distanceToManhattan,
 	distanceToSquared: distanceToSquared,
@@ -3300,18 +3302,18 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	VECTOR2_RIGHT: VECTOR2_RIGHT
 });
 
-var Rectangle = /** @class */ (function () {
-    function Rectangle(a, b) {
-        if (a === void 0) { a = create$1(); }
-        if (b === void 0) { b = create$1(1, 1); }
-        this.min = create$1();
-        this.max = create$1();
+var Rectangle2 = /** @class */ (function () {
+    function Rectangle2(a, b) {
+        if (a === void 0) { a = create$2(); }
+        if (b === void 0) { b = create$2(1, 1); }
+        this.min = create$2();
+        this.max = create$2();
         min(a, b, this.min);
         max(a, b, this.max);
     }
-    return Rectangle;
+    return Rectangle2;
 }());
-var area = function (a) {
+var area$1 = function (a) {
     return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
 };
 var containsPoint = function (rect, a) {
@@ -3323,9 +3325,9 @@ var containsRectangle = function (rect, box) {
         rect.min[1] <= box.min[1] &&
         box.max[1] <= rect.max[1]);
 };
-var create = function (a, b) {
-    if (a === void 0) { a = create$1(); }
-    if (b === void 0) { b = create$1(1, 1); }
+var create$1 = function (a, b) {
+    if (a === void 0) { a = create$2(); }
+    if (b === void 0) { b = create$2(1, 1); }
     return {
         max: max(a, b),
         min: min(a, b)
@@ -3335,37 +3337,37 @@ var equals = function (a, b) {
     return equals$1(a.min, b.min) && equals$1(a.max, b.max);
 };
 var getCenter = function (a, out) {
-    if (out === void 0) { out = create$1(); }
+    if (out === void 0) { out = create$2(); }
     add(a.min, a.max, out);
     return multiplyScalar(out, 0.5, out);
 };
 var getSize = function (a, out) {
-    if (out === void 0) { out = create$1(); }
+    if (out === void 0) { out = create$2(); }
     return minus(a.max, a.min, out);
 };
 var height = function (a) {
     return a.max[1] - a.min[1];
 };
 var intersect = function (a, b, out) {
-    if (out === void 0) { out = new Rectangle(); }
+    if (out === void 0) { out = new Rectangle2(); }
     max(a.min, b.min, out.min);
     min(a.max, b.max, out.max);
     return out;
 };
 var stretch = function (a, b, c, out) {
-    if (out === void 0) { out = new Rectangle(); }
+    if (out === void 0) { out = new Rectangle2(); }
     add(a.min, b, out.min);
     add(a.max, c, out.max);
     return out;
 };
 var translate = function (a, b, out) {
-    if (out === void 0) { out = new Rectangle(); }
+    if (out === void 0) { out = new Rectangle2(); }
     add(a.min, b, out.min);
     add(a.max, b, out.max);
     return out;
 };
 var union = function (a, b, out) {
-    if (out === void 0) { out = new Rectangle(); }
+    if (out === void 0) { out = new Rectangle2(); }
     min(a.min, b.min, out.min);
     max(a.max, b.max, out.max);
     return out;
@@ -3374,13 +3376,13 @@ var width = function (a) {
     return a.max[0] - a.min[0];
 };
 
-var Rectangle$1 = /*#__PURE__*/Object.freeze({
+var Rectangle2$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	'default': Rectangle,
-	area: area,
+	'default': Rectangle2,
+	area: area$1,
 	containsPoint: containsPoint,
 	containsRectangle: containsRectangle,
-	create: create,
+	create: create$1,
 	equals: equals,
 	getCenter: getCenter,
 	getSize: getSize,
@@ -3392,5 +3394,69 @@ var Rectangle$1 = /*#__PURE__*/Object.freeze({
 	width: width
 });
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle$1 as Rectangle, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+var defaultA = [-1, -1, 0];
+var defaultB = [1, -1, 0];
+var defaultC = [0, 1, 0];
+var ab, bc;
+var Triangle3 = /** @class */ (function () {
+    function Triangle3(a, b, c) {
+        if (a === void 0) { a = new Float32Array(defaultA); }
+        if (b === void 0) { b = new Float32Array(defaultB); }
+        if (c === void 0) { c = new Float32Array(defaultC); }
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+    return Triangle3;
+}());
+var area = function (t) {
+    var c = getABLength(t);
+    var a = getBCLength(t);
+    var b = getCALength(t);
+    var p = (c + a + b) / 2;
+    return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+};
+var create = function (a, b, c) {
+    if (a === void 0) { a = new Float32Array(defaultA); }
+    if (b === void 0) { b = new Float32Array(defaultB); }
+    if (c === void 0) { c = new Float32Array(defaultC); }
+    return { a: a, b: b, c: c };
+};
+var getABLength = function (t) {
+    return distanceTo$2(t.a, t.b);
+};
+var getBCLength = function (t) {
+    return distanceTo$2(t.b, t.c);
+};
+var getCALength = function (t) {
+    return distanceTo$2(t.c, t.a);
+};
+var normal = function (t, out) {
+    if (out === void 0) { out = create$5(); }
+    minus$2(t.c, t.b, bc);
+    minus$2(t.b, t.a, ab);
+    cross$2(ab, bc, out);
+    return normalize$2(out);
+};
+var toFloat32Array = function (t, out) {
+    if (out === void 0) { out = new Float32Array(3); }
+    out.set(t.a, 0);
+    out.set(t.b, 3);
+    out.set(t.c, 6);
+    return normalize$2(out);
+};
+
+var Triangle3$1 = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	'default': Triangle3,
+	area: area,
+	create: create,
+	getABLength: getABLength,
+	getBCLength: getBCLength,
+	getCALength: getCALength,
+	normal: normal,
+	toFloat32Array: toFloat32Array
+});
+
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
 //# sourceMappingURL=Mathx.legacy.module.js.map

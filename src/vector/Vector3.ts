@@ -96,9 +96,9 @@ export const closeTo = (a: Float32Array, b: Float32Array): boolean => {
 };
 
 export const create = (
-	x: number,
+	x = 0,
 	y = 0,
-	z: number,
+	z = 0,
 	out: Float32Array = new Float32Array(3)
 ): Float32Array => {
 	out[0] = x;

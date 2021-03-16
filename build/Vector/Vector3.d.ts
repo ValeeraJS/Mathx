@@ -6,7 +6,7 @@ export declare const clampSafe: (a: Float32Array, min: Float32Array, max: Float3
 export declare const clampScalar: (a: Float32Array, min: number, max: number, out?: Float32Array) => Float32Array;
 export declare const clone: (a: Float32Array, out?: Float32Array) => Float32Array;
 export declare const closeTo: (a: Float32Array, b: Float32Array) => boolean;
-export declare const create: (x: number, y: number | undefined, z: number, out?: Float32Array) => Float32Array;
+export declare const create: (x?: number, y?: number, z?: number, out?: Float32Array) => Float32Array;
 export declare const cross: (a: Float32Array, b: Float32Array, out?: Float32Array) => Float32Array;
 export declare const distanceTo: (a: Float32Array, b: Float32Array) => number;
 export declare const distanceToManhattan: (a: Float32Array, b: Float32Array) => number;

@@ -1,7 +1,7 @@
 import IRectangle from "./interfaces/IRectangle";
 import { Vector2 } from "../vector";
 
-export default class Rectangle implements IRectangle {
+export default class Rectangle2 implements IRectangle {
 	public min: Float32Array = Vector2.create();
 	public max: Float32Array = Vector2.create();
 	public constructor(a: Float32Array = Vector2.create(), b: Float32Array = Vector2.create(1, 1)) {
@@ -58,7 +58,7 @@ export const height = (a: IRectangle): number => {
 export const intersect = (
 	a: IRectangle,
 	b: IRectangle,
-	out: IRectangle = new Rectangle()
+	out: IRectangle = new Rectangle2()
 ): IRectangle => {
 	Vector2.max(a.min, b.min, out.min);
 	Vector2.min(a.max, b.max, out.max);
@@ -70,7 +70,7 @@ export const stretch = (
 	a: IRectangle,
 	b: Float32Array,
 	c: Float32Array,
-	out: IRectangle = new Rectangle()
+	out: IRectangle = new Rectangle2()
 ): IRectangle => {
 	Vector2.add(a.min, b, out.min);
 	Vector2.add(a.max, c, out.max);
@@ -81,7 +81,7 @@ export const stretch = (
 export const translate = (
 	a: IRectangle,
 	b: Float32Array,
-	out: IRectangle = new Rectangle()
+	out: IRectangle = new Rectangle2()
 ): IRectangle => {
 	Vector2.add(a.min, b, out.min);
 	Vector2.add(a.max, b, out.max);
@@ -92,7 +92,7 @@ export const translate = (
 export const union = (
 	a: IRectangle,
 	b: IRectangle,
-	out: IRectangle = new Rectangle()
+	out: IRectangle = new Rectangle2()
 ): IRectangle => {
 	Vector2.min(a.min, b.min, out.min);
 	Vector2.max(a.max, b.max, out.max);
