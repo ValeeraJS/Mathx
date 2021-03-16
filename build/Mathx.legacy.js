@@ -288,7 +288,7 @@
 	    return ColorRGB;
 	}(Uint8Array));
 
-	var create$8 = function (r, g, b, a, out) {
+	var create$9 = function (r, g, b, a, out) {
 	    if (r === void 0) { r = 0; }
 	    if (g === void 0) { g = 0; }
 	    if (b === void 0) { b = 0; }
@@ -323,7 +323,7 @@
 
 	var ColorGPU = /*#__PURE__*/Object.freeze({
 		__proto__: null,
-		create: create$8,
+		create: create$9,
 		createJson: createJson,
 		fromScalar: fromScalar$2
 	});
@@ -494,13 +494,13 @@
 
 	var createDefault = function () {
 	    return {
+	        order: EulerRotationOrders.XYZ,
 	        x: 0,
 	        y: 0,
-	        z: 0,
-	        order: EulerRotationOrders.XYZ
+	        z: 0
 	    };
 	};
-	var create$7 = function (x, y, z, order, out) {
+	var create$8 = function (x, y, z, order, out) {
 	    if (x === void 0) { x = 0; }
 	    if (y === void 0) { y = 0; }
 	    if (z === void 0) { z = 0; }
@@ -598,7 +598,7 @@
 
 	var Euler = /*#__PURE__*/Object.freeze({
 		__proto__: null,
-		create: create$7,
+		create: create$8,
 		from: from$6,
 		fromMatrix4: fromMatrix4$1
 	});
@@ -606,10 +606,7 @@
 	var a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
 	var b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
 	var x$3 = 0, y$3 = 0;
-	var UNIT_MATRIX2_DATA = [
-	    1, 0,
-	    0, 1,
-	];
+	var UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 	var UNIT_MATRIX2 = new Float32Array(UNIT_MATRIX2_DATA);
 	var add$3 = function (a, b, out) {
 	    out[0] = a[0] + b[0];
@@ -635,16 +632,19 @@
 	    b10$2 = b[1];
 	    b01$2 = b[2];
 	    b11$2 = b[3];
-	    return closeToCommon(a00$2, b00$2) && closeToCommon(a01$2, b01$2) && closeToCommon(a10$2, b10$2) && closeToCommon(a11$2, b11$2);
+	    return (closeToCommon(a00$2, b00$2) &&
+	        closeToCommon(a01$2, b01$2) &&
+	        closeToCommon(a10$2, b10$2) &&
+	        closeToCommon(a11$2, b11$2));
 	};
-	var create$6 = function (a) {
+	var create$7 = function (a) {
 	    if (a === void 0) { a = UNIT_MATRIX2_DATA; }
 	    return new Float32Array(a);
 	};
 	var determinant$2 = function (a) {
 	    return a[0] * a[3] - a[1] * a[2];
 	};
-	var equals$3 = function (a, b) {
+	var equals$4 = function (a, b) {
 	    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 	};
 	var frobNorm = function (a) {
@@ -761,9 +761,9 @@
 	    out[3] = a11$2 * y$3;
 	    return out;
 	};
-	function toString$4(a) {
+	var toString$4 = function (a) {
 	    return "mat2(" + a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3] + ")";
-	}
+	};
 	var transpose$2 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(4); }
 	    if (out === a) {
@@ -786,9 +786,9 @@
 		add: add$3,
 		adjoint: adjoint,
 		closeTo: closeTo$3,
-		create: create$6,
+		create: create$7,
 		determinant: determinant$2,
-		equals: equals$3,
+		equals: equals$4,
 		frobNorm: frobNorm,
 		from: from$5,
 		fromRotation: fromRotation$2,
@@ -807,11 +807,7 @@
 	var a00$1 = 0, a01$1 = 0, a02$1 = 0, a11$1 = 0, a10$1 = 0, a12$1 = 0, a20$1 = 0, a21$1 = 0, a22$1 = 0;
 	var b00$1 = 0, b01$1 = 0, b02$1 = 0, b11$1 = 0, b10$1 = 0, b12$1 = 0, b20$1 = 0, b21$1 = 0, b22$1 = 0;
 	var x$2 = 0, y$2 = 0;
-	var UNIT_MATRIX3_DATA = [
-	    1, 0, 0,
-	    0, 1, 0,
-	    0, 0, 1
-	];
+	var UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 	var UNIT_MATRIX3 = new Float32Array(UNIT_MATRIX3_DATA);
 	var cofactor00 = function (a) {
 	    return a[4] * a[8] - a[5] * a[7];
@@ -840,19 +836,19 @@
 	var cofactor22 = function (a) {
 	    return a[0] * a[4] - a[3] * a[1];
 	};
-	var create$5 = function () {
+	var create$6 = function () {
 	    return new Float32Array(UNIT_MATRIX3_DATA);
 	};
 	var determinant$1 = function (a) {
-	    a00$1 = a[0],
-	        a01$1 = a[1],
-	        a02$1 = a[2];
-	    a10$1 = a[3],
-	        a11$1 = a[4],
-	        a12$1 = a[5];
-	    a20$1 = a[6],
-	        a21$1 = a[7],
-	        a22$1 = a[8];
+	    a00$1 = a[0];
+	    a01$1 = a[1];
+	    a02$1 = a[2];
+	    a10$1 = a[3];
+	    a11$1 = a[4];
+	    a12$1 = a[5];
+	    a20$1 = a[6];
+	    a21$1 = a[7];
+	    a22$1 = a[8];
 	    return (a00$1 * (a22$1 * a11$1 - a12$1 * a21$1) +
 	        a01$1 * (-a22$1 * a10$1 + a12$1 * a20$1) +
 	        a02$1 * (a21$1 * a10$1 - a11$1 * a20$1));
@@ -937,15 +933,15 @@
 	    return out;
 	};
 	var invert$2 = function (a, out) {
-	    a00$1 = a[0],
-	        a01$1 = a[1],
-	        a02$1 = a[2];
-	    a10$1 = a[3],
-	        a11$1 = a[4],
-	        a12$1 = a[5];
-	    a20$1 = a[6],
-	        a21$1 = a[7],
-	        a22$1 = a[8];
+	    a00$1 = a[0];
+	    a01$1 = a[1];
+	    a02$1 = a[2];
+	    a10$1 = a[3];
+	    a11$1 = a[4];
+	    a12$1 = a[5];
+	    a20$1 = a[6];
+	    a21$1 = a[7];
+	    a22$1 = a[8];
 	    b01$1 = a22$1 * a11$1 - a12$1 * a21$1;
 	    b11$1 = -a22$1 * a10$1 + a12$1 * a20$1;
 	    b21$1 = a21$1 * a10$1 - a11$1 * a20$1;
@@ -967,24 +963,24 @@
 	};
 	var multiply$5 = function () { return function (a, b, out) {
 	    if (out === void 0) { out = new Float32Array(9); }
-	    a00$1 = a[0],
-	        a01$1 = a[1],
-	        a02$1 = a[2];
-	    a10$1 = a[3],
-	        a11$1 = a[4],
-	        a12$1 = a[5];
-	    a20$1 = a[6],
-	        a21$1 = a[7],
-	        a22$1 = a[8];
-	    b00$1 = b[0],
-	        b01$1 = b[1],
-	        b02$1 = b[2];
-	    b10$1 = b[3],
-	        b11$1 = b[4],
-	        b12$1 = b[5];
-	    b20$1 = b[6],
-	        b21$1 = b[7],
-	        b22$1 = b[8];
+	    a00$1 = a[0];
+	    a01$1 = a[1];
+	    a02$1 = a[2];
+	    a10$1 = a[3];
+	    a11$1 = a[4];
+	    a12$1 = a[5];
+	    a20$1 = a[6];
+	    a21$1 = a[7];
+	    a22$1 = a[8];
+	    b00$1 = b[0];
+	    b01$1 = b[1];
+	    b02$1 = b[2];
+	    b10$1 = b[3];
+	    b11$1 = b[4];
+	    b12$1 = b[5];
+	    b20$1 = b[6];
+	    b21$1 = b[7];
+	    b22$1 = b[8];
 	    out[0] = b00$1 * a00$1 + b01$1 * a10$1 + b02$1 * a20$1;
 	    out[1] = b00$1 * a01$1 + b01$1 * a11$1 + b02$1 * a21$1;
 	    out[2] = b00$1 * a02$1 + b01$1 * a12$1 + b02$1 * a22$1;
@@ -998,17 +994,17 @@
 	}; };
 	var rotate$2 = function (a, rad, out) {
 	    if (out === void 0) { out = new Float32Array(9); }
-	    a00$1 = a[0],
-	        a01$1 = a[1],
-	        a02$1 = a[2],
-	        a10$1 = a[3],
-	        a11$1 = a[4],
-	        a12$1 = a[5],
-	        a20$1 = a[6],
-	        a21$1 = a[7],
-	        a22$1 = a[8],
-	        y$2 = Math.sin(rad),
-	        x$2 = Math.cos(rad);
+	    a00$1 = a[0];
+	    a01$1 = a[1];
+	    a02$1 = a[2];
+	    a10$1 = a[3];
+	    a11$1 = a[4];
+	    a12$1 = a[5];
+	    a20$1 = a[6];
+	    a21$1 = a[7];
+	    a22$1 = a[8];
+	    y$2 = Math.sin(rad);
+	    x$2 = Math.cos(rad);
 	    out[0] = x$2 * a00$1 + y$2 * a10$1;
 	    out[1] = x$2 * a01$1 + y$2 * a11$1;
 	    out[2] = x$2 * a02$1 + y$2 * a12$1;
@@ -1020,7 +1016,7 @@
 	    out[8] = a22$1;
 	    return out;
 	};
-	function scale$1(a, v, out) {
+	var scale$1 = function (a, v, out) {
 	    if (out === void 0) { out = new Float32Array(9); }
 	    x$2 = v[0];
 	    y$2 = v[1];
@@ -1034,8 +1030,8 @@
 	    out[7] = a[7];
 	    out[8] = a[8];
 	    return out;
-	}
-	var translate$1 = function (a, v, out) {
+	};
+	var translate$2 = function (a, v, out) {
 	    if (out === void 0) { out = new Float32Array(9); }
 	    a00$1 = a[0];
 	    a01$1 = a[1];
@@ -1098,7 +1094,7 @@
 		cofactor20: cofactor20,
 		cofactor21: cofactor21,
 		cofactor22: cofactor22,
-		create: create$5,
+		create: create$6,
 		determinant: determinant$1,
 		from: from$4,
 		fromMatrix4: fromMatrix4,
@@ -1110,40 +1106,36 @@
 		multiply: multiply$5,
 		rotate: rotate$2,
 		scale: scale$1,
-		translate: translate$1,
+		translate: translate$2,
 		transpose: transpose$1
 	});
 
+	/* eslint-disable max-lines */
 	var a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 	var b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
 	var x$1 = 0, y$1 = 0, z = 0, det = 0, len$1 = 0, s$3 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
-	var UNIT_MATRIX4_DATA = Object.freeze([
-	    1, 0, 0, 0,
-	    0, 1, 0, 0,
-	    0, 0, 1, 0,
-	    0, 0, 0, 1
-	]);
+	var UNIT_MATRIX4_DATA = Object.freeze([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 	var UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
-	var create$4 = function () {
+	var create$5 = function () {
 	    return new Float32Array(UNIT_MATRIX4_DATA);
 	};
 	var determinant = function (a) {
-	    a00 = a[0],
-	        a01 = a[1],
-	        a02 = a[2],
-	        a03 = a[3];
-	    a10 = a[4],
-	        a11 = a[5],
-	        a12 = a[6],
-	        a13 = a[7];
-	    a20 = a[8],
-	        a21 = a[9],
-	        a22 = a[10],
-	        a23 = a[11];
-	    a30 = a[12],
-	        a31 = a[13],
-	        a32 = a[14],
-	        a33 = a[15];
+	    a00 = a[0];
+	    a01 = a[1];
+	    a02 = a[2];
+	    a03 = a[3];
+	    a10 = a[4];
+	    a11 = a[5];
+	    a12 = a[6];
+	    a13 = a[7];
+	    a20 = a[8];
+	    a21 = a[9];
+	    a22 = a[10];
+	    a23 = a[11];
+	    a30 = a[12];
+	    a31 = a[13];
+	    a32 = a[14];
+	    a33 = a[15];
 	    b00 = a00 * a11 - a01 * a10;
 	    b01 = a00 * a12 - a02 * a10;
 	    b02 = a01 * a12 - a02 * a11;
@@ -1181,9 +1173,12 @@
 	    x$1 = euler.x;
 	    y$1 = euler.y;
 	    z = euler.z;
-	    a = Math.cos(x$1), b = Math.sin(x$1);
-	    c$2 = Math.cos(y$1), d = Math.sin(y$1);
-	    e = Math.cos(z), f = Math.sin(z);
+	    a = Math.cos(x$1);
+	    b = Math.sin(x$1);
+	    c$2 = Math.cos(y$1);
+	    d = Math.sin(y$1);
+	    e = Math.cos(z);
+	    f = Math.sin(z);
 	    if (euler.order === EulerRotationOrders.XYZ) {
 	        var ae = a * e, af = a * f, be = b * e, bf = b * f;
 	        out[0] = c$2 * e;
@@ -1267,7 +1262,7 @@
 	    out[15] = 1;
 	    return out;
 	};
-	function fromQuaternion(q, out) {
+	var fromQuaternion = function (q, out) {
 	    var x = q[0], y = q[1], z = q[2], w = q[3];
 	    var x2 = x + x;
 	    var y2 = y + y;
@@ -1298,7 +1293,7 @@
 	    out[14] = 0;
 	    out[15] = 1;
 	    return out;
-	}
+	};
 	var fromRotation = function (rad, axis, out) {
 	    x$1 = axis[0];
 	    y$1 = axis[1];
@@ -1457,22 +1452,22 @@
 	};
 	function invert$1(a, out) {
 	    if (out === void 0) { out = new Float32Array(16); }
-	    a00 = a[0],
-	        a01 = a[1],
-	        a02 = a[2],
-	        a03 = a[3];
-	    a10 = a[4],
-	        a11 = a[5],
-	        a12 = a[6],
-	        a13 = a[7];
-	    a20 = a[8],
-	        a21 = a[9],
-	        a22 = a[10],
-	        a23 = a[11];
-	    a30 = a[12],
-	        a31 = a[13],
-	        a32 = a[14],
-	        a33 = a[15];
+	    a00 = a[0];
+	    a01 = a[1];
+	    a02 = a[2];
+	    a03 = a[3];
+	    a10 = a[4];
+	    a11 = a[5];
+	    a12 = a[6];
+	    a13 = a[7];
+	    a20 = a[8];
+	    a21 = a[9];
+	    a22 = a[10];
+	    a23 = a[11];
+	    a30 = a[12];
+	    a31 = a[13];
+	    a32 = a[14];
+	    a33 = a[15];
 	    b00 = a00 * a11 - a01 * a10;
 	    b01 = a00 * a12 - a02 * a10;
 	    b02 = a00 * a13 - a03 * a10;
@@ -1485,8 +1480,7 @@
 	    b31 = a21 * a32 - a22 * a31;
 	    b32 = a21 * a33 - a23 * a31;
 	    b33 = a22 * a33 - a23 * a32;
-	    det =
-	        b00 * b33 - b01 * b32 + b02 * b31 + b03 * b30 - b20 * b23 + b21 * b22;
+	    det = b00 * b33 - b01 * b32 + b02 * b31 + b03 * b30 - b20 * b23 + b21 * b22;
 	    if (!det) {
 	        return null;
 	    }
@@ -1582,26 +1576,26 @@
 	};
 	var multiply$4 = function (a, b, out) {
 	    if (out === void 0) { out = new Float32Array(16); }
-	    a00 = a[0],
-	        a01 = a[1],
-	        a02 = a[2],
-	        a03 = a[3];
-	    a10 = a[4],
-	        a11 = a[5],
-	        a12 = a[6],
-	        a13 = a[7];
-	    a20 = a[8],
-	        a21 = a[9],
-	        a22 = a[10],
-	        a23 = a[11];
-	    a30 = a[12],
-	        a31 = a[13],
-	        a32 = a[14],
-	        a33 = a[15];
-	    b00 = b[0],
-	        b01 = b[1],
-	        b02 = b[2],
-	        b03 = b[3];
+	    a00 = a[0];
+	    a01 = a[1];
+	    a02 = a[2];
+	    a03 = a[3];
+	    a10 = a[4];
+	    a11 = a[5];
+	    a12 = a[6];
+	    a13 = a[7];
+	    a20 = a[8];
+	    a21 = a[9];
+	    a22 = a[10];
+	    a23 = a[11];
+	    a30 = a[12];
+	    a31 = a[13];
+	    a32 = a[14];
+	    a33 = a[15];
+	    b00 = b[0];
+	    b01 = b[1];
+	    b02 = b[2];
+	    b03 = b[3];
 	    out[0] = b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30;
 	    out[1] = b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31;
 	    out[2] = b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32;
@@ -1655,7 +1649,7 @@
 	    return out;
 	};
 	var perspective = function (fovy, aspect, near, far, out) {
-	    var f = 1.0 / Math.tan(fovy / 2), nf;
+	    f = 1.0 / Math.tan(fovy / 2);
 	    out[0] = f / aspect;
 	    out[1] = 0;
 	    out[2] = 0;
@@ -1670,10 +1664,10 @@
 	    out[12] = 0;
 	    out[13] = 0;
 	    out[15] = 0;
-	    if (far != null && far !== Infinity) {
-	        nf = 1 / (near - far);
-	        out[10] = (far + near) * nf;
-	        out[14] = 2 * far * near * nf;
+	    if (far !== null && far !== Infinity) {
+	        a = 1 / (near - far);
+	        out[10] = (far + near) * a;
+	        out[14] = 2 * far * near * a;
 	    }
 	    else {
 	        out[10] = -1;
@@ -1768,7 +1762,7 @@
 	    out[11] = a23 * c$2 - a13 * s$3;
 	    return out;
 	};
-	function rotateY$2(a, rad, out) {
+	var rotateY$2 = function (a, rad, out) {
 	    s$3 = Math.sin(rad);
 	    c$2 = Math.cos(rad);
 	    a00 = a[0];
@@ -1798,7 +1792,7 @@
 	    out[10] = a02 * s$3 + a22 * c$2;
 	    out[11] = a03 * s$3 + a23 * c$2;
 	    return out;
-	}
+	};
 	var rotateZ$2 = function (a, rad, out) {
 	    s$3 = Math.sin(rad);
 	    c$2 = Math.cos(rad);
@@ -1892,7 +1886,7 @@
 	    out[15] = 1;
 	    return out;
 	};
-	var translate = function (a, v, out) {
+	var translate$1 = function (a, v, out) {
 	    if (out === void 0) { out = new Float32Array(16); }
 	    x$1 = v[0];
 	    y$1 = v[1];
@@ -1938,11 +1932,11 @@
 	var transpose = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(16); }
 	    if (out === a) {
-	        a01 = a[1],
-	            a02 = a[2],
-	            a03 = a[3];
-	        a12 = a[6],
-	            a13 = a[7];
+	        a01 = a[1];
+	        a02 = a[2];
+	        a03 = a[3];
+	        a12 = a[6];
+	        a13 = a[7];
 	        a23 = a[11];
 	        out[1] = a[4];
 	        out[2] = a[8];
@@ -1981,7 +1975,7 @@
 	var Matrix4 = /*#__PURE__*/Object.freeze({
 		__proto__: null,
 		UNIT_MATRIX4: UNIT_MATRIX4,
-		create: create$4,
+		create: create$5,
 		determinant: determinant,
 		from: from$3,
 		fromEuler: fromEuler,
@@ -2004,7 +1998,7 @@
 		rotateZ: rotateZ$2,
 		scale: scale,
 		targetTo: targetTo,
-		translate: translate,
+		translate: translate$1,
 		transpose: transpose
 	});
 
@@ -2025,12 +2019,12 @@
 	    return out;
 	};
 	var angle$1 = function (a, b) {
-	    ax$2 = a[0],
-	        ay$2 = a[1],
-	        az$2 = a[2],
-	        bx$2 = b[0],
-	        by$2 = b[1],
-	        bz$2 = b[2];
+	    ax$2 = a[0];
+	    ay$2 = a[1];
+	    az$2 = a[2];
+	    bx$2 = b[0];
+	    by$2 = b[1];
+	    bz$2 = b[2];
 	    var mag1 = Math.sqrt(ax$2 * ax$2 + ay$2 * ay$2 + az$2 * az$2), mag2 = Math.sqrt(bx$2 * bx$2 + by$2 * by$2 + bz$2 * bz$2), mag = mag1 * mag2, cosine = mag && dot$3(a, b) / mag;
 	    return Math.acos(clampCommon(cosine, -1, 1));
 	};
@@ -2065,7 +2059,7 @@
 	var closeTo$2 = function (a, b) {
 	    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 	};
-	var create$3 = function (x, y, z, out) {
+	var create$4 = function (x, y, z, out) {
 	    if (y === void 0) { y = 0; }
 	    if (out === void 0) { out = new Float32Array(3); }
 	    out[0] = x;
@@ -2075,8 +2069,12 @@
 	};
 	var cross$2 = function (a, b, out) {
 	    if (out === void 0) { out = new Float32Array(3); }
-	    ax$2 = a[0], ay$2 = a[1], az$2 = a[2];
-	    bx$2 = b[0], by$2 = b[1], bz$2 = b[2];
+	    ax$2 = a[0];
+	    ay$2 = a[1];
+	    az$2 = a[2];
+	    bx$2 = b[0];
+	    by$2 = b[1];
+	    bz$2 = b[2];
 	    out[0] = ay$2 * bz$2 - az$2 * by$2;
 	    out[1] = az$2 * bx$2 - ax$2 * bz$2;
 	    out[2] = ax$2 * by$2 - ay$2 * bx$2;
@@ -2114,8 +2112,8 @@
 	var dot$3 = function (a, b) {
 	    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 	};
-	var equals$2 = function (a, b) {
-	    return ((a[0] === b[0]) && (a[1] === b[1]) && (a[2] === b[2]));
+	var equals$3 = function (a, b) {
+	    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 	};
 	var from$2 = function (a, out) {
 	    if (out === void 0) { out = new Float32Array(3); }
@@ -2304,26 +2302,26 @@
 	    return "vec3(" + a[0] + ", " + a[1] + ", " + a[2] + ")";
 	};
 	var transformMatrix3$1 = function (a, m, out) {
-	    ax$2 = a[0],
-	        ay$2 = a[1],
-	        az$2 = a[2];
+	    ax$2 = a[0];
+	    ay$2 = a[1];
+	    az$2 = a[2];
 	    out[0] = ax$2 * m[0] + ay$2 * m[3] + az$2 * m[6];
 	    out[1] = ax$2 * m[1] + ay$2 * m[4] + az$2 * m[7];
 	    out[2] = ax$2 * m[2] + ay$2 * m[5] + az$2 * m[8];
 	    return out;
 	};
-	function transformMatrix4$1(a, m, out) {
+	var transformMatrix4$1 = function (a, m, out) {
 	    if (out === void 0) { out = new Float32Array(3); }
-	    ax$2 = a[0],
-	        ay$2 = a[1],
-	        az$2 = a[2];
+	    ax$2 = a[0];
+	    ay$2 = a[1];
+	    az$2 = a[2];
 	    ag = m[3] * ax$2 + m[7] * ay$2 + m[11] * az$2 + m[15];
 	    ag = ag || 1.0;
 	    out[0] = (m[0] * ax$2 + m[4] * ay$2 + m[8] * az$2 + m[12]) / ag;
 	    out[1] = (m[1] * ax$2 + m[5] * ay$2 + m[9] * az$2 + m[13]) / ag;
 	    out[2] = (m[2] * ax$2 + m[6] * ay$2 + m[10] * az$2 + m[14]) / ag;
 	    return out;
-	}
+	};
 	var transformQuat$1 = function (a, q, out) {
 	    if (out === void 0) { out = new Float32Array(3); }
 	    var qx = q[0], qy = q[1], qz = q[2], qw = q[3];
@@ -2367,7 +2365,7 @@
 		clampScalar: clampScalar$1,
 		clone: clone$1,
 		closeTo: closeTo$2,
-		create: create$3,
+		create: create$4,
 		cross: cross$2,
 		distanceTo: distanceTo$2,
 		distanceToManhattan: distanceToManhattan$1,
@@ -2375,7 +2373,7 @@
 		divide: divide$2,
 		divideScalar: divideScalar$1,
 		dot: dot$3,
-		equals: equals$2,
+		equals: equals$3,
 		from: from$2,
 		fromArray: fromArray$1,
 		fromScalar: fromScalar$1,
@@ -2438,7 +2436,7 @@
 	var closeTo$1 = function (a, b) {
 	    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
 	};
-	var create$2 = function (x, y, z, w, out) {
+	var create$3 = function (x, y, z, w, out) {
 	    if (x === void 0) { x = 0; }
 	    if (y === void 0) { y = 0; }
 	    if (z === void 0) { z = 0; }
@@ -2493,7 +2491,7 @@
 	var dot$2 = function (a, b) {
 	    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 	};
-	var equals$1 = function (a, b) {
+	var equals$2 = function (a, b) {
 	    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 	};
 	function floor$1(a, out) {
@@ -2661,13 +2659,13 @@
 		add: add$1,
 		ceil: ceil$1,
 		closeTo: closeTo$1,
-		create: create$2,
+		create: create$3,
 		cross: cross$1,
 		distanceTo: distanceTo$1,
 		distanceToSquared: distanceToSquared$1,
 		divide: divide$1,
 		dot: dot$2,
-		equals: equals$1,
+		equals: equals$2,
 		floor: floor$1,
 		from: from$1,
 		fromValues: fromValues,
@@ -2703,7 +2701,7 @@
 	    out[3] = a[3];
 	    return out;
 	};
-	var create$1 = function (x, y, z, w, out) {
+	var create$2 = function (x, y, z, w, out) {
 	    if (x === void 0) { x = 0; }
 	    if (y === void 0) { y = 0; }
 	    if (z === void 0) { z = 0; }
@@ -2938,7 +2936,7 @@
 		__proto__: null,
 		angleTo: angleTo,
 		conjugate: conjugate,
-		create: create$1,
+		create: create$2,
 		dot: dot$1,
 		fromAxisAngle: fromAxisAngle,
 		fromMatrix3: fromMatrix3,
@@ -3035,7 +3033,9 @@
 	var cross = function (a, b) {
 	    return a[0] * b[1] - a[1] * b[0];
 	};
-	var create = function (x, y, out) {
+	var create$1 = function (x, y, out) {
+	    if (x === void 0) { x = 0; }
+	    if (y === void 0) { y = 0; }
 	    if (out === void 0) { out = new Float32Array(2); }
 	    out[0] = x;
 	    out[1] = y;
@@ -3067,7 +3067,7 @@
 	var dot = function (a, b) {
 	    return a[0] * b[0] + a[1] * b[1];
 	};
-	var equals = function (a, b) {
+	var equals$1 = function (a, b) {
 	    return a[0] === b[0] && a[1] === b[1];
 	};
 	var floor = function (a, out) {
@@ -3262,14 +3262,14 @@
 		closeToManhattan: closeToManhattan,
 		clone: clone,
 		cross: cross,
-		create: create,
+		create: create$1,
 		distanceTo: distanceTo,
 		distanceToManhattan: distanceToManhattan,
 		distanceToSquared: distanceToSquared,
 		divide: divide,
 		divideScalar: divideScalar,
 		dot: dot,
-		equals: equals,
+		equals: equals$1,
 		floor: floor,
 		floorToZero: floorToZero,
 		from: from,
@@ -3306,6 +3306,98 @@
 		VECTOR2_RIGHT: VECTOR2_RIGHT
 	});
 
+	var Rectangle = /** @class */ (function () {
+	    function Rectangle(a, b) {
+	        if (a === void 0) { a = create$1(); }
+	        if (b === void 0) { b = create$1(1, 1); }
+	        this.min = create$1();
+	        this.max = create$1();
+	        min(a, b, this.min);
+	        max(a, b, this.max);
+	    }
+	    return Rectangle;
+	}());
+	var area = function (a) {
+	    return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
+	};
+	var containsPoint = function (rect, a) {
+	    return a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1];
+	};
+	var containsRectangle = function (rect, box) {
+	    return (rect.min[0] <= box.min[0] &&
+	        box.max[0] <= rect.max[0] &&
+	        rect.min[1] <= box.min[1] &&
+	        box.max[1] <= rect.max[1]);
+	};
+	var create = function (a, b) {
+	    if (a === void 0) { a = create$1(); }
+	    if (b === void 0) { b = create$1(1, 1); }
+	    return {
+	        max: max(a, b),
+	        min: min(a, b)
+	    };
+	};
+	var equals = function (a, b) {
+	    return equals$1(a.min, b.min) && equals$1(a.max, b.max);
+	};
+	var getCenter = function (a, out) {
+	    if (out === void 0) { out = create$1(); }
+	    add(a.min, a.max, out);
+	    return multiplyScalar(out, 0.5, out);
+	};
+	var getSize = function (a, out) {
+	    if (out === void 0) { out = create$1(); }
+	    return minus(a.max, a.min, out);
+	};
+	var height = function (a) {
+	    return a.max[1] - a.min[1];
+	};
+	var intersect = function (a, b, out) {
+	    if (out === void 0) { out = new Rectangle(); }
+	    max(a.min, b.min, out.min);
+	    min(a.max, b.max, out.max);
+	    return out;
+	};
+	var stretch = function (a, b, c, out) {
+	    if (out === void 0) { out = new Rectangle(); }
+	    add(a.min, b, out.min);
+	    add(a.max, c, out.max);
+	    return out;
+	};
+	var translate = function (a, b, out) {
+	    if (out === void 0) { out = new Rectangle(); }
+	    add(a.min, b, out.min);
+	    add(a.max, b, out.max);
+	    return out;
+	};
+	var union = function (a, b, out) {
+	    if (out === void 0) { out = new Rectangle(); }
+	    min(a.min, b.min, out.min);
+	    max(a.max, b.max, out.max);
+	    return out;
+	};
+	var width = function (a) {
+	    return a.max[0] - a.min[0];
+	};
+
+	var Rectangle$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		'default': Rectangle,
+		area: area,
+		containsPoint: containsPoint,
+		containsRectangle: containsRectangle,
+		create: create,
+		equals: equals,
+		getCenter: getCenter,
+		getSize: getSize,
+		height: height,
+		intersect: intersect,
+		stretch: stretch,
+		translate: translate,
+		union: union,
+		width: width
+	});
+
 	exports.COLOR_HEX_MAP = COLOR_HEX_MAP;
 	exports.ColorGPU = ColorGPU;
 	exports.ColorRGB = ColorRGB;
@@ -3315,6 +3407,7 @@
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;
 	exports.Quaternion = Quaternion;
+	exports.Rectangle = Rectangle$1;
 	exports.Vector2 = Vector2;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;

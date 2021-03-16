@@ -5,4 +5,5 @@ export * from "./matrix";
 // export * from "./polar";
 export * from "./quaternion";
 export * from "./random";
+export * from "./shape";
 export * from "./vector";

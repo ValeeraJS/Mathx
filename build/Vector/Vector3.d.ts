@@ -42,7 +42,7 @@ export declare const setLength: (a: Float32Array, len: number, out?: Float32Arra
 export declare const slerp: (a: Float32Array, b: Float32Array, t: number, out?: Float32Array) => Float32Array;
 export declare const toString: (a: Float32Array) => string;
 export declare const transformMatrix3: (a: Float32Array, m: Float32Array, out: Float32Array) => Float32Array;
-export declare function transformMatrix4(a: Float32Array, m: Float32Array, out?: Float32Array): Float32Array;
+export declare const transformMatrix4: (a: Float32Array, m: Float32Array, out?: Float32Array) => Float32Array;
 export declare const transformQuat: (a: Float32Array, q: Float32Array, out?: Float32Array) => Float32Array;
 export declare const VECTOR3_ZERO: Float32Array;
 export declare const VECTOR3_ONE: Float32Array;

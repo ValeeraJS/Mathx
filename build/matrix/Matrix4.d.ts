@@ -4,7 +4,7 @@ export declare const create: () => Float32Array;
 export declare const determinant: (a: Float32Array) => number;
 export declare const from: (a: Float32Array, out?: Float32Array) => Float32Array;
 export declare const fromEuler: (euler: IEuler, out?: Float32Array) => Float32Array;
-export declare function fromQuaternion(q: Float32Array, out: Float32Array): Float32Array;
+export declare const fromQuaternion: (q: Float32Array, out: Float32Array) => Float32Array;
 export declare const fromRotation: (rad: number, axis: Float32Array, out: Float32Array) => Float32Array | null;
 export declare const fromRotationX: (rad: number, out: Float32Array) => Float32Array;
 export declare const fromRotationY: (rad: number, out: Float32Array) => Float32Array;
@@ -19,7 +19,7 @@ export declare const orthogonal: (left: number, right: number, bottom: number, t
 export declare const perspective: (fovy: number, aspect: number, near: number, far: number, out: Float32Array) => Float32Array;
 export declare const rotate: (a: Float32Array, rad: number, axis: Float32Array, out: Float32Array) => Float32Array | null;
 export declare const rotateX: (a: Float32Array, rad: number, out: Float32Array) => Float32Array;
-export declare function rotateY(a: Float32Array, rad: number, out: Float32Array): Float32Array;
+export declare const rotateY: (a: Float32Array, rad: number, out: Float32Array) => Float32Array;
 export declare const rotateZ: (a: Float32Array, rad: number, out: Float32Array) => Float32Array;
 export declare const scale: (a: Float32Array, v: Float32Array, out?: Float32Array) => Float32Array;
 export declare const targetTo: (eye: Float32Array, target: Float32Array, up: Float32Array, out?: Float32Array) => Float32Array;

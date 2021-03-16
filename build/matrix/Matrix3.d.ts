@@ -19,6 +19,6 @@ export declare const identity: (out?: Float32Array) => Float32Array;
 export declare const invert: (a: Float32Array, out: Float32Array) => Float32Array | null;
 export declare const multiply: () => (a: Float32Array, b: Float32Array, out?: Float32Array) => Float32Array;
 export declare const rotate: (a: Float32Array, rad: number, out?: Float32Array) => Float32Array;
-export declare function scale(a: Float32Array, v: Float32Array, out?: Float32Array): Float32Array;
+export declare const scale: (a: Float32Array, v: Float32Array, out?: Float32Array) => Float32Array;
 export declare const translate: (a: Float32Array, v: Float32Array, out?: Float32Array) => Float32Array;
 export declare const transpose: (a: Float32Array, out?: Float32Array) => Float32Array;

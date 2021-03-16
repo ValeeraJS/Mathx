@@ -16,5 +16,5 @@ export declare const multiply: (a: Float32Array, b: Float32Array, out?: Float32A
 export declare const multiplyScalar: (a: Float32Array, b: number, out?: Float32Array) => Float32Array;
 export declare const rotate: (a: Float32Array, rad: number, out?: Float32Array) => Float32Array;
 export declare const scale: (a: Float32Array, v: Float32Array, out?: Float32Array) => Float32Array;
-export declare function toString(a: Float32Array): string;
+export declare const toString: (a: Float32Array) => string;
 export declare const transpose: (a: Float32Array, out?: Float32Array) => Float32Array;

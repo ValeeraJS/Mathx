@@ -210,7 +210,7 @@ class ColorRGB extends Uint8Array {
     }
 }
 
-const create$8 = (r = 0, g = 0, b = 0, a = 1, out = new Float32Array(4)) => {
+const create$9 = (r = 0, g = 0, b = 0, a = 1, out = new Float32Array(4)) => {
     out[0] = r;
     out[1] = g;
     out[2] = b;
@@ -235,7 +235,7 @@ const fromScalar$2 = (scalar, a = 1, out) => {
 
 var ColorGPU = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	create: create$8,
+	create: create$9,
 	createJson: createJson,
 	fromScalar: fromScalar$2
 });
@@ -397,13 +397,13 @@ var EulerRotationOrders;
 
 const createDefault = () => {
     return {
+        order: EulerRotationOrders.XYZ,
         x: 0,
         y: 0,
-        z: 0,
-        order: EulerRotationOrders.XYZ
+        z: 0
     };
 };
-const create$7 = (x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ, out = createDefault()) => {
+const create$8 = (x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ, out = createDefault()) => {
     out.x = x;
     out.y = y;
     out.z = z;
@@ -494,7 +494,7 @@ const fromMatrix4$1 = (matrix, out = createDefault()) => {
 
 var Euler = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	create: create$7,
+	create: create$8,
 	from: from$6,
 	fromMatrix4: fromMatrix4$1
 });
@@ -502,10 +502,7 @@ var Euler = /*#__PURE__*/Object.freeze({
 let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
 let b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
 let x$3 = 0, y$3 = 0;
-const UNIT_MATRIX2_DATA = [
-    1, 0,
-    0, 1,
-];
+const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 const UNIT_MATRIX2 = new Float32Array(UNIT_MATRIX2_DATA);
 const add$3 = (a, b, out) => {
     out[0] = a[0] + b[0];
@@ -531,15 +528,18 @@ const closeTo$3 = (a, b) => {
     b10$2 = b[1];
     b01$2 = b[2];
     b11$2 = b[3];
-    return closeToCommon(a00$2, b00$2) && closeToCommon(a01$2, b01$2) && closeToCommon(a10$2, b10$2) && closeToCommon(a11$2, b11$2);
+    return (closeToCommon(a00$2, b00$2) &&
+        closeToCommon(a01$2, b01$2) &&
+        closeToCommon(a10$2, b10$2) &&
+        closeToCommon(a11$2, b11$2));
 };
-const create$6 = (a = UNIT_MATRIX2_DATA) => {
+const create$7 = (a = UNIT_MATRIX2_DATA) => {
     return new Float32Array(a);
 };
 const determinant$2 = (a) => {
     return a[0] * a[3] - a[1] * a[2];
 };
-const equals$3 = (a, b) => {
+const equals$4 = (a, b) => {
     return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 };
 const frobNorm = (a) => {
@@ -646,9 +646,9 @@ const scale$2 = (a, v, out = new Float32Array(4)) => {
     out[3] = a11$2 * y$3;
     return out;
 };
-function toString$4(a) {
+const toString$4 = (a) => {
     return `mat2(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-}
+};
 const transpose$2 = (a, out = new Float32Array(4)) => {
     if (out === a) {
         a01$2 = a[1];
@@ -670,9 +670,9 @@ var Matrix2 = /*#__PURE__*/Object.freeze({
 	add: add$3,
 	adjoint: adjoint,
 	closeTo: closeTo$3,
-	create: create$6,
+	create: create$7,
 	determinant: determinant$2,
-	equals: equals$3,
+	equals: equals$4,
 	frobNorm: frobNorm,
 	from: from$5,
 	fromRotation: fromRotation$2,
@@ -691,11 +691,7 @@ var Matrix2 = /*#__PURE__*/Object.freeze({
 let a00$1 = 0, a01$1 = 0, a02$1 = 0, a11$1 = 0, a10$1 = 0, a12$1 = 0, a20$1 = 0, a21$1 = 0, a22$1 = 0;
 let b00$1 = 0, b01$1 = 0, b02$1 = 0, b11$1 = 0, b10$1 = 0, b12$1 = 0, b20$1 = 0, b21$1 = 0, b22$1 = 0;
 let x$2 = 0, y$2 = 0;
-const UNIT_MATRIX3_DATA = [
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, 1
-];
+const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 const UNIT_MATRIX3 = new Float32Array(UNIT_MATRIX3_DATA);
 const cofactor00 = (a) => {
     return a[4] * a[8] - a[5] * a[7];
@@ -724,19 +720,19 @@ const cofactor21 = (a) => {
 const cofactor22 = (a) => {
     return a[0] * a[4] - a[3] * a[1];
 };
-const create$5 = () => {
+const create$6 = () => {
     return new Float32Array(UNIT_MATRIX3_DATA);
 };
 const determinant$1 = (a) => {
-    a00$1 = a[0],
-        a01$1 = a[1],
-        a02$1 = a[2];
-    a10$1 = a[3],
-        a11$1 = a[4],
-        a12$1 = a[5];
-    a20$1 = a[6],
-        a21$1 = a[7],
-        a22$1 = a[8];
+    a00$1 = a[0];
+    a01$1 = a[1];
+    a02$1 = a[2];
+    a10$1 = a[3];
+    a11$1 = a[4];
+    a12$1 = a[5];
+    a20$1 = a[6];
+    a21$1 = a[7];
+    a22$1 = a[8];
     return (a00$1 * (a22$1 * a11$1 - a12$1 * a21$1) +
         a01$1 * (-a22$1 * a10$1 + a12$1 * a20$1) +
         a02$1 * (a21$1 * a10$1 - a11$1 * a20$1));
@@ -816,15 +812,15 @@ const identity$2 = (out = new Float32Array(9)) => {
     return out;
 };
 const invert$2 = (a, out) => {
-    a00$1 = a[0],
-        a01$1 = a[1],
-        a02$1 = a[2];
-    a10$1 = a[3],
-        a11$1 = a[4],
-        a12$1 = a[5];
-    a20$1 = a[6],
-        a21$1 = a[7],
-        a22$1 = a[8];
+    a00$1 = a[0];
+    a01$1 = a[1];
+    a02$1 = a[2];
+    a10$1 = a[3];
+    a11$1 = a[4];
+    a12$1 = a[5];
+    a20$1 = a[6];
+    a21$1 = a[7];
+    a22$1 = a[8];
     b01$1 = a22$1 * a11$1 - a12$1 * a21$1;
     b11$1 = -a22$1 * a10$1 + a12$1 * a20$1;
     b21$1 = a21$1 * a10$1 - a11$1 * a20$1;
@@ -845,24 +841,24 @@ const invert$2 = (a, out) => {
     return out;
 };
 const multiply$5 = () => (a, b, out = new Float32Array(9)) => {
-    a00$1 = a[0],
-        a01$1 = a[1],
-        a02$1 = a[2];
-    a10$1 = a[3],
-        a11$1 = a[4],
-        a12$1 = a[5];
-    a20$1 = a[6],
-        a21$1 = a[7],
-        a22$1 = a[8];
-    b00$1 = b[0],
-        b01$1 = b[1],
-        b02$1 = b[2];
-    b10$1 = b[3],
-        b11$1 = b[4],
-        b12$1 = b[5];
-    b20$1 = b[6],
-        b21$1 = b[7],
-        b22$1 = b[8];
+    a00$1 = a[0];
+    a01$1 = a[1];
+    a02$1 = a[2];
+    a10$1 = a[3];
+    a11$1 = a[4];
+    a12$1 = a[5];
+    a20$1 = a[6];
+    a21$1 = a[7];
+    a22$1 = a[8];
+    b00$1 = b[0];
+    b01$1 = b[1];
+    b02$1 = b[2];
+    b10$1 = b[3];
+    b11$1 = b[4];
+    b12$1 = b[5];
+    b20$1 = b[6];
+    b21$1 = b[7];
+    b22$1 = b[8];
     out[0] = b00$1 * a00$1 + b01$1 * a10$1 + b02$1 * a20$1;
     out[1] = b00$1 * a01$1 + b01$1 * a11$1 + b02$1 * a21$1;
     out[2] = b00$1 * a02$1 + b01$1 * a12$1 + b02$1 * a22$1;
@@ -875,17 +871,17 @@ const multiply$5 = () => (a, b, out = new Float32Array(9)) => {
     return out;
 };
 const rotate$2 = (a, rad, out = new Float32Array(9)) => {
-    a00$1 = a[0],
-        a01$1 = a[1],
-        a02$1 = a[2],
-        a10$1 = a[3],
-        a11$1 = a[4],
-        a12$1 = a[5],
-        a20$1 = a[6],
-        a21$1 = a[7],
-        a22$1 = a[8],
-        y$2 = Math.sin(rad),
-        x$2 = Math.cos(rad);
+    a00$1 = a[0];
+    a01$1 = a[1];
+    a02$1 = a[2];
+    a10$1 = a[3];
+    a11$1 = a[4];
+    a12$1 = a[5];
+    a20$1 = a[6];
+    a21$1 = a[7];
+    a22$1 = a[8];
+    y$2 = Math.sin(rad);
+    x$2 = Math.cos(rad);
     out[0] = x$2 * a00$1 + y$2 * a10$1;
     out[1] = x$2 * a01$1 + y$2 * a11$1;
     out[2] = x$2 * a02$1 + y$2 * a12$1;
@@ -897,7 +893,7 @@ const rotate$2 = (a, rad, out = new Float32Array(9)) => {
     out[8] = a22$1;
     return out;
 };
-function scale$1(a, v, out = new Float32Array(9)) {
+const scale$1 = (a, v, out = new Float32Array(9)) => {
     x$2 = v[0];
     y$2 = v[1];
     out[0] = x$2 * a[0];
@@ -910,8 +906,8 @@ function scale$1(a, v, out = new Float32Array(9)) {
     out[7] = a[7];
     out[8] = a[8];
     return out;
-}
-const translate$1 = (a, v, out = new Float32Array(9)) => {
+};
+const translate$2 = (a, v, out = new Float32Array(9)) => {
     a00$1 = a[0];
     a01$1 = a[1];
     a02$1 = a[2];
@@ -972,7 +968,7 @@ var Matrix3 = /*#__PURE__*/Object.freeze({
 	cofactor20: cofactor20,
 	cofactor21: cofactor21,
 	cofactor22: cofactor22,
-	create: create$5,
+	create: create$6,
 	determinant: determinant$1,
 	from: from$4,
 	fromMatrix4: fromMatrix4,
@@ -984,40 +980,36 @@ var Matrix3 = /*#__PURE__*/Object.freeze({
 	multiply: multiply$5,
 	rotate: rotate$2,
 	scale: scale$1,
-	translate: translate$1,
+	translate: translate$2,
 	transpose: transpose$1
 });
 
+/* eslint-disable max-lines */
 let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
 let x$1 = 0, y$1 = 0, z = 0, det = 0, len$1 = 0, s$3 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
-const UNIT_MATRIX4_DATA = Object.freeze([
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1
-]);
+const UNIT_MATRIX4_DATA = Object.freeze([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 const UNIT_MATRIX4 = new Float32Array(UNIT_MATRIX4_DATA);
-const create$4 = () => {
+const create$5 = () => {
     return new Float32Array(UNIT_MATRIX4_DATA);
 };
 const determinant = (a) => {
-    a00 = a[0],
-        a01 = a[1],
-        a02 = a[2],
-        a03 = a[3];
-    a10 = a[4],
-        a11 = a[5],
-        a12 = a[6],
-        a13 = a[7];
-    a20 = a[8],
-        a21 = a[9],
-        a22 = a[10],
-        a23 = a[11];
-    a30 = a[12],
-        a31 = a[13],
-        a32 = a[14],
-        a33 = a[15];
+    a00 = a[0];
+    a01 = a[1];
+    a02 = a[2];
+    a03 = a[3];
+    a10 = a[4];
+    a11 = a[5];
+    a12 = a[6];
+    a13 = a[7];
+    a20 = a[8];
+    a21 = a[9];
+    a22 = a[10];
+    a23 = a[11];
+    a30 = a[12];
+    a31 = a[13];
+    a32 = a[14];
+    a33 = a[15];
     b00 = a00 * a11 - a01 * a10;
     b01 = a00 * a12 - a02 * a10;
     b02 = a01 * a12 - a02 * a11;
@@ -1053,9 +1045,12 @@ const fromEuler = (euler, out = new Float32Array(16)) => {
     x$1 = euler.x;
     y$1 = euler.y;
     z = euler.z;
-    a = Math.cos(x$1), b = Math.sin(x$1);
-    c$2 = Math.cos(y$1), d = Math.sin(y$1);
-    e = Math.cos(z), f = Math.sin(z);
+    a = Math.cos(x$1);
+    b = Math.sin(x$1);
+    c$2 = Math.cos(y$1);
+    d = Math.sin(y$1);
+    e = Math.cos(z);
+    f = Math.sin(z);
     if (euler.order === EulerRotationOrders.XYZ) {
         const ae = a * e, af = a * f, be = b * e, bf = b * f;
         out[0] = c$2 * e;
@@ -1139,20 +1134,20 @@ const fromEuler = (euler, out = new Float32Array(16)) => {
     out[15] = 1;
     return out;
 };
-function fromQuaternion(q, out) {
-    let x = q[0], y = q[1], z = q[2], w = q[3];
-    let x2 = x + x;
-    let y2 = y + y;
-    let z2 = z + z;
-    let xx = x * x2;
-    let yx = y * x2;
-    let yy = y * y2;
-    let zx = z * x2;
-    let zy = z * y2;
-    let zz = z * z2;
-    let wx = w * x2;
-    let wy = w * y2;
-    let wz = w * z2;
+const fromQuaternion = (q, out) => {
+    const x = q[0], y = q[1], z = q[2], w = q[3];
+    const x2 = x + x;
+    const y2 = y + y;
+    const z2 = z + z;
+    const xx = x * x2;
+    const yx = y * x2;
+    const yy = y * y2;
+    const zx = z * x2;
+    const zy = z * y2;
+    const zz = z * z2;
+    const wx = w * x2;
+    const wy = w * y2;
+    const wz = w * z2;
     out[0] = 1 - yy - zz;
     out[1] = yx + wz;
     out[2] = zx - wy;
@@ -1170,7 +1165,7 @@ function fromQuaternion(q, out) {
     out[14] = 0;
     out[15] = 1;
     return out;
-}
+};
 const fromRotation = (rad, axis, out) => {
     x$1 = axis[0];
     y$1 = axis[1];
@@ -1325,22 +1320,22 @@ const identity$1 = (out = new Float32Array(16)) => {
     return out;
 };
 function invert$1(a, out = new Float32Array(16)) {
-    a00 = a[0],
-        a01 = a[1],
-        a02 = a[2],
-        a03 = a[3];
-    a10 = a[4],
-        a11 = a[5],
-        a12 = a[6],
-        a13 = a[7];
-    a20 = a[8],
-        a21 = a[9],
-        a22 = a[10],
-        a23 = a[11];
-    a30 = a[12],
-        a31 = a[13],
-        a32 = a[14],
-        a33 = a[15];
+    a00 = a[0];
+    a01 = a[1];
+    a02 = a[2];
+    a03 = a[3];
+    a10 = a[4];
+    a11 = a[5];
+    a12 = a[6];
+    a13 = a[7];
+    a20 = a[8];
+    a21 = a[9];
+    a22 = a[10];
+    a23 = a[11];
+    a30 = a[12];
+    a31 = a[13];
+    a32 = a[14];
+    a33 = a[15];
     b00 = a00 * a11 - a01 * a10;
     b01 = a00 * a12 - a02 * a10;
     b02 = a00 * a13 - a03 * a10;
@@ -1353,8 +1348,7 @@ function invert$1(a, out = new Float32Array(16)) {
     b31 = a21 * a32 - a22 * a31;
     b32 = a21 * a33 - a23 * a31;
     b33 = a22 * a33 - a23 * a32;
-    det =
-        b00 * b33 - b01 * b32 + b02 * b31 + b03 * b30 - b20 * b23 + b21 * b22;
+    det = b00 * b33 - b01 * b32 + b02 * b31 + b03 * b30 - b20 * b23 + b21 * b22;
     if (!det) {
         return null;
     }
@@ -1379,15 +1373,15 @@ function invert$1(a, out = new Float32Array(16)) {
 }
 const lookAt = (eye, center, up, out) => {
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
-    let eyex = eye[0];
-    let eyey = eye[1];
-    let eyez = eye[2];
-    let upx = up[0];
-    let upy = up[1];
-    let upz = up[2];
-    let centerx = center[0];
-    let centery = center[1];
-    let centerz = center[2];
+    const eyex = eye[0];
+    const eyey = eye[1];
+    const eyez = eye[2];
+    const upx = up[0];
+    const upy = up[1];
+    const upz = up[2];
+    const centerx = center[0];
+    const centery = center[1];
+    const centerz = center[2];
     if (Math.abs(eyex - centerx) < EPSILON &&
         Math.abs(eyey - centery) < EPSILON &&
         Math.abs(eyez - centerz) < EPSILON) {
@@ -1449,26 +1443,26 @@ const lookAt = (eye, center, up, out) => {
     return out;
 };
 const multiply$4 = (a, b, out = new Float32Array(16)) => {
-    a00 = a[0],
-        a01 = a[1],
-        a02 = a[2],
-        a03 = a[3];
-    a10 = a[4],
-        a11 = a[5],
-        a12 = a[6],
-        a13 = a[7];
-    a20 = a[8],
-        a21 = a[9],
-        a22 = a[10],
-        a23 = a[11];
-    a30 = a[12],
-        a31 = a[13],
-        a32 = a[14],
-        a33 = a[15];
-    b00 = b[0],
-        b01 = b[1],
-        b02 = b[2],
-        b03 = b[3];
+    a00 = a[0];
+    a01 = a[1];
+    a02 = a[2];
+    a03 = a[3];
+    a10 = a[4];
+    a11 = a[5];
+    a12 = a[6];
+    a13 = a[7];
+    a20 = a[8];
+    a21 = a[9];
+    a22 = a[10];
+    a23 = a[11];
+    a30 = a[12];
+    a31 = a[13];
+    a32 = a[14];
+    a33 = a[15];
+    b00 = b[0];
+    b01 = b[1];
+    b02 = b[2];
+    b03 = b[3];
     out[0] = b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30;
     out[1] = b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31;
     out[2] = b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32;
@@ -1500,9 +1494,9 @@ const multiply$4 = (a, b, out = new Float32Array(16)) => {
     return out;
 };
 const orthogonal = (left, right, bottom, top, near, far, out) => {
-    let lr = 1 / (left - right);
-    let bt = 1 / (bottom - top);
-    let nf = 1 / (near - far);
+    const lr = 1 / (left - right);
+    const bt = 1 / (bottom - top);
+    const nf = 1 / (near - far);
     out[0] = -2 * lr;
     out[1] = 0;
     out[2] = 0;
@@ -1522,7 +1516,7 @@ const orthogonal = (left, right, bottom, top, near, far, out) => {
     return out;
 };
 const perspective = (fovy, aspect, near, far, out) => {
-    let f = 1.0 / Math.tan(fovy / 2), nf;
+    f = 1.0 / Math.tan(fovy / 2);
     out[0] = f / aspect;
     out[1] = 0;
     out[2] = 0;
@@ -1537,10 +1531,10 @@ const perspective = (fovy, aspect, near, far, out) => {
     out[12] = 0;
     out[13] = 0;
     out[15] = 0;
-    if (far != null && far !== Infinity) {
-        nf = 1 / (near - far);
-        out[10] = (far + near) * nf;
-        out[14] = 2 * far * near * nf;
+    if (far !== null && far !== Infinity) {
+        a = 1 / (near - far);
+        out[10] = (far + near) * a;
+        out[14] = 2 * far * near * a;
     }
     else {
         out[10] = -1;
@@ -1635,7 +1629,7 @@ const rotateX$2 = (a, rad, out) => {
     out[11] = a23 * c$2 - a13 * s$3;
     return out;
 };
-function rotateY$2(a, rad, out) {
+const rotateY$2 = (a, rad, out) => {
     s$3 = Math.sin(rad);
     c$2 = Math.cos(rad);
     a00 = a[0];
@@ -1665,7 +1659,7 @@ function rotateY$2(a, rad, out) {
     out[10] = a02 * s$3 + a22 * c$2;
     out[11] = a03 * s$3 + a23 * c$2;
     return out;
-}
+};
 const rotateZ$2 = (a, rad, out) => {
     s$3 = Math.sin(rad);
     c$2 = Math.cos(rad);
@@ -1722,7 +1716,7 @@ const scale = (a, v, out = new Float32Array(16)) => {
     return out;
 };
 const targetTo = (eye, target, up, out = new Float32Array(16)) => {
-    let eyex = eye[0], eyey = eye[1], eyez = eye[2], upx = up[0], upy = up[1], upz = up[2];
+    const eyex = eye[0], eyey = eye[1], eyez = eye[2], upx = up[0], upy = up[1], upz = up[2];
     let z0 = eyex - target[0], z1 = eyey - target[1], z2 = eyez - target[2];
     let len = z0 * z0 + z1 * z1 + z2 * z2;
     if (len > 0) {
@@ -1757,7 +1751,7 @@ const targetTo = (eye, target, up, out = new Float32Array(16)) => {
     out[15] = 1;
     return out;
 };
-const translate = (a, v, out = new Float32Array(16)) => {
+const translate$1 = (a, v, out = new Float32Array(16)) => {
     x$1 = v[0];
     y$1 = v[1];
     z = v[2];
@@ -1801,11 +1795,11 @@ const translate = (a, v, out = new Float32Array(16)) => {
 };
 const transpose = (a, out = new Float32Array(16)) => {
     if (out === a) {
-        a01 = a[1],
-            a02 = a[2],
-            a03 = a[3];
-        a12 = a[6],
-            a13 = a[7];
+        a01 = a[1];
+        a02 = a[2];
+        a03 = a[3];
+        a12 = a[6];
+        a13 = a[7];
         a23 = a[11];
         out[1] = a[4];
         out[2] = a[8];
@@ -1844,7 +1838,7 @@ const transpose = (a, out = new Float32Array(16)) => {
 var Matrix4 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	UNIT_MATRIX4: UNIT_MATRIX4,
-	create: create$4,
+	create: create$5,
 	determinant: determinant,
 	from: from$3,
 	fromEuler: fromEuler,
@@ -1867,7 +1861,7 @@ var Matrix4 = /*#__PURE__*/Object.freeze({
 	rotateZ: rotateZ$2,
 	scale: scale,
 	targetTo: targetTo,
-	translate: translate,
+	translate: translate$1,
 	transpose: transpose
 });
 
@@ -1886,13 +1880,13 @@ const addScalar$1 = (a, b, out = new Float32Array(3)) => {
     return out;
 };
 const angle$1 = (a, b) => {
-    ax$2 = a[0],
-        ay$2 = a[1],
-        az$2 = a[2],
-        bx$2 = b[0],
-        by$2 = b[1],
-        bz$2 = b[2];
-    let mag1 = Math.sqrt(ax$2 * ax$2 + ay$2 * ay$2 + az$2 * az$2), mag2 = Math.sqrt(bx$2 * bx$2 + by$2 * by$2 + bz$2 * bz$2), mag = mag1 * mag2, cosine = mag && dot$3(a, b) / mag;
+    ax$2 = a[0];
+    ay$2 = a[1];
+    az$2 = a[2];
+    bx$2 = b[0];
+    by$2 = b[1];
+    bz$2 = b[2];
+    const mag1 = Math.sqrt(ax$2 * ax$2 + ay$2 * ay$2 + az$2 * az$2), mag2 = Math.sqrt(bx$2 * bx$2 + by$2 * by$2 + bz$2 * bz$2), mag = mag1 * mag2, cosine = mag && dot$3(a, b) / mag;
     return Math.acos(clampCommon(cosine, -1, 1));
 };
 const clamp$1 = (a, min, max, out = new Float32Array(3)) => {
@@ -1922,15 +1916,19 @@ const clone$1 = (a, out = new Float32Array(3)) => {
 const closeTo$2 = (a, b) => {
     return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 };
-const create$3 = (x, y = 0, z, out = new Float32Array(3)) => {
+const create$4 = (x, y = 0, z, out = new Float32Array(3)) => {
     out[0] = x;
     out[1] = y;
     out[2] = z;
     return out;
 };
 const cross$2 = (a, b, out = new Float32Array(3)) => {
-    ax$2 = a[0], ay$2 = a[1], az$2 = a[2];
-    bx$2 = b[0], by$2 = b[1], bz$2 = b[2];
+    ax$2 = a[0];
+    ay$2 = a[1];
+    az$2 = a[2];
+    bx$2 = b[0];
+    by$2 = b[1];
+    bz$2 = b[2];
     out[0] = ay$2 * bz$2 - az$2 * by$2;
     out[1] = az$2 * bx$2 - ax$2 * bz$2;
     out[2] = ax$2 * by$2 - ay$2 * bx$2;
@@ -1966,8 +1964,8 @@ const divideScalar$1 = (a, b, out = new Float32Array(3)) => {
 const dot$3 = (a, b) => {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 };
-const equals$2 = (a, b) => {
-    return ((a[0] === b[0]) && (a[1] === b[1]) && (a[2] === b[2]));
+const equals$3 = (a, b) => {
+    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 };
 const from$2 = (a, out = new Float32Array(3)) => {
     out[0] = a[0];
@@ -1993,10 +1991,10 @@ const fromValues$1 = (x, y, z, out = new Float32Array(3)) => {
 };
 const hermite = (a, b, c, d, t, out = new Float32Array(3)) => {
     ag = t * t;
-    let factor1 = ag * (2 * t - 3) + 1;
-    let factor2 = ag * (t - 2) + t;
-    let factor3 = ag * (t - 1);
-    let factor4 = ag * (3 - 2 * t);
+    const factor1 = ag * (2 * t - 3) + 1;
+    const factor2 = ag * (t - 2) + t;
+    const factor3 = ag * (t - 1);
+    const factor4 = ag * (3 - 2 * t);
     out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
     out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
     out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
@@ -2133,35 +2131,35 @@ const toString$3 = (a) => {
     return `vec3(${a[0]}, ${a[1]}, ${a[2]})`;
 };
 const transformMatrix3$1 = (a, m, out) => {
-    ax$2 = a[0],
-        ay$2 = a[1],
-        az$2 = a[2];
+    ax$2 = a[0];
+    ay$2 = a[1];
+    az$2 = a[2];
     out[0] = ax$2 * m[0] + ay$2 * m[3] + az$2 * m[6];
     out[1] = ax$2 * m[1] + ay$2 * m[4] + az$2 * m[7];
     out[2] = ax$2 * m[2] + ay$2 * m[5] + az$2 * m[8];
     return out;
 };
-function transformMatrix4$1(a, m, out = new Float32Array(3)) {
-    ax$2 = a[0],
-        ay$2 = a[1],
-        az$2 = a[2];
+const transformMatrix4$1 = (a, m, out = new Float32Array(3)) => {
+    ax$2 = a[0];
+    ay$2 = a[1];
+    az$2 = a[2];
     ag = m[3] * ax$2 + m[7] * ay$2 + m[11] * az$2 + m[15];
     ag = ag || 1.0;
     out[0] = (m[0] * ax$2 + m[4] * ay$2 + m[8] * az$2 + m[12]) / ag;
     out[1] = (m[1] * ax$2 + m[5] * ay$2 + m[9] * az$2 + m[13]) / ag;
     out[2] = (m[2] * ax$2 + m[6] * ay$2 + m[10] * az$2 + m[14]) / ag;
     return out;
-}
+};
 const transformQuat$1 = (a, q, out = new Float32Array(3)) => {
-    let qx = q[0], qy = q[1], qz = q[2], qw = q[3];
-    let x = a[0], y = a[1], z = a[2];
+    const qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+    const x = a[0], y = a[1], z = a[2];
     // var qvec = [qx, qy, qz];
     // var uv = vec3.cross([], qvec, a);
     let uvx = qy * z - qz * y, uvy = qz * x - qx * z, uvz = qx * y - qy * x;
     // var uuv = vec3.cross([], qvec, uv);
     let uuvx = qy * uvz - qz * uvy, uuvy = qz * uvx - qx * uvz, uuvz = qx * uvy - qy * uvx;
     // vec3.scale(uv, uv, 2 * w);
-    let w2 = qw * 2;
+    const w2 = qw * 2;
     uvx *= w2;
     uvy *= w2;
     uvz *= w2;
@@ -2194,7 +2192,7 @@ var Vector3 = /*#__PURE__*/Object.freeze({
 	clampScalar: clampScalar$1,
 	clone: clone$1,
 	closeTo: closeTo$2,
-	create: create$3,
+	create: create$4,
 	cross: cross$2,
 	distanceTo: distanceTo$2,
 	distanceToManhattan: distanceToManhattan$1,
@@ -2202,7 +2200,7 @@ var Vector3 = /*#__PURE__*/Object.freeze({
 	divide: divide$2,
 	divideScalar: divideScalar$1,
 	dot: dot$3,
-	equals: equals$2,
+	equals: equals$3,
 	from: from$2,
 	fromArray: fromArray$1,
 	fromScalar: fromScalar$1,
@@ -2263,7 +2261,7 @@ function ceil$1(a, out = new Float32Array(4)) {
 const closeTo$1 = (a, b) => {
     return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
 };
-const create$2 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
+const create$3 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
     out[0] = x;
     out[1] = y;
     out[2] = z;
@@ -2311,7 +2309,7 @@ const divide$1 = (a, b, out = new Float32Array(4)) => {
 const dot$2 = (a, b) => {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 };
-const equals$1 = (a, b) => {
+const equals$2 = (a, b) => {
     return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 };
 function floor$1(a, out) {
@@ -2465,13 +2463,13 @@ var Vector4 = /*#__PURE__*/Object.freeze({
 	add: add$1,
 	ceil: ceil$1,
 	closeTo: closeTo$1,
-	create: create$2,
+	create: create$3,
 	cross: cross$1,
 	distanceTo: distanceTo$1,
 	distanceToSquared: distanceToSquared$1,
 	divide: divide$1,
 	dot: dot$2,
-	equals: equals$1,
+	equals: equals$2,
 	floor: floor$1,
 	from: from$1,
 	fromValues: fromValues,
@@ -2506,7 +2504,7 @@ const conjugate = (a, out = new Float32Array(4)) => {
     out[3] = a[3];
     return out;
 };
-const create$1 = (x = 0, y = 0, z = 0, w = 1, out = new Float32Array(4)) => {
+const create$2 = (x = 0, y = 0, z = 0, w = 1, out = new Float32Array(4)) => {
     out[0] = x;
     out[1] = y;
     out[2] = z;
@@ -2732,7 +2730,7 @@ var Quaternion = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	angleTo: angleTo,
 	conjugate: conjugate,
-	create: create$1,
+	create: create$2,
 	dot: dot$1,
 	fromAxisAngle: fromAxisAngle,
 	fromMatrix3: fromMatrix3,
@@ -2818,7 +2816,7 @@ const clone = (a, out = new Float32Array(2)) => {
 const cross = (a, b) => {
     return a[0] * b[1] - a[1] * b[0];
 };
-const create = (x, y, out = new Float32Array(2)) => {
+const create$1 = (x = 0, y = 0, out = new Float32Array(2)) => {
     out[0] = x;
     out[1] = y;
     return out;
@@ -2847,7 +2845,7 @@ const divideScalar = (a, scalar, out = new Float32Array(2)) => {
 const dot = (a, b) => {
     return a[0] * b[0] + a[1] * b[1];
 };
-const equals = (a, b) => {
+const equals$1 = (a, b) => {
     return a[0] === b[0] && a[1] === b[1];
 };
 const floor = (a, out = new Float32Array(2)) => {
@@ -3012,14 +3010,14 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	closeToManhattan: closeToManhattan,
 	clone: clone,
 	cross: cross,
-	create: create,
+	create: create$1,
 	distanceTo: distanceTo,
 	distanceToManhattan: distanceToManhattan,
 	distanceToSquared: distanceToSquared,
 	divide: divide,
 	divideScalar: divideScalar,
 	dot: dot,
-	equals: equals,
+	equals: equals$1,
 	floor: floor,
 	floorToZero: floorToZero,
 	from: from,
@@ -3056,5 +3054,86 @@ var Vector2 = /*#__PURE__*/Object.freeze({
 	VECTOR2_RIGHT: VECTOR2_RIGHT
 });
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+class Rectangle {
+    constructor(a = create$1(), b = create$1(1, 1)) {
+        this.min = create$1();
+        this.max = create$1();
+        min(a, b, this.min);
+        max(a, b, this.max);
+    }
+}
+const area = (a) => {
+    return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
+};
+const containsPoint = (rect, a) => {
+    return a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1];
+};
+const containsRectangle = (rect, box) => {
+    return (rect.min[0] <= box.min[0] &&
+        box.max[0] <= rect.max[0] &&
+        rect.min[1] <= box.min[1] &&
+        box.max[1] <= rect.max[1]);
+};
+const create = (a = create$1(), b = create$1(1, 1)) => {
+    return {
+        max: max(a, b),
+        min: min(a, b)
+    };
+};
+const equals = (a, b) => {
+    return equals$1(a.min, b.min) && equals$1(a.max, b.max);
+};
+const getCenter = (a, out = create$1()) => {
+    add(a.min, a.max, out);
+    return multiplyScalar(out, 0.5, out);
+};
+const getSize = (a, out = create$1()) => {
+    return minus(a.max, a.min, out);
+};
+const height = (a) => {
+    return a.max[1] - a.min[1];
+};
+const intersect = (a, b, out = new Rectangle()) => {
+    max(a.min, b.min, out.min);
+    min(a.max, b.max, out.max);
+    return out;
+};
+const stretch = (a, b, c, out = new Rectangle()) => {
+    add(a.min, b, out.min);
+    add(a.max, c, out.max);
+    return out;
+};
+const translate = (a, b, out = new Rectangle()) => {
+    add(a.min, b, out.min);
+    add(a.max, b, out.max);
+    return out;
+};
+const union = (a, b, out = new Rectangle()) => {
+    min(a.min, b.min, out.min);
+    max(a.max, b.max, out.max);
+    return out;
+};
+const width = (a) => {
+    return a.max[0] - a.min[0];
+};
+
+var Rectangle$1 = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	'default': Rectangle,
+	area: area,
+	containsPoint: containsPoint,
+	containsRectangle: containsRectangle,
+	create: create,
+	equals: equals,
+	getCenter: getCenter,
+	getSize: getSize,
+	height: height,
+	intersect: intersect,
+	stretch: stretch,
+	translate: translate,
+	union: union,
+	width: width
+});
+
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle$1 as Rectangle, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
 //# sourceMappingURL=Mathx.module.js.map

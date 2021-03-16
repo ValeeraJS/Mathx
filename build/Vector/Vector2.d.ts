@@ -13,7 +13,7 @@ export declare const closeToRect: (a: Float32Array, b: Float32Array, epsilon?: n
 export declare const closeToManhattan: (a: Float32Array, b: Float32Array, epsilon?: number) => boolean;
 export declare const clone: (a: Float32Array, out?: Float32Array) => Float32Array;
 export declare const cross: (a: Float32Array, b: Float32Array) => number;
-export declare const create: (x: number, y: number, out?: Float32Array) => Float32Array;
+export declare const create: (x?: number, y?: number, out?: Float32Array) => Float32Array;
 export declare const distanceTo: (a: Float32Array, b: Float32Array) => number;
 export declare const distanceToManhattan: (a: Float32Array, b: Float32Array) => number;
 export declare const distanceToSquared: (a: Float32Array, b: Float32Array) => number;

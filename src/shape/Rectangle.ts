@@ -1,75 +1,105 @@
 import IRectangle from "./interfaces/IRectangle";
-import { IVector2Data } from "../vector/interfaces/IVector2";
-import Vector2, { min as minVec2, max as maxVec2, add as addVec2, equals as equalsVec2, multiplyScalar, minus as minusVec2 } from "../vector/Vector2";
+import { Vector2 } from "../vector";
 
 export default class Rectangle implements IRectangle {
-    min: IVector2Data = new Vector2();
-    max: IVector2Data = new Vector2();
-    constructor(a: IVector2Data = new Vector2(), b: IVector2Data = new Vector2(1, 1)) {
-        minVec2(a, b, this.min);
-        maxVec2(a, b, this.max);
-    }
+	public min: Float32Array = Vector2.create();
+	public max: Float32Array = Vector2.create();
+	public constructor(a: Float32Array = Vector2.create(), b: Float32Array = Vector2.create(1, 1)) {
+		Vector2.min(a, b, this.min);
+		Vector2.max(a, b, this.max);
+	}
 }
 
-export const area = (a: IRectangle) => {
-    return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
-}
+export const area = (a: IRectangle): number => {
+	return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
+};
 
-export const containsPoint = (a: IVector2Data) => {
-    return a[0] >= this.min[0] && a[0] <= this.max[0] &&
-        a[1] >= this.min[1] && a[1] <= this.max[1];
-}
+export const containsPoint = (rect: IRectangle, a: Float32Array): boolean => {
+	return a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1];
+};
 
-export const containsRectangle = (box: IRectangle) => {
-    return this.min[0] <= box.min[0] && box.max[0] <= this.max[0] &&
-        this.min[1] <= box.min[1] && box.max[1] <= this.max[1];
-}
+export const containsRectangle = (rect: IRectangle, box: IRectangle): boolean => {
+	return (
+		rect.min[0] <= box.min[0] &&
+		box.max[0] <= rect.max[0] &&
+		rect.min[1] <= box.min[1] &&
+		box.max[1] <= rect.max[1]
+	);
+};
 
-export const equals = (a: IRectangle, b: IRectangle) => {
-    return equalsVec2(a.min, b.min) && equalsVec2(a.max, b.max);
-}
+export const create = (
+	a: Float32Array = Vector2.create(),
+	b: Float32Array = Vector2.create(1, 1)
+): IRectangle => {
+	return {
+		max: Vector2.max(a, b),
+		min: Vector2.min(a, b)
+	};
+};
 
-export const getCenter = (a: IRectangle, out: IVector2Data = new Vector2()) => {
-    addVec2(a.min, a.max, out);
-    return multiplyScalar(out, 0.5, out);
-}
+export const equals = (a: IRectangle, b: IRectangle): boolean => {
+	return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
+};
 
-export const getSize = (a: IRectangle, out: IVector2Data = new Vector2()) => {
-    return minusVec2(a.max, a.min, out);
-}
+export const getCenter = (a: IRectangle, out: Float32Array = Vector2.create()): Float32Array => {
+	Vector2.add(a.min, a.max, out);
 
-export const height = (a: IRectangle) => {
-    return a.max[1] - a.min[1];
-}
+	return Vector2.multiplyScalar(out, 0.5, out);
+};
 
-export const intersect = (a: IRectangle, b: IRectangle, out: IRectangle = new Rectangle()) => {
-    maxVec2(a.min, b.min, out.min);
-    minVec2(a.max, b.max, out.max);
+export const getSize = (a: IRectangle, out: Float32Array = Vector2.create()): Float32Array => {
+	return Vector2.minus(a.max, a.min, out);
+};
 
-    return out;
-}
+export const height = (a: IRectangle): number => {
+	return a.max[1] - a.min[1];
+};
 
-export const stretch = (a: IRectangle, b: IVector2Data, c: IVector2Data, out: IRectangle = new Rectangle()) => {
-    addVec2(a.min, b, out.min);
-    addVec2(a.max, c, out.max);
+export const intersect = (
+	a: IRectangle,
+	b: IRectangle,
+	out: IRectangle = new Rectangle()
+): IRectangle => {
+	Vector2.max(a.min, b.min, out.min);
+	Vector2.min(a.max, b.max, out.max);
 
-    return out;
-}
+	return out;
+};
 
-export const translate = (a: IRectangle, b: IVector2Data, out: IRectangle = new Rectangle()) => {
-    addVec2(a.min, b, out.min);
-    addVec2(a.max, b, out.max);
+export const stretch = (
+	a: IRectangle,
+	b: Float32Array,
+	c: Float32Array,
+	out: IRectangle = new Rectangle()
+): IRectangle => {
+	Vector2.add(a.min, b, out.min);
+	Vector2.add(a.max, c, out.max);
 
-    return this;
-}
+	return out;
+};
 
-export const union = (a: IRectangle, b: IRectangle, out: IRectangle = new Rectangle()) => {
-    minVec2(a.min, b.min, out.min);
-    maxVec2(a.max, b.max, out.max);
+export const translate = (
+	a: IRectangle,
+	b: Float32Array,
+	out: IRectangle = new Rectangle()
+): IRectangle => {
+	Vector2.add(a.min, b, out.min);
+	Vector2.add(a.max, b, out.max);
 
-    return out;
-}
+	return out;
+};
 
-export const width = (a: IRectangle) => {
-    return a.max[0] - a.min[0];
-}
+export const union = (
+	a: IRectangle,
+	b: IRectangle,
+	out: IRectangle = new Rectangle()
+): IRectangle => {
+	Vector2.min(a.min, b.min, out.min);
+	Vector2.max(a.max, b.max, out.max);
+
+	return out;
+};
+
+export const width = (a: IRectangle): number => {
+	return a.max[0] - a.min[0];
+};
