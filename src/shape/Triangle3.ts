@@ -5,7 +5,8 @@ const defaultA = [-1, -1, 0];
 const defaultB = [1, -1, 0];
 const defaultC = [0, 1, 0];
 
-let ab: Float32Array, bc: Float32Array;
+const ab = new Float32Array(3);
+const bc = new Float32Array(3);
 
 export default class Triangle3 implements ITriangle3 {
 	public a: Float32Array;
