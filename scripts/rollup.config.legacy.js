@@ -1,28 +1,28 @@
-import typescript from 'rollup-plugin-typescript2';
-import json from 'rollup-plugin-json';
+import json from "rollup-plugin-json";
+import typescript from "rollup-plugin-typescript2";
 
 export default {
-	input: 'src/index.ts',
-	plugins: [
-		json(),
-		typescript({
-			tsconfig: './tsconfig.legacy.json'
-		})
-	],
+	input: "src/index.ts",
 	output: [
 		{
 			externalLiveBindings: true,
-			format: 'umd',
-			name: 'Mathx',
-			file: 'build/Mathx.legacy.js',
-			sourcemap: true,
-			indent: '\t'
+			file: "build/Mathx.legacy.js",
+			format: "umd",
+			indent: "\t",
+			name: "Mathx",
+			sourcemap: true
 		},
 		{
-			format: 'es',
-			file: 'build/Mathx.legacy.module.js',
-			sourcemap: true,
-			indent: '\t'
+			file: "build/Mathx.legacy.module.js",
+			format: "es",
+			indent: "\t",
+			sourcemap: true
 		}
+	],
+	plugins: [
+		json(),
+		typescript({
+			tsconfig: "./tsconfig.legacy.json"
+		})
 	]
 };
