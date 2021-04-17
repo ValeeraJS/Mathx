@@ -16,7 +16,7 @@ export default {
 			file: "build/Mathx.legacy.module.js",
 			format: "es",
 			indent: "\t",
-			sourcemap: true
+			sourcemap: false
 		}
 	],
 	plugins: [

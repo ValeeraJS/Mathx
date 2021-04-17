@@ -3144,7 +3144,8 @@
 	const defaultA = [-1, -1, 0];
 	const defaultB = [1, -1, 0];
 	const defaultC = [0, 1, 0];
-	let ab, bc;
+	const ab = new Float32Array(3);
+	const bc = new Float32Array(3);
 	class Triangle3 {
 	    constructor(a = new Float32Array(defaultA), b = new Float32Array(defaultB), c = new Float32Array(defaultC)) {
 	        this.a = a;

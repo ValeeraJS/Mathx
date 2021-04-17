@@ -3403,7 +3403,8 @@
 	var defaultA = [-1, -1, 0];
 	var defaultB = [1, -1, 0];
 	var defaultC = [0, 1, 0];
-	var ab, bc;
+	var ab = new Float32Array(3);
+	var bc = new Float32Array(3);
 	var Triangle3 = /** @class */ (function () {
 	    function Triangle3(a, b, c) {
 	        if (a === void 0) { a = new Float32Array(defaultA); }

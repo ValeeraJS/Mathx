@@ -3138,7 +3138,8 @@ var Rectangle2$1 = /*#__PURE__*/Object.freeze({
 const defaultA = [-1, -1, 0];
 const defaultB = [1, -1, 0];
 const defaultC = [0, 1, 0];
-let ab, bc;
+const ab = new Float32Array(3);
+const bc = new Float32Array(3);
 class Triangle3 {
     constructor(a = new Float32Array(defaultA), b = new Float32Array(defaultB), c = new Float32Array(defaultC)) {
         this.a = a;
@@ -3191,4 +3192,3 @@ var Triangle3$1 = /*#__PURE__*/Object.freeze({
 });
 
 export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
-//# sourceMappingURL=Mathx.module.js.map
