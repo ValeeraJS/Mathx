@@ -6,6 +6,7 @@ export { default as closeTo } from "./closeTo";
 export { default as floorPowerOfTwo } from "./floorPowerOfTwo";
 export { default as floorToZero } from "./floorToZero";
 export { default as isPowerOfTwo } from "./isPowerOfTwo";
+export { default as mapRange } from "./mapRange";
 export { default as randFloat } from "./randFloat";
 export { default as randInt } from "./randInt";
 export { default as sum } from "./sum";

@@ -1,3 +1,3 @@
-export default (min: number = 0, max: number = 1): number => {
-    return min + Math.floor(Math.random() * (max - min + 1));
-}
+export default (min = 0, max = 1): number => {
+	return min + Math.floor(Math.random() * (max - min + 1));
+};

@@ -20,5 +20,6 @@ export default (val: number, min: number, max: number): number => {
 	} else if (v > max) {
 		return v - circle;
 	}
+
 	return v;
 };

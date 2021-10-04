@@ -346,6 +346,24 @@ var isPowerOfTwo = (value) => {
     return (value & (value - 1)) === 0 && value !== 0;
 };
 
+let d1 = 0, d2 = 0;
+/**
+ * @function mapRange
+ * @desc 将目标值按照区间线性映射到另一个区间里面的值。
+ * @param {number} value 目标值
+ * @param {number} range1 值所在的线性区间
+ * @param {number} range2 值需要映射到的目标区间
+ * @returns {number} 映射之后的值
+ * @example Mathx.mapRange(50, [0, 100], [0, 1]); // 0.5;
+ * Mathx.clamp(150, [100, 200], [0, -100]); // -50;
+ * Mathx.clamp(10, [0, 1], [0, -2]); // -20;
+ */
+var mapRange = (value, range1, range2) => {
+    d1 = range1[1] - range1[0];
+    d2 = range2[1] - range2[0];
+    return (value - d1 * 0.5) / d2 / d1;
+};
+
 var randFloat = (min = 0, max = 1) => {
     return min + Math.random() * (max - min);
 };
@@ -3191,4 +3209,4 @@ var Triangle3$1 = /*#__PURE__*/Object.freeze({
 	toFloat32Array: toFloat32Array
 });
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

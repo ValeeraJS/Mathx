@@ -1,4 +1,5 @@
-let len = 0, sum = 0;
+let len = 0,
+	sum = 0;
 
 /**
  * @function sumArray
