@@ -46,7 +46,7 @@ export const closeTo = (a: Float32Array, b: Float32Array): boolean => {
 	);
 };
 
-export const create = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
+export const create = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)): Float32Array => {
 	out[0] = x;
 	out[1] = y;
 	out[2] = z;
@@ -60,13 +60,13 @@ export const cross = (
 	v: Float32Array,
 	w: Float32Array,
 	out: Float32Array = new Float32Array(4)
-) => {
-	(A = v[0] * w[1] - v[1] * w[0]),
-	(B = v[0] * w[2] - v[2] * w[0]),
-	(C = v[0] * w[3] - v[3] * w[0]),
-	(D = v[1] * w[2] - v[2] * w[1]),
-	(E = v[1] * w[3] - v[3] * w[1]),
-	(F = v[2] * w[3] - v[3] * w[2]);
+): Float32Array => {
+	A = v[0] * w[1] - v[1] * w[0];
+	B = v[0] * w[2] - v[2] * w[0];
+	C = v[0] * w[3] - v[3] * w[0];
+	D = v[1] * w[2] - v[2] * w[1];
+	E = v[1] * w[3] - v[3] * w[1];
+	F = v[2] * w[3] - v[3] * w[2];
 	G = u[0];
 	H = u[1];
 	I = u[2];
@@ -80,7 +80,7 @@ export const cross = (
 	return out;
 };
 
-export const distanceTo = (a: Float32Array, b: Float32Array) => {
+export const distanceTo = (a: Float32Array, b: Float32Array): number => {
 	ax = b[0] - a[0];
 	ay = b[1] - a[1];
 	az = b[2] - a[2];
@@ -89,7 +89,7 @@ export const distanceTo = (a: Float32Array, b: Float32Array) => {
 	return Math.hypot(ax, ay, az, aw);
 };
 
-export const distanceToSquared = (a: Float32Array, b: Float32Array) => {
+export const distanceToSquared = (a: Float32Array, b: Float32Array): number => {
 	ax = b[0] - a[0];
 	ay = b[1] - a[1];
 	az = b[2] - a[2];
@@ -102,7 +102,7 @@ export const divide = (
 	a: Float32Array,
 	b: Float32Array,
 	out: Float32Array = new Float32Array(4)
-) => {
+): Float32Array => {
 	out[0] = a[0] / b[0];
 	out[1] = a[1] / b[1];
 	out[2] = a[2] / b[2];
@@ -111,15 +111,15 @@ export const divide = (
 	return out;
 };
 
-export const dot = (a: Float32Array, b: Float32Array) => {
+export const dot = (a: Float32Array, b: Float32Array): number => {
 	return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 };
 
-export const equals = (a: Float32Array, b: Float32Array) => {
+export const equals = (a: Float32Array, b: Float32Array): boolean => {
 	return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 };
 
-export function floor(a: Float32Array, out: Float32Array) {
+export function floor(a: Float32Array, out: Float32Array): Float32Array {
 	out[0] = Math.floor(a[0]);
 	out[1] = Math.floor(a[1]);
 	out[2] = Math.floor(a[2]);
@@ -152,7 +152,7 @@ export const fromValues = (
 	return out;
 };
 
-export const inverse = (a: Float32Array, out: Float32Array = new Float32Array(4)) => {
+export const inverse = (a: Float32Array, out: Float32Array = new Float32Array(4)): Float32Array => {
 	out[0] = 1.0 / a[0];
 	out[1] = 1.0 / a[1];
 	out[2] = 1.0 / a[2];
@@ -161,11 +161,11 @@ export const inverse = (a: Float32Array, out: Float32Array = new Float32Array(4)
 	return out;
 };
 
-export const length = (a: Float32Array) => {
+export const length = (a: Float32Array): number => {
 	return Math.hypot(a[0], a[1], a[2], a[3]);
 };
 
-export const lengthSquared = (a: Float32Array) => {
+export const lengthSquared = (a: Float32Array): number => {
 	ax = a[0];
 	ay = a[1];
 	az = a[2];
@@ -179,7 +179,7 @@ export const lerp = (
 	b: Float32Array,
 	t: number,
 	out: Float32Array = new Float32Array(4)
-) => {
+): Float32Array => {
 	ax = a[0];
 	ay = a[1];
 	az = a[2];
@@ -192,7 +192,11 @@ export const lerp = (
 	return out;
 };
 
-export const max = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(4)) => {
+export const max = (
+	a: Float32Array,
+	b: Float32Array,
+	out: Float32Array = new Float32Array(4)
+): Float32Array => {
 	out[0] = Math.max(a[0], b[0]);
 	out[1] = Math.max(a[1], b[1]);
 	out[2] = Math.max(a[2], b[2]);
@@ -201,7 +205,11 @@ export const max = (a: Float32Array, b: Float32Array, out: Float32Array = new Fl
 	return out;
 };
 
-export const min = (a: Float32Array, b: Float32Array, out: Float32Array = new Float32Array(4)) => {
+export const min = (
+	a: Float32Array,
+	b: Float32Array,
+	out: Float32Array = new Float32Array(4)
+): Float32Array => {
 	out[0] = Math.min(a[0], b[0]);
 	out[1] = Math.min(a[1], b[1]);
 	out[2] = Math.min(a[2], b[2]);
@@ -214,7 +222,7 @@ export const minus = (
 	a: Float32Array,
 	b: Float32Array,
 	out: Float32Array = new Float32Array(4)
-) => {
+): Float32Array => {
 	out[0] = a[0] - b[0];
 	out[1] = a[1] - b[1];
 	out[2] = a[2] - b[2];
@@ -227,7 +235,7 @@ export const multiply = (
 	a: Float32Array,
 	b: Float32Array,
 	out: Float32Array = new Float32Array(4)
-) => {
+): Float32Array => {
 	out[0] = a[0] * b[0];
 	out[1] = a[1] * b[1];
 	out[2] = a[2] * b[2];
@@ -240,7 +248,7 @@ export const multiplyScalar = (
 	a: Float32Array,
 	b: number,
 	out: Float32Array = new Float32Array(4)
-) => {
+): Float32Array => {
 	out[0] = a[0] * b;
 	out[1] = a[1] * b;
 	out[2] = a[2] * b;
@@ -249,7 +257,7 @@ export const multiplyScalar = (
 	return out;
 };
 
-export const negate = (a: Float32Array, out: Float32Array = new Float32Array(4)) => {
+export const negate = (a: Float32Array, out: Float32Array = new Float32Array(4)): Float32Array => {
 	out[0] = -a[0];
 	out[1] = -a[1];
 	out[2] = -a[2];
@@ -258,7 +266,10 @@ export const negate = (a: Float32Array, out: Float32Array = new Float32Array(4))
 	return out;
 };
 
-export const normalize = (a: Float32Array, out: Float32Array = new Float32Array(4)) => {
+export const normalize = (
+	a: Float32Array,
+	out: Float32Array = new Float32Array(4)
+): Float32Array => {
 	ax = a[0];
 	ay = a[1];
 	az = a[2];
@@ -275,7 +286,7 @@ export const normalize = (a: Float32Array, out: Float32Array = new Float32Array(
 	return out;
 };
 
-export const round = (a: Float32Array, out: Float32Array = new Float32Array(4)) => {
+export const round = (a: Float32Array, out: Float32Array = new Float32Array(4)): Float32Array => {
 	out[0] = Math.round(a[0]);
 	out[1] = Math.round(a[1]);
 	out[2] = Math.round(a[2]);
@@ -284,31 +295,39 @@ export const round = (a: Float32Array, out: Float32Array = new Float32Array(4)) 
 	return out;
 };
 
-export function toString(a: Float32Array) {
+export const toString = (a: Float32Array): string => {
 	return `vec4(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-}
+};
 
-export function transformMatrix4(
+export const transformMatrix4 = (
 	a: Float32Array,
 	m: Float32Array,
 	out: Float32Array = new Float32Array(4)
-) {
-	(ax = a[0]), (ay = a[1]), (az = a[2]), (aw = a[3]);
+): Float32Array => {
+	ax = a[0];
+	ay = a[1];
+	az = a[2];
+	aw = a[3];
 	out[0] = m[0] * ax + m[4] * ay + m[8] * az + m[12] * aw;
 	out[1] = m[1] * ax + m[5] * ay + m[9] * az + m[13] * aw;
 	out[2] = m[2] * ax + m[6] * ay + m[10] * az + m[14] * aw;
 	out[3] = m[3] * ax + m[7] * ay + m[11] * az + m[15] * aw;
 
 	return out;
-}
+};
 
 export const transformQuat = (
 	a: Float32Array,
 	q: Float32Array,
 	out: Float32Array = new Float32Array(4)
-) => {
-	(bx = a[0]), (by = a[1]), (bz = a[2]);
-	(ax = q[0]), (ay = q[1]), (az = q[2]), (aw = q[3]);
+): Float32Array => {
+	bx = a[0];
+	by = a[1];
+	bz = a[2];
+	ax = q[0];
+	ay = q[1];
+	az = q[2];
+	aw = q[3];
 
 	ix = aw * bx + ay * bz - az * by;
 	iy = aw * by + az * bx - ax * bz;

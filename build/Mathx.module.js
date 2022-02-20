@@ -2474,12 +2474,12 @@ const create$4 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
     return out;
 };
 const cross$1 = (u, v, w, out = new Float32Array(4)) => {
-    (A = v[0] * w[1] - v[1] * w[0]),
-        (B = v[0] * w[2] - v[2] * w[0]),
-        (C = v[0] * w[3] - v[3] * w[0]),
-        (D = v[1] * w[2] - v[2] * w[1]),
-        (E = v[1] * w[3] - v[3] * w[1]),
-        (F = v[2] * w[3] - v[3] * w[2]);
+    A = v[0] * w[1] - v[1] * w[0];
+    B = v[0] * w[2] - v[2] * w[0];
+    C = v[0] * w[3] - v[3] * w[0];
+    D = v[1] * w[2] - v[2] * w[1];
+    E = v[1] * w[3] - v[3] * w[1];
+    F = v[2] * w[3] - v[3] * w[2];
     G = u[0];
     H = u[1];
     I = u[2];
@@ -2630,20 +2630,28 @@ const round$1 = (a, out = new Float32Array(4)) => {
     out[3] = Math.round(a[3]);
     return out;
 };
-function toString$2(a) {
+const toString$2 = (a) => {
     return `vec4(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-}
-function transformMatrix4(a, m, out = new Float32Array(4)) {
-    (ax$1 = a[0]), (ay$1 = a[1]), (az$1 = a[2]), (aw$1 = a[3]);
+};
+const transformMatrix4 = (a, m, out = new Float32Array(4)) => {
+    ax$1 = a[0];
+    ay$1 = a[1];
+    az$1 = a[2];
+    aw$1 = a[3];
     out[0] = m[0] * ax$1 + m[4] * ay$1 + m[8] * az$1 + m[12] * aw$1;
     out[1] = m[1] * ax$1 + m[5] * ay$1 + m[9] * az$1 + m[13] * aw$1;
     out[2] = m[2] * ax$1 + m[6] * ay$1 + m[10] * az$1 + m[14] * aw$1;
     out[3] = m[3] * ax$1 + m[7] * ay$1 + m[11] * az$1 + m[15] * aw$1;
     return out;
-}
+};
 const transformQuat = (a, q, out = new Float32Array(4)) => {
-    (bx$1 = a[0]), (by$1 = a[1]), (bz$1 = a[2]);
-    (ax$1 = q[0]), (ay$1 = q[1]), (az$1 = q[2]), (aw$1 = q[3]);
+    bx$1 = a[0];
+    by$1 = a[1];
+    bz$1 = a[2];
+    ax$1 = q[0];
+    ay$1 = q[1];
+    az$1 = q[2];
+    aw$1 = q[3];
     ix = aw$1 * bx$1 + ay$1 * bz$1 - az$1 * by$1;
     iy = aw$1 * by$1 + az$1 * bx$1 - ax$1 * bz$1;
     iz = aw$1 * bz$1 + ax$1 * by$1 - ay$1 * bx$1;

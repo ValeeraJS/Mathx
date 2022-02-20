@@ -23,6 +23,6 @@ export declare const multiplyScalar: (a: Float32Array, b: number, out?: Float32A
 export declare const negate: (a: Float32Array, out?: Float32Array) => Float32Array;
 export declare const normalize: (a: Float32Array, out?: Float32Array) => Float32Array;
 export declare const round: (a: Float32Array, out?: Float32Array) => Float32Array;
-export declare function toString(a: Float32Array): string;
-export declare function transformMatrix4(a: Float32Array, m: Float32Array, out?: Float32Array): Float32Array;
+export declare const toString: (a: Float32Array) => string;
+export declare const transformMatrix4: (a: Float32Array, m: Float32Array, out?: Float32Array) => Float32Array;
 export declare const transformQuat: (a: Float32Array, q: Float32Array, out?: Float32Array) => Float32Array;
