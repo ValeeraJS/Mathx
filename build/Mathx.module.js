@@ -403,6 +403,190 @@ var sum = (...arr) => {
     return sumArray(arr);
 };
 
+var BackIn = (p) => {
+    const s = 1.70158;
+    return p === 1 ? 1 : p * p * ((s + 1) * p - s);
+};
+
+var BackInOut = (p) => {
+    const s = 1.70158 * 1.525;
+    if ((p *= 2) < 1) {
+        return 0.5 * (p * p * ((s + 1) * p - s));
+    }
+    p -= 2;
+    return 0.5 * (p * p * ((s + 1) * p + s) + 2);
+};
+
+var BackOut = (p) => {
+    const s = 1.70158;
+    return p === 0 ? 0 : --p * p * ((s + 1) * p + s) + 1;
+};
+
+/* eslint-disable no-return-assign */
+var BounceOut = (p) => {
+    if (p < 1 / 2.75) {
+        return 7.5625 * p * p;
+    }
+    else if (p < 2 / 2.75) {
+        return 7.5625 * (p -= 1.5 / 2.75) * p + 0.75;
+    }
+    else if (p < 2.5 / 2.75) {
+        return 7.5625 * (p -= 2.25 / 2.75) * p + 0.9375;
+    }
+    else {
+        return 7.5625 * (p -= 2.625 / 2.75) * p + 0.984375;
+    }
+};
+
+var BounceIn = (p) => {
+    return 1 - BounceOut(1 - p);
+};
+
+var BounceInOut = (p) => {
+    if (p < 0.5) {
+        return BounceIn(p * 2) * 0.5;
+    }
+    return BounceOut(p * 2 - 1) * 0.5 + 0.5;
+};
+
+var CircularIn = (p) => {
+    return 1 - Math.sqrt(1 - p * p);
+};
+
+var CircularInOut = (p) => {
+    if ((p *= 2) < 1) {
+        return -0.5 * (Math.sqrt(1 - p * p) - 1);
+    }
+    p -= 2;
+    return 0.5 * (Math.sqrt(1 - p * p) + 1);
+};
+
+var CircularOut = (p) => {
+    return Math.sqrt(1 - --p * p);
+};
+
+var CubicIn = (p) => {
+    return p * p * p;
+};
+
+var CubicInOut = (p) => {
+    if ((p *= 2) < 1) {
+        return 0.5 * p * p * p;
+    }
+    p -= 2;
+    return 0.5 * (p * p * p + 2);
+};
+
+var CubicOut = (p) => {
+    return --p * p * p + 1;
+};
+
+var ElasticIn = (p) => {
+    if (p === 0 || p === 1) {
+        return p;
+    }
+    return -Math.pow(2, 10 * (p - 1)) * Math.sin((p - 1.1) * 5 * Math.PI);
+};
+
+var ElasticInOut = (p) => {
+    if (p === 0 || p === 1) {
+        return p;
+    }
+    p *= 2;
+    if (p < 1) {
+        return -0.5 * Math.pow(2, 10 * (p - 1)) * Math.sin((p - 1.1) * 5 * Math.PI);
+    }
+    return 0.5 * Math.pow(2, -10 * (p - 1)) * Math.sin((p - 1.1) * 5 * Math.PI) + 1;
+};
+
+var ElasticOut = (p) => {
+    if (p === 0 || p === 1) {
+        return p;
+    }
+    return Math.pow(2, -10 * p) * Math.sin((p - 0.1) * 5 * Math.PI) + 1;
+};
+
+var ExponentialIn = (p) => {
+    return p === 0 ? 0 : Math.pow(1024, p - 1);
+};
+
+var ExponentialInOut = (p) => {
+    if (p === 0 || p === 1) {
+        return p;
+    }
+    if ((p *= 2) < 1) {
+        return 0.5 * Math.pow(1024, p - 1);
+    }
+    return 0.5 * (-Math.pow(2, -10 * (p - 1)) + 2);
+};
+
+var ExponentialOut = (p) => {
+    return p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+};
+
+var Linear = (p) => {
+    return p;
+};
+
+var QuadraticIn = (p) => {
+    return p * p;
+};
+
+var QuadraticInOut = (p) => {
+    if ((p *= 2) < 1) {
+        return 0.5 * p * p;
+    }
+    return -0.5 * (--p * (p - 2) - 1);
+};
+
+var QuadraticOut = (p) => {
+    return p * (2 - p);
+};
+
+var QuarticIn = (p) => {
+    return p * p * p * p;
+};
+
+var QuarticInOut = (p) => {
+    if ((p *= 2) < 1) {
+        return 0.5 * p * p * p * p;
+    }
+    p -= 2;
+    return -0.5 * (p * p * p * p - 2);
+};
+
+var QuarticOut = (p) => {
+    return 1 - --p * p * p * p;
+};
+
+var QuinticIn = (p) => {
+    return p * p * p * p * p;
+};
+
+var QuinticInOut = (p) => {
+    if ((p *= 2) < 1) {
+        return 0.5 * p * p * p * p * p;
+    }
+    p -= 2;
+    return 0.5 * (p * p * p * p * p + 2);
+};
+
+var QuinticOut = (p) => {
+    return --p * p * p * p * p + 1;
+};
+
+var SinusoidalIn = (p) => {
+    return 1 - Math.sin(((1.0 - p) * Math.PI) / 2);
+};
+
+var SinusoidalInOut = (p) => {
+    return 0.5 * (1 - Math.sin(Math.PI * (0.5 - p)));
+};
+
+var SinusoidalOut = (p) => {
+    return Math.sin((p * Math.PI) / 2);
+};
+
 var EulerRotationOrders;
 (function (EulerRotationOrders) {
     EulerRotationOrders["XYZ"] = "xyz";
@@ -2269,15 +2453,18 @@ const add$1 = (a, b, out = new Float32Array(4)) => {
     out[3] = a[3] + b[3];
     return out;
 };
-function ceil$1(a, out = new Float32Array(4)) {
+const ceil$1 = (a, out = new Float32Array(4)) => {
     out[0] = Math.ceil(a[0]);
     out[1] = Math.ceil(a[1]);
     out[2] = Math.ceil(a[2]);
     out[3] = Math.ceil(a[3]);
     return out;
-}
+};
 const closeTo$1 = (a, b) => {
-    return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]) && closeToCommon(a[3], b[3]);
+    return (closeToCommon(a[0], b[0]) &&
+        closeToCommon(a[1], b[1]) &&
+        closeToCommon(a[2], b[2]) &&
+        closeToCommon(a[3], b[3]));
 };
 const create$4 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
     out[0] = x;
@@ -2287,12 +2474,12 @@ const create$4 = (x = 0, y = 0, z = 0, w = 0, out = new Float32Array(4)) => {
     return out;
 };
 const cross$1 = (u, v, w, out = new Float32Array(4)) => {
-    A = v[0] * w[1] - v[1] * w[0],
-        B = v[0] * w[2] - v[2] * w[0],
-        C = v[0] * w[3] - v[3] * w[0],
-        D = v[1] * w[2] - v[2] * w[1],
-        E = v[1] * w[3] - v[3] * w[1],
-        F = v[2] * w[3] - v[3] * w[2];
+    (A = v[0] * w[1] - v[1] * w[0]),
+        (B = v[0] * w[2] - v[2] * w[0]),
+        (C = v[0] * w[3] - v[3] * w[0]),
+        (D = v[1] * w[2] - v[2] * w[1]),
+        (E = v[1] * w[3] - v[3] * w[1]),
+        (F = v[2] * w[3] - v[3] * w[2]);
     G = u[0];
     H = u[1];
     I = u[2];
@@ -2447,10 +2634,7 @@ function toString$2(a) {
     return `vec4(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 }
 function transformMatrix4(a, m, out = new Float32Array(4)) {
-    ax$1 = a[0],
-        ay$1 = a[1],
-        az$1 = a[2],
-        aw$1 = a[3];
+    (ax$1 = a[0]), (ay$1 = a[1]), (az$1 = a[2]), (aw$1 = a[3]);
     out[0] = m[0] * ax$1 + m[4] * ay$1 + m[8] * az$1 + m[12] * aw$1;
     out[1] = m[1] * ax$1 + m[5] * ay$1 + m[9] * az$1 + m[13] * aw$1;
     out[2] = m[2] * ax$1 + m[6] * ay$1 + m[10] * az$1 + m[14] * aw$1;
@@ -2458,13 +2642,8 @@ function transformMatrix4(a, m, out = new Float32Array(4)) {
     return out;
 }
 const transformQuat = (a, q, out = new Float32Array(4)) => {
-    bx$1 = a[0],
-        by$1 = a[1],
-        bz$1 = a[2];
-    ax$1 = q[0],
-        ay$1 = q[1],
-        az$1 = q[2],
-        aw$1 = q[3];
+    (bx$1 = a[0]), (by$1 = a[1]), (bz$1 = a[2]);
+    (ax$1 = q[0]), (ay$1 = q[1]), (az$1 = q[2]), (aw$1 = q[3]);
     ix = aw$1 * bx$1 + ay$1 * bz$1 - az$1 * by$1;
     iy = aw$1 * by$1 + az$1 * bx$1 - ax$1 * bz$1;
     iz = aw$1 * bz$1 + ax$1 * by$1 - ay$1 * bx$1;
@@ -3209,4 +3388,4 @@ var Triangle3$1 = /*#__PURE__*/Object.freeze({
 	toFloat32Array: toFloat32Array
 });
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { BackIn, BackInOut, BackOut, BounceIn, BounceInOut, BounceOut, COLOR_HEX_MAP, CircularIn, CircularInOut, CircularOut, ColorGPU, ColorRGB, ColorRGBA, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, Euler, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, Matrix2, Matrix3, Matrix4, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, Quaternion, QuinticIn, QuinticInOut, QuinticOut, Rectangle2$1 as Rectangle2, SinusoidalIn, SinusoidalInOut, SinusoidalOut, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

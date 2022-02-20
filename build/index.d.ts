@@ -1,5 +1,6 @@
 export * from "./color";
 export * from "./common";
+export * from "./easing";
 export * from "./euler";
 export * from "./matrix";
 export * from "./quaternion";

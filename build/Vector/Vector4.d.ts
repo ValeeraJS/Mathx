@@ -1,5 +1,5 @@
 export declare const add: (a: Float32Array, b: Float32Array, out?: Float32Array) => Float32Array;
-export declare function ceil(a: Float32Array, out?: Float32Array): Float32Array;
+export declare const ceil: (a: Float32Array, out?: Float32Array) => Float32Array;
 export declare const closeTo: (a: Float32Array, b: Float32Array) => boolean;
 export declare const create: (x?: number, y?: number, z?: number, w?: number, out?: Float32Array) => Float32Array;
 export declare const cross: (u: Float32Array, v: Float32Array, w: Float32Array, out?: Float32Array) => Float32Array;
