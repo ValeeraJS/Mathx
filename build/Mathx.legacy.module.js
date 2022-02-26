@@ -429,6 +429,10 @@ var isPowerOfTwo = (function (value) {
     return (value & (value - 1)) === 0 && value !== 0;
 });
 
+var lerp$4 = (function (a, b, p) {
+    return (b - a) * p + a;
+});
+
 var d1 = 0, d2 = 0;
 /**
  * @function mapRange
@@ -3664,4 +3668,4 @@ var Triangle3$1 = /*#__PURE__*/Object.freeze({
 	toFloat32Array: toFloat32Array
 });
 
-export { BackIn, BackInOut, BackOut, BounceIn, BounceInOut, BounceOut, COLOR_HEX_MAP, CircularIn, CircularInOut, CircularOut, ColorGPU, ColorRGB, ColorRGBA, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, Euler, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, Matrix2, Matrix3, Matrix4, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, Quaternion, QuinticIn, QuinticInOut, QuinticOut, Rectangle2$1 as Rectangle2, SinusoidalIn, SinusoidalInOut, SinusoidalOut, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { BackIn, BackInOut, BackOut, BounceIn, BounceInOut, BounceOut, COLOR_HEX_MAP, CircularIn, CircularInOut, CircularOut, ColorGPU, ColorRGB, ColorRGBA, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, Euler, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, Matrix2, Matrix3, Matrix4, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, Quaternion, QuinticIn, QuinticInOut, QuinticOut, Rectangle2$1 as Rectangle2, SinusoidalIn, SinusoidalInOut, SinusoidalOut, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp$4 as lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

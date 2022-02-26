@@ -352,6 +352,10 @@
 	    return (value & (value - 1)) === 0 && value !== 0;
 	};
 
+	var lerp$4 = (a, b, p) => {
+	    return (b - a) * p + a;
+	};
+
 	let d1 = 0, d2 = 0;
 	/**
 	 * @function mapRange
@@ -3455,6 +3459,7 @@
 	exports.floorPowerOfTwo = floorPowerOfTwo;
 	exports.floorToZero = floorToZeroCommon;
 	exports.isPowerOfTwo = isPowerOfTwo;
+	exports.lerp = lerp$4;
 	exports.mapRange = mapRange;
 	exports.randFloat = randFloat;
 	exports.randInt = randInt;
