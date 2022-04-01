@@ -1,3 +1,24 @@
+var DEG_TO_RAD = Math.PI / 180;
+var DEG_360_RAD = Math.PI * 2;
+var DEG_90_RAD = Math.PI / 2;
+var DEG_60_RAD = Math.PI / 3;
+var DEG_45_RAD = Math.PI / 4;
+var DEG_30_RAD = Math.PI / 6;
+var EPSILON = Math.pow(2, -52);
+var RAD_TO_DEG = 180 / Math.PI;
+
+var constants = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	DEG_TO_RAD: DEG_TO_RAD,
+	DEG_360_RAD: DEG_360_RAD,
+	DEG_90_RAD: DEG_90_RAD,
+	DEG_60_RAD: DEG_60_RAD,
+	DEG_45_RAD: DEG_45_RAD,
+	DEG_30_RAD: DEG_30_RAD,
+	EPSILON: EPSILON,
+	RAD_TO_DEG: RAD_TO_DEG
+});
+
 var COLOR_HEX_MAP = {
     aliceblue: 0xF0F8FF,
     antiquewhite: 0xFAEBD7,
@@ -403,9 +424,6 @@ var clampSafeCommon = (function (val, a, b) {
     return a;
 });
 
-var DEG_360_RAD = Math.PI * 2;
-var EPSILON = Math.pow(2, -52);
-
 /**
  * @function closeTo
  * @desc 判断一个数是否在另一个数的邻域内，通常用于检验浮点计算是否精度在EPSILON以内
@@ -680,6 +698,41 @@ var SinusoidalInOut = (function (p) {
 
 var SinusoidalOut = (function (p) {
     return Math.sin((p * Math.PI) / 2);
+});
+
+var index = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	BackIn: BackIn,
+	BackOut: BackOut,
+	BackInOut: BackInOut,
+	BounceIn: BounceIn,
+	BounceInOut: BounceInOut,
+	BounceOut: BounceOut,
+	CircularIn: CircularIn,
+	CircularInOut: CircularInOut,
+	CircularOut: CircularOut,
+	CubicIn: CubicIn,
+	CubicInOut: CubicInOut,
+	CubicOut: CubicOut,
+	ElasticIn: ElasticIn,
+	ElasticInOut: ElasticInOut,
+	ElasticOut: ElasticOut,
+	ExponentialIn: ExponentialIn,
+	ExponentialInOut: ExponentialInOut,
+	ExponentialOut: ExponentialOut,
+	Linear: Linear,
+	QuadraticIn: QuadraticIn,
+	QuadraticInOut: QuadraticInOut,
+	QuadraticOut: QuadraticOut,
+	QuarticIn: QuarticIn,
+	QuarticInOut: QuarticInOut,
+	QuarticOut: QuarticOut,
+	QuinticIn: QuinticIn,
+	QuinticInOut: QuinticInOut,
+	QuinticOut: QuinticOut,
+	SinusoidalIn: SinusoidalIn,
+	SinusoidalInOut: SinusoidalInOut,
+	SinusoidalOut: SinusoidalOut
 });
 
 var EulerRotationOrders;
@@ -3668,4 +3721,4 @@ var Triangle3$1 = /*#__PURE__*/Object.freeze({
 	toFloat32Array: toFloat32Array
 });
 
-export { BackIn, BackInOut, BackOut, BounceIn, BounceInOut, BounceOut, COLOR_HEX_MAP, CircularIn, CircularInOut, CircularOut, ColorGPU, ColorRGB, ColorRGBA, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, Euler, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, Matrix2, Matrix3, Matrix4, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, Quaternion, QuinticIn, QuinticInOut, QuinticOut, Rectangle2$1 as Rectangle2, SinusoidalIn, SinusoidalInOut, SinusoidalOut, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp$4 as lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, index as Easing, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp$4 as lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

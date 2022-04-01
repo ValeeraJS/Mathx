@@ -1,6 +1,7 @@
+export * as Constants from "./constants";
 export * from "./color";
 export * from "./common";
-export * from "./easing";
+export * as Easing from "./easing";
 export * from "./euler";
 export * from "./matrix";
 export * from "./quaternion";

@@ -1,3 +1,4 @@
+export * as Constants from "./constants";
 export * from "./color";
 export * from "./common";
 export * as Easing from "./easing";

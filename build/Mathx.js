@@ -4,6 +4,27 @@
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Mathx = {}));
 }(this, (function (exports) { 'use strict';
 
+	const DEG_TO_RAD = Math.PI / 180;
+	const DEG_360_RAD = Math.PI * 2;
+	const DEG_90_RAD = Math.PI / 2;
+	const DEG_60_RAD = Math.PI / 3;
+	const DEG_45_RAD = Math.PI / 4;
+	const DEG_30_RAD = Math.PI / 6;
+	const EPSILON = Math.pow(2, -52);
+	const RAD_TO_DEG = 180 / Math.PI;
+
+	var constants = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		DEG_TO_RAD: DEG_TO_RAD,
+		DEG_360_RAD: DEG_360_RAD,
+		DEG_90_RAD: DEG_90_RAD,
+		DEG_60_RAD: DEG_60_RAD,
+		DEG_45_RAD: DEG_45_RAD,
+		DEG_30_RAD: DEG_30_RAD,
+		EPSILON: EPSILON,
+		RAD_TO_DEG: RAD_TO_DEG
+	});
+
 	const COLOR_HEX_MAP = {
 	    aliceblue: 0xF0F8FF,
 	    antiquewhite: 0xFAEBD7,
@@ -327,9 +348,6 @@
 	    return a;
 	};
 
-	const DEG_360_RAD = Math.PI * 2;
-	const EPSILON = Math.pow(2, -52);
-
 	/**
 	 * @function closeTo
 	 * @desc 判断一个数是否在另一个数的邻域内，通常用于检验浮点计算是否精度在EPSILON以内
@@ -596,6 +614,41 @@
 	var SinusoidalOut = (p) => {
 	    return Math.sin((p * Math.PI) / 2);
 	};
+
+	var index = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		BackIn: BackIn,
+		BackOut: BackOut,
+		BackInOut: BackInOut,
+		BounceIn: BounceIn,
+		BounceInOut: BounceInOut,
+		BounceOut: BounceOut,
+		CircularIn: CircularIn,
+		CircularInOut: CircularInOut,
+		CircularOut: CircularOut,
+		CubicIn: CubicIn,
+		CubicInOut: CubicInOut,
+		CubicOut: CubicOut,
+		ElasticIn: ElasticIn,
+		ElasticInOut: ElasticInOut,
+		ElasticOut: ElasticOut,
+		ExponentialIn: ExponentialIn,
+		ExponentialInOut: ExponentialInOut,
+		ExponentialOut: ExponentialOut,
+		Linear: Linear,
+		QuadraticIn: QuadraticIn,
+		QuadraticInOut: QuadraticInOut,
+		QuadraticOut: QuadraticOut,
+		QuarticIn: QuarticIn,
+		QuarticInOut: QuarticInOut,
+		QuarticOut: QuarticOut,
+		QuinticIn: QuinticIn,
+		QuinticInOut: QuinticInOut,
+		QuinticOut: QuinticOut,
+		SinusoidalIn: SinusoidalIn,
+		SinusoidalInOut: SinusoidalInOut,
+		SinusoidalOut: SinusoidalOut
+	});
 
 	var EulerRotationOrders;
 	(function (EulerRotationOrders) {
@@ -3406,47 +3459,18 @@
 		toFloat32Array: toFloat32Array
 	});
 
-	exports.BackIn = BackIn;
-	exports.BackInOut = BackInOut;
-	exports.BackOut = BackOut;
-	exports.BounceIn = BounceIn;
-	exports.BounceInOut = BounceInOut;
-	exports.BounceOut = BounceOut;
 	exports.COLOR_HEX_MAP = COLOR_HEX_MAP;
-	exports.CircularIn = CircularIn;
-	exports.CircularInOut = CircularInOut;
-	exports.CircularOut = CircularOut;
 	exports.ColorGPU = ColorGPU;
 	exports.ColorRGB = ColorRGB;
 	exports.ColorRGBA = ColorRGBA;
-	exports.CubicIn = CubicIn;
-	exports.CubicInOut = CubicInOut;
-	exports.CubicOut = CubicOut;
-	exports.ElasticIn = ElasticIn;
-	exports.ElasticInOut = ElasticInOut;
-	exports.ElasticOut = ElasticOut;
+	exports.Constants = constants;
+	exports.Easing = index;
 	exports.Euler = Euler;
-	exports.ExponentialIn = ExponentialIn;
-	exports.ExponentialInOut = ExponentialInOut;
-	exports.ExponentialOut = ExponentialOut;
-	exports.Linear = Linear;
 	exports.Matrix2 = Matrix2;
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;
-	exports.QuadraticIn = QuadraticIn;
-	exports.QuadraticInOut = QuadraticInOut;
-	exports.QuadraticOut = QuadraticOut;
-	exports.QuarticIn = QuarticIn;
-	exports.QuarticInOut = QuarticInOut;
-	exports.QuarticOut = QuarticOut;
 	exports.Quaternion = Quaternion;
-	exports.QuinticIn = QuinticIn;
-	exports.QuinticInOut = QuinticInOut;
-	exports.QuinticOut = QuinticOut;
 	exports.Rectangle2 = Rectangle2$1;
-	exports.SinusoidalIn = SinusoidalIn;
-	exports.SinusoidalInOut = SinusoidalInOut;
-	exports.SinusoidalOut = SinusoidalOut;
 	exports.Triangle3 = Triangle3$1;
 	exports.Vector2 = Vector2;
 	exports.Vector3 = Vector3;
