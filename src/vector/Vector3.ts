@@ -465,7 +465,7 @@ export const slerp = (
 };
 
 export const toString = (a: Float32Array): string => {
-	return `vec3(${a[0]}, ${a[1]}, ${a[2]})`;
+	return `(${a[0]}, ${a[1]}, ${a[2]})`;
 };
 
 export const transformMatrix3 = (

@@ -436,7 +436,7 @@ export const toPalorJson = (a: Float32Array | number[], p = { a: 0, r: 0 }): IPo
 };
 
 export const toString = (a: Float32Array | number[]): string => {
-	return `vec2(${a[0]}, ${a[1]})`;
+	return `(${a[0]}, ${a[1]})`;
 };
 
 export const transformMatrix3 = (

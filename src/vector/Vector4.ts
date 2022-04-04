@@ -296,7 +296,7 @@ export const round = (a: Float32Array, out: Float32Array = new Float32Array(4)):
 };
 
 export const toString = (a: Float32Array): string => {
-	return `vec4(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
+	return `(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 };
 
 export const transformMatrix4 = (

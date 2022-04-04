@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import IEuler, { EulerRotationOrders } from "../euler/IEuler";
 import { EPSILON } from "../constants";
+import { VECTOR3_TOP } from "../vector/Vector3";
 
 let a00 = 0,
 	a01 = 0,
@@ -538,8 +539,8 @@ export function invert(
 export const lookAt = (
 	eye: Float32Array,
 	center: Float32Array,
-	up: Float32Array,
-	out: Float32Array
+	up: Float32Array = VECTOR3_TOP,
+	out: Float32Array = new Float32Array(16)
 ): Float32Array => {
 	let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
 	const eyex = eye[0];

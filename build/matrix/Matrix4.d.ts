@@ -13,7 +13,7 @@ export declare const fromScaling: (v: Float32Array, out?: Float32Array) => Float
 export declare const fromTranslation: (v: Float32Array, out?: Float32Array) => Float32Array;
 export declare const identity: (out?: Float32Array) => Float32Array;
 export declare function invert(a: Float32Array, out?: Float32Array): Float32Array | null;
-export declare const lookAt: (eye: Float32Array, center: Float32Array, up: Float32Array, out: Float32Array) => Float32Array;
+export declare const lookAt: (eye: Float32Array, center: Float32Array, up?: Float32Array, out?: Float32Array) => Float32Array;
 export declare const multiply: (a: Float32Array, b: Float32Array, out?: Float32Array) => Float32Array;
 export declare const orthogonal: (left: number, right: number, bottom: number, top: number, near: number, far: number, out: Float32Array) => Float32Array;
 export declare const perspective: (fovy: number, aspect: number, near: number, far: number, out: Float32Array) => Float32Array;
