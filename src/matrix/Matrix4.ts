@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import IEuler, { EulerRotationOrders } from "../euler/IEuler";
+import { closeTo } from "../common";
 import { EPSILON } from "../constants";
 import { VECTOR3_TOP } from "../vector/Vector3";
 
@@ -553,11 +554,7 @@ export const lookAt = (
 	const centery = center[1];
 	const centerz = center[2];
 
-	if (
-		Math.abs(eyex - centerx) < EPSILON &&
-		Math.abs(eyey - centery) < EPSILON &&
-		Math.abs(eyez - centerz) < EPSILON
-	) {
+	if (closeTo(eyex, centerx) && closeTo(eyey, centery) && closeTo(eyez, centerz)) {
 		return identity(out);
 	}
 
@@ -962,7 +959,7 @@ export const scale = (
 export const targetTo = (
 	eye: Float32Array,
 	target: Float32Array,
-	up: Float32Array,
+	up: Float32Array = VECTOR3_TOP,
 	out: Float32Array = new Float32Array(16)
 ): Float32Array => {
 	const eyex = eye[0],
