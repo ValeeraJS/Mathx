@@ -3,4 +3,4 @@ export { default as IColorRGBA, IColorRGBAData, IColorRGBAJson } from "./interfa
 export { default as IColorRGB, IColorRGBData, IColorRGBJson } from "./interfaces/IColorRGB";
 export { default as ColorRGBA } from "./ColorRGBA";
 export { default as ColorRGB } from "./ColorRGB";
-export * as ColorGPU from "./ColorGPU";
+export { default as ColorGPU } from "./ColorGPU";

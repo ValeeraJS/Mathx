@@ -20,159 +20,352 @@ var constants = /*#__PURE__*/Object.freeze({
 });
 
 const COLOR_HEX_MAP = {
-    aliceblue: 0xF0F8FF,
-    antiquewhite: 0xFAEBD7,
-    aqua: 0x00FFFF,
-    aquamarine: 0x7FFFD4,
-    azure: 0xF0FFFF,
-    beige: 0xF5F5DC,
-    bisque: 0xFFE4C4,
+    aliceblue: 0xf0f8ff,
+    antiquewhite: 0xfaebd7,
+    aqua: 0x00ffff,
+    aquamarine: 0x7fffd4,
+    azure: 0xf0ffff,
+    beige: 0xf5f5dc,
+    bisque: 0xffe4c4,
     black: 0x000000,
-    blanchedalmond: 0xFFEBCD,
-    blue: 0x0000FF,
-    blueviolet: 0x8A2BE2,
-    brown: 0xA52A2A,
-    burlywood: 0xDEB887,
-    cadetblue: 0x5F9EA0,
-    chartreuse: 0x7FFF00,
-    chocolate: 0xD2691E,
-    coral: 0xFF7F50,
-    cornflowerblue: 0x6495ED,
-    cornsilk: 0xFFF8DC,
-    crimson: 0xDC143C,
-    cyan: 0x00FFFF,
-    darkblue: 0x00008B,
-    darkcyan: 0x008B8B,
-    darkgoldenrod: 0xB8860B,
-    darkgray: 0xA9A9A9,
+    blanchedalmond: 0xffebcd,
+    blue: 0x0000ff,
+    blueviolet: 0x8a2be2,
+    brown: 0xa52a2a,
+    burlywood: 0xdeb887,
+    cadetblue: 0x5f9ea0,
+    chartreuse: 0x7fff00,
+    chocolate: 0xd2691e,
+    coral: 0xff7f50,
+    cornflowerblue: 0x6495ed,
+    cornsilk: 0xfff8dc,
+    crimson: 0xdc143c,
+    cyan: 0x00ffff,
+    darkblue: 0x00008b,
+    darkcyan: 0x008b8b,
+    darkgoldenrod: 0xb8860b,
+    darkgray: 0xa9a9a9,
     darkgreen: 0x006400,
-    darkgrey: 0xA9A9A9,
-    darkkhaki: 0xBDB76B,
-    darkmagenta: 0x8B008B,
-    darkolivegreen: 0x556B2F,
-    darkorange: 0xFF8C00,
-    darkorchid: 0x9932CC,
-    darkred: 0x8B0000,
-    darksalmon: 0xE9967A,
-    darkseagreen: 0x8FBC8F,
-    darkslateblue: 0x483D8B,
-    darkslategray: 0x2F4F4F,
-    darkslategrey: 0x2F4F4F,
-    darkturquoise: 0x00CED1,
-    darkviolet: 0x9400D3,
-    deeppink: 0xFF1493,
-    deepskyblue: 0x00BFFF,
+    darkgrey: 0xa9a9a9,
+    darkkhaki: 0xbdb76b,
+    darkmagenta: 0x8b008b,
+    darkolivegreen: 0x556b2f,
+    darkorange: 0xff8c00,
+    darkorchid: 0x9932cc,
+    darkred: 0x8b0000,
+    darksalmon: 0xe9967a,
+    darkseagreen: 0x8fbc8f,
+    darkslateblue: 0x483d8b,
+    darkslategray: 0x2f4f4f,
+    darkslategrey: 0x2f4f4f,
+    darkturquoise: 0x00ced1,
+    darkviolet: 0x9400d3,
+    deeppink: 0xff1493,
+    deepskyblue: 0x00bfff,
     dimgray: 0x696969,
     dimgrey: 0x696969,
-    dodgerblue: 0x1E90FF,
-    firebrick: 0xB22222,
-    floralwhite: 0xFFFAF0,
-    forestgreen: 0x228B22,
-    fuchsia: 0xFF00FF,
-    gainsboro: 0xDCDCDC,
-    ghostwhite: 0xF8F8FF,
-    gold: 0xFFD700,
-    goldenrod: 0xDAA520,
+    dodgerblue: 0x1e90ff,
+    firebrick: 0xb22222,
+    floralwhite: 0xfffaf0,
+    forestgreen: 0x228b22,
+    fuchsia: 0xff00ff,
+    gainsboro: 0xdcdcdc,
+    ghostwhite: 0xf8f8ff,
+    gold: 0xffd700,
+    goldenrod: 0xdaa520,
     gray: 0x808080,
     green: 0x008000,
-    greenyellow: 0xADFF2F,
+    greenyellow: 0xadff2f,
     grey: 0x808080,
-    honeydew: 0xF0FFF0,
-    hotpink: 0xFF69B4,
-    indianred: 0xCD5C5C,
-    indigo: 0x4B0082,
-    ivory: 0xFFFFF0,
-    khaki: 0xF0E68C,
-    lavender: 0xE6E6FA,
-    lavenderblush: 0xFFF0F5,
-    lawngreen: 0x7CFC00,
-    lemonchiffon: 0xFFFACD,
-    lightblue: 0xADD8E6,
-    lightcoral: 0xF08080,
-    lightcyan: 0xE0FFFF,
-    lightgoldenrodyellow: 0xFAFAD2,
-    lightgray: 0xD3D3D3,
-    lightgreen: 0x90EE90,
-    lightgrey: 0xD3D3D3,
-    lightpink: 0xFFB6C1,
-    lightsalmon: 0xFFA07A,
-    lightseagreen: 0x20B2AA,
-    lightskyblue: 0x87CEFA,
+    honeydew: 0xf0fff0,
+    hotpink: 0xff69b4,
+    indianred: 0xcd5c5c,
+    indigo: 0x4b0082,
+    ivory: 0xfffff0,
+    khaki: 0xf0e68c,
+    lavender: 0xe6e6fa,
+    lavenderblush: 0xfff0f5,
+    lawngreen: 0x7cfc00,
+    lemonchiffon: 0xfffacd,
+    lightblue: 0xadd8e6,
+    lightcoral: 0xf08080,
+    lightcyan: 0xe0ffff,
+    lightgoldenrodyellow: 0xfafad2,
+    lightgray: 0xd3d3d3,
+    lightgreen: 0x90ee90,
+    lightgrey: 0xd3d3d3,
+    lightpink: 0xffb6c1,
+    lightsalmon: 0xffa07a,
+    lightseagreen: 0x20b2aa,
+    lightskyblue: 0x87cefa,
     lightslategray: 0x778899,
     lightslategrey: 0x778899,
-    lightsteelblue: 0xB0C4DE,
-    lightyellow: 0xFFFFE0,
-    lime: 0x00FF00,
-    limegreen: 0x32CD32,
-    linen: 0xFAF0E6,
-    magenta: 0xFF00FF,
+    lightsteelblue: 0xb0c4de,
+    lightyellow: 0xffffe0,
+    lime: 0x00ff00,
+    limegreen: 0x32cd32,
+    linen: 0xfaf0e6,
+    magenta: 0xff00ff,
     maroon: 0x800000,
-    mediumaquamarine: 0x66CDAA,
-    mediumblue: 0x0000CD,
-    mediumorchid: 0xBA55D3,
-    mediumpurple: 0x9370DB,
-    mediumseagreen: 0x3CB371,
-    mediumslateblue: 0x7B68EE,
-    mediumspringgreen: 0x00FA9A,
-    mediumturquoise: 0x48D1CC,
-    mediumvioletred: 0xC71585,
+    mediumaquamarine: 0x66cdaa,
+    mediumblue: 0x0000cd,
+    mediumorchid: 0xba55d3,
+    mediumpurple: 0x9370db,
+    mediumseagreen: 0x3cb371,
+    mediumslateblue: 0x7b68ee,
+    mediumspringgreen: 0x00fa9a,
+    mediumturquoise: 0x48d1cc,
+    mediumvioletred: 0xc71585,
     midnightblue: 0x191970,
-    mintcream: 0xF5FFFA,
-    mistyrose: 0xFFE4E1,
-    moccasin: 0xFFE4B5,
-    navajowhite: 0xFFDEAD,
+    mintcream: 0xf5fffa,
+    mistyrose: 0xffe4e1,
+    moccasin: 0xffe4b5,
+    navajowhite: 0xffdead,
     navy: 0x000080,
-    oldlace: 0xFDF5E6,
+    oldlace: 0xfdf5e6,
     olive: 0x808000,
-    olivedrab: 0x6B8E23,
-    orange: 0xFFA500,
-    orangered: 0xFF4500,
-    orchid: 0xDA70D6,
-    palegoldenrod: 0xEEE8AA,
-    palegreen: 0x98FB98,
-    paleturquoise: 0xAFEEEE,
-    palevioletred: 0xDB7093,
-    papayawhip: 0xFFEFD5,
-    peachpuff: 0xFFDAB9,
-    peru: 0xCD853F,
-    pink: 0xFFC0CB,
-    plum: 0xDDA0DD,
-    powderblue: 0xB0E0E6,
+    olivedrab: 0x6b8e23,
+    orange: 0xffa500,
+    orangered: 0xff4500,
+    orchid: 0xda70d6,
+    palegoldenrod: 0xeee8aa,
+    palegreen: 0x98fb98,
+    paleturquoise: 0xafeeee,
+    palevioletred: 0xdb7093,
+    papayawhip: 0xffefd5,
+    peachpuff: 0xffdab9,
+    peru: 0xcd853f,
+    pink: 0xffc0cb,
+    plum: 0xdda0dd,
+    powderblue: 0xb0e0e6,
     purple: 0x800080,
     rebeccapurple: 0x663399,
-    red: 0xFF0000,
-    rosybrown: 0xBC8F8F,
-    royalblue: 0x4169E1,
-    saddlebrown: 0x8B4513,
-    salmon: 0xFA8072,
-    sandybrown: 0xF4A460,
-    seagreen: 0x2E8B57,
-    seashell: 0xFFF5EE,
-    sienna: 0xA0522D,
-    silver: 0xC0C0C0,
-    skyblue: 0x87CEEB,
-    slateblue: 0x6A5ACD,
+    red: 0xff0000,
+    rosybrown: 0xbc8f8f,
+    royalblue: 0x4169e1,
+    saddlebrown: 0x8b4513,
+    salmon: 0xfa8072,
+    sandybrown: 0xf4a460,
+    seagreen: 0x2e8b57,
+    seashell: 0xfff5ee,
+    sienna: 0xa0522d,
+    silver: 0xc0c0c0,
+    skyblue: 0x87ceeb,
+    slateblue: 0x6a5acd,
     slategray: 0x708090,
     slategrey: 0x708090,
-    snow: 0xFFFAFA,
-    springgreen: 0x00FF7F,
-    steelblue: 0x4682B4,
-    tan: 0xD2B48C,
+    snow: 0xfffafa,
+    springgreen: 0x00ff7f,
+    steelblue: 0x4682b4,
+    tan: 0xd2b48c,
     teal: 0x008080,
-    thistle: 0xD8BFD8,
-    tomato: 0xFF6347,
-    turquoise: 0x40E0D0,
-    violet: 0xEE82EE,
-    wheat: 0xF5DEB3,
-    white: 0xFFFFFF,
-    whitesmoke: 0xF5F5F5,
-    yellow: 0xFFFF00,
-    yellowgreen: 0x9ACD32
+    thistle: 0xd8bfd8,
+    tomato: 0xff6347,
+    turquoise: 0x40e0d0,
+    violet: 0xee82ee,
+    wheat: 0xf5deb3,
+    white: 0xffffff,
+    whitesmoke: 0xf5f5f5,
+    yellow: 0xffff00,
+    yellowgreen: 0x9acd32
 };
 
 class ColorRGBA extends Uint8Array {
-    constructor(r = 0, g = 0, b = 0, a = 255) {
+    constructor(r = 0, g = 0, b = 0, a = 1) {
         super(4);
+        this[0] = r;
+        this[1] = g;
+        this[2] = b;
+        this[3] = a;
+    }
+    get r() {
+        return this[0];
+    }
+    set r(val) {
+        this[0] = val;
+    }
+    get g() {
+        return this[1];
+    }
+    set g(val) {
+        this[1] = val;
+    }
+    get b() {
+        return this[2];
+    }
+    set b(val) {
+        this[2] = val;
+    }
+    get a() {
+        return this[4];
+    }
+    set a(val) {
+        this[4] = val;
+    }
+}
+ColorRGBA.average = (color) => {
+    return (color[0] + color[1] + color[2]) / 3;
+};
+ColorRGBA.averageWeighted = (color, wr = 0.299, wg = 0.587, wb = 0.114) => {
+    return color[0] * wr + color[1] * wg + color[2] * wb;
+};
+ColorRGBA.clone = (color) => {
+    return new ColorRGBA(color[0], color[1], color[2], color[3]);
+};
+ColorRGBA.create = (r = 0, g = 0, b = 0, a = 1) => {
+    return new ColorRGBA(r, g, b, a);
+};
+ColorRGBA.equals = (a, b) => {
+    return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
+        (a.g ?? a[1]) === (b.g ?? b[1]) &&
+        (a.b ?? a[2]) === (b.b ?? b[2]) &&
+        (a.a ?? a[3]) === (b.a ?? b[3]));
+};
+ColorRGBA.fromArray = (arr, out = new ColorRGBA()) => {
+    out[0] = arr[0];
+    out[1] = arr[1];
+    out[2] = arr[2];
+    out[3] = arr[3];
+    return out;
+};
+ColorRGBA.fromHex = (hex, alpha = 255, out = new ColorRGBA()) => {
+    out[0] = hex >> 16;
+    out[1] = (hex >> 8) & 255;
+    out[2] = hex & 255;
+    out[3] = alpha;
+    return out;
+};
+ColorRGBA.fromJson = (json, out = new ColorRGBA()) => {
+    out[0] = json.r;
+    out[1] = json.g;
+    out[2] = json.b;
+    out[3] = json.a;
+    return out;
+};
+ColorRGBA.fromScalar = (scalar, alpha = 255, out = new ColorRGBA()) => {
+    out[0] = scalar;
+    out[1] = scalar;
+    out[2] = scalar;
+    out[3] = alpha;
+    return out;
+};
+ColorRGBA.fromString = (str, out = new ColorRGBA()) => {
+    if (str in COLOR_HEX_MAP) {
+        return ColorRGBA.fromHex(COLOR_HEX_MAP[str], 255, out);
+    }
+    else if (str.startsWith("#")) {
+        str = str.substr(1);
+        return ColorRGBA.fromScalar(parseInt(str, 16), 255, out);
+    }
+    else if (str.startsWith("rgba(")) {
+        str = str.substring(4, str.length - 1);
+        const arr = str.split(",");
+        out[0] = parseInt(arr[0], 10);
+        out[1] = parseInt(arr[1], 10);
+        out[2] = parseInt(arr[2], 10);
+        out[3] = parseInt(arr[3], 10);
+    }
+    return out;
+};
+ColorRGBA.grayscale = (color, wr = 0.299, wg = 0.587, wb = 0.114, out = new ColorRGBA()) => {
+    const gray = ColorRGBA.averageWeighted(color, wr, wg, wb);
+    ColorRGBA.fromScalar(gray, color[3], out);
+    return out;
+};
+
+class ColorRGB extends Uint8Array {
+    constructor(r = 0, g = 0, b = 0) {
+        super(3);
+        this[0] = r;
+        this[1] = g;
+        this[2] = b;
+    }
+    get r() {
+        return this[0];
+    }
+    set r(val) {
+        this[0] = val;
+    }
+    get g() {
+        return this[1];
+    }
+    set g(val) {
+        this[1] = val;
+    }
+    get b() {
+        return this[2];
+    }
+    set b(val) {
+        this[2] = val;
+    }
+}
+ColorRGB.average = (color) => {
+    return (color[0] + color[1] + color[2]) / 3;
+};
+ColorRGB.averageWeighted = (color, wr = 0.299, wg = 0.587, wb = 0.114) => {
+    return color[0] * wr + color[1] * wg + color[2] * wb;
+};
+ColorRGB.clone = (color) => {
+    return new ColorRGB(color[0], color[1], color[2]);
+};
+ColorRGB.create = (r = 0, g = 0, b = 0) => {
+    return new ColorRGB(r, g, b);
+};
+ColorRGB.equals = (a, b) => {
+    return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
+        (a.g ?? a[1]) === (b.g ?? b[1]) &&
+        (a.b ?? a[2]) === (b.b ?? b[2]));
+};
+ColorRGB.fromArray = (arr, out = new ColorRGB()) => {
+    out[0] = arr[0];
+    out[1] = arr[1];
+    out[2] = arr[2];
+    return out;
+};
+ColorRGB.fromHex = (hex, out = new ColorRGB()) => {
+    out[0] = hex >> 16;
+    out[1] = (hex >> 8) & 255;
+    out[2] = hex & 255;
+    return out;
+};
+ColorRGB.fromJson = (json, out = new ColorRGB()) => {
+    out[0] = json.r;
+    out[1] = json.g;
+    out[2] = json.b;
+    return out;
+};
+ColorRGB.fromScalar = (scalar, out = new ColorRGB()) => {
+    out[0] = scalar;
+    out[1] = scalar;
+    out[2] = scalar;
+    return out;
+};
+ColorRGB.fromString = (str, out = new ColorRGB()) => {
+    if (str in COLOR_HEX_MAP) {
+        return ColorRGB.fromHex(COLOR_HEX_MAP[str], out);
+    }
+    else if (str.startsWith("#")) {
+        str = str.substr(1);
+        return ColorRGB.fromScalar(parseInt(str, 16), out);
+    }
+    else if (str.startsWith("rgb(")) {
+        str = str.substring(4, str.length - 1);
+        const arr = str.split(",");
+        out[0] = parseInt(arr[0], 10);
+        out[1] = parseInt(arr[1], 10);
+        out[2] = parseInt(arr[2], 10);
+    }
+    return out;
+};
+ColorRGB.grayscale = (color, wr = 0.299, wg = 0.587, wb = 0.114, out = new ColorRGB()) => {
+    const gray = ColorRGB.averageWeighted(color, wr, wg, wb);
+    ColorRGB.fromScalar(gray, out);
+    return out;
+};
+
+class ColorGPU extends Float32Array {
+    constructor(r = 0, g = 0, b = 0, a = 0) {
+        super(3);
         this[0] = r;
         this[1] = g;
         this[2] = b;
@@ -203,63 +396,73 @@ class ColorRGBA extends Uint8Array {
         this[3] = val;
     }
 }
-
-class ColorRGB extends Uint8Array {
-    constructor(r = 0, g = 0, b = 0) {
-        super(3);
-        this[0] = r;
-        this[1] = g;
-        this[2] = b;
-    }
-    get r() {
-        return this[0];
-    }
-    set r(val) {
-        this[0] = val;
-    }
-    get g() {
-        return this[1];
-    }
-    set g(val) {
-        this[1] = val;
-    }
-    get b() {
-        return this[2];
-    }
-    set b(val) {
-        this[2] = val;
-    }
-}
-
-const create$a = (r = 0, g = 0, b = 0, a = 1, out = new Float32Array(4)) => {
-    out[0] = r;
-    out[1] = g;
-    out[2] = b;
-    out[3] = a;
+ColorGPU.average = (color) => {
+    return (color[0] + color[1] + color[2]) / 3;
+};
+ColorGPU.averageWeighted = (color, wr = 0.299, wg = 0.587, wb = 0.114) => {
+    return color[0] * wr + color[1] * wg + color[2] * wb;
+};
+ColorGPU.clone = (color) => {
+    return new ColorGPU(color[0], color[1], color[2], color[3]);
+};
+ColorGPU.create = (r = 0, g = 0, b = 0, a = 0) => {
+    return new ColorGPU(r, g, b, a);
+};
+ColorGPU.equals = (a, b) => {
+    return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
+        (a.g ?? a[1]) === (b.g ?? b[1]) &&
+        (a.b ?? a[2]) === (b.b ?? b[2]) &&
+        (a.a ?? a[3]) === (b.a ?? b[3]));
+};
+ColorGPU.fromArray = (arr, out = new ColorGPU()) => {
+    out[0] = arr[0];
+    out[1] = arr[1];
+    out[2] = arr[2];
+    out[3] = arr[3];
     return out;
 };
-const createJson = (r = 0, g = 0, b = 0, a = 1) => {
-    return {
-        r,
-        g,
-        b,
-        a
-    };
+ColorGPU.fromHex = (hex, alpha = 1, out = new ColorGPU()) => {
+    out[0] = hex >> 16;
+    out[1] = (hex >> 8) & 255;
+    out[2] = hex & 255;
+    out[3] = alpha;
+    return out;
 };
-const fromScalar$2 = (scalar, a = 1, out) => {
+ColorGPU.fromJson = (json, out = new ColorGPU()) => {
+    out[0] = json.r;
+    out[1] = json.g;
+    out[2] = json.b;
+    out[3] = json.a;
+    return out;
+};
+ColorGPU.fromScalar = (scalar, out = new ColorGPU()) => {
     out[0] = scalar;
     out[1] = scalar;
     out[2] = scalar;
-    out[3] = a;
     return out;
 };
-
-var ColorGPU = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	create: create$a,
-	createJson: createJson,
-	fromScalar: fromScalar$2
-});
+ColorGPU.fromString = (str, out = new ColorGPU()) => {
+    if (str in COLOR_HEX_MAP) {
+        return ColorGPU.fromHex(COLOR_HEX_MAP[str], 1, out);
+    }
+    else if (str.startsWith("#")) {
+        str = str.substr(1);
+        return ColorGPU.fromScalar(parseInt(str, 16), out);
+    }
+    else if (str.startsWith("rgb(")) {
+        str = str.substring(4, str.length - 1);
+        const arr = str.split(",");
+        out[0] = parseInt(arr[0], 10);
+        out[1] = parseInt(arr[1], 10);
+        out[2] = parseInt(arr[2], 10);
+    }
+    return out;
+};
+ColorGPU.grayscale = (color, wr = 0.299, wg = 0.587, wb = 0.114, out = new ColorGPU()) => {
+    const gray = ColorGPU.averageWeighted(color, wr, wg, wb);
+    ColorGPU.fromScalar(gray, out);
+    return out;
+};
 
 var ceilPowerOfTwo = (value) => {
     return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2));
@@ -654,108 +857,118 @@ var EulerRotationOrders;
     EulerRotationOrders["YXZ"] = "yxz";
 })(EulerRotationOrders || (EulerRotationOrders = {}));
 
-const createDefault = () => {
-    return {
-        order: EulerRotationOrders.XYZ,
-        x: 0,
-        y: 0,
-        z: 0
-    };
-};
-const create$9 = (x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ, out = createDefault()) => {
-    out.x = x;
-    out.y = y;
-    out.z = z;
-    out.order = order;
-    return out;
-};
-const from$6 = (euler, out = createDefault()) => {
-    out.x = euler.x;
-    out.y = euler.y;
-    out.z = euler.z;
-    out.order = euler.order;
-    return out;
-};
-const fromMatrix4$1 = (matrix, out = createDefault()) => {
-    const m11 = matrix[0], m12 = matrix[4], m13 = matrix[8];
-    const m21 = matrix[1], m22 = matrix[5], m23 = matrix[9];
-    const m31 = matrix[2], m32 = matrix[6], m33 = matrix[10];
-    switch (out.order) {
-        case EulerRotationOrders.XYZ:
-            out.y = Math.asin(clampCommon(m13, -1, 1));
-            if (Math.abs(m13) < 0.9999999) {
-                out.x = Math.atan2(-m23, m33);
-                out.z = Math.atan2(-m12, m11);
-            }
-            else {
-                out.x = Math.atan2(m32, m22);
-                out.z = 0;
-            }
-            break;
-        case EulerRotationOrders.YXZ:
-            out.x = Math.asin(-clampCommon(m23, -1, 1));
-            if (Math.abs(m23) < 0.9999999) {
-                out.y = Math.atan2(m13, m33);
-                out.z = Math.atan2(m21, m22);
-            }
-            else {
-                out.y = Math.atan2(-m31, m11);
-                out.z = 0;
-            }
-            break;
-        case EulerRotationOrders.ZXY:
-            out.x = Math.asin(clampCommon(m32, -1, 1));
-            if (Math.abs(m32) < 0.9999999) {
-                out.y = Math.atan2(-m31, m33);
-                out.z = Math.atan2(-m12, m22);
-            }
-            else {
-                out.y = 0;
-                out.z = Math.atan2(m21, m11);
-            }
-            break;
-        case EulerRotationOrders.ZYX:
-            out.y = Math.asin(-clampCommon(m31, -1, 1));
-            if (Math.abs(m31) < 0.9999999) {
-                out.x = Math.atan2(m32, m33);
-                out.z = Math.atan2(m21, m11);
-            }
-            else {
-                out.x = 0;
-                out.z = Math.atan2(-m12, m22);
-            }
-            break;
-        case EulerRotationOrders.YZX:
-            out.z = Math.asin(clampCommon(m21, -1, 1));
-            if (Math.abs(m21) < 0.9999999) {
-                out.x = Math.atan2(-m23, m22);
-                out.y = Math.atan2(-m31, m11);
-            }
-            else {
-                out.x = 0;
-                out.y = Math.atan2(m13, m33);
-            }
-            break;
-        case EulerRotationOrders.XZY:
-            out.z = Math.asin(-clampCommon(m12, -1, 1));
-            if (Math.abs(m12) < 0.9999999) {
-                out.x = Math.atan2(m32, m22);
-                out.y = Math.atan2(m13, m11);
-            }
-            else {
-                out.x = Math.atan2(-m23, m33);
-                out.y = 0;
-            }
-            break;
+class EulerAngle extends Float32Array {
+    constructor(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
+        super(3);
+        this[0] = x;
+        this[1] = y;
+        this[2] = z;
+        this.order = order;
     }
-    return out;
-};
+    static clone(euler) {
+        return new EulerAngle(euler.x, euler.y, euler.z, euler.order);
+    }
+    static create(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
+        return new EulerAngle(x, y, z, order);
+    }
+    static fromMatrix4(matrix4, out = new EulerAngle()) {
+        const m11 = matrix4[0], m12 = matrix4[4], m13 = matrix4[8];
+        const m21 = matrix4[1], m22 = matrix4[5], m23 = matrix4[9];
+        const m31 = matrix4[2], m32 = matrix4[6], m33 = matrix4[10];
+        switch (out.order) {
+            case EulerRotationOrders.XYZ:
+                out.y = Math.asin(clampCommon(m13, -1, 1));
+                if (Math.abs(m13) < 0.9999999) {
+                    out.x = Math.atan2(-m23, m33);
+                    out.z = Math.atan2(-m12, m11);
+                }
+                else {
+                    out.x = Math.atan2(m32, m22);
+                    out.z = 0;
+                }
+                break;
+            case EulerRotationOrders.YXZ:
+                out.x = Math.asin(-clampCommon(m23, -1, 1));
+                if (Math.abs(m23) < 0.9999999) {
+                    out.y = Math.atan2(m13, m33);
+                    out.z = Math.atan2(m21, m22);
+                }
+                else {
+                    out.y = Math.atan2(-m31, m11);
+                    out.z = 0;
+                }
+                break;
+            case EulerRotationOrders.ZXY:
+                out.x = Math.asin(clampCommon(m32, -1, 1));
+                if (Math.abs(m32) < 0.9999999) {
+                    out.y = Math.atan2(-m31, m33);
+                    out.z = Math.atan2(-m12, m22);
+                }
+                else {
+                    out.y = 0;
+                    out.z = Math.atan2(m21, m11);
+                }
+                break;
+            case EulerRotationOrders.ZYX:
+                out.y = Math.asin(-clampCommon(m31, -1, 1));
+                if (Math.abs(m31) < 0.9999999) {
+                    out.x = Math.atan2(m32, m33);
+                    out.z = Math.atan2(m21, m11);
+                }
+                else {
+                    out.x = 0;
+                    out.z = Math.atan2(-m12, m22);
+                }
+                break;
+            case EulerRotationOrders.YZX:
+                out.z = Math.asin(clampCommon(m21, -1, 1));
+                if (Math.abs(m21) < 0.9999999) {
+                    out.x = Math.atan2(-m23, m22);
+                    out.y = Math.atan2(-m31, m11);
+                }
+                else {
+                    out.x = 0;
+                    out.y = Math.atan2(m13, m33);
+                }
+                break;
+            case EulerRotationOrders.XZY:
+                out.z = Math.asin(-clampCommon(m12, -1, 1));
+                if (Math.abs(m12) < 0.9999999) {
+                    out.x = Math.atan2(m32, m22);
+                    out.y = Math.atan2(m13, m11);
+                }
+                else {
+                    out.x = Math.atan2(-m23, m33);
+                    out.y = 0;
+                }
+                break;
+        }
+        return out;
+    }
+    get x() {
+        return this[0];
+    }
+    set x(value) {
+        this[0] = value;
+    }
+    get y() {
+        return this[1];
+    }
+    set y(value) {
+        this[1] = value;
+    }
+    get z() {
+        return this[2];
+    }
+    set z(value) {
+        this[2] = value;
+    }
+}
+EulerAngle.ORDERS = EulerRotationOrders;
 
-var Euler = /*#__PURE__*/Object.freeze({
+var EulerAngle$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	create: create$9,
-	from: from$6,
-	fromMatrix4: fromMatrix4$1
+	'default': EulerAngle
 });
 
 let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
@@ -2016,9 +2229,7 @@ const lookAt = (eye, center, up = VECTOR3_TOP, out = new Float32Array(16)) => {
     const centerx = center[0];
     const centery = center[1];
     const centerz = center[2];
-    if (Math.abs(eyex - centerx) < EPSILON &&
-        Math.abs(eyey - centery) < EPSILON &&
-        Math.abs(eyez - centerz) < EPSILON) {
+    if (closeToCommon(eyex, centerx) && closeToCommon(eyey, centery) && closeToCommon(eyez, centerz)) {
         return identity$1(out);
     }
     z0 = eyex - centerx;
@@ -2349,7 +2560,7 @@ const scale = (a, v, out = new Float32Array(16)) => {
     }
     return out;
 };
-const targetTo = (eye, target, up, out = new Float32Array(16)) => {
+const targetTo = (eye, target, up = VECTOR3_TOP, out = new Float32Array(16)) => {
     const eyex = eye[0], eyey = eye[1], eyez = eye[2], upx = up[0], upy = up[1], upz = up[2];
     let z0 = eyex - target[0], z1 = eyey - target[1], z2 = eyez - target[2];
     let len = z0 * z0 + z1 * z1 + z2 * z2;
@@ -3453,4 +3664,4 @@ var Triangle3$1 = /*#__PURE__*/Object.freeze({
 	toFloat32Array: toFloat32Array
 });
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, index as Easing, Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp$4 as lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, index as Easing, EulerAngle$1 as Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp$4 as lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

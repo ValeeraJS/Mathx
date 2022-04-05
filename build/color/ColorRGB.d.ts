@@ -1,6 +1,18 @@
-import IColorRGB, { IColorRGBData } from "./interfaces/IColorRGB";
+import IColorRGB, { IColorRGBJson } from "./interfaces/IColorRGB";
+import { IColorRGBAJson } from ".";
 export default class ColorRGB extends Uint8Array implements IColorRGB {
-    readonly length: 3;
+    static average: (color: IColorRGB) => number;
+    static averageWeighted: (color: IColorRGB, wr?: number, wg?: number, wb?: number) => number;
+    static clone: (color: IColorRGB) => IColorRGB;
+    static create: (r?: number, g?: number, b?: number) => IColorRGB;
+    static equals: (a: IColorRGB, b: IColorRGB) => boolean;
+    static fromArray: (arr: ArrayLike<number>, out?: IColorRGB) => IColorRGB;
+    static fromHex: (hex: number, out?: IColorRGB) => IColorRGB;
+    static fromJson: (json: IColorRGBJson | IColorRGBAJson, out?: IColorRGB) => IColorRGB;
+    static fromScalar: (scalar: number, out?: IColorRGB) => IColorRGB;
+    static fromString: (str: string, out?: IColorRGB) => IColorRGB;
+    static grayscale: (color: IColorRGB, wr?: number, wg?: number, wb?: number, out?: IColorRGB) => IColorRGB;
+    length: 3;
     constructor(r?: number, g?: number, b?: number);
     get r(): number;
     set r(val: number);
@@ -9,8 +21,3 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
     get b(): number;
     set b(val: number);
 }
-export declare const create: (r?: number, g?: number, b?: number) => ColorRGB;
-export declare const equals: (a: IColorRGBData, b: IColorRGBData) => boolean;
-export declare const fromHex: (hex: number, out: IColorRGBData) => IColorRGBData;
-export declare const fromScalar: (scalar: number, out: IColorRGBData) => IColorRGBData;
-export declare const fromString: (str: string, out: IColorRGBData) => IColorRGBData;

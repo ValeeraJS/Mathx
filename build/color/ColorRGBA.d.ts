@@ -1,6 +1,18 @@
-import IColorRGBA, { IColorRGBAData } from "./interfaces/IColorRGBA";
+import IColorRGBA, { IColorRGBAJson } from "./interfaces/IColorRGBA";
+import IColorRGB from "./interfaces/IColorRGB";
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
-    readonly length: 4;
+    static average: (color: IColorRGB | IColorRGBA) => number;
+    static averageWeighted: (color: IColorRGB | IColorRGBA, wr?: number, wg?: number, wb?: number) => number;
+    static clone: (color: IColorRGBA) => IColorRGBA;
+    static create: (r?: number, g?: number, b?: number, a?: number) => IColorRGBA;
+    static equals: (a: IColorRGBA, b: IColorRGBA) => boolean;
+    static fromArray: (arr: ArrayLike<number>, out?: IColorRGBA) => IColorRGBA;
+    static fromHex: (hex: number, alpha?: number, out?: IColorRGBA) => IColorRGBA;
+    static fromJson: (json: IColorRGBAJson, out?: IColorRGBA) => IColorRGBA;
+    static fromScalar: (scalar: number, alpha?: number, out?: IColorRGBA) => IColorRGBA;
+    static fromString: (str: string, out?: IColorRGBA) => IColorRGBA;
+    static grayscale: (color: IColorRGBA, wr?: number, wg?: number, wb?: number, out?: IColorRGBA) => IColorRGBA;
+    length: 4;
     constructor(r?: number, g?: number, b?: number, a?: number);
     get r(): number;
     set r(val: number);
@@ -11,8 +23,3 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
     get a(): number;
     set a(val: number);
 }
-export declare const create: (r?: number, g?: number, b?: number, a?: number) => ColorRGBA;
-export declare const equals: (a: IColorRGBAData, b: IColorRGBAData) => boolean;
-export declare const fromHex: (hex: number, a: number | undefined, out: IColorRGBAData) => IColorRGBAData;
-export declare const fromScalar: (scalar: number, a: number | undefined, out: IColorRGBAData) => IColorRGBAData;
-export declare const fromString: (str: string, a: number | undefined, out: IColorRGBAData) => IColorRGBAData;

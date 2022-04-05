@@ -1,9 +1,9 @@
-import IEuler from "../euler/IEuler";
+import IEulerAngle from "../euler/IEulerAngle";
 export declare const UNIT_MATRIX4: Float32Array;
 export declare const create: () => Float32Array;
 export declare const determinant: (a: Float32Array) => number;
 export declare const from: (a: Float32Array, out?: Float32Array) => Float32Array;
-export declare const fromEuler: (euler: IEuler, out?: Float32Array) => Float32Array;
+export declare const fromEuler: (euler: IEulerAngle, out?: Float32Array) => Float32Array;
 export declare const fromQuaternion: (q: Float32Array, out: Float32Array) => Float32Array;
 export declare const fromRotation: (rad: number, axis: Float32Array, out: Float32Array) => Float32Array | null;
 export declare const fromRotationX: (rad: number, out: Float32Array) => Float32Array;
@@ -22,6 +22,6 @@ export declare const rotateX: (a: Float32Array, rad: number, out: Float32Array) 
 export declare const rotateY: (a: Float32Array, rad: number, out: Float32Array) => Float32Array;
 export declare const rotateZ: (a: Float32Array, rad: number, out: Float32Array) => Float32Array;
 export declare const scale: (a: Float32Array, v: Float32Array, out?: Float32Array) => Float32Array;
-export declare const targetTo: (eye: Float32Array, target: Float32Array, up: Float32Array, out?: Float32Array) => Float32Array;
+export declare const targetTo: (eye: Float32Array, target: Float32Array, up?: Float32Array, out?: Float32Array) => Float32Array;
 export declare const translate: (a: Float32Array, v: Float32Array, out?: Float32Array) => Float32Array;
 export declare const transpose: (a: Float32Array, out?: Float32Array) => Float32Array;
