@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import IEuler, { EulerRotationOrders } from "../euler/IEuler";
+import IEulerAngle, { EulerRotationOrders } from "../euler/IEulerAngle";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
 import { VECTOR3_TOP } from "../vector/Vector3";
@@ -115,7 +115,7 @@ export const from = (a: Float32Array, out: Float32Array = new Float32Array(16)):
 };
 
 export const fromEuler = (
-	euler: IEuler,
+	euler: IEulerAngle,
 	out: Float32Array = new Float32Array(16)
 ): Float32Array => {
 	x = euler.x;

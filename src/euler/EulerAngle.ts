@@ -1,5 +1,40 @@
-import IEuler, { EulerRotationOrders } from "./IEuler";
+import IEulerAngle, { EulerRotationOrders } from "./IEulerAngle";
 import clamp from "../common/clamp";
+
+export default class EulerAngle extends Float32Array implements IEulerAngle {
+	public order: EulerRotationOrders;
+	public constructor(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
+		super(3);
+		this[0] = x;
+		this[1] = y;
+		this[2] = z;
+		this.order = order;
+	}
+
+	public get x(): number {
+		return this[0];
+	}
+
+	public set x(value: number) {
+		this[0] = value;
+	}
+
+	public get y(): number {
+		return this[1];
+	}
+
+	public set y(value: number) {
+		this[1] = value;
+	}
+
+	public get z(): number {
+		return this[2];
+	}
+
+	public set z(value: number) {
+		this[2] = value;
+	}
+}
 
 const createDefault = () => {
 	return {
@@ -15,8 +50,8 @@ export const create = (
 	y = 0,
 	z = 0,
 	order = EulerRotationOrders.XYZ,
-	out: IEuler = createDefault()
-): IEuler => {
+	out: IEulerAngle = createDefault()
+): IEulerAngle => {
 	out.x = x;
 	out.y = y;
 	out.z = z;
@@ -25,7 +60,7 @@ export const create = (
 	return out;
 };
 
-export const from = (euler: IEuler, out: IEuler = createDefault()): IEuler => {
+export const from = (euler: IEulerAngle, out: IEulerAngle = createDefault()): IEulerAngle => {
 	out.x = euler.x;
 	out.y = euler.y;
 	out.z = euler.z;
@@ -34,7 +69,10 @@ export const from = (euler: IEuler, out: IEuler = createDefault()): IEuler => {
 	return out;
 };
 
-export const fromMatrix4 = (matrix: Float32Array, out: IEuler = createDefault()): IEuler => {
+export const fromMatrix4 = (
+	matrix: Float32Array,
+	out: IEulerAngle = createDefault()
+): IEulerAngle => {
 	const m11 = matrix[0],
 		m12 = matrix[4],
 		m13 = matrix[8];

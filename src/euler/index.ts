@@ -1,1 +1,1 @@
-export * as Euler from "./Euler";
+export * as Euler from "./EulerAngle";
