@@ -8,7 +8,7 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 	};
 
 	public static averageWeighted = (
-		color: IColorRGB,
+		color: IColorRGB | ArrayLike<number>,
 		wr = 0.299,
 		wg = 0.587,
 		wb = 0.114
@@ -16,7 +16,7 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
 
-	public static clone = (color: IColorRGB): IColorRGB => {
+	public static clone = (color: IColorRGB | ArrayLike<number>): IColorRGB => {
 		return new ColorRGB(color[0], color[1], color[2]);
 	};
 
@@ -90,7 +90,7 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 	};
 
 	public static grayscale = (
-		color: IColorRGB,
+		color: IColorRGB | ArrayLike<number>,
 		wr = 0.299,
 		wg = 0.587,
 		wb = 0.114,

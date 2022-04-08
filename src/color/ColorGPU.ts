@@ -2,12 +2,12 @@ import IColorGPU, { IColorGPUJson } from "./interfaces/IColorGPU";
 import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 
 export default class ColorGPU extends Float32Array implements IColorGPU {
-	public static average = (color: IColorGPU): number => {
+	public static average = (color: IColorGPU | ArrayLike<number>): number => {
 		return (color[0] + color[1] + color[2]) / 3;
 	};
 
 	public static averageWeighted = (
-		color: IColorGPU,
+		color: IColorGPU | ArrayLike<number>,
 		wr = 0.299,
 		wg = 0.587,
 		wb = 0.114
@@ -15,7 +15,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
 
-	public static clone = (color: IColorGPU): IColorGPU => {
+	public static clone = (color: IColorGPU | ArrayLike<number>): IColorGPU => {
 		return new ColorGPU(color[0], color[1], color[2], color[3]);
 	};
 
@@ -94,7 +94,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 	};
 
 	public static grayscale = (
-		color: IColorGPU,
+		color: IColorGPU | ArrayLike<number>,
 		wr = 0.299,
 		wg = 0.587,
 		wb = 0.114,

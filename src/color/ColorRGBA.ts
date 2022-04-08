@@ -8,7 +8,7 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	};
 
 	public static averageWeighted = (
-		color: IColorRGB | IColorRGBA,
+		color: IColorRGB | IColorRGBA | ArrayLike<number>,
 		wr = 0.299,
 		wg = 0.587,
 		wb = 0.114
@@ -16,7 +16,7 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
 
-	public static clone = (color: IColorRGBA): IColorRGBA => {
+	public static clone = (color: IColorRGBA | ArrayLike<number>): IColorRGBA => {
 		return new ColorRGBA(color[0], color[1], color[2], color[3]);
 	};
 
@@ -104,7 +104,7 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	};
 
 	public static grayscale = (
-		color: IColorRGBA,
+		color: IColorRGBA | ArrayLike<number>,
 		wr = 0.299,
 		wg = 0.587,
 		wb = 0.114,
