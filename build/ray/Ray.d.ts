@@ -6,9 +6,9 @@ export default class Ray implements IRay {
     direction: IVector3Data;
     constructor(position?: IVector3Data, direction?: IVector3Data);
 }
-export declare const at: (a: IRay, b: number, out?: any) => Float32Array;
+export declare const at: (a: IRay, b: number, out?: any) => any;
 export declare const distanceToPoint: (a: IRay, point: any) => number;
-export declare const distanceSqToPoint: (a: IRay, point: any) => number;
+export declare const distanceSqToPoint: (a: IRay, point: any) => any;
 export declare const lookAt: (a: IRay, b: any, out?: IRay) => IRay;
-export declare const intersectSphere: (ray: IRay, sphere: ISphere, target: any) => Float32Array | null;
+export declare const intersectSphere: (ray: IRay, sphere: ISphere, target: any) => any;
 export declare const intersectsSphere: (ray: IRay, sphere: ISphere) => boolean;

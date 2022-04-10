@@ -2,8 +2,8 @@ import IColorRGB, { IColorRGBJson } from "./interfaces/IColorRGB";
 import { IColorRGBAJson } from ".";
 export default class ColorRGB extends Uint8Array implements IColorRGB {
     static average: (color: IColorRGB) => number;
-    static averageWeighted: (color: IColorRGB, wr?: number, wg?: number, wb?: number) => number;
-    static clone: (color: IColorRGB) => IColorRGB;
+    static averageWeighted: (color: IColorRGB | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
+    static clone: (color: IColorRGB | ArrayLike<number>) => IColorRGB;
     static create: (r?: number, g?: number, b?: number) => IColorRGB;
     static equals: (a: IColorRGB, b: IColorRGB) => boolean;
     static fromArray: (arr: ArrayLike<number>, out?: IColorRGB) => IColorRGB;
@@ -11,7 +11,7 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
     static fromJson: (json: IColorRGBJson | IColorRGBAJson, out?: IColorRGB) => IColorRGB;
     static fromScalar: (scalar: number, out?: IColorRGB) => IColorRGB;
     static fromString: (str: string, out?: IColorRGB) => IColorRGB;
-    static grayscale: (color: IColorRGB, wr?: number, wg?: number, wb?: number, out?: IColorRGB) => IColorRGB;
+    static grayscale: (color: IColorRGB | ArrayLike<number>, wr?: number, wg?: number, wb?: number, out?: IColorRGB) => IColorRGB;
     length: 3;
     constructor(r?: number, g?: number, b?: number);
     get r(): number;

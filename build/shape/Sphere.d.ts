@@ -9,5 +9,5 @@ export default class Sphere implements ISphere {
 export declare const boundingBox: (a: ISphere, out?: ICube) => ICube;
 export declare const containsPoint: (a: ISphere, b: any) => boolean;
 export declare const distanceToPoint: (a: ISphere, b: any) => number;
-export declare const equals: (a: ISphere, b: ISphere) => boolean;
+export declare const equals: (a: ISphere, b: ISphere) => any;
 export declare const intersectsSphere: (a: ISphere, b: ISphere) => boolean;

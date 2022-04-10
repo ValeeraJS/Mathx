@@ -1,8 +1,8 @@
 import IColorGPU, { IColorGPUJson } from "./interfaces/IColorGPU";
 export default class ColorGPU extends Float32Array implements IColorGPU {
-    static average: (color: IColorGPU) => number;
-    static averageWeighted: (color: IColorGPU, wr?: number, wg?: number, wb?: number) => number;
-    static clone: (color: IColorGPU) => IColorGPU;
+    static average: (color: IColorGPU | ArrayLike<number>) => number;
+    static averageWeighted: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
+    static clone: (color: IColorGPU | ArrayLike<number>) => IColorGPU;
     static create: (r?: number, g?: number, b?: number, a?: number) => IColorGPU;
     static equals: (a: IColorGPU, b: IColorGPU) => boolean;
     static fromArray: (arr: ArrayLike<number>, out?: IColorGPU) => IColorGPU;
@@ -10,7 +10,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
     static fromJson: (json: IColorGPUJson, out?: IColorGPU) => IColorGPU;
     static fromScalar: (scalar: number, out?: IColorGPU) => IColorGPU;
     static fromString: (str: string, out?: IColorGPU) => IColorGPU;
-    static grayscale: (color: IColorGPU, wr?: number, wg?: number, wb?: number, out?: IColorGPU) => IColorGPU;
+    static grayscale: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number, out?: IColorGPU) => IColorGPU;
     length: 4;
     constructor(r?: number, g?: number, b?: number, a?: number);
     get r(): number;

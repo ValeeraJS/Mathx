@@ -1,1 +1,2 @@
-export * as Quaternion from "./Quaternion";
+import Quaternion from "./Quaternion";
+export { Quaternion };
