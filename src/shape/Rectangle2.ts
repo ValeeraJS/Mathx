@@ -1,9 +1,9 @@
+import Vector2, { IVector2 } from "../vector/Vector2";
 import IRectangle from "./interfaces/IRectangle";
-import { Vector2 } from "../vector";
 
 export default class Rectangle2 implements IRectangle {
-	public min: Float32Array = Vector2.create();
-	public max: Float32Array = Vector2.create();
+	public min: IVector2 = Vector2.create();
+	public max: IVector2 = Vector2.create();
 	public constructor(a: Float32Array = Vector2.create(), b: Float32Array = Vector2.create(1, 1)) {
 		Vector2.min(a, b, this.min);
 		Vector2.max(a, b, this.max);
@@ -41,13 +41,13 @@ export const equals = (a: IRectangle, b: IRectangle): boolean => {
 	return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
 };
 
-export const getCenter = (a: IRectangle, out: Float32Array = Vector2.create()): Float32Array => {
+export const getCenter = (a: IRectangle, out: IVector2 = Vector2.create()): Float32Array => {
 	Vector2.add(a.min, a.max, out);
 
 	return Vector2.multiplyScalar(out, 0.5, out);
 };
 
-export const getSize = (a: IRectangle, out: Float32Array = Vector2.create()): Float32Array => {
+export const getSize = (a: IRectangle, out: IVector2 = Vector2.create()): Float32Array => {
 	return Vector2.minus(a.max, a.min, out);
 };
 

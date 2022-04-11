@@ -1,5 +1,7 @@
 import IColorGPU, { IColorGPUJson } from "./interfaces/IColorGPU";
 import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
+import IColorRGB from "./interfaces/IColorRGB";
+import IColorRGBA from "./interfaces/IColorRGBA";
 
 export default class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
@@ -33,7 +35,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 	};
 
 	public static fromArray = (
-		arr: ArrayLike<number>,
+		arr: Float32Array | IColorGPU | number[],
 		out: IColorGPU = new ColorGPU()
 	): IColorGPU => {
 		out[0] = arr[0];
@@ -43,6 +45,30 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 
 		return out;
 	};
+
+	public static fromColorRGB(
+		color: IColorRGB | number[] | Uint8Array,
+		out: IColorGPU = new ColorGPU()
+	): IColorGPU {
+		out[0] = color[0] / 255;
+		out[1] = color[1] / 255;
+		out[2] = color[2] / 255;
+		out[3] = 1;
+
+		return out;
+	}
+
+	public static fromColorRGBA(
+		color: IColorRGBA | number[] | Uint8Array,
+		out: IColorGPU = new ColorGPU()
+	): IColorGPU {
+		out[0] = color[0] / 255;
+		out[1] = color[1] / 255;
+		out[2] = color[2] / 255;
+		out[3] = color[3] / 255;
+
+		return out;
+	}
 
 	public static fromHex = (
 		hex: number,

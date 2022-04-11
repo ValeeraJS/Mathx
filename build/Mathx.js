@@ -377,6 +377,20 @@
 	        this[2] = b;
 	        this[3] = a;
 	    }
+	    static fromColorRGB(color, out = new ColorGPU()) {
+	        out[0] = color[0] / 255;
+	        out[1] = color[1] / 255;
+	        out[2] = color[2] / 255;
+	        out[3] = 1;
+	        return out;
+	    }
+	    static fromColorRGBA(color, out = new ColorGPU()) {
+	        out[0] = color[0] / 255;
+	        out[1] = color[1] / 255;
+	        out[2] = color[2] / 255;
+	        out[3] = color[3] / 255;
+	        return out;
+	    }
 	    get r() {
 	        return this[0];
 	    }
@@ -3130,6 +3144,143 @@
 	    return out;
 	};
 
+	class Rectangle2 {
+	    constructor(a = Vector2.create(), b = Vector2.create(1, 1)) {
+	        this.min = Vector2.create();
+	        this.max = Vector2.create();
+	        Vector2.min(a, b, this.min);
+	        Vector2.max(a, b, this.max);
+	    }
+	}
+	const area$1 = (a) => {
+	    return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
+	};
+	const containsPoint = (rect, a) => {
+	    return a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1];
+	};
+	const containsRectangle = (rect, box) => {
+	    return (rect.min[0] <= box.min[0] &&
+	        box.max[0] <= rect.max[0] &&
+	        rect.min[1] <= box.min[1] &&
+	        box.max[1] <= rect.max[1]);
+	};
+	const create$1 = (a = Vector2.create(), b = Vector2.create(1, 1)) => {
+	    return {
+	        max: Vector2.max(a, b),
+	        min: Vector2.min(a, b)
+	    };
+	};
+	const equals = (a, b) => {
+	    return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
+	};
+	const getCenter = (a, out = Vector2.create()) => {
+	    Vector2.add(a.min, a.max, out);
+	    return Vector2.multiplyScalar(out, 0.5, out);
+	};
+	const getSize = (a, out = Vector2.create()) => {
+	    return Vector2.minus(a.max, a.min, out);
+	};
+	const height = (a) => {
+	    return a.max[1] - a.min[1];
+	};
+	const intersect = (a, b, out = new Rectangle2()) => {
+	    Vector2.max(a.min, b.min, out.min);
+	    Vector2.min(a.max, b.max, out.max);
+	    return out;
+	};
+	const stretch = (a, b, c, out = new Rectangle2()) => {
+	    Vector2.add(a.min, b, out.min);
+	    Vector2.add(a.max, c, out.max);
+	    return out;
+	};
+	const translate = (a, b, out = new Rectangle2()) => {
+	    Vector2.add(a.min, b, out.min);
+	    Vector2.add(a.max, b, out.max);
+	    return out;
+	};
+	const union = (a, b, out = new Rectangle2()) => {
+	    Vector2.min(a.min, b.min, out.min);
+	    Vector2.max(a.max, b.max, out.max);
+	    return out;
+	};
+	const width = (a) => {
+	    return a.max[0] - a.min[0];
+	};
+
+	var Rectangle2$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		'default': Rectangle2,
+		area: area$1,
+		containsPoint: containsPoint,
+		containsRectangle: containsRectangle,
+		create: create$1,
+		equals: equals,
+		getCenter: getCenter,
+		getSize: getSize,
+		height: height,
+		intersect: intersect,
+		stretch: stretch,
+		translate: translate,
+		union: union,
+		width: width
+	});
+
+	const defaultA = [-1, -1, 0];
+	const defaultB = [1, -1, 0];
+	const defaultC = [0, 1, 0];
+	const ab = new Vector3();
+	const bc = new Vector3();
+	class Triangle3 {
+	    constructor(a = new Float32Array(defaultA), b = new Float32Array(defaultB), c = new Float32Array(defaultC)) {
+	        this.a = a;
+	        this.b = b;
+	        this.c = c;
+	    }
+	}
+	const area = (t) => {
+	    const c = getABLength(t);
+	    const a = getBCLength(t);
+	    const b = getCALength(t);
+	    const p = (c + a + b) / 2;
+	    return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+	};
+	const create = (a = new Float32Array(defaultA), b = new Float32Array(defaultB), c = new Float32Array(defaultC)) => {
+	    return { a, b, c };
+	};
+	const getABLength = (t) => {
+	    return Vector3.distanceTo(t.a, t.b);
+	};
+	const getBCLength = (t) => {
+	    return Vector3.distanceTo(t.b, t.c);
+	};
+	const getCALength = (t) => {
+	    return Vector3.distanceTo(t.c, t.a);
+	};
+	const normal = (t, out = Vector3.create()) => {
+	    Vector3.minus(t.c, t.b, bc);
+	    Vector3.minus(t.b, t.a, ab);
+	    Vector3.cross(ab, bc, out);
+	    return Vector3.normalize(out);
+	};
+	const toFloat32Array = (t, out = new Float32Array(3)) => {
+	    out.set(t.a, 0);
+	    out.set(t.b, 3);
+	    out.set(t.c, 6);
+	    return Vector3.normalize(out);
+	};
+
+	var Triangle3$1 = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		'default': Triangle3,
+		area: area,
+		create: create,
+		getABLength: getABLength,
+		getBCLength: getBCLength,
+		getCALength: getCALength,
+		normal: normal,
+		toFloat32Array: toFloat32Array
+	});
+
 	// import clampCommon from "../common/clamp";
 	let ax, ay, az, aw, bx, by, bz, len;
 	let ix, iy, iz, iw;
@@ -3376,143 +3527,6 @@
 	    out[3] = a[3];
 	    return out;
 	};
-
-	class Rectangle2 {
-	    constructor(a = Vector2.create(), b = Vector2.create(1, 1)) {
-	        this.min = Vector2.create();
-	        this.max = Vector2.create();
-	        Vector2.min(a, b, this.min);
-	        Vector2.max(a, b, this.max);
-	    }
-	}
-	const area$1 = (a) => {
-	    return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
-	};
-	const containsPoint = (rect, a) => {
-	    return a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1];
-	};
-	const containsRectangle = (rect, box) => {
-	    return (rect.min[0] <= box.min[0] &&
-	        box.max[0] <= rect.max[0] &&
-	        rect.min[1] <= box.min[1] &&
-	        box.max[1] <= rect.max[1]);
-	};
-	const create$1 = (a = Vector2.create(), b = Vector2.create(1, 1)) => {
-	    return {
-	        max: Vector2.max(a, b),
-	        min: Vector2.min(a, b)
-	    };
-	};
-	const equals = (a, b) => {
-	    return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
-	};
-	const getCenter = (a, out = Vector2.create()) => {
-	    Vector2.add(a.min, a.max, out);
-	    return Vector2.multiplyScalar(out, 0.5, out);
-	};
-	const getSize = (a, out = Vector2.create()) => {
-	    return Vector2.minus(a.max, a.min, out);
-	};
-	const height = (a) => {
-	    return a.max[1] - a.min[1];
-	};
-	const intersect = (a, b, out = new Rectangle2()) => {
-	    Vector2.max(a.min, b.min, out.min);
-	    Vector2.min(a.max, b.max, out.max);
-	    return out;
-	};
-	const stretch = (a, b, c, out = new Rectangle2()) => {
-	    Vector2.add(a.min, b, out.min);
-	    Vector2.add(a.max, c, out.max);
-	    return out;
-	};
-	const translate = (a, b, out = new Rectangle2()) => {
-	    Vector2.add(a.min, b, out.min);
-	    Vector2.add(a.max, b, out.max);
-	    return out;
-	};
-	const union = (a, b, out = new Rectangle2()) => {
-	    Vector2.min(a.min, b.min, out.min);
-	    Vector2.max(a.max, b.max, out.max);
-	    return out;
-	};
-	const width = (a) => {
-	    return a.max[0] - a.min[0];
-	};
-
-	var Rectangle2$1 = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		'default': Rectangle2,
-		area: area$1,
-		containsPoint: containsPoint,
-		containsRectangle: containsRectangle,
-		create: create$1,
-		equals: equals,
-		getCenter: getCenter,
-		getSize: getSize,
-		height: height,
-		intersect: intersect,
-		stretch: stretch,
-		translate: translate,
-		union: union,
-		width: width
-	});
-
-	const defaultA = [-1, -1, 0];
-	const defaultB = [1, -1, 0];
-	const defaultC = [0, 1, 0];
-	const ab = new Float32Array(3);
-	const bc = new Float32Array(3);
-	class Triangle3 {
-	    constructor(a = new Float32Array(defaultA), b = new Float32Array(defaultB), c = new Float32Array(defaultC)) {
-	        this.a = a;
-	        this.b = b;
-	        this.c = c;
-	    }
-	}
-	const area = (t) => {
-	    const c = getABLength(t);
-	    const a = getBCLength(t);
-	    const b = getCALength(t);
-	    const p = (c + a + b) / 2;
-	    return Math.sqrt(p * (p - a) * (p - b) * (p - c));
-	};
-	const create = (a = new Float32Array(defaultA), b = new Float32Array(defaultB), c = new Float32Array(defaultC)) => {
-	    return { a, b, c };
-	};
-	const getABLength = (t) => {
-	    return Vector3.distanceTo(t.a, t.b);
-	};
-	const getBCLength = (t) => {
-	    return Vector3.distanceTo(t.b, t.c);
-	};
-	const getCALength = (t) => {
-	    return Vector3.distanceTo(t.c, t.a);
-	};
-	const normal = (t, out = Vector3.create()) => {
-	    Vector3.minus(t.c, t.b, bc);
-	    Vector3.minus(t.b, t.a, ab);
-	    Vector3.cross(ab, bc, out);
-	    return Vector3.normalize(out);
-	};
-	const toFloat32Array = (t, out = new Float32Array(3)) => {
-	    out.set(t.a, 0);
-	    out.set(t.b, 3);
-	    out.set(t.c, 6);
-	    return Vector3.normalize(out);
-	};
-
-	var Triangle3$1 = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		'default': Triangle3,
-		area: area,
-		create: create,
-		getABLength: getABLength,
-		getBCLength: getBCLength,
-		getCALength: getCALength,
-		normal: normal,
-		toFloat32Array: toFloat32Array
-	});
 
 	exports.COLOR_HEX_MAP = COLOR_HEX_MAP;
 	exports.ColorGPU = ColorGPU;

@@ -1,12 +1,12 @@
+import Vector3, { IVector3 } from "../vector/Vector3";
 import ITriangle3 from "./interfaces/ITriangle";
-import { Vector3 } from "../vector";
 
 const defaultA = [-1, -1, 0];
 const defaultB = [1, -1, 0];
 const defaultC = [0, 1, 0];
 
-const ab = new Float32Array(3);
-const bc = new Float32Array(3);
+const ab = new Vector3();
+const bc = new Vector3();
 
 export default class Triangle3 implements ITriangle3 {
 	public a: Float32Array;
@@ -53,7 +53,7 @@ export const getCALength = (t: ITriangle3): number => {
 	return Vector3.distanceTo(t.c, t.a);
 };
 
-export const normal = (t: ITriangle3, out: Float32Array = Vector3.create()): Float32Array => {
+export const normal = (t: ITriangle3, out: IVector3 = Vector3.create()): IVector3 => {
 	Vector3.minus(t.c, t.b, bc);
 	Vector3.minus(t.b, t.a, ab);
 
