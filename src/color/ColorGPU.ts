@@ -49,9 +49,9 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 		alpha = 1,
 		out: IColorGPU = new ColorGPU()
 	): IColorGPU => {
-		out[0] = hex >> 16;
-		out[1] = (hex >> 8) & 255;
-		out[2] = hex & 255;
+		out[0] = (hex >> 16) / 255;
+		out[1] = ((hex >> 8) & 255) / 255;
+		out[2] = (hex & 255) / 255;
 		out[3] = alpha;
 
 		return out;
@@ -80,14 +80,14 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 		} else if (str.startsWith("#")) {
 			str = str.substr(1);
 
-			return ColorGPU.fromScalar(parseInt(str, 16), out);
+			return ColorGPU.fromHex(parseInt(str, 16), 1, out);
 		} else if (str.startsWith("rgb(")) {
 			str = str.substring(4, str.length - 1);
 			const arr = str.split(",");
 
-			out[0] = parseInt(arr[0], 10);
-			out[1] = parseInt(arr[1], 10);
-			out[2] = parseInt(arr[2], 10);
+			out[0] = parseInt(arr[0], 10) / 255;
+			out[1] = parseInt(arr[1], 10) / 255;
+			out[2] = parseInt(arr[2], 10) / 255;
 		}
 
 		return out;
