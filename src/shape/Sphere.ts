@@ -1,4 +1,4 @@
-import Vector3, { IVector3, IVector3Data } from "../vector/interfaces/IVector3";
+import Vector3, { IVector3 } from "./../vector/Vector3";
 import Cube from "./Cube";
 import ICube from "./interfaces/ICube";
 import ISphere from "./interfaces/ISphere";
@@ -13,11 +13,11 @@ export default class Sphere implements ISphere {
 		return out;
 	};
 
-	public static containsPoint = (a: ISphere, b: IVector3Data): boolean => {
+	public static containsPoint = (a: ISphere, b: IVector3 | number[] | Float32Array): boolean => {
 		return Vector3.distanceToSquared(a.position, b) <= a.radius * a.radius;
 	};
 
-	public static distanceToPoint = (a: ISphere, b: IVector3Data): number => {
+	public static distanceToPoint = (a: ISphere, b: IVector3 | number[] | Float32Array): number => {
 		return Vector3.distanceTo(a.position, b) - a.radius;
 	};
 
