@@ -1,4 +1,4 @@
+import IEulerAngle, { EulerRotationOrders } from "./IEulerAngle";
 import EulerAngle from "./EulerAngle";
-import IEulerAngle from "./IEulerAngle";
 
-export { EulerAngle, IEulerAngle };
+export { EulerAngle, IEulerAngle, EulerRotationOrders };

@@ -867,7 +867,7 @@
 		SinusoidalOut: SinusoidalOut
 	});
 
-	var EulerRotationOrders;
+	exports.EulerRotationOrders = void 0;
 	(function (EulerRotationOrders) {
 	    EulerRotationOrders["XYZ"] = "xyz";
 	    EulerRotationOrders["ZXY"] = "zxy";
@@ -875,10 +875,10 @@
 	    EulerRotationOrders["XZY"] = "xzy";
 	    EulerRotationOrders["ZYX"] = "zyx";
 	    EulerRotationOrders["YXZ"] = "yxz";
-	})(EulerRotationOrders || (EulerRotationOrders = {}));
+	})(exports.EulerRotationOrders || (exports.EulerRotationOrders = {}));
 
 	class EulerAngle extends Float32Array {
-	    constructor(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
+	    constructor(x = 0, y = 0, z = 0, order = exports.EulerRotationOrders.XYZ) {
 	        super(3);
 	        this[0] = x;
 	        this[1] = y;
@@ -888,7 +888,7 @@
 	    static clone(euler) {
 	        return new EulerAngle(euler.x, euler.y, euler.z, euler.order);
 	    }
-	    static create(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
+	    static create(x = 0, y = 0, z = 0, order = exports.EulerRotationOrders.XYZ) {
 	        return new EulerAngle(x, y, z, order);
 	    }
 	    static fromMatrix4(matrix4, out = new EulerAngle()) {
@@ -896,7 +896,7 @@
 	        const m21 = matrix4[1], m22 = matrix4[5], m23 = matrix4[9];
 	        const m31 = matrix4[2], m32 = matrix4[6], m33 = matrix4[10];
 	        switch (out.order) {
-	            case EulerRotationOrders.XYZ:
+	            case exports.EulerRotationOrders.XYZ:
 	                out.y = Math.asin(clampCommon(m13, -1, 1));
 	                if (Math.abs(m13) < 0.9999999) {
 	                    out.x = Math.atan2(-m23, m33);
@@ -907,7 +907,7 @@
 	                    out.z = 0;
 	                }
 	                break;
-	            case EulerRotationOrders.YXZ:
+	            case exports.EulerRotationOrders.YXZ:
 	                out.x = Math.asin(-clampCommon(m23, -1, 1));
 	                if (Math.abs(m23) < 0.9999999) {
 	                    out.y = Math.atan2(m13, m33);
@@ -918,7 +918,7 @@
 	                    out.z = 0;
 	                }
 	                break;
-	            case EulerRotationOrders.ZXY:
+	            case exports.EulerRotationOrders.ZXY:
 	                out.x = Math.asin(clampCommon(m32, -1, 1));
 	                if (Math.abs(m32) < 0.9999999) {
 	                    out.y = Math.atan2(-m31, m33);
@@ -929,7 +929,7 @@
 	                    out.z = Math.atan2(m21, m11);
 	                }
 	                break;
-	            case EulerRotationOrders.ZYX:
+	            case exports.EulerRotationOrders.ZYX:
 	                out.y = Math.asin(-clampCommon(m31, -1, 1));
 	                if (Math.abs(m31) < 0.9999999) {
 	                    out.x = Math.atan2(m32, m33);
@@ -940,7 +940,7 @@
 	                    out.z = Math.atan2(-m12, m22);
 	                }
 	                break;
-	            case EulerRotationOrders.YZX:
+	            case exports.EulerRotationOrders.YZX:
 	                out.z = Math.asin(clampCommon(m21, -1, 1));
 	                if (Math.abs(m21) < 0.9999999) {
 	                    out.x = Math.atan2(-m23, m22);
@@ -951,7 +951,7 @@
 	                    out.y = Math.atan2(m13, m33);
 	                }
 	                break;
-	            case EulerRotationOrders.XZY:
+	            case exports.EulerRotationOrders.XZY:
 	                out.z = Math.asin(-clampCommon(m12, -1, 1));
 	                if (Math.abs(m12) < 0.9999999) {
 	                    out.x = Math.atan2(m32, m22);
@@ -984,7 +984,7 @@
 	        this[2] = value;
 	    }
 	}
-	EulerAngle.ORDERS = EulerRotationOrders;
+	EulerAngle.ORDERS = exports.EulerRotationOrders;
 
 	let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
 	let b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
@@ -1800,7 +1800,7 @@
 	    d = Math.sin(y$1);
 	    e = Math.cos(z);
 	    f = Math.sin(z);
-	    if (euler.order === EulerRotationOrders.XYZ) {
+	    if (euler.order === exports.EulerRotationOrders.XYZ) {
 	        const ae = a * e, af = a * f, be = b * e, bf = b * f;
 	        out[0] = c$2 * e;
 	        out[4] = -c$2 * f;
@@ -1812,7 +1812,7 @@
 	        out[6] = be + af * d;
 	        out[10] = a * c$2;
 	    }
-	    else if (euler.order === EulerRotationOrders.YXZ) {
+	    else if (euler.order === exports.EulerRotationOrders.YXZ) {
 	        const ce = c$2 * e, cf = c$2 * f, de = d * e, df = d * f;
 	        out[0] = ce + df * b;
 	        out[4] = de * b - cf;
@@ -1824,7 +1824,7 @@
 	        out[6] = df + ce * b;
 	        out[10] = a * c$2;
 	    }
-	    else if (euler.order === EulerRotationOrders.ZXY) {
+	    else if (euler.order === exports.EulerRotationOrders.ZXY) {
 	        const ce = c$2 * e, cf = c$2 * f, de = d * e, df = d * f;
 	        out[0] = ce - df * b;
 	        out[4] = -a * f;
@@ -1836,7 +1836,7 @@
 	        out[6] = b;
 	        out[10] = a * c$2;
 	    }
-	    else if (euler.order === EulerRotationOrders.ZYX) {
+	    else if (euler.order === exports.EulerRotationOrders.ZYX) {
 	        const ae = a * e, af = a * f, be = b * e, bf = b * f;
 	        out[0] = c$2 * e;
 	        out[4] = be * d - af;
@@ -1848,7 +1848,7 @@
 	        out[6] = b * c$2;
 	        out[10] = a * c$2;
 	    }
-	    else if (euler.order === EulerRotationOrders.YZX) {
+	    else if (euler.order === exports.EulerRotationOrders.YZX) {
 	        const ac = a * c$2, ad = a * d, bc = b * c$2, bd = b * d;
 	        out[0] = c$2 * e;
 	        out[4] = bd - ac * f;
@@ -1860,7 +1860,7 @@
 	        out[6] = ad * f + bc;
 	        out[10] = ac - bd * f;
 	    }
-	    else if (euler.order === EulerRotationOrders.XZY) {
+	    else if (euler.order === exports.EulerRotationOrders.XZY) {
 	        const ac = a * c$2, ad = a * d, bc = b * c$2, bd = b * d;
 	        out[0] = c$2 * e;
 	        out[4] = -f;
