@@ -980,11 +980,6 @@ class EulerAngle extends Float32Array {
 }
 EulerAngle.ORDERS = EulerRotationOrders;
 
-var EulerAngle$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': EulerAngle
-});
-
 let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
 let b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
 let x$3 = 0, y$3 = 0;
@@ -3502,4 +3497,4 @@ Vector4.transformQuat = (a, q, out = new Vector4()) => {
     return out;
 };
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, index as Easing, EulerAngle$1 as Euler, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, index as Easing, EulerAngle, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

@@ -986,11 +986,6 @@
 	}
 	EulerAngle.ORDERS = EulerRotationOrders;
 
-	var EulerAngle$1 = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		'default': EulerAngle
-	});
-
 	let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
 	let b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
 	let x$3 = 0, y$3 = 0;
@@ -3514,7 +3509,7 @@
 	exports.ColorRGBA = ColorRGBA;
 	exports.Constants = constants;
 	exports.Easing = index;
-	exports.Euler = EulerAngle$1;
+	exports.EulerAngle = EulerAngle;
 	exports.Matrix2 = Matrix2;
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;
