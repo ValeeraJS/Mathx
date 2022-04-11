@@ -1,18 +1,18 @@
 import Vector2, { IVector2 } from "../vector/Vector2";
-import IRectangle from "./interfaces/IRectangle";
+import IRectangle2 from "./interfaces/IRectangle2";
 
-export default class Rectangle2 implements IRectangle {
-	public static area = (a: IRectangle): number => {
+export default class Rectangle2 implements IRectangle2 {
+	public static area = (a: IRectangle2): number => {
 		return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
 	};
 
-	public static containsPoint = (rect: IRectangle, a: Float32Array): boolean => {
+	public static containsPoint = (rect: IRectangle2, a: Float32Array): boolean => {
 		return (
 			a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1]
 		);
 	};
 
-	public static containsRectangle = (rect: IRectangle, box: IRectangle): boolean => {
+	public static containsRectangle = (rect: IRectangle2, box: IRectangle2): boolean => {
 		return (
 			rect.min[0] <= box.min[0] &&
 			box.max[0] <= rect.max[0] &&
@@ -24,36 +24,36 @@ export default class Rectangle2 implements IRectangle {
 	public static create = (
 		a: Float32Array = Vector2.create(),
 		b: Float32Array = Vector2.create(1, 1)
-	): IRectangle => {
+	): IRectangle2 => {
 		return {
 			max: Vector2.max(a, b),
 			min: Vector2.min(a, b)
 		};
 	};
 
-	public static equals = (a: IRectangle, b: IRectangle): boolean => {
+	public static equals = (a: IRectangle2, b: IRectangle2): boolean => {
 		return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
 	};
 
-	public static getCenter = (a: IRectangle, out: IVector2 = Vector2.create()): IVector2 => {
+	public static getCenter = (a: IRectangle2, out: IVector2 = Vector2.create()): IVector2 => {
 		Vector2.add(a.min, a.max, out);
 
 		return Vector2.multiplyScalar(out, 0.5, out);
 	};
 
-	public static getSize = (a: IRectangle, out: IVector2 = Vector2.create()): IVector2 => {
+	public static getSize = (a: IRectangle2, out: IVector2 = Vector2.create()): IVector2 => {
 		return Vector2.minus(a.max, a.min, out);
 	};
 
-	public static height = (a: IRectangle): number => {
+	public static height = (a: IRectangle2): number => {
 		return a.max[1] - a.min[1];
 	};
 
 	public static intersect = (
-		a: IRectangle,
-		b: IRectangle,
-		out: IRectangle = new Rectangle2()
-	): IRectangle => {
+		a: IRectangle2,
+		b: IRectangle2,
+		out: IRectangle2 = new Rectangle2()
+	): IRectangle2 => {
 		Vector2.max(a.min, b.min, out.min);
 		Vector2.min(a.max, b.max, out.max);
 
@@ -61,11 +61,11 @@ export default class Rectangle2 implements IRectangle {
 	};
 
 	public static stretch = (
-		a: IRectangle,
+		a: IRectangle2,
 		b: Float32Array | IVector2 | number[],
 		c: Float32Array | IVector2 | number[],
-		out: IRectangle = new Rectangle2()
-	): IRectangle => {
+		out: IRectangle2 = new Rectangle2()
+	): IRectangle2 => {
 		Vector2.add(a.min, b, out.min);
 		Vector2.add(a.max, c, out.max);
 
@@ -73,10 +73,10 @@ export default class Rectangle2 implements IRectangle {
 	};
 
 	public static translate = (
-		a: IRectangle,
+		a: IRectangle2,
 		b: Float32Array | IVector2 | number[],
-		out: IRectangle = new Rectangle2()
-	): IRectangle => {
+		out: IRectangle2 = new Rectangle2()
+	): IRectangle2 => {
 		Vector2.add(a.min, b, out.min);
 		Vector2.add(a.max, b, out.max);
 
@@ -84,17 +84,17 @@ export default class Rectangle2 implements IRectangle {
 	};
 
 	public static union = (
-		a: IRectangle,
-		b: IRectangle,
-		out: IRectangle = new Rectangle2()
-	): IRectangle => {
+		a: IRectangle2,
+		b: IRectangle2,
+		out: IRectangle2 = new Rectangle2()
+	): IRectangle2 => {
 		Vector2.min(a.min, b.min, out.min);
 		Vector2.max(a.max, b.max, out.max);
 
 		return out;
 	};
 
-	public static width = (a: IRectangle): number => {
+	public static width = (a: IRectangle2): number => {
 		return a.max[0] - a.min[0];
 	};
 

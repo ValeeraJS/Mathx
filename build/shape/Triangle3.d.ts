@@ -1,5 +1,5 @@
 import { IVector3 } from "../vector/Vector3";
-import ITriangle3 from "./interfaces/ITriangle";
+import ITriangle3 from "./interfaces/ITriangle3";
 export default class Triangle3 implements ITriangle3 {
     static area: (t: ITriangle3) => number;
     static create: (a?: Float32Array, b?: Float32Array, c?: Float32Array) => ITriangle3;

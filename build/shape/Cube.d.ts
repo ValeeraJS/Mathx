@@ -1,7 +1,7 @@
 import { IVector3 } from "../vector/Vector3";
 import ICube from "./interfaces/ICube";
 import ISphere from "./interfaces/ISphere";
-import ITriangle3 from "./interfaces/ITriangle";
+import ITriangle3 from "./interfaces/ITriangle3";
 export default class Cube implements ICube {
     static clampPoint: (a: ICube, point: Float32Array | number[] | IVector3, out?: IVector3) => IVector3;
     static containsPoint: (a: ICube, b: Float32Array | number[] | IVector3) => boolean;

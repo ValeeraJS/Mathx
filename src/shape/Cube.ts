@@ -1,7 +1,7 @@
 import Vector3, { IVector3 } from "../vector/Vector3";
 import ICube from "./interfaces/ICube";
 import ISphere from "./interfaces/ISphere";
-import ITriangle3 from "./interfaces/ITriangle";
+import ITriangle3 from "./interfaces/ITriangle3";
 // import Matrix3 from "../matrix/Matrix3";
 
 const v1: IVector3 = new Vector3(),

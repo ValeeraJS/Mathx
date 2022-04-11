@@ -1,5 +1,5 @@
 import Vector3, { IVector3 } from "../vector/Vector3";
-import ITriangle3 from "./interfaces/ITriangle";
+import ITriangle3 from "./interfaces/ITriangle3";
 
 const defaultA = [-1, -1, 0];
 const defaultB = [1, -1, 0];

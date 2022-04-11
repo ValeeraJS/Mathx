@@ -2884,6 +2884,187 @@ var rndInt = (low, high) => {
     return low + Math.floor(Math.random() * (high - low + 1));
 };
 
+// import Matrix3 from "../matrix/Matrix3";
+const v1 = new Vector3(), v2 = new Vector3(), v0 = new Vector3(), f1 = new Vector3(), f2 = new Vector3(), f0 = new Vector3();
+const ta = new Vector3();
+// const ma: Matrix3 = new Matrix3();
+const tb = new Vector3(), vA = new Vector3();
+const defaultMax = [1, 1, 1];
+class Cube {
+    constructor(a = new Vector3(), b = Vector3.fromArray(defaultMax)) {
+        this.min = new Vector3();
+        this.max = new Vector3();
+        Vector3.min(a, b, this.min);
+        Vector3.max(a, b, this.max);
+    }
+}
+Cube.clampPoint = (a, point, out = new Vector3()) => {
+    return Vector3.clamp(point, a.min, a.max, out);
+};
+Cube.containsPoint = (a, b) => {
+    return (b[0] >= a.min[0] &&
+        b[0] <= a.max[0] &&
+        b[1] >= a.min[1] &&
+        b[1] <= a.max[1] &&
+        b[2] >= a.min[2] &&
+        b[2] <= a.max[2]);
+};
+Cube.containsCube = (a, b) => {
+    return (a.min[0] <= b.min[0] &&
+        b.max[0] <= a.max[0] &&
+        a.min[1] <= b.min[1] &&
+        b.max[1] <= a.max[1] &&
+        a.min[2] <= b.min[2] &&
+        b.max[2] <= a.max[2]);
+};
+Cube.depth = (a) => {
+    return a.max[2] - a.min[2];
+};
+Cube.equals = (a, b) => {
+    return Vector3.equals(a.min, b.min) && Vector3.equals(a.max, b.max);
+};
+Cube.getCenter = (a, out = new Vector3()) => {
+    Vector3.add(a.min, a.max, out);
+    return Vector3.multiplyScalar(out, 0.5, out);
+};
+Cube.getSize = (a, out = new Vector3()) => {
+    return Vector3.minus(a.max, a.min, out);
+};
+Cube.height = (a) => {
+    return a.max[1] - a.min[1];
+};
+Cube.intersect = (a, b, out = new Cube()) => {
+    Vector3.max(a.min, b.min, out.min);
+    Vector3.min(a.max, b.max, out.max);
+    return out;
+};
+Cube.intersectsBox = (a, b) => {
+    return !(b.max[0] < a.min[0] ||
+        b.min[0] > a.max[0] ||
+        b.max[1] < a.min[1] ||
+        b.min[1] > a.max[1] ||
+        b.max[2] < a.min[2] ||
+        b.min[2] > a.max[2]);
+};
+Cube.intersectsSphere = (a, b) => {
+    Cube.clampPoint(a, b.position, ta);
+    return Vector3.distanceToSquared(ta, b.position) <= b.radius * b.radius;
+};
+Cube.intersectsTriangle = (a, b) => {
+    if (Cube.isEmpty(a)) {
+        return false;
+    }
+    Cube.getCenter(a, ta);
+    Vector3.minus(a.max, ta, tb);
+    // translate triangle to aabb origin
+    Vector3.minus(b.a, ta, v0);
+    Vector3.minus(b.b, ta, v1);
+    Vector3.minus(b.c, ta, v2);
+    // compute edge vectors for triangle
+    Vector3.minus(v1, v0, f0);
+    Vector3.minus(v2, v1, f1);
+    Vector3.minus(v0, v2, f2);
+    // test against axes that are given by cross product combinations of the edges of the triangle and the edges of the aabb
+    // make an axis testing of each of the 3 sides of the aabb against each of the 3 sides of the triangle = 9 axis of separation
+    // axis_ij = u_i x f_j (u0, u1, u2 = face normals of aabb = x,y,z axes vectors since aabb is axis aligned)
+    const axes = [
+        0,
+        -f0[2],
+        f0[1],
+        0,
+        -f1[2],
+        f1[1],
+        0,
+        -f2[2],
+        f2[1],
+        f0[2],
+        0,
+        -f0[0],
+        f1[2],
+        0,
+        -f1[0],
+        f2[2],
+        0,
+        -f2[0],
+        -f0[1],
+        f0[0],
+        0,
+        -f1[1],
+        f1[0],
+        0,
+        -f2[1],
+        f2[0],
+        0
+    ];
+    if (!satForAxes(axes, v0, v1, v2, tb)) {
+        return false;
+    }
+    // test 3 face normals from the aabb
+    // ta = Matrix3.identity(); ???
+    if (!satForAxes(axes, v0, v1, v2, tb)) {
+        return false;
+    }
+    // finally testing the face normal of the triangle
+    // use already existing triangle edge vectors here
+    Vector3.cross(f0, f1, ta);
+    // axes = [_triangleNormal.x, _triangleNormal.y, _triangleNormal.z];
+    return satForAxes(ta, v0, v1, v2, tb);
+};
+Cube.isEmpty = (a) => {
+    return a.max[0] < a.min[0] || a.max[0] < a.min[0] || a.max[0] < a.min[0];
+};
+Cube.round = (a, out = new Cube()) => {
+    Vector3.round(a.min, out.min);
+    Vector3.round(a.max, out.max);
+    return out;
+};
+Cube.size = (a, out = new Vector3()) => {
+    return Vector3.minus(a.max, a.min, out);
+};
+Cube.stretch = (a, b, c, out = new Cube()) => {
+    Vector3.add(a.min, b, out.min);
+    Vector3.add(a.max, c, out.max);
+    return out;
+};
+Cube.translate = (a, b, out = new Cube()) => {
+    Vector3.add(a.min, b, out.min);
+    Vector3.add(a.max, b, out.max);
+    return out;
+};
+Cube.union = (a, b, out = new Cube()) => {
+    Vector3.min(a.min, b.min, out.min);
+    Vector3.max(a.max, b.max, out.max);
+    return out;
+};
+Cube.volume = (a) => {
+    return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]) * (a.max[2] - a.min[2]);
+};
+Cube.width = (a) => {
+    return a.max[0] - a.min[0];
+};
+let i, j, p0, p1, p2, r$1;
+function satForAxes(axes, v0, v1, v2, extents) {
+    for (i = 0, j = axes.length - 3; i <= j; i += 3) {
+        Vector3.fromArray(axes, i, vA);
+        // project the aabb onto the seperating axis
+        r$1 =
+            extents[0] * Math.abs(vA[0]) +
+                extents[1] * Math.abs(vA[1]) +
+                extents[2] * Math.abs(vA[2]);
+        // project all 3 vertices of the triangle onto the seperating axis
+        p0 = Vector3.dot(v0, vA);
+        p1 = Vector3.dot(v1, vA);
+        p2 = Vector3.dot(v2, vA);
+        // actual test, basically see if either of the most extreme of the triangle points intersects r
+        if (Math.max(-Math.max(p0, p1, p2), Math.min(p0, p1, p2)) > r$1) {
+            // points of the projected triangle are outside the projected half-length of the aabb
+            // the axis is seperating and we can exit
+            return false;
+        }
+    }
+    return true;
+}
+
 let x = 0, y = 0, c = 0, s = 0;
 class Vector2 extends Float32Array {
     constructor(x = 0, y = 0) {
@@ -3196,10 +3377,31 @@ Rectangle2.width = (a) => {
     return a.max[0] - a.min[0];
 };
 
-var Rectangle2$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': Rectangle2
-});
+let r = 0;
+class Sphere {
+    constructor(position = new Vector3(), radius = 1) {
+        this.position = position;
+        this.radius = radius;
+    }
+}
+Sphere.boundingBox = (a, out = new Cube()) => {
+    Vector3.minusScalar(a.position, a.radius, out.min);
+    Vector3.addScalar(a.position, a.radius, out.max);
+    return out;
+};
+Sphere.containsPoint = (a, b) => {
+    return Vector3.distanceToSquared(a.position, b) <= a.radius * a.radius;
+};
+Sphere.distanceToPoint = (a, b) => {
+    return Vector3.distanceTo(a.position, b) - a.radius;
+};
+Sphere.equals = (a, b) => {
+    return Vector3.equals(a.position, b.position) && a.radius === b.radius;
+};
+Sphere.intersectsSphere = (a, b) => {
+    r = a.radius + b.radius;
+    return Vector3.distanceToSquared(a.position, b.position) <= r * r;
+};
 
 const defaultA = [-1, -1, 0];
 const defaultB = [1, -1, 0];
@@ -3244,11 +3446,6 @@ Triangle3.toFloat32Array = (t, out = new Float32Array(3)) => {
     out.set(t.c, 6);
     return Vector3.normalize(out);
 };
-
-var Triangle3$1 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	'default': Triangle3
-});
 
 // import clampCommon from "../common/clamp";
 let ax, ay, az, aw, bx, by, bz, len;
@@ -3497,4 +3694,4 @@ Vector4.transformQuat = (a, q, out = new Vector4()) => {
     return out;
 };
 
-export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, index as Easing, EulerAngle, EulerRotationOrders, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2$1 as Rectangle2, Triangle3$1 as Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Matrix2, Matrix3, Matrix4, Quaternion, Rectangle2, Sphere, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
