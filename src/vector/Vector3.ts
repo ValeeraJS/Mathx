@@ -580,7 +580,7 @@ export default class Vector3 extends Float32Array implements IVector3 {
 
 	public readonly length!: 3;
 	public constructor(x = 0, y = 0, z = 0) {
-		super(2);
+		super(3);
 		this[0] = x;
 		this[1] = y;
 		this[2] = z;

@@ -382,7 +382,7 @@ export default class Vector4 extends Float32Array implements IVector4 {
 
 	public readonly length!: 4;
 	public constructor(x = 0, y = 0, z = 0, w = 0) {
-		super(2);
+		super(4);
 		this[0] = x;
 		this[1] = y;
 		this[2] = z;

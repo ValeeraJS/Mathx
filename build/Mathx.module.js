@@ -1408,7 +1408,7 @@ let ax$2, ay$2, az$2, bx$2, by$2, bz$2;
 let ag, s$3;
 class Vector3 extends Float32Array {
     constructor(x = 0, y = 0, z = 0) {
-        super(2);
+        super(3);
         this[0] = x;
         this[1] = y;
         this[2] = z;
@@ -2581,7 +2581,7 @@ let s$1 = 0, c$1 = 0, rad = 0, dotTmp = 0, omega = 0, len$1 = 0, scale0 = 0, sca
 const tmpVec3 = new Float32Array(3);
 class Quaternion extends Float32Array {
     constructor(x = 0, y = 0, z = 0, w = 0) {
-        super(2);
+        super(4);
         this[0] = x;
         this[1] = y;
         this[2] = z;
@@ -3453,7 +3453,7 @@ let ix, iy, iz, iw;
 let A, B, C, D, E, F, G, H, I, J;
 class Vector4 extends Float32Array {
     constructor(x = 0, y = 0, z = 0, w = 0) {
-        super(2);
+        super(4);
         this[0] = x;
         this[1] = y;
         this[2] = z;
