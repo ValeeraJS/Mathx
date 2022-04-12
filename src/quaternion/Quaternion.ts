@@ -384,7 +384,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 		return `quat("${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 	};
 
-	public readonly length: 4;
+	public readonly length!: 4;
 	public constructor(x = 0, y = 0, z = 0, w = 0) {
 		super(2);
 		this[0] = x;

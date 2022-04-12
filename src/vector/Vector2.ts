@@ -479,7 +479,7 @@ export default class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public readonly length: 2;
+	public readonly length!: 2;
 	public constructor(x = 0, y = 0) {
 		super(2);
 		this[0] = x;

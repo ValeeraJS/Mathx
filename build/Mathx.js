@@ -371,7 +371,7 @@
 
 	class ColorGPU extends Float32Array {
 	    constructor(r = 0, g = 0, b = 0, a = 0) {
-	        super(3);
+	        super(4);
 	        this[0] = r;
 	        this[1] = g;
 	        this[2] = b;
