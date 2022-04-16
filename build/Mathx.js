@@ -1011,6 +1011,9 @@
 	    out[3] = a00$2;
 	    return out;
 	};
+	Matrix2.clone = (source) => {
+	    return new Matrix2(source);
+	};
 	Matrix2.closeTo = (a, b) => {
 	    a00$2 = a[0];
 	    a10$2 = a[1];
@@ -1036,6 +1039,10 @@
 	};
 	Matrix2.frobNorm = (a) => {
 	    return Math.hypot(a[0], a[1], a[2], a[3]);
+	};
+	Matrix2.fromArray = (source, out = new Matrix2()) => {
+	    out.set(source);
+	    return out;
 	};
 	Matrix2.fromRotation = (rad, out = new Matrix2()) => {
 	    y$3 = Math.sin(rad);
@@ -1159,6 +1166,9 @@
 	    }
 	}
 	Matrix3.UNIT_MATRIX3 = new Matrix3(UNIT_MATRIX3_DATA);
+	Matrix3.clone = (source) => {
+	    return new Matrix3(source);
+	};
 	Matrix3.cofactor00 = (a) => {
 	    return a[4] * a[8] - a[5] * a[7];
 	};
@@ -1202,6 +1212,10 @@
 	    return (a00$1 * (a22$1 * a11$1 - a12$1 * a21$1) +
 	        a01$1 * (-a22$1 * a10$1 + a12$1 * a20$1) +
 	        a02$1 * (a21$1 * a10$1 - a11$1 * a20$1));
+	};
+	Matrix3.fromArray = (source, out = new Matrix3()) => {
+	    out.set(source);
+	    return out;
 	};
 	Matrix3.fromMatrix4 = (mat4, out = new Matrix3()) => {
 	    out[0] = mat4[0];
@@ -1751,13 +1765,16 @@
 	let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 	let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
 	let x$1 = 0, y$1 = 0, z = 0, det = 0, len$2 = 0, s$2 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
-	const UNIT_MATRIX4_DATA = Object.freeze([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+	const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 	class Matrix4 extends Float32Array {
 	    constructor(data = UNIT_MATRIX4_DATA) {
 	        super(data);
 	    }
 	}
 	Matrix4.UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
+	Matrix4.clone = (source) => {
+	    return new Matrix4(source);
+	};
 	Matrix4.create = () => {
 	    return new Matrix4(UNIT_MATRIX4_DATA);
 	};
@@ -1789,6 +1806,10 @@
 	    b20 = a20 * b02 - a21 * b01 + a22 * b00;
 	    b21 = a30 * b02 - a31 * b01 + a32 * b00;
 	    return a13 * b12 - a03 * b13 + a33 * b20 - a23 * b21;
+	};
+	Matrix4.fromArray = (source, out = new Matrix4()) => {
+	    out.set(source);
+	    return out;
 	};
 	Matrix4.fromEuler = (euler, out = new Matrix4()) => {
 	    x$1 = euler.x;

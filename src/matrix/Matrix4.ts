@@ -50,10 +50,14 @@ let x = 0,
 	e = 0,
 	f = 0;
 
-const UNIT_MATRIX4_DATA = Object.freeze([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
 export default class Matrix4 extends Float32Array {
 	public static readonly UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
+
+	public static clone = (source: Matrix4 | Float32Array | number[]): Matrix4 => {
+		return new Matrix4(source);
+	};
 
 	public static create = (): Matrix4 => {
 		return new Matrix4(UNIT_MATRIX4_DATA);
@@ -92,6 +96,15 @@ export default class Matrix4 extends Float32Array {
 		b21 = a30 * b02 - a31 * b01 + a32 * b00;
 
 		return a13 * b12 - a03 * b13 + a33 * b20 - a23 * b21;
+	};
+
+	public static fromArray = (
+		source: Matrix4 | Float32Array | number[],
+		out: Matrix4 = new Matrix4()
+	): Matrix4 => {
+		out.set(source);
+
+		return out;
 	};
 
 	public static fromEuler = (euler: IEulerAngle, out: Matrix4 = new Matrix4()): Matrix4 => {
@@ -1099,7 +1112,7 @@ export default class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public constructor(data = UNIT_MATRIX4_DATA) {
+	public constructor(data: Matrix4 | Float32Array | number[] = UNIT_MATRIX4_DATA) {
 		super(data);
 	}
 }

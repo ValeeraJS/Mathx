@@ -40,6 +40,10 @@ export default class Matrix2 extends Float32Array {
 		return out;
 	};
 
+	public static clone = (source: Matrix2 | Float32Array | number[]): Matrix2 => {
+		return new Matrix2(source);
+	};
+
 	public static closeTo = (
 		a: Float32Array | number[] | Matrix2,
 		b: Float32Array | number[] | Matrix2
@@ -78,6 +82,15 @@ export default class Matrix2 extends Float32Array {
 
 	public static frobNorm = (a: Float32Array | number[] | Matrix2): number => {
 		return Math.hypot(a[0], a[1], a[2], a[3]);
+	};
+
+	public static fromArray = (
+		source: Matrix2 | Float32Array | number[],
+		out: Matrix2 = new Matrix2()
+	): Matrix2 => {
+		out.set(source);
+
+		return out;
 	};
 
 	public static fromRotation = (rad: number, out: Matrix2 = new Matrix2()): Matrix2 => {

@@ -1,6 +1,7 @@
 import { IVector2 } from "../vector/Vector2";
 export default class Matrix3 extends Float32Array {
     static readonly UNIT_MATRIX3: Matrix3;
+    static clone: (source: Matrix3 | Float32Array | number[]) => Matrix3;
     static cofactor00: (a: Float32Array | number[] | Matrix3) => number;
     static cofactor01: (a: Float32Array | number[] | Matrix3) => number;
     static cofactor02: (a: Float32Array | number[] | Matrix3) => number;
@@ -12,6 +13,7 @@ export default class Matrix3 extends Float32Array {
     static cofactor22: (a: Float32Array | number[] | Matrix3) => number;
     static create: () => Matrix3;
     static determinant: (a: Float32Array | number[] | Matrix3) => number;
+    static fromArray: (source: Matrix3 | Float32Array | number[], out?: Matrix3) => Matrix3;
     static fromMatrix4: (mat4: Float32Array | number[], out?: Matrix3) => Matrix3;
     static fromRotation: (rad: number, out?: Matrix3) => Matrix3;
     static fromScaling: (v: Float32Array | IVector2 | number[], out?: Matrix3) => Matrix3;

@@ -2,8 +2,10 @@ import IEulerAngle from "../euler/IEulerAngle";
 import { IVector3 } from "../vector/Vector3";
 export default class Matrix4 extends Float32Array {
     static readonly UNIT_MATRIX4: Matrix4;
+    static clone: (source: Matrix4 | Float32Array | number[]) => Matrix4;
     static create: () => Matrix4;
     static determinant: (a: Float32Array | number[] | Matrix4) => number;
+    static fromArray: (source: Matrix4 | Float32Array | number[], out?: Matrix4) => Matrix4;
     static fromEuler: (euler: IEulerAngle, out?: Matrix4) => Matrix4;
     static fromQuaternion: (q: Float32Array, out?: Matrix4) => Matrix4;
     static fromRotation: (rad: number, axis: Float32Array | number[] | IVector3, out?: Matrix4) => Matrix4 | null;
@@ -26,5 +28,5 @@ export default class Matrix4 extends Float32Array {
     static targetTo: (eye: Float32Array | IVector3 | number[], target: Float32Array | IVector3 | number[], up?: Float32Array | IVector3 | number[], out?: Matrix4) => Matrix4;
     static translate: (a: Float32Array | Matrix4 | number[], v: Float32Array | IVector3 | number[], out?: Matrix4) => Matrix4;
     static transpose: (a: Float32Array | Matrix4 | number[], out?: Matrix4) => Matrix4;
-    constructor(data?: readonly number[]);
+    constructor(data?: Matrix4 | Float32Array | number[]);
 }

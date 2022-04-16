@@ -25,6 +25,11 @@ const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
 export default class Matrix3 extends Float32Array {
 	public static readonly UNIT_MATRIX3 = new Matrix3(UNIT_MATRIX3_DATA);
+
+	public static clone = (source: Matrix3 | Float32Array | number[]): Matrix3 => {
+		return new Matrix3(source);
+	};
+
 	public static cofactor00 = (a: Float32Array | number[] | Matrix3): number => {
 		return a[4] * a[8] - a[5] * a[7];
 	};
@@ -81,6 +86,15 @@ export default class Matrix3 extends Float32Array {
 			a01 * (-a22 * a10 + a12 * a20) +
 			a02 * (a21 * a10 - a11 * a20)
 		);
+	};
+
+	public static fromArray = (
+		source: Matrix3 | Float32Array | number[],
+		out: Matrix3 = new Matrix3()
+	): Matrix3 => {
+		out.set(source);
+
+		return out;
 	};
 
 	public static fromMatrix4 = (

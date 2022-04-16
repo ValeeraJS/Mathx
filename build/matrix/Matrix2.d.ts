@@ -3,11 +3,13 @@ export default class Matrix2 extends Float32Array {
     static readonly UNIT_MATRIX2: Matrix2;
     static add: (a: Float32Array | number[] | Matrix2, b: Float32Array | number[] | Matrix2, out: Matrix2) => Matrix2;
     static adjoint: (a: Float32Array | number[] | Matrix2, out: Matrix2) => Matrix2;
+    static clone: (source: Matrix2 | Float32Array | number[]) => Matrix2;
     static closeTo: (a: Float32Array | number[] | Matrix2, b: Float32Array | number[] | Matrix2) => boolean;
     static create: (a?: number[]) => Matrix2;
     static determinant: (a: Float32Array | number[] | Matrix2) => number;
     static equals: (a: Float32Array | number[] | Matrix2, b: Float32Array | number[] | Matrix2) => boolean;
     static frobNorm: (a: Float32Array | number[] | Matrix2) => number;
+    static fromArray: (source: Matrix2 | Float32Array | number[], out?: Matrix2) => Matrix2;
     static fromRotation: (rad: number, out?: Matrix2) => Matrix2;
     static fromScaling: (v: Float32Array | IVector2 | number[], out?: Matrix2) => Matrix2;
     static identity: (out?: Matrix2) => Float32Array;
