@@ -19,7 +19,9 @@ export default class Matrix4 extends Float32Array {
     static lookAt: (eye: Float32Array | number[] | IVector3, center: Float32Array | number[] | IVector3, up?: Float32Array, out?: Matrix4) => Matrix4;
     static multiply: (a: Float32Array | number[] | Matrix4, b: Float32Array | number[] | Matrix4, out?: Matrix4) => Matrix4;
     static orthogonal: (left: number, right: number, bottom: number, top: number, near: number, far: number, out?: Matrix4) => Matrix4;
+    static orthogonalZ0: (left: number, right: number, bottom: number, top: number, near: number, far: number, out?: Matrix4) => Matrix4;
     static perspective: (fovy: number, aspect: number, near: number, far: number, out?: Matrix4) => Matrix4;
+    static perspectiveZ0: (fovy: number, aspect: number, near: number, far: number, out?: Matrix4) => Matrix4;
     static rotate: (a: Float32Array | Matrix4 | number[], rad: number, axis: Float32Array | number[] | IVector3, out?: Matrix4) => Matrix4 | null;
     static rotateX: (a: Float32Array | Matrix4 | number[], rad: number, out?: Matrix4) => Matrix4;
     static rotateY: (a: Float32Array | Matrix4 | number[], rad: number, out?: Matrix4) => Matrix4;

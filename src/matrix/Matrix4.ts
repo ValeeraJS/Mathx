@@ -681,25 +681,58 @@ export default class Matrix4 extends Float32Array {
 		far: number,
 		out: Matrix4 = new Matrix4()
 	): Matrix4 => {
-		const lr = 1 / (left - right);
-		const bt = 1 / (bottom - top);
-		const nf = 1 / (near - far);
+		c = 1 / (left - right);
+		b = 1 / (bottom - top);
+		a = 1 / (near - far);
 
-		out[0] = -2 * lr;
+		out[0] = -2 * c;
 		out[1] = 0;
 		out[2] = 0;
 		out[3] = 0;
 		out[4] = 0;
-		out[5] = -2 * bt;
+		out[5] = -2 * b;
 		out[6] = 0;
 		out[7] = 0;
 		out[8] = 0;
 		out[9] = 0;
-		out[10] = 2 * nf;
+		out[10] = 2 * a;
 		out[11] = 0;
-		out[12] = (left + right) * lr;
-		out[13] = (top + bottom) * bt;
-		out[14] = (far + near) * nf;
+		out[12] = (left + right) * c;
+		out[13] = (top + bottom) * b;
+		out[14] = (far + near) * a;
+		out[15] = 1;
+
+		return out;
+	};
+
+	public static orthogonalZ0 = (
+		left: number,
+		right: number,
+		bottom: number,
+		top: number,
+		near: number,
+		far: number,
+		out: Matrix4 = new Matrix4()
+	): Matrix4 => {
+		c = 1 / (left - right);
+		b = 1 / (bottom - top);
+		a = 1 / (near - far);
+
+		out[0] = -2 * c;
+		out[1] = 0;
+		out[2] = 0;
+		out[3] = 0;
+		out[4] = 0;
+		out[5] = -2 * b;
+		out[6] = 0;
+		out[7] = 0;
+		out[8] = 0;
+		out[9] = 0;
+		out[10] = a;
+		out[11] = 0;
+		out[12] = (left + right) * c;
+		out[13] = (top + bottom) * b;
+		out[14] = near * a;
 		out[15] = 1;
 
 		return out;
@@ -735,6 +768,41 @@ export default class Matrix4 extends Float32Array {
 		} else {
 			out[10] = -1;
 			out[14] = -2 * near;
+		}
+
+		return out;
+	};
+
+	public static perspectiveZ0 = (
+		fovy: number,
+		aspect: number,
+		near: number,
+		far: number,
+		out: Matrix4 = new Matrix4()
+	): Matrix4 => {
+		f = 1.0 / Math.tan(fovy / 2);
+
+		out[0] = f / aspect;
+		out[1] = 0;
+		out[2] = 0;
+		out[3] = 0;
+		out[4] = 0;
+		out[5] = f;
+		out[6] = 0;
+		out[7] = 0;
+		out[8] = 0;
+		out[9] = 0;
+		out[11] = -1;
+		out[12] = 0;
+		out[13] = 0;
+		out[15] = 0;
+		if (far !== null && far !== Infinity) {
+			a = 1 / (near - far);
+			out[10] = far * a;
+			out[14] = far * near * a;
+		} else {
+			out[10] = -1;
+			out[14] = -near;
 		}
 
 		return out;

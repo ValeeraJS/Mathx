@@ -517,7 +517,7 @@
 	    return num < 0 ? Math.ceil(num) : Math.floor(num);
 	};
 
-	let circle, v;
+	let circle, v$1;
 	/**
 	 * @function clampCircle
 	 * @desc 将目标值限定在指定周期区间内。假定min小于等于max才能得到正确的结果。
@@ -530,14 +530,14 @@
 	 */
 	var clampCircle = (val, min, max) => {
 	    circle = max - min;
-	    v = floorToZeroCommon(min / circle) * circle + (val % circle);
-	    if (v < min) {
-	        return v + circle;
+	    v$1 = floorToZeroCommon(min / circle) * circle + (val % circle);
+	    if (v$1 < min) {
+	        return v$1 + circle;
 	    }
-	    else if (v > max) {
-	        return v - circle;
+	    else if (v$1 > max) {
+	        return v$1 - circle;
 	    }
-	    return v;
+	    return v$1;
 	};
 
 	/**
@@ -591,7 +591,7 @@
 	    return (b - a) * p + a;
 	};
 
-	let d1 = 0, d2 = 0;
+	let d1 = 0, d2$1 = 0;
 	/**
 	 * @function mapRange
 	 * @desc 将目标值按照区间线性映射到另一个区间里面的值。
@@ -605,8 +605,8 @@
 	 */
 	var mapRange = (value, range1, range2) => {
 	    d1 = range1[1] - range1[0];
-	    d2 = range2[1] - range2[0];
-	    return (value - d1 * 0.5) / d2 / d1;
+	    d2$1 = range2[1] - range2[0];
+	    return (value - d1 * 0.5) / d2$1 / d1;
 	};
 
 	var randFloat = (min = 0, max = 1) => {
@@ -988,7 +988,7 @@
 
 	let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
 	let b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
-	let x$3 = 0, y$3 = 0;
+	let x$4 = 0, y$4 = 0;
 	const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 	class Matrix2 extends Float32Array {
 	    constructor(data = UNIT_MATRIX2_DATA) {
@@ -1045,12 +1045,12 @@
 	    return out;
 	};
 	Matrix2.fromRotation = (rad, out = new Matrix2()) => {
-	    y$3 = Math.sin(rad);
-	    x$3 = Math.cos(rad);
-	    out[0] = x$3;
-	    out[1] = y$3;
-	    out[2] = -y$3;
-	    out[3] = x$3;
+	    y$4 = Math.sin(rad);
+	    x$4 = Math.cos(rad);
+	    out[0] = x$4;
+	    out[1] = y$4;
+	    out[2] = -y$4;
+	    out[3] = x$4;
 	    return out;
 	};
 	Matrix2.fromScaling = (v, out = new Matrix2()) => {
@@ -1117,12 +1117,12 @@
 	    a10$2 = a[1];
 	    a01$2 = a[2];
 	    a11$2 = a[3];
-	    y$3 = Math.sin(rad);
-	    x$3 = Math.cos(rad);
-	    out[0] = a00$2 * x$3 + a01$2 * y$3;
-	    out[1] = a10$2 * x$3 + a11$2 * y$3;
-	    out[2] = a00$2 * -y$3 + a01$2 * x$3;
-	    out[3] = a10$2 * -y$3 + a11$2 * x$3;
+	    y$4 = Math.sin(rad);
+	    x$4 = Math.cos(rad);
+	    out[0] = a00$2 * x$4 + a01$2 * y$4;
+	    out[1] = a10$2 * x$4 + a11$2 * y$4;
+	    out[2] = a00$2 * -y$4 + a01$2 * x$4;
+	    out[3] = a10$2 * -y$4 + a11$2 * x$4;
 	    return out;
 	};
 	Matrix2.scale = (a, v, out = new Matrix2()) => {
@@ -1130,12 +1130,12 @@
 	    a10$2 = a[1];
 	    a01$2 = a[2];
 	    a11$2 = a[3];
-	    x$3 = v[0];
-	    y$3 = v[1];
-	    out[0] = a00$2 * x$3;
-	    out[1] = a10$2 * x$3;
-	    out[2] = a01$2 * y$3;
-	    out[3] = a11$2 * y$3;
+	    x$4 = v[0];
+	    y$4 = v[1];
+	    out[0] = a00$2 * x$4;
+	    out[1] = a10$2 * x$4;
+	    out[2] = a01$2 * y$4;
+	    out[3] = a11$2 * y$4;
 	    return out;
 	};
 	Matrix2.toString = (a) => {
@@ -1158,7 +1158,7 @@
 
 	let a00$1 = 0, a01$1 = 0, a02$1 = 0, a11$1 = 0, a10$1 = 0, a12$1 = 0, a20$1 = 0, a21$1 = 0, a22$1 = 0;
 	let b00$1 = 0, b01$1 = 0, b02$1 = 0, b11$1 = 0, b10$1 = 0, b12$1 = 0, b20$1 = 0, b21$1 = 0, b22$1 = 0;
-	let x$2 = 0, y$2 = 0;
+	let x$3 = 0, y$3 = 0;
 	const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 	class Matrix3 extends Float32Array {
 	    constructor(data = UNIT_MATRIX3_DATA) {
@@ -1230,13 +1230,13 @@
 	    return out;
 	};
 	Matrix3.fromRotation = (rad, out = new Matrix3()) => {
-	    y$2 = Math.sin(rad);
-	    x$2 = Math.cos(rad);
-	    out[0] = x$2;
-	    out[1] = y$2;
+	    y$3 = Math.sin(rad);
+	    x$3 = Math.cos(rad);
+	    out[0] = x$3;
+	    out[1] = y$3;
 	    out[2] = 0;
-	    out[3] = -y$2;
-	    out[4] = x$2;
+	    out[3] = -y$3;
+	    out[4] = x$3;
 	    out[5] = 0;
 	    out[6] = 0;
 	    out[7] = 0;
@@ -1348,28 +1348,28 @@
 	    a20$1 = a[6];
 	    a21$1 = a[7];
 	    a22$1 = a[8];
-	    y$2 = Math.sin(rad);
-	    x$2 = Math.cos(rad);
-	    out[0] = x$2 * a00$1 + y$2 * a10$1;
-	    out[1] = x$2 * a01$1 + y$2 * a11$1;
-	    out[2] = x$2 * a02$1 + y$2 * a12$1;
-	    out[3] = y$2 * a10$1 - x$2 * a00$1;
-	    out[4] = y$2 * a11$1 - x$2 * a01$1;
-	    out[5] = y$2 * a12$1 - x$2 * a02$1;
+	    y$3 = Math.sin(rad);
+	    x$3 = Math.cos(rad);
+	    out[0] = x$3 * a00$1 + y$3 * a10$1;
+	    out[1] = x$3 * a01$1 + y$3 * a11$1;
+	    out[2] = x$3 * a02$1 + y$3 * a12$1;
+	    out[3] = y$3 * a10$1 - x$3 * a00$1;
+	    out[4] = y$3 * a11$1 - x$3 * a01$1;
+	    out[5] = y$3 * a12$1 - x$3 * a02$1;
 	    out[6] = a20$1;
 	    out[7] = a21$1;
 	    out[8] = a22$1;
 	    return out;
 	};
 	Matrix3.scale = (a, v, out = new Matrix3()) => {
-	    x$2 = v[0];
-	    y$2 = v[1];
-	    out[0] = x$2 * a[0];
-	    out[1] = x$2 * a[1];
-	    out[2] = x$2 * a[2];
-	    out[3] = y$2 * a[3];
-	    out[4] = y$2 * a[4];
-	    out[5] = y$2 * a[5];
+	    x$3 = v[0];
+	    y$3 = v[1];
+	    out[0] = x$3 * a[0];
+	    out[1] = x$3 * a[1];
+	    out[2] = x$3 * a[2];
+	    out[3] = y$3 * a[3];
+	    out[4] = y$3 * a[4];
+	    out[5] = y$3 * a[5];
 	    out[6] = a[6];
 	    out[7] = a[7];
 	    out[8] = a[8];
@@ -1385,17 +1385,17 @@
 	    a20$1 = a[6];
 	    a21$1 = a[7];
 	    a22$1 = a[8];
-	    x$2 = v[0];
-	    y$2 = v[1];
+	    x$3 = v[0];
+	    y$3 = v[1];
 	    out[0] = a00$1;
 	    out[1] = a01$1;
 	    out[2] = a02$1;
 	    out[3] = a10$1;
 	    out[4] = a11$1;
 	    out[5] = a12$1;
-	    out[6] = x$2 * a00$1 + y$2 * a10$1 + a20$1;
-	    out[7] = x$2 * a01$1 + y$2 * a11$1 + a21$1;
-	    out[8] = x$2 * a02$1 + y$2 * a12$1 + a22$1;
+	    out[6] = x$3 * a00$1 + y$3 * a10$1 + a20$1;
+	    out[7] = x$3 * a01$1 + y$3 * a11$1 + a21$1;
+	    out[8] = x$3 * a02$1 + y$3 * a12$1 + a22$1;
 	    return out;
 	};
 	Matrix3.transpose = (a, out = new Matrix3()) => {
@@ -1764,7 +1764,7 @@
 	/* eslint-disable max-lines */
 	let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 	let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
-	let x$1 = 0, y$1 = 0, z = 0, det = 0, len$2 = 0, s$2 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
+	let x$2 = 0, y$2 = 0, z = 0, det = 0, len$2 = 0, s$2 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
 	const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 	class Matrix4 extends Float32Array {
 	    constructor(data = UNIT_MATRIX4_DATA) {
@@ -1812,13 +1812,13 @@
 	    return out;
 	};
 	Matrix4.fromEuler = (euler, out = new Matrix4()) => {
-	    x$1 = euler.x;
-	    y$1 = euler.y;
+	    x$2 = euler.x;
+	    y$2 = euler.y;
 	    z = euler.z;
-	    a = Math.cos(x$1);
-	    b = Math.sin(x$1);
-	    c$2 = Math.cos(y$1);
-	    d = Math.sin(y$1);
+	    a = Math.cos(x$2);
+	    b = Math.sin(x$2);
+	    c$2 = Math.cos(y$2);
+	    d = Math.sin(y$2);
 	    e = Math.cos(z);
 	    f = Math.sin(z);
 	    if (euler.order === exports.EulerRotationOrders.XYZ) {
@@ -1937,30 +1937,30 @@
 	    return out;
 	};
 	Matrix4.fromRotation = (rad, axis, out = new Matrix4()) => {
-	    x$1 = axis[0];
-	    y$1 = axis[1];
+	    x$2 = axis[0];
+	    y$2 = axis[1];
 	    z = axis[2];
-	    len$2 = Math.hypot(x$1, y$1, z);
+	    len$2 = Math.hypot(x$2, y$2, z);
 	    if (len$2 < EPSILON) {
 	        return null;
 	    }
 	    len$2 = 1 / len$2;
-	    x$1 *= len$2;
-	    y$1 *= len$2;
+	    x$2 *= len$2;
+	    y$2 *= len$2;
 	    z *= len$2;
 	    s$2 = Math.sin(rad);
 	    c$2 = Math.cos(rad);
 	    t = 1 - c$2;
-	    out[0] = x$1 * x$1 * t + c$2;
-	    out[1] = y$1 * x$1 * t + z * s$2;
-	    out[2] = z * x$1 * t - y$1 * s$2;
+	    out[0] = x$2 * x$2 * t + c$2;
+	    out[1] = y$2 * x$2 * t + z * s$2;
+	    out[2] = z * x$2 * t - y$2 * s$2;
 	    out[3] = 0;
-	    out[4] = x$1 * y$1 * t - z * s$2;
-	    out[5] = y$1 * y$1 * t + c$2;
-	    out[6] = z * y$1 * t + x$1 * s$2;
+	    out[4] = x$2 * y$2 * t - z * s$2;
+	    out[5] = y$2 * y$2 * t + c$2;
+	    out[6] = z * y$2 * t + x$2 * s$2;
 	    out[7] = 0;
-	    out[8] = x$1 * z * t + y$1 * s$2;
-	    out[9] = y$1 * z * t - x$1 * s$2;
+	    out[8] = x$2 * z * t + y$2 * s$2;
+	    out[9] = y$2 * z * t - x$2 * s$2;
 	    out[10] = z * z * t + c$2;
 	    out[11] = 0;
 	    out[12] = 0;
@@ -2262,24 +2262,46 @@
 	    return out;
 	};
 	Matrix4.orthogonal = (left, right, bottom, top, near, far, out = new Matrix4()) => {
-	    const lr = 1 / (left - right);
-	    const bt = 1 / (bottom - top);
-	    const nf = 1 / (near - far);
-	    out[0] = -2 * lr;
+	    c$2 = 1 / (left - right);
+	    b = 1 / (bottom - top);
+	    a = 1 / (near - far);
+	    out[0] = -2 * c$2;
 	    out[1] = 0;
 	    out[2] = 0;
 	    out[3] = 0;
 	    out[4] = 0;
-	    out[5] = -2 * bt;
+	    out[5] = -2 * b;
 	    out[6] = 0;
 	    out[7] = 0;
 	    out[8] = 0;
 	    out[9] = 0;
-	    out[10] = 2 * nf;
+	    out[10] = 2 * a;
 	    out[11] = 0;
-	    out[12] = (left + right) * lr;
-	    out[13] = (top + bottom) * bt;
-	    out[14] = (far + near) * nf;
+	    out[12] = (left + right) * c$2;
+	    out[13] = (top + bottom) * b;
+	    out[14] = (far + near) * a;
+	    out[15] = 1;
+	    return out;
+	};
+	Matrix4.orthogonalZ0 = (left, right, bottom, top, near, far, out = new Matrix4()) => {
+	    c$2 = 1 / (left - right);
+	    b = 1 / (bottom - top);
+	    a = 1 / (near - far);
+	    out[0] = -2 * c$2;
+	    out[1] = 0;
+	    out[2] = 0;
+	    out[3] = 0;
+	    out[4] = 0;
+	    out[5] = -2 * b;
+	    out[6] = 0;
+	    out[7] = 0;
+	    out[8] = 0;
+	    out[9] = 0;
+	    out[10] = a;
+	    out[11] = 0;
+	    out[12] = (left + right) * c$2;
+	    out[13] = (top + bottom) * b;
+	    out[14] = near * a;
 	    out[15] = 1;
 	    return out;
 	};
@@ -2310,17 +2332,44 @@
 	    }
 	    return out;
 	};
+	Matrix4.perspectiveZ0 = (fovy, aspect, near, far, out = new Matrix4()) => {
+	    f = 1.0 / Math.tan(fovy / 2);
+	    out[0] = f / aspect;
+	    out[1] = 0;
+	    out[2] = 0;
+	    out[3] = 0;
+	    out[4] = 0;
+	    out[5] = f;
+	    out[6] = 0;
+	    out[7] = 0;
+	    out[8] = 0;
+	    out[9] = 0;
+	    out[11] = -1;
+	    out[12] = 0;
+	    out[13] = 0;
+	    out[15] = 0;
+	    if (far !== null && far !== Infinity) {
+	        a = 1 / (near - far);
+	        out[10] = far * a;
+	        out[14] = far * near * a;
+	    }
+	    else {
+	        out[10] = -1;
+	        out[14] = -near;
+	    }
+	    return out;
+	};
 	Matrix4.rotate = (a, rad, axis, out = new Matrix4()) => {
-	    x$1 = axis[0];
-	    y$1 = axis[1];
+	    x$2 = axis[0];
+	    y$2 = axis[1];
 	    z = axis[2];
-	    len$2 = Math.hypot(x$1, y$1, z);
+	    len$2 = Math.hypot(x$2, y$2, z);
 	    if (len$2 < EPSILON) {
 	        return null;
 	    }
 	    len$2 = 1 / len$2;
-	    x$1 *= len$2;
-	    y$1 *= len$2;
+	    x$2 *= len$2;
+	    y$2 *= len$2;
 	    z *= len$2;
 	    s$2 = Math.sin(rad);
 	    c$2 = Math.cos(rad);
@@ -2337,14 +2386,14 @@
 	    a21 = a[9];
 	    a22 = a[10];
 	    a23 = a[11];
-	    b00 = x$1 * x$1 * t + c$2;
-	    b01 = y$1 * x$1 * t + z * s$2;
-	    b02 = z * x$1 * t - y$1 * s$2;
-	    b10 = x$1 * y$1 * t - z * s$2;
-	    b11 = y$1 * y$1 * t + c$2;
-	    b12 = z * y$1 * t + x$1 * s$2;
-	    b20 = x$1 * z * t + y$1 * s$2;
-	    b21 = y$1 * z * t - x$1 * s$2;
+	    b00 = x$2 * x$2 * t + c$2;
+	    b01 = y$2 * x$2 * t + z * s$2;
+	    b02 = z * x$2 * t - y$2 * s$2;
+	    b10 = x$2 * y$2 * t - z * s$2;
+	    b11 = y$2 * y$2 * t + c$2;
+	    b12 = z * y$2 * t + x$2 * s$2;
+	    b20 = x$2 * z * t + y$2 * s$2;
+	    b21 = y$2 * z * t - x$2 * s$2;
 	    b22 = z * z * t + c$2;
 	    out[0] = a00 * b00 + a10 * b01 + a20 * b02;
 	    out[1] = a01 * b00 + a11 * b01 + a21 * b02;
@@ -2460,17 +2509,17 @@
 	    return out;
 	};
 	Matrix4.scale = (a, v, out = new Matrix4()) => {
-	    x$1 = v[0];
-	    y$1 = v[1];
+	    x$2 = v[0];
+	    y$2 = v[1];
 	    z = v[2];
-	    out[0] = a[0] * x$1;
-	    out[1] = a[1] * x$1;
-	    out[2] = a[2] * x$1;
-	    out[3] = a[3] * x$1;
-	    out[4] = a[4] * y$1;
-	    out[5] = a[5] * y$1;
-	    out[6] = a[6] * y$1;
-	    out[7] = a[7] * y$1;
+	    out[0] = a[0] * x$2;
+	    out[1] = a[1] * x$2;
+	    out[2] = a[2] * x$2;
+	    out[3] = a[3] * x$2;
+	    out[4] = a[4] * y$2;
+	    out[5] = a[5] * y$2;
+	    out[6] = a[6] * y$2;
+	    out[7] = a[7] * y$2;
 	    out[8] = a[8] * z;
 	    out[9] = a[9] * z;
 	    out[10] = a[10] * z;
@@ -2520,14 +2569,14 @@
 	    return out;
 	};
 	Matrix4.translate = (a, v, out = new Matrix4()) => {
-	    x$1 = v[0];
-	    y$1 = v[1];
+	    x$2 = v[0];
+	    y$2 = v[1];
 	    z = v[2];
 	    if (a === out) {
-	        out[12] = a[0] * x$1 + a[4] * y$1 + a[8] * z + a[12];
-	        out[13] = a[1] * x$1 + a[5] * y$1 + a[9] * z + a[13];
-	        out[14] = a[2] * x$1 + a[6] * y$1 + a[10] * z + a[14];
-	        out[15] = a[3] * x$1 + a[7] * y$1 + a[11] * z + a[15];
+	        out[12] = a[0] * x$2 + a[4] * y$2 + a[8] * z + a[12];
+	        out[13] = a[1] * x$2 + a[5] * y$2 + a[9] * z + a[13];
+	        out[14] = a[2] * x$2 + a[6] * y$2 + a[10] * z + a[14];
+	        out[15] = a[3] * x$2 + a[7] * y$2 + a[11] * z + a[15];
 	    }
 	    else {
 	        a00 = a[0];
@@ -2554,10 +2603,10 @@
 	        out[9] = a21;
 	        out[10] = a22;
 	        out[11] = a23;
-	        out[12] = a00 * x$1 + a10 * y$1 + a20 * z + a[12];
-	        out[13] = a01 * x$1 + a11 * y$1 + a21 * z + a[13];
-	        out[14] = a02 * x$1 + a12 * y$1 + a22 * z + a[14];
-	        out[15] = a03 * x$1 + a13 * y$1 + a23 * z + a[15];
+	        out[12] = a00 * x$2 + a10 * y$2 + a20 * z + a[12];
+	        out[13] = a01 * x$2 + a11 * y$2 + a21 * z + a[13];
+	        out[14] = a02 * x$2 + a12 * y$2 + a22 * z + a[14];
+	        out[15] = a03 * x$2 + a13 * y$2 + a23 * z + a[15];
 	    }
 	    return out;
 	};
@@ -2602,6 +2651,186 @@
 	    }
 	    return out;
 	};
+
+	let x$1, y$1;
+	/**
+	 * @class
+	 * @classdesc 极坐标
+	 * @implements {Mathx.IPolar}
+	 * @name Mathx.Polar
+	 * @desc 极坐标，遵守数学右手定则。规定逆时针方向为正方向。
+	 * @param {number} [r=0] | 距离极点距离
+	 * @param {number} [a=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
+	 */
+	class Polar {
+	    /**
+	     * @public
+	     * @member {number} Mathx.Polar.prototype.a
+	     * @desc 旋转弧度
+	     * @default 0
+	     */
+	    /**
+	     * @public
+	     * @member {number} Mathx.Polar.prototype.r
+	     * @desc 距离
+	     * @default 0
+	     */
+	    constructor(r = 0, a = 0) {
+	        this.r = r;
+	        this.a = a;
+	    }
+	    /**
+	     * @public
+	     * @method create
+	     * @memberof Mathx.Polar
+	     * @desc 创建一个极坐标
+	     * @param {number} [r=0] 距离
+	     * @param {number} [a=0] 弧度
+	     * @returns {Mathx.Polar} 新的极坐标实例
+	     */
+	    static create(r = 0, a = 0) {
+	        return new Polar(r, a);
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.distanceTo
+	     * @desc 求该坐标到另一个极坐标的欧几里得距离
+	     * @param {Mathx.IPolar} p | 目标极坐标
+	     * @returns {number} 欧几里得距离
+	     */
+	    distanceTo(p) {
+	        return Math.sqrt(this.distanceToSquared(p));
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.distanceToManhattan
+	     * @desc 求该坐标到另一个极坐标的曼哈顿距离
+	     * @param {Mathx.IPolar} p | 目标极坐标
+	     * @returns {number} 曼哈顿距离
+	     */
+	    distanceToManhattan({ r, a }) {
+	        return Math.cos(a) * r - this.x() + Math.sin(a) * r - this.y();
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.distanceToSquared
+	     * @desc 求该坐标到另一个极坐标的欧几里得距离平方
+	     * @param {Mathx.IPolar} p | 目标极坐标
+	     * @returns {number} 欧几里得距离平方
+	     */
+	    distanceToSquared({ r, a }) {
+	        return this.r * this.r + r * r - 2 * r * this.r * Math.cos(a - this.a);
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.fromVector2
+	     * @desc 将一个二维向量数据转化为自身的极坐标值
+	     * @param {Mathx.IVector2} vector2 | 二维向量
+	     * @returns {number} this
+	     */
+	    fromVector2(v) {
+	        x$1 = v[0];
+	        y$1 = v[1];
+	        this.r = Math.sqrt(x$1 * x$1 + y$1 * y$1);
+	        this.a = Math.atan2(y$1, x$1);
+	        return this;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.lengthManhattan
+	     * @desc 求自身离原点的曼哈顿距离
+	     * @returns {number} 曼哈顿距离
+	     */
+	    lengthManhattan() {
+	        return (Math.cos(this.a) + Math.sin(this.a)) * this.r;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.set
+	     * @desc 设置极坐标值
+	     * @param {number} [r=0] 距离
+	     * @param {number} [a=0] 弧度
+	     * @returns {number} this
+	     */
+	    set(r = 0, a = 0) {
+	        this.r = r;
+	        this.a = a;
+	        return this;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.setA
+	     * @desc 设置极坐标的弧度
+	     * @param {number} [a=0] 角度
+	     * @returns {number} this
+	     */
+	    setA(a = 0) {
+	        this.a = a;
+	        return this;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.setR
+	     * @desc 设置极坐标的弧度
+	     * @param {number} [r=0] 距离
+	     * @returns {number} this
+	     */
+	    setR(r = 0) {
+	        this.r = r;
+	        return this;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.toJson
+	     * @desc 将极坐标转化为纯json对象，纯数据
+	     * @param {IPolar} [json] 被修改的json对象，如果不传则会新创建json对象。
+	     * @returns {Mathx.IPolar} json
+	     */
+	    toJson(json = { a: 0, r: 0 }) {
+	        json.r = this.r;
+	        json.a = this.a;
+	        return json;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.toString
+	     * @desc 将极坐标转化为字符串
+	     * @returns {string} 形式为"(r, a)"的字符串
+	     */
+	    toString() {
+	        return `(${this.r}, ${this.a})`;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.toVector2Json
+	     * @desc 将极坐标转化为二维向量的json形式，纯数据
+	     * @param {IVector2} [json] 被修改的json对象，如果不传则会新创建json对象。
+	     * @returns {IVector2} json
+	     */
+	    toVector2Json(vec2) {
+	        vec2[0] = this.x();
+	        vec2[1] = this.y();
+	        return vec2;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.x
+	     * @desc 获取极坐标对应二维向量的x的值
+	     * @returns {number} x
+	     */
+	    x() {
+	        return Math.cos(this.a) * this.r;
+	    }
+	    /**
+	     * @public
+	     * @method Mathx.Polar.prototype.y
+	     * @desc 获取极坐标对应二维向量的y的值
+	     * @returns {number} y
+	     */
+	    y() {
+	        return Math.sin(this.a) * this.r;
+	    }
+	}
 
 	let ax$1, ay$1, az$1, aw$1, bx$1, by$1, bz$1, bw;
 	let s$1 = 0, c$1 = 0, rad = 0, dotTmp = 0, omega = 0, len$1 = 0, scale0 = 0, scale1 = 0;
@@ -3474,6 +3703,57 @@
 	    return Vector3.normalize(out);
 	};
 
+	let dis, r2, d2;
+	const v = new Vector3();
+	class Ray3 {
+	    constructor(position = new Vector3(), direction = new Vector3(0, 0, -1)) {
+	        this.position = position;
+	        this.direction = Vector3.normalize(direction);
+	    }
+	}
+	Ray3.at = (a, b, out = new Vector3()) => {
+	    return Vector3.multiplyScalar(a.direction, b, out);
+	};
+	Ray3.distanceToPoint = (a, point) => {
+	    return Math.sqrt(Ray3.distanceSqToPoint(a, point));
+	};
+	Ray3.distanceSqToPoint = (a, point) => {
+	    Vector3.minus(point, a.position, v);
+	    dis = Vector3.dot(v, a.direction);
+	    if (dis < 0) {
+	        return Vector3.distanceToSquared(a.position, point);
+	    }
+	    Vector3.multiplyScalar(a.direction, dis, v);
+	    Vector3.add(v, a.position, v);
+	    return Vector3.distanceToSquared(v, point);
+	};
+	Ray3.lookAt = (a, b, out = new Ray3()) => {
+	    if (a !== out) {
+	        Vector3.fromArray(a.position, 0, out.position);
+	    }
+	    Vector3.normalize(Vector3.minus(b, a.position, out.direction));
+	    return out;
+	};
+	Ray3.intersectSphere = (ray, sphere, target) => {
+	    Vector3.minus(sphere.position, ray.position, v);
+	    dis = Vector3.dot(v, ray.direction);
+	    d2 = Vector3.dot(v, v) - dis * dis;
+	    r2 = sphere.radius * sphere.radius;
+	    if (d2 > r2)
+	        return null;
+	    const thc = Math.sqrt(r2 - d2);
+	    const t0 = dis - thc;
+	    const t1 = dis + thc;
+	    if (t0 < 0 && t1 < 0)
+	        return null;
+	    if (t0 < 0)
+	        return Ray3.at(ray, t1, target);
+	    return Ray3.at(ray, t0, target);
+	};
+	Ray3.intersectsSphere = (ray, sphere) => {
+	    return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
+	};
+
 	// import clampCommon from "../common/clamp";
 	let ax, ay, az, aw, bx, by, bz, len;
 	let ix, iy, iz, iw;
@@ -3732,7 +4012,9 @@
 	exports.Matrix2 = Matrix2;
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;
+	exports.Polar = Polar;
 	exports.Quaternion = Quaternion;
+	exports.Ray3 = Ray3;
 	exports.Rectangle2 = Rectangle2;
 	exports.Sphere = Sphere;
 	exports.Triangle3 = Triangle3;
