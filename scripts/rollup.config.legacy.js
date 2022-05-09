@@ -5,7 +5,6 @@ export default {
 	input: "src/index.ts",
 	output: [
 		{
-			externalLiveBindings: true,
 			file: "build/Mathx.legacy.js",
 			format: "umd",
 			indent: "\t",

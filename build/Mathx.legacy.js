@@ -2547,6 +2547,86 @@
 	        out[15] = b00 * a03 + b01 * a13 + b02 * a23 + b03 * a33;
 	        return out;
 	    };
+	    // 乘以缩放矩阵
+	    Matrix4.multiplyScaleMatrix = function (a, b, out) {
+	        if (out === void 0) { out = new Matrix4(); }
+	        a00 = a[0];
+	        a01 = a[1];
+	        a02 = a[2];
+	        a03 = a[3];
+	        a10 = a[4];
+	        a11 = a[5];
+	        a12 = a[6];
+	        a13 = a[7];
+	        a20 = a[8];
+	        a21 = a[9];
+	        a22 = a[10];
+	        a23 = a[11];
+	        a30 = a[12];
+	        a31 = a[13];
+	        a32 = a[14];
+	        a33 = a[15];
+	        b00 = b[0];
+	        out[0] = b00 * a00;
+	        out[1] = b00 * a01;
+	        out[2] = b00 * a02;
+	        out[3] = b00 * a03;
+	        b01 = b[5];
+	        out[4] = b01 * a10;
+	        out[5] = b01 * a11;
+	        out[6] = b01 * a12;
+	        out[7] = b01 * a13;
+	        b02 = b[10];
+	        out[8] = b02 * a20;
+	        out[9] = b02 * a21;
+	        out[10] = b02 * a22;
+	        out[11] = b02 * a23;
+	        out[12] = a30;
+	        out[13] = a31;
+	        out[14] = a32;
+	        out[15] = a33;
+	        return out;
+	    };
+	    // 乘以平移矩阵
+	    Matrix4.multiplyTranslateMatrix = function (a, b, out) {
+	        if (out === void 0) { out = new Matrix4(); }
+	        a00 = a[0];
+	        a01 = a[1];
+	        a02 = a[2];
+	        a03 = a[3];
+	        a10 = a[4];
+	        a11 = a[5];
+	        a12 = a[6];
+	        a13 = a[7];
+	        a20 = a[8];
+	        a21 = a[9];
+	        a22 = a[10];
+	        a23 = a[11];
+	        a30 = a[12];
+	        a31 = a[13];
+	        a32 = a[14];
+	        a33 = a[15];
+	        out[0] = a00;
+	        out[1] = a01;
+	        out[2] = a02;
+	        out[3] = a03;
+	        out[4] = a10;
+	        out[5] = a11;
+	        out[6] = a12;
+	        out[7] = a13;
+	        out[8] = a20;
+	        out[9] = a21;
+	        out[10] = a22;
+	        out[11] = a23;
+	        b00 = b[12];
+	        b01 = b[13];
+	        b02 = b[14];
+	        out[12] = b00 * a00 + b01 * a10 + b02 * a20 + a30;
+	        out[13] = b00 * a01 + b01 * a11 + b02 * a21 + a31;
+	        out[14] = b00 * a02 + b01 * a12 + b02 * a22 + a32;
+	        out[15] = b00 * a03 + b01 * a13 + b02 * a23 + a33;
+	        return out;
+	    };
 	    Matrix4.orthogonal = function (left, right, bottom, top, near, far, out) {
 	        if (out === void 0) { out = new Matrix4(); }
 	        c$2 = 1 / (left - right);
