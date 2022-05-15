@@ -20,7 +20,10 @@ export default class Matrix3 extends Float32Array {
     static fromTranslation: (v: Float32Array | IVector2 | number[], out?: Matrix3) => Matrix3;
     static identity: (out?: Matrix3) => Matrix3;
     static invert: (a: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3 | null;
-    static multiply: () => (a: Float32Array | number[] | Matrix3, b: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3;
+    static multiply: (a: Float32Array | number[] | Matrix3, b: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3;
+    static multiplyRotationMatrix: (a: Float32Array | number[] | Matrix3, b: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3;
+    static multiplyScaleMatrix: (a: Float32Array | number[] | Matrix3, b: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3;
+    static multiplyTranslateMatrix: (a: Float32Array | number[] | Matrix3, b: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3;
     static rotate: (a: Float32Array | number[] | Matrix3, rad: number, out?: Matrix3) => Matrix3;
     static scale: (a: Float32Array | number[] | Matrix3, v: Float32Array | number[] | IVector2, out?: Matrix3) => Matrix3;
     static translate: (a: Float32Array | number[] | Matrix3, v: Float32Array | number[] | IVector2, out?: Matrix3) => Matrix3;

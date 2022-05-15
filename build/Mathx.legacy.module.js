@@ -1508,7 +1508,7 @@ var Matrix3 = /** @class */ (function (_super) {
         out[8] = (a11$1 * a00$1 - a01$1 * a10$1) * det;
         return out;
     };
-    Matrix3.multiply = function () { return function (a, b, out) {
+    Matrix3.multiply = function (a, b, out) {
         if (out === void 0) { out = new Matrix3(); }
         a00$1 = a[0];
         a01$1 = a[1];
@@ -1538,7 +1538,81 @@ var Matrix3 = /** @class */ (function (_super) {
         out[7] = b20$1 * a01$1 + b21$1 * a11$1 + b22$1 * a21$1;
         out[8] = b20$1 * a02$1 + b21$1 * a12$1 + b22$1 * a22$1;
         return out;
-    }; };
+    };
+    Matrix3.multiplyRotationMatrix = function (a, b, out) {
+        if (out === void 0) { out = new Matrix3(); }
+        a00$1 = a[0];
+        a01$1 = a[1];
+        a02$1 = a[2];
+        a10$1 = a[3];
+        a11$1 = a[4];
+        a12$1 = a[5];
+        a20$1 = a[6];
+        a21$1 = a[7];
+        a22$1 = a[8];
+        b00$1 = b[0];
+        b01$1 = b[1];
+        b10$1 = b[3];
+        b11$1 = b[4];
+        out[0] = b00$1 * a00$1 + b01$1 * a10$1;
+        out[1] = b00$1 * a01$1 + b01$1 * a11$1;
+        out[2] = b00$1 * a02$1 + b01$1 * a12$1;
+        out[3] = b10$1 * a00$1 + b11$1 * a10$1;
+        out[4] = b10$1 * a01$1 + b11$1 * a11$1;
+        out[5] = b10$1 * a02$1 + b11$1 * a12$1;
+        out[6] = a20$1;
+        out[7] = a21$1;
+        out[8] = a22$1;
+        return out;
+    };
+    Matrix3.multiplyScaleMatrix = function (a, b, out) {
+        if (out === void 0) { out = new Matrix3(); }
+        a00$1 = a[0];
+        a01$1 = a[1];
+        a02$1 = a[2];
+        a10$1 = a[3];
+        a11$1 = a[4];
+        a12$1 = a[5];
+        a20$1 = a[6];
+        a21$1 = a[7];
+        a22$1 = a[8];
+        b00$1 = b[0];
+        b11$1 = b[4];
+        out[0] = b00$1 * a00$1;
+        out[1] = b00$1 * a01$1;
+        out[2] = b00$1 * a02$1;
+        out[3] = b11$1 * a10$1;
+        out[4] = b11$1 * a11$1;
+        out[5] = b11$1 * a12$1;
+        out[6] = a20$1;
+        out[7] = a21$1;
+        out[8] = a22$1;
+        return out;
+    };
+    Matrix3.multiplyTranslateMatrix = function (a, b, out) {
+        if (out === void 0) { out = new Matrix3(); }
+        a00$1 = a[0];
+        a01$1 = a[1];
+        a02$1 = a[2];
+        a10$1 = a[3];
+        a11$1 = a[4];
+        a12$1 = a[5];
+        a20$1 = a[6];
+        a21$1 = a[7];
+        a22$1 = a[8];
+        b20$1 = b[6];
+        b21$1 = b[7];
+        out[0] = a00$1;
+        out[1] = a01$1;
+        out[2] = a02$1;
+        out[3] = b10$1;
+        out[4] = b10$1;
+        out[5] = b10$1;
+        out[6] = b20$1 * a00$1 + b21$1 * a10$1 + a20$1;
+        out[7] = b20$1 * a01$1 + b21$1 * a11$1 + a21$1;
+        out[8] = b20$1 * a02$1 + b21$1 * a12$1 + a22$1;
+        return out;
+    };
     Matrix3.rotate = function (a, rad, out) {
         if (out === void 0) { out = new Matrix3(); }
         a00$1 = a[0];
