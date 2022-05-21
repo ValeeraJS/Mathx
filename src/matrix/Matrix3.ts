@@ -1,4 +1,5 @@
 import { IVector2 } from "../vector/Vector2";
+import Matrix2 from "./Matrix2";
 
 let a00 = 0,
 	a01 = 0,
@@ -93,6 +94,25 @@ export default class Matrix3 extends Float32Array {
 		out: Matrix3 = new Matrix3()
 	): Matrix3 => {
 		out.set(source);
+
+		return out;
+	};
+
+	public static fromMatrix2 = (
+		mat4: Float32Array | number[] | Matrix2,
+		out: Matrix3 = new Matrix3()
+	): Matrix3 => {
+		out[0] = mat4[0];
+		out[1] = mat4[1];
+		out[2] = 0;
+
+		out[3] = mat4[2];
+		out[4] = mat4[3];
+		out[5] = 0;
+
+		out[6] = 0;
+		out[7] = 0;
+		out[8] = 1;
 
 		return out;
 	};
@@ -354,9 +374,9 @@ export default class Matrix3 extends Float32Array {
 		out[1] = a01;
 		out[2] = a02;
 
-		out[3] = b10;
-		out[4] = b10;
-		out[5] = b10;
+		out[3] = a10;
+		out[4] = a11;
+		out[5] = a12;
 
 		out[6] = b20 * a00 + b21 * a10 + a20;
 		out[7] = b20 * a01 + b21 * a11 + a21;

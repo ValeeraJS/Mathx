@@ -1217,6 +1217,18 @@
 	    out.set(source);
 	    return out;
 	};
+	Matrix3.fromMatrix2 = (mat4, out = new Matrix3()) => {
+	    out[0] = mat4[0];
+	    out[1] = mat4[1];
+	    out[2] = 0;
+	    out[3] = mat4[2];
+	    out[4] = mat4[3];
+	    out[5] = 0;
+	    out[6] = 0;
+	    out[7] = 0;
+	    out[8] = 1;
+	    return out;
+	};
 	Matrix3.fromMatrix4 = (mat4, out = new Matrix3()) => {
 	    out[0] = mat4[0];
 	    out[1] = mat4[1];
@@ -1401,9 +1413,9 @@
 	    out[0] = a00$1;
 	    out[1] = a01$1;
 	    out[2] = a02$1;
-	    out[3] = b10$1;
-	    out[4] = b10$1;
-	    out[5] = b10$1;
+	    out[3] = a10$1;
+	    out[4] = a11$1;
+	    out[5] = a12$1;
 	    out[6] = b20$1 * a00$1 + b21$1 * a10$1 + a20$1;
 	    out[7] = b20$1 * a01$1 + b21$1 * a11$1 + a21$1;
 	    out[8] = b20$1 * a02$1 + b21$1 * a12$1 + a22$1;
@@ -1969,6 +1981,25 @@
 	    out[7] = 0;
 	    out[11] = 0;
 	    // last column
+	    out[12] = 0;
+	    out[13] = 0;
+	    out[14] = 0;
+	    out[15] = 1;
+	    return out;
+	};
+	Matrix4.fromMatrix3 = (data, out = new Matrix4()) => {
+	    out[0] = data[0];
+	    out[1] = data[1];
+	    out[2] = data[2];
+	    out[3] = 0;
+	    out[4] = data[3];
+	    out[5] = data[4];
+	    out[6] = data[5];
+	    out[7] = 0;
+	    out[8] = data[6];
+	    out[9] = data[7];
+	    out[10] = data[8];
+	    out[11] = 0;
 	    out[12] = 0;
 	    out[13] = 0;
 	    out[14] = 0;

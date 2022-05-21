@@ -3,6 +3,7 @@ import IEulerAngle, { EulerRotationOrders } from "../euler/IEulerAngle";
 import Vector3, { IVector3 } from "../vector/Vector3";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
+import Matrix3 from "./Matrix3";
 
 let a00 = 0,
 	a01 = 0,
@@ -229,6 +230,33 @@ export default class Matrix4 extends Float32Array {
 		out[11] = 0;
 
 		// last column
+		out[12] = 0;
+		out[13] = 0;
+		out[14] = 0;
+		out[15] = 1;
+
+		return out;
+	};
+
+	public static fromMatrix3 = (
+		data: Float32Array | number[] | Matrix3,
+		out = new Matrix4()
+	): Matrix4 => {
+		out[0] = data[0];
+		out[1] = data[1];
+		out[2] = data[2];
+		out[3] = 0;
+
+		out[4] = data[3];
+		out[5] = data[4];
+		out[6] = data[5];
+		out[7] = 0;
+
+		out[8] = data[6];
+		out[9] = data[7];
+		out[10] = data[8];
+		out[11] = 0;
+
 		out[12] = 0;
 		out[13] = 0;
 		out[14] = 0;
