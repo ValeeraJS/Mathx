@@ -1,6 +1,7 @@
 import IColorRGBA, { IColorRGBAJson } from "./interfaces/IColorRGBA";
 import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGB from "./interfaces/IColorRGB";
+import ArraybufferDataType from "../ArraybufferDataType";
 
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	public static average = (color: IColorRGB | IColorRGBA): number => {
@@ -118,6 +119,7 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	};
 
 	public length: 4;
+	public readonly dataType = ArraybufferDataType.COLOR_RGBA;
 
 	public constructor(r = 0, g = 0, b = 0, a = 1) {
 		super(4);

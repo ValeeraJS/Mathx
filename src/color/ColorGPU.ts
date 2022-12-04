@@ -2,6 +2,7 @@ import IColorGPU, { IColorGPUJson } from "./interfaces/IColorGPU";
 import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGB from "./interfaces/IColorRGB";
 import IColorRGBA from "./interfaces/IColorRGBA";
+import ArraybufferDataType from "../ArraybufferDataType";
 
 export default class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
@@ -134,6 +135,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 	};
 
 	public length: 4;
+	public readonly dataType = ArraybufferDataType.COLOR_GPU;
 
 	public constructor(r = 0, g = 0, b = 0, a = 0) {
 		super(4);

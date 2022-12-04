@@ -1,3 +1,4 @@
+import ArraybufferDataType from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
@@ -579,6 +580,7 @@ export default class Vector3 extends Float32Array implements IVector3 {
 	};
 
 	public readonly length!: 3;
+	public readonly dataType = ArraybufferDataType.VECTOR3;
 	public constructor(x = 0, y = 0, z = 0) {
 		super(3);
 		this[0] = x;

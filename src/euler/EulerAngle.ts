@@ -1,5 +1,6 @@
 import IEulerAngle, { EulerRotationOrders } from "./IEulerAngle";
 import clamp from "../common/clamp";
+import ArraybufferDataType from "../ArraybufferDataType";
 
 export default class EulerAngle extends Float32Array implements IEulerAngle {
 	public static readonly ORDERS = EulerRotationOrders;
@@ -109,6 +110,7 @@ export default class EulerAngle extends Float32Array implements IEulerAngle {
 	}
 
 	public order: EulerRotationOrders;
+	public readonly dataType = ArraybufferDataType.EULER;
 	public constructor(x = 0, y = 0, z = 0, order = EulerRotationOrders.XYZ) {
 		super(3);
 		this[0] = x;

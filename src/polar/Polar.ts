@@ -1,3 +1,4 @@
+import ArraybufferDataType from "../ArraybufferDataType";
 import IPolar from "./interfaces/IPolar";
 
 let x: number, y: number;
@@ -27,6 +28,7 @@ export default class Polar implements IPolar {
 
 	public a: number;
 	public r: number;
+	public readonly dataType = ArraybufferDataType.POLAR;
 	/**
 	 * @public
 	 * @member {number} Mathx.Polar.prototype.a

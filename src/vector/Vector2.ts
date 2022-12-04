@@ -5,6 +5,7 @@ import closeToCommon from "../common/closeTo";
 import floorToZeroCommon from "../common/floorToZero";
 import { IPairs2Float32 } from "../common/interfaces/IPairs2";
 import { IPolar } from "../polar";
+import ArraybufferDataType from "../ArraybufferDataType";
 
 let x = 0,
 	y = 0,
@@ -480,6 +481,7 @@ export default class Vector2 extends Float32Array implements IVector2 {
 	};
 
 	public readonly length!: 2;
+	public readonly dataType = ArraybufferDataType.VECTOR2;
 	public constructor(x = 0, y = 0) {
 		super(2);
 		this[0] = x;

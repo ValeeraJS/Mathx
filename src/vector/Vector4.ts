@@ -1,5 +1,6 @@
 // import clampCommon from "../common/clamp";
 // import clampSafeCommon from "../common/clampSafe";
+import ArraybufferDataType from "../ArraybufferDataType";
 import closeToCommon from "../common/closeTo";
 import { IPairs4Float32 } from "../common/interfaces/IPairs4";
 
@@ -381,6 +382,7 @@ export default class Vector4 extends Float32Array implements IVector4 {
 	};
 
 	public readonly length!: 4;
+	public readonly dataType = ArraybufferDataType.VECTOR4;
 	public constructor(x = 0, y = 0, z = 0, w = 0) {
 		super(4);
 		this[0] = x;
