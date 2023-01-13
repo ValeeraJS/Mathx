@@ -193,6 +193,12 @@ export default class Cube implements ICube {
 		return out;
 	};
 
+	public static surfaceArea = (a: ICube): number => {
+		Cube.getSize(a, ta);
+
+		return (ta.x * ta.y + ta.x * ta.z + ta.y * ta.z) * 2;
+	};
+
 	public static translate = (
 		a: ICube,
 		b: Float32Array | number[] | IVector3,

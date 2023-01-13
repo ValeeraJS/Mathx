@@ -1,10 +1,6 @@
 import Vector3, { IVector3 } from "../vector/Vector3";
 import ITriangle3 from "./interfaces/ITriangle3";
 
-const defaultA = [-1, -1, 0];
-const defaultB = [1, -1, 0];
-const defaultC = [0, 1, 0];
-
 const ab = new Vector3();
 const bc = new Vector3();
 
@@ -19,9 +15,9 @@ export default class Triangle3 implements ITriangle3 {
 	};
 
 	public static create = (
-		a: Float32Array = new Float32Array(defaultA),
-		b: Float32Array = new Float32Array(defaultB),
-		c: Float32Array = new Float32Array(defaultC)
+		a: Vector3 = new Vector3(-1, -1, 0),
+		b: Vector3 = new Vector3(1, -1, 0),
+		c: Vector3 = new Vector3(0, 1, 0)
 	): ITriangle3 => {
 		return { a, b, c };
 	};
@@ -58,14 +54,14 @@ export default class Triangle3 implements ITriangle3 {
 		return Vector3.normalize(out);
 	};
 
-	public a: Float32Array;
-	public b: Float32Array;
-	public c: Float32Array;
+	public a: Vector3;
+	public b: Vector3;
+	public c: Vector3;
 
 	public constructor(
-		a: Float32Array = new Float32Array(defaultA),
-		b: Float32Array = new Float32Array(defaultB),
-		c: Float32Array = new Float32Array(defaultC)
+		a: Vector3 = new Vector3(-1, -1, 0),
+		b: Vector3 = new Vector3(1, -1, 0),
+		c: Vector3 = new Vector3(0, 1, 0)
 	) {
 		this.a = a;
 		this.b = b;

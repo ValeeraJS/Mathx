@@ -1,6 +1,6 @@
 import IEulerAngle, { EulerRotationOrders } from "./IEulerAngle";
-import clamp from "../common/clamp";
 import ArraybufferDataType from "../ArraybufferDataType";
+import clamp from "../common/clamp";
 
 export default class EulerAngle extends Float32Array implements IEulerAngle {
 	public static readonly ORDERS = EulerRotationOrders;
