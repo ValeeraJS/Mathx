@@ -1,8 +1,8 @@
 const DEG_TO_RAD = Math.PI / 180;
 const DEG_360_RAD = Math.PI * 2;
-const DEG_90_RAD = Math.PI / 2;
+const DEG_90_RAD = Math.PI * 0.5;
 const DEG_60_RAD = Math.PI / 3;
-const DEG_45_RAD = Math.PI / 4;
+const DEG_45_RAD = Math.PI * 0.25;
 const DEG_30_RAD = Math.PI / 6;
 const EPSILON = Math.pow(2, -52);
 const RAD_TO_DEG = 180 / Math.PI;
@@ -3863,6 +3863,56 @@ class Sphere {
     }
 }
 
+const ab$1 = new Vector2();
+const bc$1 = new Vector2();
+class Triangle2 {
+    static area = (t) => {
+        const c = Triangle2.getABLength(t);
+        const a = Triangle2.getBCLength(t);
+        const b = Triangle2.getCALength(t);
+        const p = (c + a + b) / 2;
+        return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+    };
+    static create = (a = new Vector2(-1, -1), b = new Vector2(1, -1), c = new Vector2(0, 1)) => {
+        return new Triangle2(a, b, c);
+    };
+    static getABLength = (t) => {
+        return Vector2.distanceTo(t.a, t.b);
+    };
+    static getBCLength = (t) => {
+        return Vector2.distanceTo(t.b, t.c);
+    };
+    static getCALength = (t) => {
+        return Vector2.distanceTo(t.c, t.a);
+    };
+    static normal = (t) => {
+        Vector2.minus(t.c, t.b, bc$1);
+        Vector2.minus(t.b, t.a, ab$1);
+        const v = Vector2.cross(ab$1, bc$1);
+        if (v > 0) {
+            return 1;
+        }
+        if (v < 0) {
+            return -1;
+        }
+        return 0;
+    };
+    static toFloat32Array = (t, out = new Float32Array(2)) => {
+        out.set(t.a, 0);
+        out.set(t.b, 2);
+        out.set(t.c, 4);
+        return out;
+    };
+    a;
+    b;
+    c;
+    constructor(a = new Vector2(-1, -1), b = new Vector2(1, -1), c = new Vector2(0, 1)) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+}
+
 const ab = new Vector3();
 const bc = new Vector3();
 class Triangle3 {
@@ -4223,4 +4273,4 @@ class Vector4 extends Float32Array {
     }
 }
 
-export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Matrix2, Matrix3, Matrix4, Polar, Quaternion, Ray3, Rectangle2, Sphere, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Matrix2, Matrix3, Matrix4, Polar, Quaternion, Ray3, Rectangle2, Sphere, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
