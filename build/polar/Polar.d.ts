@@ -21,6 +21,7 @@ export default class Polar implements IPolar {
     static create(r?: number, a?: number): Polar;
     a: number;
     r: number;
+    readonly dataType: string;
     /**
      * @public
      * @member {number} Mathx.Polar.prototype.a

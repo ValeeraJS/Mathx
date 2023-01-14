@@ -2,7 +2,6 @@
 // import clampSafeCommon from "../common/clampSafe";
 import ArraybufferDataType from "../ArraybufferDataType";
 import closeToCommon from "../common/closeTo";
-import { IPairs4Float32 } from "../common/interfaces/IPairs4";
 
 export interface IVector4Json {
 	x: number;
@@ -11,7 +10,7 @@ export interface IVector4Json {
 	w: number;
 }
 
-export interface IVector4 extends IPairs4Float32, IVector4Json {}
+export interface IVector4 extends Float32Array, IVector4Json {}
 
 let ax: number, ay: number, az: number, aw: number, bx: number, by: number, bz: number, len: number;
 let ix: number, iy: number, iz: number, iw: number;
@@ -27,6 +26,8 @@ let A: number,
 	J: number;
 
 export default class Vector4 extends Float32Array implements IVector4 {
+	public static readonly VECTOR3_ZERO = new Vector4(0, 0, 0, 0);
+	public static readonly VECTOR3_ONE = new Vector4(1, 1, 1, 1);
 	public static add = (
 		a: Float32Array | IVector4 | number[],
 		b: Float32Array | IVector4 | number[],
@@ -330,6 +331,26 @@ export default class Vector4 extends Float32Array implements IVector4 {
 		out[1] = Math.round(a[1]);
 		out[2] = Math.round(a[2]);
 		out[3] = Math.round(a[3]);
+
+		return out;
+	};
+
+	public static set = (x = 0, y = 0, z = 0, w = 0, out: IVector4 = new Vector4()): IVector4 => {
+		out[0] = x;
+		out[1] = y;
+		out[2] = z;
+		out[4] = w;
+
+		return out;
+	};
+
+	public static setNorm = (
+		a: Float32Array | number[] | IVector4,
+		length: number,
+		out: IVector4 = new Vector4(2)
+	): IVector4 => {
+		Vector4.normalize(a, out);
+		Vector4.multiplyScalar(out, length, out);
 
 		return out;
 	};

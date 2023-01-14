@@ -1,5 +1,5 @@
 import { IPairs4Float32 } from "../../common/interfaces/IPairs4";
-export declare type IColorGPUData = IPairs4Float32;
+export type IColorGPUData = IPairs4Float32;
 export interface IColorGPUJson {
     a: number;
     b: number;

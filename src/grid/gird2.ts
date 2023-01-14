@@ -1,4 +1,4 @@
-import { add, multiply } from "../vector/Vector2";
+import Vector2 from "../vector/Vector2";
 
 export default class Grid2 {
 	public data: Float32Array[] = []; // 格子索引
@@ -15,6 +15,6 @@ export default class Grid2 {
 		this.size = size;
 		this.gridSize = gridSize;
 		this.min = min;
-		this.max = add(multiply(this.gridSize, this.size), this.min);
+		this.max = Vector2.add(Vector2.multiply(this.gridSize, this.size), this.min);
 	}
 }

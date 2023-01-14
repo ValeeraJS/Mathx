@@ -30,6 +30,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
     static toAxisAngle: (q: Float32Array | IQuaternion | number[], outAxis: IVector3) => number;
     static toString: (a: Float32Array | IQuaternion | number[]) => string;
     readonly length: 4;
+    readonly dataType: string;
     constructor(x?: number, y?: number, z?: number, w?: number);
     get x(): number;
     set x(value: number);

@@ -2,7 +2,6 @@ import ArraybufferDataType from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
-import { IPairs3Float32 } from "../common/interfaces/IPairs3";
 
 let ax: number, ay: number, az: number, bx: number, by: number, bz: number;
 let ag: number, s: number;
@@ -13,17 +12,17 @@ export interface IVector3Json {
 	z: number;
 }
 
-export interface IVector3 extends IPairs3Float32, IVector3Json {}
+export interface IVector3 extends Float32Array, IVector3Json {};
 
 export default class Vector3 extends Float32Array implements IVector3 {
-	public static readonly VECTOR3_ZERO = new Float32Array([0, 0, 0]);
-	public static readonly VECTOR3_ONE = new Float32Array([1, 1, 1]);
-	public static readonly VECTOR3_TOP = new Float32Array([0, 1, 0]);
-	public static readonly VECTOR3_BOTTOM = new Float32Array([0, -1, 0]);
-	public static readonly VECTOR3_LEFT = new Float32Array([-1, 0, 0]);
-	public static readonly VECTOR3_RIGHT = new Float32Array([1, 0, 0]);
-	public static readonly VECTOR3_FRONT = new Float32Array([0, 0, -1]);
-	public static readonly VECTOR3_BACK = new Float32Array([0, 0, 1]);
+	public static readonly VECTOR3_ZERO = new Vector3(0, 0, 0);
+	public static readonly VECTOR3_ONE = new Vector3(1, 1, 1);
+	public static readonly VECTOR3_TOP = new Vector3(0, 1, 0);
+	public static readonly VECTOR3_BOTTOM = new Vector3(0, -1, 0);
+	public static readonly VECTOR3_LEFT = new Vector3(-1, 0, 0);
+	public static readonly VECTOR3_RIGHT = new Vector3(1, 0, 0);
+	public static readonly VECTOR3_FRONT = new Vector3(0, 0, -1);
+	public static readonly VECTOR3_BACK = new Vector3(0, 0, 1);
 
 	public static add = (
 		a: Float32Array | IVector3 | number[],

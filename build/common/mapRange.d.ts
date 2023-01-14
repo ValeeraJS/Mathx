@@ -1,4 +1,3 @@
-declare const _default: (value: number, range1: number[] | Float32Array, range2: number[] | Float32Array) => number;
 /**
  * @function mapRange
  * @desc 将目标值按照区间线性映射到另一个区间里面的值。
@@ -10,4 +9,5 @@ declare const _default: (value: number, range1: number[] | Float32Array, range2:
  * Mathx.clamp(150, [100, 200], [0, -100]); // -50;
  * Mathx.clamp(10, [0, 1], [0, -2]); // -20;
  */
+declare const _default: (value: number, range1: number[] | Float32Array, range2: number[] | Float32Array) => number;
 export default _default;

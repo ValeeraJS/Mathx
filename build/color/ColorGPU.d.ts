@@ -16,6 +16,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
     static fromString: (str: string, out?: IColorGPU) => IColorGPU;
     static grayscale: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number, out?: IColorGPU) => IColorGPU;
     length: 4;
+    readonly dataType: string;
     constructor(r?: number, g?: number, b?: number, a?: number);
     get r(): number;
     set r(val: number);

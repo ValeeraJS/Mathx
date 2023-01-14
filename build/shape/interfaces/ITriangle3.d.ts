@@ -1,5 +1,6 @@
+import { Vector3 } from "../../vector";
 export default interface ITriangle3 {
-    a: Float32Array;
-    b: Float32Array;
-    c: Float32Array;
+    a: Vector3;
+    b: Vector3;
+    c: Vector3;
 }

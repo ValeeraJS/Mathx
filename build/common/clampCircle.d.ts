@@ -1,4 +1,3 @@
-declare const _default: (val: number, min: number, max: number) => number;
 /**
  * @function clampCircle
  * @desc 将目标值限定在指定周期区间内。假定min小于等于max才能得到正确的结果。
@@ -9,4 +8,5 @@ declare const _default: (val: number, min: number, max: number) => number;
  * @example Mathx.clampCircle(3 * Math.PI, 0, 2 * Math.PI); // Math.PI;
  * Mathx.clampCircle(2 * Math.PI, -Math.PI, Math.PI); // 0;
  */
+declare const _default: (val: number, min: number, max: number) => number;
 export default _default;

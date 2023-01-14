@@ -1,4 +1,3 @@
-declare const _default: (val: number, a: number, b: number) => number;
 /**
  * @function clampSafe
  * @desc 与clamp函数功能一样，将目标值限定在指定区间内。但此函数是安全的，不要求第二个参数必须小于第三个参数
@@ -14,4 +13,5 @@ declare const _default: (val: number, a: number, b: number) => number;
  * Mathx.clamp(3, 0, 2); // 2;
  * Mathx.clamp(3, 2, 0); // 2;
  */
+declare const _default: (val: number, a: number, b: number) => number;
 export default _default;

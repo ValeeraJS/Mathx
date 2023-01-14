@@ -1,20 +1,19 @@
-import { IPairs3Float32 } from "../common/interfaces/IPairs3";
 export interface IVector3Json {
     x: number;
     y: number;
     z: number;
 }
-export interface IVector3 extends IPairs3Float32, IVector3Json {
+export interface IVector3 extends Float32Array, IVector3Json {
 }
 export default class Vector3 extends Float32Array implements IVector3 {
-    static readonly VECTOR3_ZERO: Float32Array;
-    static readonly VECTOR3_ONE: Float32Array;
-    static readonly VECTOR3_TOP: Float32Array;
-    static readonly VECTOR3_BOTTOM: Float32Array;
-    static readonly VECTOR3_LEFT: Float32Array;
-    static readonly VECTOR3_RIGHT: Float32Array;
-    static readonly VECTOR3_FRONT: Float32Array;
-    static readonly VECTOR3_BACK: Float32Array;
+    static readonly VECTOR3_ZERO: Vector3;
+    static readonly VECTOR3_ONE: Vector3;
+    static readonly VECTOR3_TOP: Vector3;
+    static readonly VECTOR3_BOTTOM: Vector3;
+    static readonly VECTOR3_LEFT: Vector3;
+    static readonly VECTOR3_RIGHT: Vector3;
+    static readonly VECTOR3_FRONT: Vector3;
+    static readonly VECTOR3_BACK: Vector3;
     static add: (a: Float32Array | IVector3 | number[], b: Float32Array | IVector3 | number[], out?: IVector3) => IVector3;
     static addScalar: (a: Float32Array | IVector3 | number[], b: number, out?: IVector3) => IVector3;
     static angle: (a: Float32Array | IVector3 | number[], b: Float32Array | IVector3 | number[]) => number;
@@ -61,6 +60,7 @@ export default class Vector3 extends Float32Array implements IVector3 {
     static transformMatrix4: (a: Float32Array | IVector3 | number[], m: Float32Array | IVector3 | number[], out?: IVector3) => IVector3;
     static transformQuat: (a: Float32Array | IVector3 | number[], q: Float32Array | IVector3 | number[], out?: IVector3) => IVector3;
     readonly length: 3;
+    readonly dataType: string;
     constructor(x?: number, y?: number, z?: number);
     get x(): number;
     set x(value: number);

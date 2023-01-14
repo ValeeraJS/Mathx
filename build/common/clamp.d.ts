@@ -1,4 +1,3 @@
-declare const _default: (val: number, min: number, max: number) => number;
 /**
  * @function clamp
  * @desc 将目标值限定在指定区间内。假定min小于等于max才能得到正确的结果。
@@ -11,4 +10,5 @@ declare const _default: (val: number, min: number, max: number) => number;
  * Mathx.clamp(-1, 0, 2); // 0;
  * Mathx.clamp(3, 0, 2); // 2;
  */
+declare const _default: (val: number, min: number, max: number) => number;
 export default _default;

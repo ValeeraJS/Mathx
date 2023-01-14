@@ -19,6 +19,7 @@ export default class Cube implements ICube {
     static round: (a: ICube, out?: ICube) => ICube;
     static size: (a: ICube, out?: IVector3) => Float32Array;
     static stretch: (a: ICube, b: Float32Array | number[] | IVector3, c: Float32Array | number[] | IVector3, out?: ICube) => ICube;
+    static surfaceArea: (a: ICube) => number;
     static translate: (a: ICube, b: Float32Array | number[] | IVector3, out?: ICube) => ICube;
     static union: (a: ICube, b: ICube, out?: ICube) => ICube;
     static volume: (a: ICube) => number;

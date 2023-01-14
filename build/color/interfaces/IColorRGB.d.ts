@@ -1,5 +1,5 @@
 import { IPairs3Uint8 } from "../../common/interfaces/IPairs3";
-export declare type IColorRGBData = IPairs3Uint8;
+export type IColorRGBData = IPairs3Uint8;
 export interface IColorRGBJson {
     r: number;
     g: number;

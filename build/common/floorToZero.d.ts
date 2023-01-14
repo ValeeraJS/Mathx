@@ -1,4 +1,3 @@
-declare const _default: (num: number) => number;
 /**
  * @function floorToZero
  * @desc 以0为中心取整
@@ -8,4 +7,5 @@ declare const _default: (num: number) => number;
  * Mathx.roundToZero(-0.8); // 0;
  * Mathx.roundToZero(-1.1); // -1;
  */
+declare const _default: (num: number) => number;
 export default _default;

@@ -1,10 +1,5 @@
-import {
-	add as addVec3,
-	max as maxVec3,
-	min as minVec3,
-	multiply as multiplyVec3
-} from "../vector/Vector3";
-import { boundingBox } from "../shape/Sphere";
+import Vector3 from "../vector/Vector3";
+import Sphere from "../shape/Sphere";
 import ICube from "../shape/interfaces/ICube";
 import ISphere from "../shape/interfaces/ISphere";
 
@@ -23,28 +18,28 @@ export default class Grid3 {
 		this.size = size;
 		this.gridSize = gridSize;
 		this.min = min;
-		this.max = addVec3(multiplyVec3(this.gridSize, this.size), this.min);
+		this.max = Vector3.add(Vector3.multiply(this.gridSize, this.size), this.min);
 	}
 }
 
-let tmpCude: ICube,
-	min3: Float32Array,
-	max3: Float32Array,
-	x: number,
-	y: number,
-	z: number,
-	rr: number,
-	i: number,
-	j: number,
-	k: number,
-	sx: number,
-	sy: number,
-	sz: number;
+let tmpCude: ICube;
+let min3: Vector3 = new Vector3();
+let max3: Vector3 = new Vector3();
+let x: number;
+let y: number;
+let z: number;
+let rr: number;
+let i: number;
+let j: number;
+let k: number;
+let sx: number;
+let sy: number;
+let sz: number;
 
 // 将方块信息转化为格子数组，方块与格子重合部分才会记录信息
 export const dataFromSolidCube = (a: ICube, out: Grid3 = new Grid3()): Grid3 => {
-	maxVec3(a.min, out.min, min3); // 起始遍历位置
-	minVec3(a.max, out.max, max3);
+	Vector3.max(a.min, out.min, min3); // 起始遍历位置
+	Vector3.min(a.max, out.max, max3);
 
 	x = out.gridSize[0];
 	y = out.gridSize[1];
@@ -67,9 +62,9 @@ export const dataFromSolidCube = (a: ICube, out: Grid3 = new Grid3()): Grid3 => 
 
 // 将球信息转化为格子数组，方块与格子重合部分才会记录信息
 export const dataFromSolidSphere = (a: ISphere, out: Grid3 = new Grid3()): Grid3 => {
-	boundingBox(a, tmpCude);
-	maxVec3(tmpCude.min, out.min, min3); // 起始遍历位置
-	minVec3(tmpCude.max, out.max, max3);
+	Sphere.boundingBox(a, tmpCude);
+	Vector3.max(tmpCude.min, out.min, min3); // 起始遍历位置
+	Vector3.min(tmpCude.max, out.max, max3);
 
 	x = out.gridSize[0];
 	y = out.gridSize[1];

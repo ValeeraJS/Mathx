@@ -1,13 +1,14 @@
-import { IPairs4Float32 } from "../common/interfaces/IPairs4";
 export interface IVector4Json {
     x: number;
     y: number;
     z: number;
     w: number;
 }
-export interface IVector4 extends IPairs4Float32, IVector4Json {
+export interface IVector4 extends Float32Array, IVector4Json {
 }
 export default class Vector4 extends Float32Array implements IVector4 {
+    static readonly VECTOR3_ZERO: Vector4;
+    static readonly VECTOR3_ONE: Vector4;
     static add: (a: Float32Array | IVector4 | number[], b: Float32Array | IVector4 | number[], out?: IVector4) => IVector4;
     static ceil: (a: Float32Array | IVector4 | number[], out?: IVector4) => IVector4;
     static closeTo: (a: Float32Array | IVector4 | number[], b: Float32Array | IVector4 | number[]) => boolean;
@@ -32,10 +33,13 @@ export default class Vector4 extends Float32Array implements IVector4 {
     static negate: (a: Float32Array | IVector4 | number[], out?: IVector4) => IVector4;
     static normalize: (a: Float32Array | IVector4 | number[], out?: IVector4) => IVector4;
     static round: (a: Float32Array | IVector4 | number[], out?: IVector4) => IVector4;
+    static set: (x?: number, y?: number, z?: number, w?: number, out?: IVector4) => IVector4;
+    static setNorm: (a: Float32Array | number[] | IVector4, length: number, out?: IVector4) => IVector4;
     static toString: (a: Float32Array | IVector4 | number[]) => string;
     static transformMatrix4: (a: Float32Array | IVector4 | number[], m: Float32Array, out?: IVector4) => IVector4;
     static transformQuat: (a: Float32Array | IVector4 | number[], q: Float32Array | number[], out?: IVector4) => IVector4;
     readonly length: 4;
+    readonly dataType: string;
     constructor(x?: number, y?: number, z?: number, w?: number);
     get x(): number;
     set x(value: number);
