@@ -55,10 +55,10 @@ export default class Triangle2 implements ITriangle2 {
 		out: Float32Array = new Float32Array(2)
 	): Float32Array => {
 		out.set(t.a, 0);
-		out.set(t.b, 3);
-		out.set(t.c, 6);
+		out.set(t.b, 2);
+		out.set(t.c, 4);
 
-		return Vector2.normalize(out);
+		return out;
 	};
 
 	public a: Vector2;

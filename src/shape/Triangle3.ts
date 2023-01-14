@@ -1,4 +1,4 @@
-import Vector3, { IVector3 } from "../vector/Vector3";
+import Vector3, { Vector3Like } from "../vector/Vector3";
 import ITriangle3 from "./interfaces/ITriangle3";
 
 const ab = new Vector3();
@@ -34,7 +34,7 @@ export default class Triangle3 implements ITriangle3 {
 		return Vector3.distanceTo(t.c, t.a);
 	};
 
-	public static normal = (t: ITriangle3, out: IVector3 = Vector3.create()): IVector3 => {
+	public static normal = (t: ITriangle3, out: Vector3Like = Vector3.create()): Vector3Like => {
 		Vector3.minus(t.c, t.b, bc);
 		Vector3.minus(t.b, t.a, ab);
 
@@ -45,13 +45,13 @@ export default class Triangle3 implements ITriangle3 {
 
 	public static toFloat32Array = (
 		t: ITriangle3,
-		out: Float32Array = new Float32Array(3)
+		out: Float32Array = new Float32Array(9)
 	): Float32Array => {
 		out.set(t.a, 0);
 		out.set(t.b, 3);
 		out.set(t.c, 6);
 
-		return Vector3.normalize(out);
+		return out;
 	};
 
 	public a: Vector3;

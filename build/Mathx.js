@@ -3010,18 +3010,6 @@
 	    }
 	    /**
 	     * @public
-	     * @method Mathx.Polar.prototype.toVector2Json
-	     * @desc 将极坐标转化为二维向量的json形式，纯数据
-	     * @param {IVector2} [json] 被修改的json对象，如果不传则会新创建json对象。
-	     * @returns {IVector2} json
-	     */
-	    toVector2Json(vec2) {
-	        vec2[0] = this.x();
-	        vec2[1] = this.y();
-	        return vec2;
-	    }
-	    /**
-	     * @public
 	     * @method Mathx.Polar.prototype.x
 	     * @desc 获取极坐标对应二维向量的x的值
 	     * @returns {number} x
@@ -3909,11 +3897,11 @@
 	        Vector3.cross(ab, bc, out);
 	        return Vector3.normalize(out);
 	    };
-	    static toFloat32Array = (t, out = new Float32Array(3)) => {
+	    static toFloat32Array = (t, out = new Float32Array(9)) => {
 	        out.set(t.a, 0);
 	        out.set(t.b, 3);
 	        out.set(t.c, 6);
-	        return Vector3.normalize(out);
+	        return out;
 	    };
 	    a;
 	    b;

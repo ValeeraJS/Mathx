@@ -116,14 +116,6 @@ export default class Polar implements IPolar {
     toString(): string;
     /**
      * @public
-     * @method Mathx.Polar.prototype.toVector2Json
-     * @desc 将极坐标转化为二维向量的json形式，纯数据
-     * @param {IVector2} [json] 被修改的json对象，如果不传则会新创建json对象。
-     * @returns {IVector2} json
-     */
-    toVector2Json(vec2: Float32Array): Float32Array;
-    /**
-     * @public
      * @method Mathx.Polar.prototype.x
      * @desc 获取极坐标对应二维向量的x的值
      * @returns {number} x
