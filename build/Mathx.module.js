@@ -4006,7 +4006,7 @@ class Vector4 extends Float32Array {
         out[3] = w;
         return out;
     };
-    static cross = (u, v, w, out = new Float32Array(4)) => {
+    static cross = (u, v, w, out = new Vector4(4)) => {
         A = v[0] * w[1] - v[1] * w[0];
         B = v[0] * w[2] - v[2] * w[0];
         C = v[0] * w[3] - v[3] * w[0];
