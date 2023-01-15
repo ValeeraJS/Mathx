@@ -9,6 +9,7 @@ export default class Matrix4 extends Float32Array {
     static fromArray: (source: Matrix4 | Float32Array | number[], out?: Matrix4) => Matrix4;
     static fromEuler: (euler: IEulerAngle, out?: Matrix4) => Matrix4;
     static fromMatrix3: (data: Float32Array | number[] | Matrix3, out?: Matrix4) => Matrix4;
+    static fromMatrix3MVP: (data: Float32Array | number[] | Matrix3, out?: Matrix4) => Matrix4;
     static fromQuaternion: (q: Float32Array, out?: Matrix4) => Matrix4;
     static fromRotation: (rad: number, axis: Float32Array | number[] | IVector3, out?: Matrix4) => Matrix4 | null;
     static fromRotationX: (rad: number, out?: Matrix4) => Matrix4;

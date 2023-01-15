@@ -55,7 +55,7 @@ export default class Polar extends Float32Array implements IPolar {
 	 * @default 0
 	 */
 	public constructor(r = 0, a = 0) {
-		super();
+		super(2);
 		this.r = r;
 		this.a = a;
 	}

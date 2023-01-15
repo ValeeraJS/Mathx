@@ -265,6 +265,33 @@ export default class Matrix4 extends Float32Array {
 		return out;
 	};
 
+	public static fromMatrix3MVP = (
+		data: Float32Array | number[] | Matrix3,
+		out = new Matrix4()
+	): Matrix4 => {
+		out[0] = data[0];
+		out[1] = data[1];
+		out[2] = 0;
+		out[3] = 0;
+
+		out[4] = data[3];
+		out[5] = data[4];
+		out[6] = 0;
+		out[7] = 0;
+
+		out[8] = 0;
+		out[9] = 0;
+		out[10] = 1;
+		out[11] = 0;
+
+		out[12] = data[6];
+		out[13] = data[7];
+		out[14] = 0;
+		out[15] = 1;
+
+		return out;
+	};
+
 	public static fromQuaternion = (q: Float32Array, out: Matrix4 = new Matrix4()): Matrix4 => {
 		const x = q[0],
 			y = q[1],

@@ -2021,6 +2021,25 @@ class Matrix4 extends Float32Array {
         out[15] = 1;
         return out;
     };
+    static fromMatrix3MVP = (data, out = new Matrix4()) => {
+        out[0] = data[0];
+        out[1] = data[1];
+        out[2] = 0;
+        out[3] = 0;
+        out[4] = data[3];
+        out[5] = data[4];
+        out[6] = 0;
+        out[7] = 0;
+        out[8] = 0;
+        out[9] = 0;
+        out[10] = 1;
+        out[11] = 0;
+        out[12] = data[6];
+        out[13] = data[7];
+        out[14] = 0;
+        out[15] = 1;
+        return out;
+    };
     static fromQuaternion = (q, out = new Matrix4()) => {
         const x = q[0], y = q[1], z = q[2], w = q[3];
         const x2 = x + x;
@@ -2904,7 +2923,7 @@ class Polar extends Float32Array {
      * @default 0
      */
     constructor(r = 0, a = 0) {
-        super();
+        super(2);
         this.r = r;
         this.a = a;
     }
