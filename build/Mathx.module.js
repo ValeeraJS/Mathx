@@ -2861,7 +2861,7 @@ let x$1, y$1;
  * @param {number} [r=0] | 距离极点距离
  * @param {number} [a=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
  */
-class Polar {
+class Polar extends Float32Array {
     /**
      * @public
      * @method create
@@ -2874,8 +2874,22 @@ class Polar {
     static create(r = 0, a = 0) {
         return new Polar(r, a);
     }
-    a;
-    r;
+    get a() {
+        return this[1];
+    }
+    ;
+    set a(v) {
+        this[1] = v;
+    }
+    ;
+    get r() {
+        return this[0];
+    }
+    ;
+    set r(v) {
+        this[0] = v;
+    }
+    ;
     dataType = ArraybufferDataType.POLAR;
     /**
      * @public
@@ -2890,6 +2904,7 @@ class Polar {
      * @default 0
      */
     constructor(r = 0, a = 0) {
+        super();
         this.r = r;
         this.a = a;
     }
@@ -2945,19 +2960,6 @@ class Polar {
      */
     lengthManhattan() {
         return (Math.cos(this.a) + Math.sin(this.a)) * this.r;
-    }
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.set
-     * @desc 设置极坐标值
-     * @param {number} [r=0] 距离
-     * @param {number} [a=0] 弧度
-     * @returns {number} this
-     */
-    set(r = 0, a = 0) {
-        this.r = r;
-        this.a = a;
-        return this;
     }
     /**
      * @public

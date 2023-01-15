@@ -8,7 +8,7 @@ import IPolar from "./interfaces/IPolar";
  * @param {number} [r=0] | 距离极点距离
  * @param {number} [a=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
  */
-export default class Polar implements IPolar {
+export default class Polar extends Float32Array implements IPolar {
     /**
      * @public
      * @method create
@@ -19,8 +19,10 @@ export default class Polar implements IPolar {
      * @returns {Mathx.Polar} 新的极坐标实例
      */
     static create(r?: number, a?: number): Polar;
-    a: number;
-    r: number;
+    get a(): number;
+    set a(v: number);
+    get r(): number;
+    set r(v: number);
     readonly dataType: string;
     /**
      * @public
@@ -74,15 +76,6 @@ export default class Polar implements IPolar {
      * @returns {number} 曼哈顿距离
      */
     lengthManhattan(): number;
-    /**
-     * @public
-     * @method Mathx.Polar.prototype.set
-     * @desc 设置极坐标值
-     * @param {number} [r=0] 距离
-     * @param {number} [a=0] 弧度
-     * @returns {number} this
-     */
-    set(r?: number, a?: number): this;
     /**
      * @public
      * @method Mathx.Polar.prototype.setA
