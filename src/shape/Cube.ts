@@ -1,4 +1,4 @@
-import Vector3, { IVector3 } from "../vector/Vector3";
+import Vector3, { IVector3, Vector3Like } from "../vector/Vector3";
 import ICube from "./interfaces/ICube";
 import ISphere from "./interfaces/ISphere";
 import ITriangle3 from "./interfaces/ITriangle3";
@@ -21,8 +21,8 @@ export default class Cube implements ICube {
 	public static clampPoint = (
 		a: ICube,
 		point: Float32Array | number[] | IVector3,
-		out: IVector3 = new Vector3()
-	): IVector3 => {
+		out: Vector3Like = new Vector3()
+	): Vector3Like => {
 		return Vector3.clamp(point, a.min, a.max, out);
 	};
 
@@ -56,13 +56,13 @@ export default class Cube implements ICube {
 		return Vector3.equals(a.min, b.min) && Vector3.equals(a.max, b.max);
 	};
 
-	public static getCenter = (a: ICube, out: IVector3 = new Vector3()): IVector3 => {
+	public static getCenter = (a: ICube, out: Vector3Like = new Vector3()): Vector3Like => {
 		Vector3.add(a.min, a.max, out);
 
 		return Vector3.multiplyScalar(out, 0.5, out);
 	};
 
-	public static getSize = (a: ICube, out: IVector3 = new Vector3()): Float32Array => {
+	public static getSize = (a: ICube, out: Vector3Like = new Vector3()): Vector3Like => {
 		return Vector3.minus(a.max, a.min, out);
 	};
 
@@ -177,7 +177,7 @@ export default class Cube implements ICube {
 		return out;
 	};
 
-	public static size = (a: ICube, out: IVector3 = new Vector3()): Float32Array => {
+	public static size = (a: ICube, out: Vector3Like = new Vector3()): Vector3Like => {
 		return Vector3.minus(a.max, a.min, out);
 	};
 
@@ -227,7 +227,7 @@ export default class Cube implements ICube {
 
 	public min: IVector3 = new Vector3();
 	public max: IVector3 = new Vector3();
-	public constructor(a: IVector3 = new Vector3(), b: IVector3 = Vector3.fromArray(defaultMax)) {
+	public constructor(a: IVector3 = new Vector3(), b: Vector3Like = Vector3.fromArray(defaultMax)) {
 		Vector3.min(a, b, this.min);
 		Vector3.max(a, b, this.max);
 	}

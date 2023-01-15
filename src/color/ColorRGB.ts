@@ -2,6 +2,16 @@ import IColorRGB, { IColorRGBJson } from "./interfaces/IColorRGB";
 import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import { IColorRGBAJson } from ".";
 import ArraybufferDataType from "../ArraybufferDataType";
+import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
+
+function hue2rgb(p: number, q: number, t: number): number {
+	if (t < 0) t += 1;
+	if (t > 1) t -= 1;
+	if (t < 1 / 6) return p + (q - p) * 6 * t;
+	if (t < 1 / 2) return q;
+	if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+	return p;
+}
 
 export default class ColorRGB extends Uint8Array implements IColorRGB {
 	public static average = (color: IColorRGB): number => {
@@ -10,9 +20,9 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 
 	public static averageWeighted = (
 		color: IColorRGB | ArrayLike<number>,
-		wr = 0.299,
-		wg = 0.587,
-		wb = 0.114
+		wr = WEIGHT_GRAY_RED,
+		wg = WEIGHT_GRAY_GREEN,
+		wb = WEIGHT_GRAY_BLUE
 	): number => {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
@@ -51,6 +61,26 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 
 		return out;
 	};
+
+	public static fromHSL = (h: number, s: number, l: number, out = new ColorRGB) => {
+		var r, g, b;
+
+		if (s === 0) {
+			r = g = b = l; // achromatic
+		} else {
+			var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+			var p = 2 * l - q;
+			r = hue2rgb(p, q, h + 1 / 3);
+			g = hue2rgb(p, q, h);
+			b = hue2rgb(p, q, h - 1 / 3);
+		}
+
+		out[0] = r;
+		out[1] = g;
+		out[2] = b;
+
+		return out;
+	}
 
 	public static fromJson = (
 		json: IColorRGBJson | IColorRGBAJson,
@@ -92,9 +122,9 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 
 	public static grayscale = (
 		color: IColorRGB | ArrayLike<number>,
-		wr = 0.299,
-		wg = 0.587,
-		wb = 0.114,
+		wr = WEIGHT_GRAY_RED,
+		wg = WEIGHT_GRAY_GREEN,
+		wb = WEIGHT_GRAY_BLUE,
 		out: IColorRGB = new ColorRGB()
 	): IColorRGB => {
 		const gray = ColorRGB.averageWeighted(color, wr, wg, wb);

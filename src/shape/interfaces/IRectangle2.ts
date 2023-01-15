@@ -1,6 +1,6 @@
-import { IVector2 } from "../../vector/Vector2";
+import { Vector3Like } from "../../vector/Vector3";
 
 export default interface IRectangle2 {
-	min: IVector2;
-	max: IVector2;
+	min: Vector3Like;
+	max: Vector3Like;
 }

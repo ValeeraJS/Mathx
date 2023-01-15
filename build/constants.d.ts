@@ -6,3 +6,6 @@ export declare const DEG_45_RAD: number;
 export declare const DEG_30_RAD: number;
 export declare const EPSILON: number;
 export declare const RAD_TO_DEG: number;
+export declare const WEIGHT_GRAY_RED = 0.299;
+export declare const WEIGHT_GRAY_GREEN = 0.587;
+export declare const WEIGHT_GRAY_BLUE = 0.114;

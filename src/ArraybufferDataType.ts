@@ -2,6 +2,8 @@ const ArraybufferDataType = {
 	COLOR_GPU: "col",
 	COLOR_RGB: "col_rgb",
 	COLOR_RGBA: "col_rgba",
+	COLOR_HSL: "col_hsl",
+	COLOR_HSLA: "col_hsla",
 	EULER: "euler",
 	MATRIX2: "mat2",
 	MATRIX3: "mat3",

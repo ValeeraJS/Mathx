@@ -253,8 +253,8 @@ export default class Vector2 extends Float32Array implements IVector2 {
 	public static max = (
 		a: Vector2Like,
 		b: Vector2Like,
-		out: IVector2 = new Vector2()
-	): IVector2 => {
+		out: Vector2Like = new Vector2()
+	): Vector2Like => {
 		out[0] = Math.max(a[0], b[0]);
 		out[1] = Math.max(a[1], b[1]);
 

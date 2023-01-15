@@ -45,7 +45,7 @@ export default class Vector2 extends Float32Array implements IVector2 {
     static lengthManhattan: (a: Vector2Like) => number;
     static lengthSquared: (a: Vector2Like) => number;
     static lerp: (a: Vector2Like, b: Vector2Like, alpha: number, out?: Vector2Like) => Vector2Like;
-    static max: (a: Vector2Like, b: Vector2Like, out?: IVector2) => IVector2;
+    static max: (a: Vector2Like, b: Vector2Like, out?: Vector2Like) => Vector2Like;
     static min: (a: Vector2Like, b: Vector2Like, out?: Vector2Like) => Vector2Like;
     static minus: (a: Vector2Like, b: Vector2Like, out?: Vector2Like) => Vector2Like;
     static minusScalar: (a: Vector2Like, num: number, out?: Vector2Like) => Vector2Like;

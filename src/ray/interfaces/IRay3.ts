@@ -1,6 +1,6 @@
-import { IVector3 } from "../../vector/Vector3";
+import { Vector3Like } from "../../vector/Vector3";
 
 export default interface IRay {
-	position: IVector3;
-	direction: IVector3;
+	position: Vector3Like;
+	direction: Vector3Like;
 }

@@ -8,6 +8,7 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
     static equals: (a: IColorRGB, b: IColorRGB) => boolean;
     static fromArray: (arr: ArrayLike<number>, out?: IColorRGB) => IColorRGB;
     static fromHex: (hex: number, out?: IColorRGB) => IColorRGB;
+    static fromHSL: (h: number, s: number, l: number, out?: ColorRGB) => ColorRGB;
     static fromJson: (json: IColorRGBJson | IColorRGBAJson, out?: IColorRGB) => IColorRGB;
     static fromScalar: (scalar: number, out?: IColorRGB) => IColorRGB;
     static fromString: (str: string, out?: IColorRGB) => IColorRGB;

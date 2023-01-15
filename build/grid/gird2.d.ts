@@ -1,8 +1,9 @@
+import { Vector2Like } from "../vector/Vector2";
 export default class Grid2 {
-    data: Float32Array[];
-    gridSize: Float32Array;
-    min: Float32Array;
-    size: Float32Array;
-    max: Float32Array;
-    constructor(size?: Float32Array, gridSize?: Float32Array, min?: Float32Array);
+    data: Vector2Like[];
+    gridSize: Vector2Like;
+    min: Vector2Like;
+    size: Vector2Like;
+    max: Vector2Like;
+    constructor(size?: Vector2Like, gridSize?: Vector2Like, min?: Vector2Like);
 }

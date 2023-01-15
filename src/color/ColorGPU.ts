@@ -3,6 +3,7 @@ import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGB from "./interfaces/IColorRGB";
 import IColorRGBA from "./interfaces/IColorRGBA";
 import ArraybufferDataType from "../ArraybufferDataType";
+import { WEIGHT_GRAY_BLUE, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_RED } from "../constants";
 
 export default class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
@@ -11,9 +12,9 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 
 	public static averageWeighted = (
 		color: IColorGPU | ArrayLike<number>,
-		wr = 0.299,
-		wg = 0.587,
-		wb = 0.114
+		wr = WEIGHT_GRAY_RED,
+		wg = WEIGHT_GRAY_GREEN,
+		wb = WEIGHT_GRAY_BLUE
 	): number => {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
@@ -122,9 +123,9 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 
 	public static grayscale = (
 		color: IColorGPU | ArrayLike<number>,
-		wr = 0.299,
-		wg = 0.587,
-		wb = 0.114,
+		wr = WEIGHT_GRAY_RED,
+		wg = WEIGHT_GRAY_GREEN,
+		wb = WEIGHT_GRAY_BLUE,
 		out: IColorGPU = new ColorGPU()
 	): IColorGPU => {
 		const gray = ColorGPU.averageWeighted(color, wr, wg, wb);

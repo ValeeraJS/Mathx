@@ -1,4 +1,5 @@
 import Vector2, { IVector2 } from "../vector/Vector2";
+import { Vector2Like } from "../vector/Vector2";
 import IRectangle2 from "./interfaces/IRectangle2";
 
 export default class Rectangle2 implements IRectangle2 {
@@ -22,8 +23,8 @@ export default class Rectangle2 implements IRectangle2 {
 	};
 
 	public static create = (
-		a: Float32Array = Vector2.create(),
-		b: Float32Array = Vector2.create(1, 1)
+		a: Vector2Like = Vector2.create(),
+		b: Vector2Like = Vector2.create(1, 1)
 	): IRectangle2 => {
 		return {
 			max: Vector2.max(a, b),
@@ -35,13 +36,13 @@ export default class Rectangle2 implements IRectangle2 {
 		return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
 	};
 
-	public static getCenter = (a: IRectangle2, out: IVector2 = Vector2.create()): IVector2 => {
+	public static getCenter = (a: IRectangle2, out: Vector2Like = Vector2.create()): Vector2Like => {
 		Vector2.add(a.min, a.max, out);
 
 		return Vector2.multiplyScalar(out, 0.5, out);
 	};
 
-	public static getSize = (a: IRectangle2, out: IVector2 = Vector2.create()): IVector2 => {
+	public static getSize = (a: IRectangle2, out: Vector2Like = Vector2.create()): Vector2Like => {
 		return Vector2.minus(a.max, a.min, out);
 	};
 
@@ -98,11 +99,11 @@ export default class Rectangle2 implements IRectangle2 {
 		return a.max[0] - a.min[0];
 	};
 
-	public min: IVector2 = Vector2.create();
-	public max: IVector2 = Vector2.create();
+	public min: Vector2Like = Vector2.create();
+	public max: Vector2Like = Vector2.create();
 	public constructor(
-		a: IVector2 | Float32Array | number[] = Vector2.create(),
-		b: IVector2 | Float32Array | number[] = Vector2.create(1, 1)
+		a: Vector2Like = Vector2.create(),
+		b: Vector2Like = Vector2.create(1, 1)
 	) {
 		Vector2.min(a, b, this.min);
 		Vector2.max(a, b, this.max);

@@ -12,6 +12,9 @@
 	const DEG_30_RAD = Math.PI / 6;
 	const EPSILON = Math.pow(2, -52);
 	const RAD_TO_DEG = 180 / Math.PI;
+	const WEIGHT_GRAY_RED = 0.299;
+	const WEIGHT_GRAY_GREEN = 0.587;
+	const WEIGHT_GRAY_BLUE = 0.114;
 
 	var constants = /*#__PURE__*/Object.freeze({
 		__proto__: null,
@@ -22,7 +25,10 @@
 		DEG_90_RAD: DEG_90_RAD,
 		DEG_TO_RAD: DEG_TO_RAD,
 		EPSILON: EPSILON,
-		RAD_TO_DEG: RAD_TO_DEG
+		RAD_TO_DEG: RAD_TO_DEG,
+		WEIGHT_GRAY_BLUE: WEIGHT_GRAY_BLUE,
+		WEIGHT_GRAY_GREEN: WEIGHT_GRAY_GREEN,
+		WEIGHT_GRAY_RED: WEIGHT_GRAY_RED
 	});
 
 	const COLOR_HEX_MAP = {
@@ -180,6 +186,8 @@
 	    COLOR_GPU: "col",
 	    COLOR_RGB: "col_rgb",
 	    COLOR_RGBA: "col_rgba",
+	    COLOR_HSL: "col_hsl",
+	    COLOR_HSLA: "col_hsla",
 	    EULER: "euler",
 	    MATRIX2: "mat2",
 	    MATRIX3: "mat3",
@@ -195,7 +203,7 @@
 	    static average = (color) => {
 	        return (color[0] + color[1] + color[2]) / 3;
 	    };
-	    static averageWeighted = (color, wr = 0.299, wg = 0.587, wb = 0.114) => {
+	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
 	        return color[0] * wr + color[1] * wg + color[2] * wb;
 	    };
 	    static clone = (color) => {
@@ -256,7 +264,7 @@
 	        }
 	        return out;
 	    };
-	    static grayscale = (color, wr = 0.299, wg = 0.587, wb = 0.114, out = new ColorRGBA()) => {
+	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorRGBA()) => {
 	        const gray = ColorRGBA.averageWeighted(color, wr, wg, wb);
 	        ColorRGBA.fromScalar(gray, color[3], out);
 	        return out;
@@ -296,11 +304,24 @@
 	    }
 	}
 
+	function hue2rgb(p, q, t) {
+	    if (t < 0)
+	        t += 1;
+	    if (t > 1)
+	        t -= 1;
+	    if (t < 1 / 6)
+	        return p + (q - p) * 6 * t;
+	    if (t < 1 / 2)
+	        return q;
+	    if (t < 2 / 3)
+	        return p + (q - p) * (2 / 3 - t) * 6;
+	    return p;
+	}
 	class ColorRGB extends Uint8Array {
 	    static average = (color) => {
 	        return (color[0] + color[1] + color[2]) / 3;
 	    };
-	    static averageWeighted = (color, wr = 0.299, wg = 0.587, wb = 0.114) => {
+	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
 	        return color[0] * wr + color[1] * wg + color[2] * wb;
 	    };
 	    static clone = (color) => {
@@ -324,6 +345,23 @@
 	        out[0] = hex >> 16;
 	        out[1] = (hex >> 8) & 255;
 	        out[2] = hex & 255;
+	        return out;
+	    };
+	    static fromHSL = (h, s, l, out = new ColorRGB) => {
+	        var r, g, b;
+	        if (s === 0) {
+	            r = g = b = l; // achromatic
+	        }
+	        else {
+	            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	            var p = 2 * l - q;
+	            r = hue2rgb(p, q, h + 1 / 3);
+	            g = hue2rgb(p, q, h);
+	            b = hue2rgb(p, q, h - 1 / 3);
+	        }
+	        out[0] = r;
+	        out[1] = g;
+	        out[2] = b;
 	        return out;
 	    };
 	    static fromJson = (json, out = new ColorRGB()) => {
@@ -355,7 +393,7 @@
 	        }
 	        return out;
 	    };
-	    static grayscale = (color, wr = 0.299, wg = 0.587, wb = 0.114, out = new ColorRGB()) => {
+	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorRGB()) => {
 	        const gray = ColorRGB.averageWeighted(color, wr, wg, wb);
 	        ColorRGB.fromScalar(gray, out);
 	        return out;
@@ -392,7 +430,7 @@
 	    static average = (color) => {
 	        return (color[0] + color[1] + color[2]) / 3;
 	    };
-	    static averageWeighted = (color, wr = 0.299, wg = 0.587, wb = 0.114) => {
+	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
 	        return color[0] * wr + color[1] * wg + color[2] * wb;
 	    };
 	    static clone = (color) => {
@@ -465,7 +503,7 @@
 	        }
 	        return out;
 	    };
-	    static grayscale = (color, wr = 0.299, wg = 0.587, wb = 0.114, out = new ColorGPU()) => {
+	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorGPU()) => {
 	        const gray = ColorGPU.averageWeighted(color, wr, wg, wb);
 	        ColorGPU.fromScalar(gray, out);
 	        return out;

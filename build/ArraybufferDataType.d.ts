@@ -2,6 +2,8 @@ declare const ArraybufferDataType: {
     COLOR_GPU: string;
     COLOR_RGB: string;
     COLOR_RGBA: string;
+    COLOR_HSL: string;
+    COLOR_HSLA: string;
     EULER: string;
     MATRIX2: string;
     MATRIX3: string;

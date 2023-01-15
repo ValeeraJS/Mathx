@@ -2,6 +2,7 @@ import IColorRGBA, { IColorRGBAJson } from "./interfaces/IColorRGBA";
 import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGB from "./interfaces/IColorRGB";
 import ArraybufferDataType from "../ArraybufferDataType";
+import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
 
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	public static average = (color: IColorRGB | IColorRGBA): number => {
@@ -10,9 +11,9 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 
 	public static averageWeighted = (
 		color: IColorRGB | IColorRGBA | ArrayLike<number>,
-		wr = 0.299,
-		wg = 0.587,
-		wb = 0.114
+		wr = WEIGHT_GRAY_RED,
+		wg = WEIGHT_GRAY_GREEN,
+		wb = WEIGHT_GRAY_BLUE
 	): number => {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
@@ -106,9 +107,9 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 
 	public static grayscale = (
 		color: IColorRGBA | ArrayLike<number>,
-		wr = 0.299,
-		wg = 0.587,
-		wb = 0.114,
+		wr = WEIGHT_GRAY_RED,
+		wg = WEIGHT_GRAY_GREEN,
+		wb = WEIGHT_GRAY_BLUE,
 		out: IColorRGBA = new ColorRGBA()
 	): IColorRGBA => {
 		const gray = ColorRGBA.averageWeighted(color, wr, wg, wb);

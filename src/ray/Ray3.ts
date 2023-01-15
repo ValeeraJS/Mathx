@@ -1,4 +1,4 @@
-import Vector3, { IVector3 } from "../vector/Vector3";
+import Vector3, { Vector3Like } from "../vector/Vector3";
 import IRay3 from "./interfaces/IRay3";
 import ISphere from "../shape/interfaces/ISphere";
 
@@ -6,15 +6,15 @@ let dis: number, r2: number, d2: number;
 const v = new Vector3();
 
 export default class Ray3 implements IRay3 {
-	public static at = (a: IRay3, b: number, out: IVector3 = new Vector3()): IVector3 => {
+	public static at = (a: IRay3, b: number, out: Vector3Like = new Vector3()): Vector3Like => {
 		return Vector3.multiplyScalar(a.direction, b, out);
 	};
 
-	public static distanceToPoint = (a: IRay3, point: IVector3): number => {
+	public static distanceToPoint = (a: IRay3, point: Vector3Like): number => {
 		return Math.sqrt(Ray3.distanceSqToPoint(a, point));
 	};
 
-	public static distanceSqToPoint = (a: IRay3, point: IVector3): number => {
+	public static distanceSqToPoint = (a: IRay3, point: Vector3Like): number => {
 		Vector3.minus(point, a.position, v);
 		dis = Vector3.dot(v, a.direction);
 
@@ -28,7 +28,7 @@ export default class Ray3 implements IRay3 {
 		return Vector3.distanceToSquared(v, point);
 	};
 
-	public static lookAt = (a: IRay3, b: IVector3, out: IRay3 = new Ray3()): IRay3 => {
+	public static lookAt = (a: IRay3, b: Vector3Like, out: IRay3 = new Ray3()): IRay3 => {
 		if (a !== out) {
 			Vector3.fromArray(a.position, 0, out.position);
 		}
@@ -41,8 +41,8 @@ export default class Ray3 implements IRay3 {
 	public static intersectSphere = (
 		ray: IRay3,
 		sphere: ISphere,
-		target: IVector3
-	): null | IVector3 => {
+		target: Vector3Like
+	): null | Vector3Like => {
 		Vector3.minus(sphere.position, ray.position, v);
 		dis = Vector3.dot(v, ray.direction);
 		d2 = Vector3.dot(v, v) - dis * dis;
@@ -67,11 +67,11 @@ export default class Ray3 implements IRay3 {
 		return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
 	};
 
-	public position: IVector3;
-	public direction: IVector3;
+	public position: Vector3Like;
+	public direction: Vector3Like;
 	public constructor(
-		position: IVector3 = new Vector3(),
-		direction: IVector3 = new Vector3(0, 0, -1)
+		position: Vector3Like = new Vector3(),
+		direction: Vector3Like = new Vector3(0, 0, -1)
 	) {
 		this.position = position;
 		this.direction = Vector3.normalize(direction);
