@@ -193,6 +193,64 @@ const ArraybufferDataType = {
     VECTOR4: "vec4"
 };
 
+let max = 0, min = 0;
+let h = 0, s$4 = 0, l = 0;
+class ColorHSL extends Uint8Array {
+    dataType = ArraybufferDataType.COLOR_HSL;
+    static fromRGBUnsignedNormal(r, g, b, out = new ColorHSL()) {
+        max = Math.max(r, g, b);
+        min = Math.min(r, g, b);
+        l = (max + min) / 2;
+        if (max === min) {
+            h = s$4 = 0;
+        }
+        else {
+            let d = max - min;
+            s$4 = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+        out[0] = h;
+        out[1] = s$4;
+        out[2] = l;
+        return out;
+    }
+    constructor(h = 0, s = 0, l = 0) {
+        super(3);
+        this[0] = h;
+        this[1] = s;
+        this[2] = l;
+    }
+    get h() {
+        return this[0];
+    }
+    set h(val) {
+        this[0] = val;
+    }
+    get s() {
+        return this[1];
+    }
+    set s(val) {
+        this[1] = val;
+    }
+    get l() {
+        return this[2];
+    }
+    set l(val) {
+        this[2] = val;
+    }
+}
+
 class ColorRGBA extends Uint8Array {
     static average = (color) => {
         return (color[0] + color[1] + color[2]) / 3;
@@ -4332,4 +4390,4 @@ class Vector4 extends Float32Array {
     }
 }
 
-export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Matrix2, Matrix3, Matrix4, Polar, Quaternion, Ray3, Rectangle2, Sphere, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorHSL, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Matrix2, Matrix3, Matrix4, Polar, Quaternion, Ray3, Rectangle2, Sphere, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clampCommon as clamp, clampCircle, clampSafeCommon as clampSafe, closeToCommon as closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

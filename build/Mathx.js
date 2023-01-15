@@ -199,6 +199,64 @@
 	    VECTOR4: "vec4"
 	};
 
+	let max = 0, min = 0;
+	let h = 0, s$4 = 0, l = 0;
+	class ColorHSL extends Uint8Array {
+	    dataType = ArraybufferDataType.COLOR_HSL;
+	    static fromRGBUnsignedNormal(r, g, b, out = new ColorHSL()) {
+	        max = Math.max(r, g, b);
+	        min = Math.min(r, g, b);
+	        l = (max + min) / 2;
+	        if (max === min) {
+	            h = s$4 = 0;
+	        }
+	        else {
+	            let d = max - min;
+	            s$4 = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+	            switch (max) {
+	                case r:
+	                    h = (g - b) / d + (g < b ? 6 : 0);
+	                    break;
+	                case g:
+	                    h = (b - r) / d + 2;
+	                    break;
+	                case b:
+	                    h = (r - g) / d + 4;
+	                    break;
+	            }
+	            h /= 6;
+	        }
+	        out[0] = h;
+	        out[1] = s$4;
+	        out[2] = l;
+	        return out;
+	    }
+	    constructor(h = 0, s = 0, l = 0) {
+	        super(3);
+	        this[0] = h;
+	        this[1] = s;
+	        this[2] = l;
+	    }
+	    get h() {
+	        return this[0];
+	    }
+	    set h(val) {
+	        this[0] = val;
+	    }
+	    get s() {
+	        return this[1];
+	    }
+	    set s(val) {
+	        this[1] = val;
+	    }
+	    get l() {
+	        return this[2];
+	    }
+	    set l(val) {
+	        this[2] = val;
+	    }
+	}
+
 	class ColorRGBA extends Uint8Array {
 	    static average = (color) => {
 	        return (color[0] + color[1] + color[2]) / 3;
@@ -4341,6 +4399,7 @@
 	exports.ArraybufferDataType = ArraybufferDataType;
 	exports.COLOR_HEX_MAP = COLOR_HEX_MAP;
 	exports.ColorGPU = ColorGPU;
+	exports.ColorHSL = ColorHSL;
 	exports.ColorRGB = ColorRGB;
 	exports.ColorRGBA = ColorRGBA;
 	exports.Constants = constants;
