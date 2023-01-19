@@ -8,11 +8,11 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
     static equals: (a: IColorRGBA, b: IColorRGBA) => boolean;
     static fromArray: (arr: ArrayLike<number>, out?: IColorRGBA) => IColorRGBA;
     static fromHex: (hex: number, alpha?: number, out?: IColorRGBA) => IColorRGBA;
+    static fromHSL: (h: number, s: number, l: number, out?: ColorRGBA) => ColorRGBA;
     static fromJson: (json: IColorRGBAJson, out?: IColorRGBA) => IColorRGBA;
     static fromScalar: (scalar: number, alpha?: number, out?: IColorRGBA) => IColorRGBA;
     static fromString: (str: string, out?: IColorRGBA) => IColorRGBA;
     static grayscale: (color: IColorRGBA | ArrayLike<number>, wr?: number, wg?: number, wb?: number, out?: IColorRGBA) => IColorRGBA;
-    length: 4;
     readonly dataType: string;
     constructor(r?: number, g?: number, b?: number, a?: number);
     get r(): number;

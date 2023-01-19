@@ -251,6 +251,20 @@ class ColorHSL extends Uint8Array {
     }
 }
 
+function hue2rgb(p, q, t) {
+    if (t < 0)
+        t += 1;
+    if (t > 1)
+        t -= 1;
+    if (t < 1 / 6)
+        return p + (q - p) * 6 * t;
+    if (t < 1 / 2)
+        return q;
+    if (t < 2 / 3)
+        return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+}
+
 class ColorRGBA extends Uint8Array {
     static average = (color) => {
         return (color[0] + color[1] + color[2]) / 3;
@@ -282,6 +296,24 @@ class ColorRGBA extends Uint8Array {
         out[1] = (hex >> 8) & 255;
         out[2] = hex & 255;
         out[3] = alpha;
+        return out;
+    };
+    static fromHSL = (h, s, l, out = new ColorRGBA) => {
+        var r, g, b;
+        if (s === 0) {
+            r = g = b = l; // achromatic
+        }
+        else {
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1 / 3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1 / 3);
+        }
+        out[0] = Math.round(r * 255);
+        out[1] = Math.round(g * 255);
+        out[2] = Math.round(b * 255);
+        out[3] = 255;
         return out;
     };
     static fromJson = (json, out = new ColorRGBA()) => {
@@ -321,9 +353,8 @@ class ColorRGBA extends Uint8Array {
         ColorRGBA.fromScalar(gray, color[3], out);
         return out;
     };
-    length;
     dataType = ArraybufferDataType.COLOR_RGBA;
-    constructor(r = 0, g = 0, b = 0, a = 1) {
+    constructor(r = 0, g = 0, b = 0, a = 255) {
         super(4);
         this[0] = r;
         this[1] = g;
@@ -349,26 +380,13 @@ class ColorRGBA extends Uint8Array {
         this[2] = val;
     }
     get a() {
-        return this[4];
+        return this[3];
     }
     set a(val) {
-        this[4] = val;
+        this[3] = val;
     }
 }
 
-function hue2rgb(p, q, t) {
-    if (t < 0)
-        t += 1;
-    if (t > 1)
-        t -= 1;
-    if (t < 1 / 6)
-        return p + (q - p) * 6 * t;
-    if (t < 1 / 2)
-        return q;
-    if (t < 2 / 3)
-        return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-}
 class ColorRGB extends Uint8Array {
     static average = (color) => {
         return (color[0] + color[1] + color[2]) / 3;
@@ -411,9 +429,9 @@ class ColorRGB extends Uint8Array {
             g = hue2rgb(p, q, h);
             b = hue2rgb(p, q, h - 1 / 3);
         }
-        out[0] = r;
-        out[1] = g;
-        out[2] = b;
+        out[0] = Math.round(r * 255);
+        out[1] = Math.round(g * 255);
+        out[2] = Math.round(b * 255);
         return out;
     };
     static fromJson = (json, out = new ColorRGB()) => {
@@ -450,7 +468,6 @@ class ColorRGB extends Uint8Array {
         ColorRGB.fromScalar(gray, out);
         return out;
     };
-    length;
     dataType = ArraybufferDataType.COLOR_RGB;
     constructor(r = 0, g = 0, b = 0) {
         super(3);
@@ -502,6 +519,23 @@ class ColorGPU extends Float32Array {
         out[1] = arr[1];
         out[2] = arr[2];
         out[3] = arr[3];
+        return out;
+    };
+    static fromColorHSL = (h, s, l, out = new ColorGPU) => {
+        var r, g, b;
+        if (s === 0) {
+            r = g = b = l; // achromatic
+        }
+        else {
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1 / 3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1 / 3);
+        }
+        out[0] = r;
+        out[1] = g;
+        out[2] = b;
         return out;
     };
     static fromColorRGB(color, out = new ColorGPU()) {
@@ -560,7 +594,6 @@ class ColorGPU extends Float32Array {
         ColorGPU.fromScalar(gray, out);
         return out;
     };
-    length;
     dataType = ArraybufferDataType.COLOR_GPU;
     constructor(r = 0, g = 0, b = 0, a = 0) {
         super(4);

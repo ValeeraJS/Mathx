@@ -4,6 +4,7 @@ import IColorRGB from "./interfaces/IColorRGB";
 import IColorRGBA from "./interfaces/IColorRGBA";
 import ArraybufferDataType from "../ArraybufferDataType";
 import { WEIGHT_GRAY_BLUE, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_RED } from "../constants";
+import { hue2rgb } from "./hue2color";
 
 export default class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
@@ -47,6 +48,26 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 
 		return out;
 	};
+
+	public static fromColorHSL = (h: number, s: number, l: number, out = new ColorGPU) => {
+		var r, g, b;
+
+		if (s === 0) {
+			r = g = b = l; // achromatic
+		} else {
+			var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+			var p = 2 * l - q;
+			r = hue2rgb(p, q, h + 1 / 3);
+			g = hue2rgb(p, q, h);
+			b = hue2rgb(p, q, h - 1 / 3);
+		}
+
+		out[0] = r;
+		out[1] = g;
+		out[2] = b;
+
+		return out;
+	}
 
 	public static fromColorRGB(
 		color: IColorRGB | number[] | Uint8Array,
@@ -135,7 +156,6 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
 		return out;
 	};
 
-	public length: 4;
 	public readonly dataType = ArraybufferDataType.COLOR_GPU;
 
 	public constructor(r = 0, g = 0, b = 0, a = 0) {

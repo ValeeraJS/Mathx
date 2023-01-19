@@ -3,6 +3,7 @@ import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import IColorRGB from "./interfaces/IColorRGB";
 import ArraybufferDataType from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
+import { hue2rgb } from "./hue2color";
 
 export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	public static average = (color: IColorRGB | IColorRGBA): number => {
@@ -59,6 +60,27 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 
 		return out;
 	};
+
+	public static fromHSL = (h: number, s: number, l: number, out = new ColorRGBA) => {
+		var r, g, b;
+
+		if (s === 0) {
+			r = g = b = l; // achromatic
+		} else {
+			var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+			var p = 2 * l - q;
+			r = hue2rgb(p, q, h + 1 / 3);
+			g = hue2rgb(p, q, h);
+			b = hue2rgb(p, q, h - 1 / 3);
+		}
+
+		out[0] = Math.round(r * 255);
+		out[1] = Math.round(g * 255);
+		out[2] = Math.round(b * 255);
+		out[3] = 255;
+
+		return out;
+	}
 
 	public static fromJson = (
 		json: IColorRGBAJson,
@@ -118,11 +140,9 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 
 		return out;
 	};
-
-	public length: 4;
 	public readonly dataType = ArraybufferDataType.COLOR_RGBA;
 
-	public constructor(r = 0, g = 0, b = 0, a = 1) {
+	public constructor(r = 0, g = 0, b = 0, a = 255) {
 		super(4);
 		this[0] = r;
 		this[1] = g;
@@ -155,10 +175,10 @@ export default class ColorRGBA extends Uint8Array implements IColorRGBA {
 	}
 
 	public get a(): number {
-		return this[4];
+		return this[3];
 	}
 
 	public set a(val: number) {
-		this[4] = val;
+		this[3] = val;
 	}
 }

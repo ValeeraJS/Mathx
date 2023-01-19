@@ -3,15 +3,7 @@ import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
 import { IColorRGBAJson } from ".";
 import ArraybufferDataType from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
-
-function hue2rgb(p: number, q: number, t: number): number {
-	if (t < 0) t += 1;
-	if (t > 1) t -= 1;
-	if (t < 1 / 6) return p + (q - p) * 6 * t;
-	if (t < 1 / 2) return q;
-	if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-	return p;
-}
+import { hue2rgb } from "./hue2color";
 
 export default class ColorRGB extends Uint8Array implements IColorRGB {
 	public static average = (color: IColorRGB): number => {
@@ -75,9 +67,9 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 			b = hue2rgb(p, q, h - 1 / 3);
 		}
 
-		out[0] = r;
-		out[1] = g;
-		out[2] = b;
+		out[0] = Math.round(r * 255);
+		out[1] = Math.round(g * 255);
+		out[2] = Math.round(b * 255);
 
 		return out;
 	}
@@ -134,7 +126,6 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
 		return out;
 	};
 
-	public length: 3;
 	public readonly dataType = ArraybufferDataType.COLOR_RGB;
 
 	public constructor(r = 0, g = 0, b = 0) {

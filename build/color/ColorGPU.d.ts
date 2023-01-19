@@ -8,6 +8,7 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
     static create: (r?: number, g?: number, b?: number, a?: number) => IColorGPU;
     static equals: (a: IColorGPU, b: IColorGPU) => boolean;
     static fromArray: (arr: Float32Array | IColorGPU | number[], out?: IColorGPU) => IColorGPU;
+    static fromColorHSL: (h: number, s: number, l: number, out?: ColorGPU) => ColorGPU;
     static fromColorRGB(color: IColorRGB | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
     static fromColorRGBA(color: IColorRGBA | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
     static fromHex: (hex: number, alpha?: number, out?: IColorGPU) => IColorGPU;
@@ -15,7 +16,6 @@ export default class ColorGPU extends Float32Array implements IColorGPU {
     static fromScalar: (scalar: number, out?: IColorGPU) => IColorGPU;
     static fromString: (str: string, out?: IColorGPU) => IColorGPU;
     static grayscale: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number, out?: IColorGPU) => IColorGPU;
-    length: 4;
     readonly dataType: string;
     constructor(r?: number, g?: number, b?: number, a?: number);
     get r(): number;

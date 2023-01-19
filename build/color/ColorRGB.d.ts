@@ -13,7 +13,6 @@ export default class ColorRGB extends Uint8Array implements IColorRGB {
     static fromScalar: (scalar: number, out?: IColorRGB) => IColorRGB;
     static fromString: (str: string, out?: IColorRGB) => IColorRGB;
     static grayscale: (color: IColorRGB | ArrayLike<number>, wr?: number, wg?: number, wb?: number, out?: IColorRGB) => IColorRGB;
-    length: 3;
     readonly dataType: string;
     constructor(r?: number, g?: number, b?: number);
     get r(): number;
