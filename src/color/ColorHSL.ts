@@ -4,7 +4,7 @@ import IColorHSL from "./interfaces/IColorHSL";
 let max = 0, min = 0;
 let h = 0, s = 0, l = 0;
 
-export default class ColorHSL extends Uint8Array implements IColorHSL {
+export default class ColorHSL extends Float32Array implements IColorHSL {
 	public readonly dataType = ArraybufferDataType.COLOR_HSL;
 
 	public static fromRGBUnsignedNormal(r: number, g: number, b: number, out: ColorHSL = new ColorHSL()): ColorHSL {
