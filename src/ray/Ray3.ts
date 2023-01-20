@@ -6,7 +6,7 @@ let dis: number, r2: number, d2: number;
 const v = new Vector3();
 
 export default class Ray3 implements IRay3 {
-	public static at = (a: IRay3, b: number, out: Vector3Like = new Vector3()): Vector3Like => {
+	public static at = (a: IRay3, b: number, out: Vector3 = new Vector3()): Vector3 => {
 		return Vector3.multiplyScalar(a.direction, b, out);
 	};
 
@@ -28,7 +28,7 @@ export default class Ray3 implements IRay3 {
 		return Vector3.distanceToSquared(v, point);
 	};
 
-	public static lookAt = (a: IRay3, b: Vector3Like, out: IRay3 = new Ray3()): IRay3 => {
+	public static lookAt = (a: IRay3, b: Vector3Like, out: Ray3 = new Ray3()): Ray3 => {
 		if (a !== out) {
 			Vector3.fromArray(a.position, 0, out.position);
 		}
@@ -41,8 +41,8 @@ export default class Ray3 implements IRay3 {
 	public static intersectSphere = (
 		ray: IRay3,
 		sphere: ISphere,
-		target: Vector3Like
-	): null | Vector3Like => {
+		target: Vector3
+	): null | Vector3 => {
 		Vector3.minus(sphere.position, ray.position, v);
 		dis = Vector3.dot(v, ray.direction);
 		d2 = Vector3.dot(v, v) - dis * dis;
@@ -67,13 +67,13 @@ export default class Ray3 implements IRay3 {
 		return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
 	};
 
-	public position: Vector3Like;
-	public direction: Vector3Like;
+	public position: Vector3 = new Vector3();
+	public direction: Vector3 = new Vector3();
 	public constructor(
-		position: Vector3Like = new Vector3(),
-		direction: Vector3Like = new Vector3(0, 0, -1)
+		position: Vector3Like = Vector3.VECTOR3_ZERO,
+		direction: Vector3Like =  Vector3.VECTOR3_BACK
 	) {
-		this.position = position;
-		this.direction = Vector3.normalize(direction);
+		this.position.set(position)
+		Vector3.normalize(direction, this.direction);
 	}
 }
