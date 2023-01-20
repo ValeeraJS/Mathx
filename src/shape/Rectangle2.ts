@@ -23,26 +23,23 @@ export default class Rectangle2 implements IRectangle2 {
 	};
 
 	public static create = (
-		a: Vector2Like = Vector2.create(),
-		b: Vector2Like = Vector2.create(1, 1)
-	): IRectangle2 => {
-		return {
-			max: Vector2.max(a, b),
-			min: Vector2.min(a, b)
-		};
+		a: Vector2Like = Vector2.VECTOR2_ZERO,
+		b: Vector2Like = Vector2.VECTOR2_ONE
+	): Rectangle2 => {
+		return new Rectangle2(a, b);
 	};
 
 	public static equals = (a: IRectangle2, b: IRectangle2): boolean => {
 		return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
 	};
 
-	public static getCenter = (a: IRectangle2, out: Vector2Like = Vector2.create()): Vector2Like => {
+	public static getCenter = (a: IRectangle2, out: Vector2 = Vector2.create()): Vector2 => {
 		Vector2.add(a.min, a.max, out);
 
 		return Vector2.multiplyScalar(out, 0.5, out);
 	};
 
-	public static getSize = (a: IRectangle2, out: Vector2Like = Vector2.create()): Vector2Like => {
+	public static getSize = (a: IRectangle2, out: Vector2 = Vector2.create()): Vector2 => {
 		return Vector2.minus(a.max, a.min, out);
 	};
 
@@ -53,8 +50,8 @@ export default class Rectangle2 implements IRectangle2 {
 	public static intersect = (
 		a: IRectangle2,
 		b: IRectangle2,
-		out: IRectangle2 = new Rectangle2()
-	): IRectangle2 => {
+		out: Rectangle2 = new Rectangle2()
+	): Rectangle2 => {
 		Vector2.max(a.min, b.min, out.min);
 		Vector2.min(a.max, b.max, out.max);
 
@@ -65,8 +62,8 @@ export default class Rectangle2 implements IRectangle2 {
 		a: IRectangle2,
 		b: Float32Array | IVector2 | number[],
 		c: Float32Array | IVector2 | number[],
-		out: IRectangle2 = new Rectangle2()
-	): IRectangle2 => {
+		out: Rectangle2 = new Rectangle2()
+	): Rectangle2 => {
 		Vector2.add(a.min, b, out.min);
 		Vector2.add(a.max, c, out.max);
 
@@ -76,8 +73,8 @@ export default class Rectangle2 implements IRectangle2 {
 	public static translate = (
 		a: IRectangle2,
 		b: Float32Array | IVector2 | number[],
-		out: IRectangle2 = new Rectangle2()
-	): IRectangle2 => {
+		out: Rectangle2 = new Rectangle2()
+	): Rectangle2 => {
 		Vector2.add(a.min, b, out.min);
 		Vector2.add(a.max, b, out.max);
 
@@ -87,8 +84,8 @@ export default class Rectangle2 implements IRectangle2 {
 	public static union = (
 		a: IRectangle2,
 		b: IRectangle2,
-		out: IRectangle2 = new Rectangle2()
-	): IRectangle2 => {
+		out: Rectangle2 = new Rectangle2()
+	): Rectangle2 => {
 		Vector2.min(a.min, b.min, out.min);
 		Vector2.max(a.max, b.max, out.max);
 
@@ -99,11 +96,11 @@ export default class Rectangle2 implements IRectangle2 {
 		return a.max[0] - a.min[0];
 	};
 
-	public min: Vector2Like = Vector2.create();
-	public max: Vector2Like = Vector2.create();
+	public min: Vector2 = new Vector2();
+	public max: Vector2 = new Vector2();
 	public constructor(
-		a: Vector2Like = Vector2.create(),
-		b: Vector2Like = Vector2.create(1, 1)
+		a: Vector2Like = Vector2.VECTOR2_ZERO,
+		b: Vector2Like = Vector2.VECTOR2_ONE
 	) {
 		Vector2.min(a, b, this.min);
 		Vector2.max(a, b, this.max);
