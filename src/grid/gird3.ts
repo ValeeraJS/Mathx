@@ -2,6 +2,7 @@ import Vector3, { Vector3Like } from "../vector/Vector3";
 import Sphere from "../shape/Sphere";
 import ICube from "../shape/interfaces/ICube";
 import ISphere from "../shape/interfaces/ISphere";
+import Cube from "../shape/Cube";
 
 export default class Grid3 {
 	public data: Vector3Like[] = []; // 格子索引
@@ -22,7 +23,7 @@ export default class Grid3 {
 	}
 }
 
-let tmpCude: ICube;
+let tmpCude: Cube;
 let min3: Vector3 = new Vector3();
 let max3: Vector3 = new Vector3();
 let x: number;
