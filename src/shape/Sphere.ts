@@ -1,4 +1,4 @@
-import Vector3, { IVector3 } from "./../vector/Vector3";
+import Vector3, { IVector3, Vector3Like } from "./../vector/Vector3";
 import Cube from "./Cube";
 import ICube from "./interfaces/ICube";
 import ISphere from "./interfaces/ISphere";
@@ -6,7 +6,7 @@ import ISphere from "./interfaces/ISphere";
 let r = 0;
 
 export default class Sphere implements ISphere {
-	public static boundingBox = (a: ISphere, out: ICube = new Cube()): ICube => {
+	public static boundingBox = (a: ISphere, out: Cube = new Cube()): ICube => {
 		Vector3.minusScalar(a.position, a.radius, out.min);
 		Vector3.addScalar(a.position, a.radius, out.max);
 
@@ -31,11 +31,11 @@ export default class Sphere implements ISphere {
 		return Vector3.distanceToSquared(a.position, b.position) <= r * r;
 	};
 
-	public position: IVector3;
+	public position: Vector3 = new Vector3();
 	public radius: number;
 
-	public constructor(position: IVector3 = new Vector3(), radius = 1) {
-		this.position = position;
+	public constructor(position: Vector3Like = Vector3.VECTOR3_ZERO, radius = 1) {
+		this.position.set(position);
 		this.radius = radius;
 	}
 }
