@@ -68,7 +68,7 @@ export default class Cube implements ICube {
 		return a.max[1] - a.min[1];
 	};
 
-	public static intersect = (a: ICube, b: ICube, out: ICube = new Cube()): ICube => {
+	public static intersect = (a: ICube, b: ICube, out: Cube = new Cube()): Cube => {
 		Vector3.max(a.min, b.min, out.min);
 		Vector3.min(a.max, b.max, out.max);
 
@@ -183,8 +183,8 @@ export default class Cube implements ICube {
 		a: ICube,
 		b: Float32Array | number[] | IVector3,
 		c: Float32Array | number[] | IVector3,
-		out: ICube = new Cube()
-	): ICube => {
+		out: Cube = new Cube()
+	): Cube => {
 		Vector3.add(a.min, b, out.min);
 		Vector3.add(a.max, c, out.max);
 
