@@ -4,29 +4,27 @@ import ISphere from "./interfaces/ISphere";
 import ITriangle3 from "./interfaces/ITriangle3";
 // import Matrix3 from "../matrix/Matrix3";
 
-const v1: IVector3 = new Vector3(),
-	v2: IVector3 = new Vector3(),
-	v0: IVector3 = new Vector3(),
-	f1: IVector3 = new Vector3(),
-	f2: IVector3 = new Vector3(),
-	f0: IVector3 = new Vector3();
-const ta: IVector3 = new Vector3();
+const v1: Vector3 = new Vector3(),
+	v2: Vector3 = new Vector3(),
+	v0: Vector3 = new Vector3(),
+	f1: Vector3 = new Vector3(),
+	f2: Vector3 = new Vector3(),
+	f0: Vector3 = new Vector3();
+const ta: Vector3 = new Vector3();
 // const ma: Matrix3 = new Matrix3();
-const tb: IVector3 = new Vector3(),
-	vA: IVector3 = new Vector3();
-
-const defaultMax = [1, 1, 1];
+const tb: Vector3 = new Vector3(),
+	vA: Vector3 = new Vector3();
 
 export default class Cube implements ICube {
 	public static clampPoint = (
 		a: ICube,
-		point: Float32Array | number[] | IVector3,
-		out: Vector3Like = new Vector3()
-	): Vector3Like => {
+		point: Vector3Like,
+		out: Vector3 = new Vector3()
+	): Vector3 => {
 		return Vector3.clamp(point, a.min, a.max, out);
 	};
 
-	public static containsPoint = (a: ICube, b: Float32Array | number[] | IVector3): boolean => {
+	public static containsPoint = (a: ICube, b: Vector3Like): boolean => {
 		return (
 			b[0] >= a.min[0] &&
 			b[0] <= a.max[0] &&
@@ -56,13 +54,13 @@ export default class Cube implements ICube {
 		return Vector3.equals(a.min, b.min) && Vector3.equals(a.max, b.max);
 	};
 
-	public static getCenter = (a: ICube, out: Vector3Like = new Vector3()): Vector3Like => {
+	public static getCenter = (a: ICube, out: Vector3 = new Vector3()): Vector3 => {
 		Vector3.add(a.min, a.max, out);
 
 		return Vector3.multiplyScalar(out, 0.5, out);
 	};
 
-	public static getSize = (a: ICube, out: Vector3Like = new Vector3()): Vector3Like => {
+	public static getSize = (a: ICube, out: Vector3 = new Vector3()): Vector3 => {
 		return Vector3.minus(a.max, a.min, out);
 	};
 
@@ -170,14 +168,14 @@ export default class Cube implements ICube {
 		return a.max[0] < a.min[0] || a.max[0] < a.min[0] || a.max[0] < a.min[0];
 	};
 
-	public static round = (a: ICube, out: ICube = new Cube()): ICube => {
+	public static round = (a: ICube, out: Cube = new Cube()): Cube => {
 		Vector3.round(a.min, out.min);
 		Vector3.round(a.max, out.max);
 
 		return out;
 	};
 
-	public static size = (a: ICube, out: Vector3Like = new Vector3()): Vector3Like => {
+	public static size = (a: ICube, out: Vector3 = new Vector3()): Vector3 => {
 		return Vector3.minus(a.max, a.min, out);
 	};
 
@@ -202,15 +200,15 @@ export default class Cube implements ICube {
 	public static translate = (
 		a: ICube,
 		b: Float32Array | number[] | IVector3,
-		out: ICube = new Cube()
-	): ICube => {
+		out: Cube = new Cube()
+	): Cube => {
 		Vector3.add(a.min, b, out.min);
 		Vector3.add(a.max, b, out.max);
 
 		return out;
 	};
 
-	public static union = (a: ICube, b: ICube, out: ICube = new Cube()): ICube => {
+	public static union = (a: ICube, b: ICube, out: Cube = new Cube()): Cube => {
 		Vector3.min(a.min, b.min, out.min);
 		Vector3.max(a.max, b.max, out.max);
 
@@ -225,9 +223,9 @@ export default class Cube implements ICube {
 		return a.max[0] - a.min[0];
 	};
 
-	public min: IVector3 = new Vector3();
-	public max: IVector3 = new Vector3();
-	public constructor(a: IVector3 = new Vector3(), b: Vector3Like = Vector3.fromArray(defaultMax)) {
+	public min: Vector3 = new Vector3();
+	public max: Vector3 = new Vector3();
+	public constructor(a: Vector3Like = new Vector3(), b: Vector3Like = Vector3.VECTOR3_ONE) {
 		Vector3.min(a, b, this.min);
 		Vector3.max(a, b, this.max);
 	}
