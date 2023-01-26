@@ -2,6 +2,7 @@ import ArraybufferDataType from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
+import Matrix4 from "../matrix/Matrix4";
 
 let ax: number, ay: number, az: number, bx: number, by: number, bz: number;
 let ag: number, s: number;
@@ -230,7 +231,7 @@ export default class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static fromScalar = (num: number, out: Vector3 = new Vector3(3)): Vector3 => {
+	public static fromScalar = (num: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = out[1] = out[2] = num;
 
 		return out;
@@ -248,6 +249,13 @@ export default class Vector3 extends Float32Array implements IVector3 {
 
 		return out;
 	};
+
+	public static fromMatrix4Translate = (mat: Matrix4, out: Vector3 = new Vector3()): Vector3 => {
+		out[0] = mat[12];
+		out[1] = mat[13];
+		out[2] = mat[14];
+		return out;
+	}
 
 	public static hermite = (
 		a: Vector3Like,
@@ -525,17 +533,17 @@ export default class Vector3 extends Float32Array implements IVector3 {
 
 	public static transformMatrix4 = (
 		a: Vector3Like,
-		m: Vector3Like,
+		m: Matrix4,
 		out: Vector3 = new Vector3()
 	): Vector3 => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
 		ag = m[3] * ax + m[7] * ay + m[11] * az + m[15];
-		ag = ag || 1.0;
-		out[0] = (m[0] * ax + m[4] * ay + m[8] * az + m[12]) / ag;
-		out[1] = (m[1] * ax + m[5] * ay + m[9] * az + m[13]) / ag;
-		out[2] = (m[2] * ax + m[6] * ay + m[10] * az + m[14]) / ag;
+		ag = ag ? 1 / ag : 1.0;
+		out[0] = (m[0] * ax + m[4] * ay + m[8] * az + m[12]) * ag;
+		out[1] = (m[1] * ax + m[5] * ay + m[9] * az + m[13]) * ag;
+		out[2] = (m[2] * ax + m[6] * ay + m[10] * az + m[14]) * ag;
 
 		return out;
 	};
