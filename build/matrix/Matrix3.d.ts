@@ -1,6 +1,6 @@
 import { IVector2 } from "../vector/Vector2";
-import Matrix2 from "./Matrix2";
-export default class Matrix3 extends Float32Array {
+import { Matrix2 } from "./Matrix2";
+export declare class Matrix3 extends Float32Array {
     static readonly UNIT_MATRIX3: Matrix3;
     static clone: (source: Matrix3 | Float32Array | number[]) => Matrix3;
     static cofactor00: (a: Float32Array | number[] | Matrix3) => number;

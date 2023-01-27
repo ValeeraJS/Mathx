@@ -4,4 +4,4 @@ export interface IColorHSLJson {
 	l: number;
 }
 
-export default interface IColorHSL extends Float32Array, IColorHSLJson {}
+export interface IColorHSL extends Float32Array, IColorHSLJson {}

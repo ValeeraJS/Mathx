@@ -1,11 +1,11 @@
-import IColorRGB, { IColorRGBJson } from "./interfaces/IColorRGB";
-import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
+import { IColorRGB, IColorRGBJson } from "./interfaces/IColorRGB";
+import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
 import { IColorRGBAJson } from ".";
-import ArraybufferDataType from "../ArraybufferDataType";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
 import { hue2rgb } from "./hue2color";
 
-export default class ColorRGB extends Uint8Array implements IColorRGB {
+export class ColorRGB extends Uint8Array implements IColorRGB {
 	public static average = (color: IColorRGB): number => {
 		return (color[0] + color[1] + color[2]) / 3;
 	};

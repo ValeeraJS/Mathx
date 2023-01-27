@@ -1,8 +1,7 @@
-import Vector2, { IVector2 } from "../vector/Vector2";
-import { Vector2Like } from "../vector/Vector2";
-import IRectangle2 from "./interfaces/IRectangle2";
+import { Vector2, Vector2Like } from "../vector/Vector2";
+import { IRectangle2 } from "./interfaces/IRectangle2";
 
-export default class Rectangle2 implements IRectangle2 {
+export class Rectangle2 implements IRectangle2 {
 	public static area = (a: IRectangle2): number => {
 		return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
 	};
@@ -60,8 +59,8 @@ export default class Rectangle2 implements IRectangle2 {
 
 	public static stretch = (
 		a: IRectangle2,
-		b: Float32Array | IVector2 | number[],
-		c: Float32Array | IVector2 | number[],
+		b: Vector2Like,
+		c: Vector2Like,
 		out: Rectangle2 = new Rectangle2()
 	): Rectangle2 => {
 		Vector2.add(a.min, b, out.min);
@@ -72,7 +71,7 @@ export default class Rectangle2 implements IRectangle2 {
 
 	public static translate = (
 		a: IRectangle2,
-		b: Float32Array | IVector2 | number[],
+		b: Vector2Like,
 		out: Rectangle2 = new Rectangle2()
 	): Rectangle2 => {
 		Vector2.add(a.min, b, out.min);

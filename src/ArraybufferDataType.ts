@@ -1,4 +1,4 @@
-const ArraybufferDataType = {
+export const ArraybufferDataType = {
 	COLOR_GPU: "col",
 	COLOR_RGB: "col_rgb",
 	COLOR_RGBA: "col_rgba",
@@ -14,5 +14,3 @@ const ArraybufferDataType = {
 	VECTOR3: "vec3",
 	VECTOR4: "vec4"
 };
-
-export default ArraybufferDataType;

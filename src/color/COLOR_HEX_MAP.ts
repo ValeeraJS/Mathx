@@ -1,4 +1,4 @@
-const COLOR_HEX_MAP: { [key: string]: number } = {
+export const COLOR_HEX_MAP: { [key: string]: number } = {
 	aliceblue: 0xf0f8ff,
 	antiquewhite: 0xfaebd7,
 	aqua: 0x00ffff,
@@ -167,5 +167,3 @@ const COLOR_HEX_MAP: { [key: string]: number } = {
 	yellow: 0xffff00,
 	yellowgreen: 0x9acd32
 };
-
-export default COLOR_HEX_MAP;

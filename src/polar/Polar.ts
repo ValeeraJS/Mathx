@@ -1,5 +1,5 @@
-import ArraybufferDataType from "../ArraybufferDataType";
-import IPolar from "./interfaces/IPolar";
+import {ArraybufferDataType} from "../ArraybufferDataType";
+import {IPolar} from "./interfaces/IPolar";
 
 let x: number, y: number;
 
@@ -12,7 +12,7 @@ let x: number, y: number;
  * @param {number} [r=0] | 距离极点距离
  * @param {number} [a=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
  */
-export default class Polar extends Float32Array implements IPolar {
+export class Polar extends Float32Array implements IPolar {
 	/**
 	 * @public
 	 * @method create

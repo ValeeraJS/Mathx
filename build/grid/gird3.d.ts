@@ -1,12 +1,12 @@
-import { Vector3Like } from "../vector/Vector3";
-import ICube from "../shape/interfaces/ICube";
-import ISphere from "../shape/interfaces/ISphere";
-export default class Grid3 {
-    data: Vector3Like[];
-    gridSize: Vector3Like;
-    min: Vector3Like;
-    size: Vector3Like;
-    max: Vector3Like;
+import { Vector3, Vector3Like } from "../vector/Vector3";
+import { ICube } from "../shape/interfaces/ICube";
+import { ISphere } from "../shape/interfaces/ISphere";
+export declare class Grid3 {
+    data: Vector3[];
+    gridSize: Vector3;
+    min: Vector3;
+    size: Vector3;
+    max: Vector3;
     constructor(size?: Vector3Like, gridSize?: Vector3Like, min?: Vector3Like);
 }
 export declare const dataFromSolidCube: (a: ICube, out?: Grid3) => Grid3;

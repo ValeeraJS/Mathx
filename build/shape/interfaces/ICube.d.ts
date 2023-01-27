@@ -1,5 +1,5 @@
-import { IVector3 } from "../../vector/Vector3";
-export default interface ICube {
-    min: IVector3;
-    max: IVector3;
+import { Vector3Like } from "../../vector/Vector3";
+export interface ICube {
+    min: Vector3Like;
+    max: Vector3Like;
 }

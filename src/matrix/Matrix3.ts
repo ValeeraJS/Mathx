@@ -1,5 +1,5 @@
 import { IVector2 } from "../vector/Vector2";
-import Matrix2 from "./Matrix2";
+import { Matrix2 } from "./Matrix2";
 
 let a00 = 0,
 	a01 = 0,
@@ -24,7 +24,7 @@ let x = 0,
 
 const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
-export default class Matrix3 extends Float32Array {
+export class Matrix3 extends Float32Array {
 	public static readonly UNIT_MATRIX3 = new Matrix3(UNIT_MATRIX3_DATA);
 
 	public static clone = (source: Matrix3 | Float32Array | number[]): Matrix3 => {

@@ -1,8 +1,8 @@
-import ArraybufferDataType from "../ArraybufferDataType";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
-import Matrix4 from "../matrix/Matrix4";
+import { Matrix4 } from "../matrix/Matrix4";
 
 let ax: number, ay: number, az: number, bx: number, by: number, bz: number;
 let ag: number, s: number;
@@ -16,7 +16,7 @@ export interface IVector3Json {
 export interface IVector3 extends Float32Array, IVector3Json { };
 export type Vector3Like = IVector3 | Vector3 | number[] | Float32Array;
 
-export default class Vector3 extends Float32Array implements IVector3 {
+export class Vector3 extends Float32Array implements IVector3 {
 	public static readonly VECTOR3_ZERO = new Vector3(0, 0, 0);
 	public static readonly VECTOR3_ONE = new Vector3(1, 1, 1);
 	public static readonly VECTOR3_TOP = new Vector3(0, 1, 0);

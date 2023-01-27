@@ -1,8 +1,8 @@
-import Vector3, { IVector3, Vector3Like } from "../vector/Vector3";
+import { Vector3, IVector3, Vector3Like } from "../vector/Vector3";
 import { EPSILON } from "../constants";
 import { IPairs4Float32 } from "../common/interfaces/IPairs4";
-import Matrix3 from "../matrix/Matrix3";
-import ArraybufferDataType from "../ArraybufferDataType";
+import { Matrix3 } from "../matrix/Matrix3";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 
 let ax: number, ay: number, az: number, aw: number, bx: number, by: number, bz: number, bw: number;
 let s = 0,
@@ -22,7 +22,7 @@ export interface IQuaternionJson {
 	w: number;
 }
 
-export interface IQuaternion extends IPairs4Float32, IQuaternionJson {}
+export interface IQuaternion extends IPairs4Float32, IQuaternionJson { }
 
 export default class Quaternion extends Float32Array implements IQuaternion {
 	public static angleTo = (

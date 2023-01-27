@@ -6,7 +6,7 @@ export declare enum EulerRotationOrders {
     ZYX = "zyx",
     YXZ = "yxz"
 }
-export default interface IEulerAngle {
+export interface IEulerAngle {
     x: number;
     y: number;
     z: number;

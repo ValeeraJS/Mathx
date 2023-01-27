@@ -1,6 +1,6 @@
-import { Vector2 } from "../../vector";
-export default interface ITriangle2 {
-    a: Vector2;
-    b: Vector2;
-    c: Vector2;
+import { Vector2Like } from "../../vector";
+export interface ITriangle2 {
+    a: Vector2Like;
+    b: Vector2Like;
+    c: Vector2Like;
 }

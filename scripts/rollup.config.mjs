@@ -9,7 +9,7 @@ export default {
 			format: "umd",
 			indent: "\t",
 			name: "Mathx",
-			sourcemap: true
+			sourcemap: false
 		},
 		{
 			file: "build/Mathx.module.js",

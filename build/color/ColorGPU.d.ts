@@ -1,7 +1,7 @@
-import IColorGPU, { IColorGPUJson } from "./interfaces/IColorGPU";
-import IColorRGB from "./interfaces/IColorRGB";
-import IColorRGBA from "./interfaces/IColorRGBA";
-export default class ColorGPU extends Float32Array implements IColorGPU {
+import { IColorGPU, IColorGPUJson } from "./interfaces/IColorGPU";
+import { IColorRGB } from "./interfaces/IColorRGB";
+import { IColorRGBA } from "./interfaces/IColorRGBA";
+export declare class ColorGPU extends Float32Array implements IColorGPU {
     static average: (color: IColorGPU | ArrayLike<number>) => number;
     static averageWeighted: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
     static clone: (color: IColorGPU | ArrayLike<number>) => IColorGPU;

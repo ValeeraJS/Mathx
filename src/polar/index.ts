@@ -1,2 +1,2 @@
-export { default as IPolar } from "./interfaces/IPolar";
-export { default as Polar } from "./Polar";
+export * from "./interfaces/IPolar";
+export * from "./Polar";

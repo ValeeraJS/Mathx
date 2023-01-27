@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
-import IEulerAngle, { EulerRotationOrders } from "../euler/IEulerAngle";
-import Vector3, { IVector3 } from "../vector/Vector3";
+import { IEulerAngle, EulerRotationOrders } from "../euler/IEulerAngle";
+import { Vector3, IVector3 } from "../vector/Vector3";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
-import Matrix3 from "./Matrix3";
+import { Matrix3 } from "./Matrix3";
 
 let a00 = 0,
 	a01 = 0,
@@ -53,7 +53,7 @@ let x = 0,
 
 const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
-export default class Matrix4 extends Float32Array {
+export class Matrix4 extends Float32Array {
 	public static readonly UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
 
 	public static clone = (source: Matrix4 | Float32Array | number[]): Matrix4 => {

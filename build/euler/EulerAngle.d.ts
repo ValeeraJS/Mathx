@@ -1,5 +1,5 @@
-import IEulerAngle, { EulerRotationOrders } from "./IEulerAngle";
-export default class EulerAngle extends Float32Array implements IEulerAngle {
+import { IEulerAngle, EulerRotationOrders } from "./IEulerAngle";
+export declare class EulerAngle extends Float32Array implements IEulerAngle {
     static readonly ORDERS: typeof EulerRotationOrders;
     static clone(euler: IEulerAngle): EulerAngle;
     static create(x?: number, y?: number, z?: number, order?: EulerRotationOrders): EulerAngle;

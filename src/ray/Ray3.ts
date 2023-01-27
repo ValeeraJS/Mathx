@@ -1,12 +1,12 @@
-import Vector3, { Vector3Like } from "../vector/Vector3";
-import IRay3 from "./interfaces/IRay3";
-import ISphere from "../shape/interfaces/ISphere";
+import { Vector3, Vector3Like } from "../vector/Vector3";
+import { IRay3 } from "./interfaces/IRay3";
+import { ISphere } from "../shape/interfaces/ISphere";
 import { Plane3 } from "../shape/Plane3";
 
 let dis: number, r2: number, d2: number;
 const v = new Vector3();
 
-export default class Ray3 implements IRay3 {
+export class Ray3 implements IRay3 {
 	public static at = (a: IRay3, b: number, out: Vector3 = new Vector3()): Vector3 => {
 		return Vector3.multiplyScalar(a.direction, b, out);
 	};

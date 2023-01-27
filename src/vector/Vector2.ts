@@ -1,5 +1,5 @@
 import { DEG_360_RAD, EPSILON } from "../constants";
-import ArraybufferDataType from "../ArraybufferDataType";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
@@ -19,7 +19,7 @@ export interface IVector2Json {
 export interface IVector2 extends Float32Array, IVector2Json { };
 export type Vector2Like = IVector2 | Vector2 | number[] | Float32Array;
 
-export default class Vector2 extends Float32Array implements IVector2 {
+export class Vector2 extends Float32Array implements IVector2 {
 	public static readonly VECTOR2_ZERO = new Vector2(0, 0);
 	public static readonly VECTOR2_TOP = new Vector2(0, 1);
 	public static readonly VECTOR2_BOTTOM = new Vector2(0, -1);

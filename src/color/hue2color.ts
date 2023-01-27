@@ -1,4 +1,4 @@
-export function hue2rgb(p: number, q: number, t: number): number {
+export const hue2rgb = (p: number, q: number, t: number): number => {
     if (t < 0) t += 1;
     if (t > 1) t -= 1;
     if (t < 1 / 6) return p + (q - p) * 6 * t;

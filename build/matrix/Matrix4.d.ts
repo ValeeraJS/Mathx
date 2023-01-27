@@ -1,7 +1,7 @@
-import IEulerAngle from "../euler/IEulerAngle";
+import { IEulerAngle } from "../euler/IEulerAngle";
 import { IVector3 } from "../vector/Vector3";
-import Matrix3 from "./Matrix3";
-export default class Matrix4 extends Float32Array {
+import { Matrix3 } from "./Matrix3";
+export declare class Matrix4 extends Float32Array {
     static readonly UNIT_MATRIX4: Matrix4;
     static clone: (source: Matrix4 | Float32Array | number[]) => Matrix4;
     static create: () => Matrix4;

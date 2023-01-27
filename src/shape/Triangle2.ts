@@ -1,10 +1,10 @@
-import ITriangle2 from "./interfaces/ITriangle2";
-import Vector2 from "../vector/Vector2";
+import {ITriangle2} from "./interfaces/ITriangle2";
+import {Vector2} from "../vector/Vector2";
 
 const ab = new Vector2();
 const bc = new Vector2();
 
-export default class Triangle2 implements ITriangle2 {
+export class Triangle2 implements ITriangle2 {
 	public static area = (t: ITriangle2): number => {
 		const c = Triangle2.getABLength(t);
 		const a = Triangle2.getBCLength(t);

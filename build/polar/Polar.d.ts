@@ -1,4 +1,4 @@
-import IPolar from "./interfaces/IPolar";
+import { IPolar } from "./interfaces/IPolar";
 /**
  * @class
  * @classdesc 极坐标
@@ -8,7 +8,7 @@ import IPolar from "./interfaces/IPolar";
  * @param {number} [r=0] | 距离极点距离
  * @param {number} [a=0] | 旋转弧度，规定0弧度为笛卡尔坐标系x轴方向
  */
-export default class Polar extends Float32Array implements IPolar {
+export declare class Polar extends Float32Array implements IPolar {
     /**
      * @public
      * @method create

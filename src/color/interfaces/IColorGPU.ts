@@ -5,4 +5,4 @@ export interface IColorGPUJson {
 	r: number;
 }
 
-export default interface IColorGPU extends Float32Array, IColorGPUJson {}
+export interface IColorGPU extends Float32Array, IColorGPUJson {}

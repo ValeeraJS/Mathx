@@ -1,5 +1,5 @@
 import { Vector2Like } from "../vector/Vector2";
-export default class Grid2 {
+export declare class Grid2 {
     data: Vector2Like[];
     gridSize: Vector2Like;
     min: Vector2Like;

@@ -1,4 +1,2 @@
-import IRay3 from "./interfaces/IRay3";
-import Ray3 from "./Ray3";
-
-export { IRay3, Ray3 };
+export * from "./interfaces/IRay3";
+export * from "./Ray3";

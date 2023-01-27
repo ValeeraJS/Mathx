@@ -1,7 +1,7 @@
-import Vector3, { IVector3, Vector3Like } from "../vector/Vector3";
-import ICube from "./interfaces/ICube";
-import ISphere from "./interfaces/ISphere";
-import ITriangle3 from "./interfaces/ITriangle3";
+import { Vector3, IVector3, Vector3Like } from "../vector/Vector3";
+import { ICube } from "./interfaces/ICube";
+import { ISphere } from "./interfaces/ISphere";
+import { ITriangle3 } from "./interfaces/ITriangle3";
 // import Matrix3 from "../matrix/Matrix3";
 
 const v1: Vector3 = new Vector3(),
@@ -15,7 +15,7 @@ const ta: Vector3 = new Vector3();
 const tb: Vector3 = new Vector3(),
 	vA: Vector3 = new Vector3();
 
-export default class Cube implements ICube {
+export class Cube implements ICube {
 	public static clampPoint = (
 		a: ICube,
 		point: Vector3Like,

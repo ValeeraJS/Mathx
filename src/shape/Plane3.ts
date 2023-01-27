@@ -1,5 +1,5 @@
-import Sphere from "./Sphere";
-import Vector3, { Vector3Like } from "../vector/Vector3";
+import { Sphere } from "./Sphere";
+import { Vector3, Vector3Like } from "../vector/Vector3";
 
 const v1 = new Vector3();
 const v2 = new Vector3();

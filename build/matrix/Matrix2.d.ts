@@ -1,5 +1,5 @@
 import { IVector2 } from "./../vector/Vector2";
-export default class Matrix2 extends Float32Array {
+export declare class Matrix2 extends Float32Array {
     static readonly UNIT_MATRIX2: Matrix2;
     static add: (a: Float32Array | number[] | Matrix2, b: Float32Array | number[] | Matrix2, out: Matrix2) => Matrix2;
     static adjoint: (a: Float32Array | number[] | Matrix2, out: Matrix2) => Matrix2;

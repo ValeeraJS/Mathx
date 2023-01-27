@@ -200,7 +200,7 @@
 	};
 
 	let max = 0, min = 0;
-	let h = 0, s$4 = 0, l = 0;
+	let h = 0, s$3 = 0, l = 0;
 	class ColorHSL extends Float32Array {
 	    dataType = ArraybufferDataType.COLOR_HSL;
 	    static fromRGBUnsignedNormal(r, g, b, out = new ColorHSL()) {
@@ -208,11 +208,11 @@
 	        min = Math.min(r, g, b);
 	        l = (max + min) / 2;
 	        if (max === min) {
-	            h = s$4 = 0;
+	            h = s$3 = 0;
 	        }
 	        else {
 	            let d = max - min;
-	            s$4 = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+	            s$3 = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 	            switch (max) {
 	                case r:
 	                    h = (g - b) / d + (g < b ? 6 : 0);
@@ -227,7 +227,7 @@
 	            h /= 6;
 	        }
 	        out[0] = h;
-	        out[1] = s$4;
+	        out[1] = s$3;
 	        out[2] = l;
 	        return out;
 	    }
@@ -257,7 +257,7 @@
 	    }
 	}
 
-	function hue2rgb(p, q, t) {
+	const hue2rgb = (p, q, t) => {
 	    if (t < 0)
 	        t += 1;
 	    if (t > 1)
@@ -269,129 +269,7 @@
 	    if (t < 2 / 3)
 	        return p + (q - p) * (2 / 3 - t) * 6;
 	    return p;
-	}
-
-	class ColorRGBA extends Uint8Array {
-	    static average = (color) => {
-	        return (color[0] + color[1] + color[2]) / 3;
-	    };
-	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
-	        return color[0] * wr + color[1] * wg + color[2] * wb;
-	    };
-	    static clone = (color) => {
-	        return new ColorRGBA(color[0], color[1], color[2], color[3]);
-	    };
-	    static create = (r = 0, g = 0, b = 0, a = 1) => {
-	        return new ColorRGBA(r, g, b, a);
-	    };
-	    static equals = (a, b) => {
-	        return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
-	            (a.g ?? a[1]) === (b.g ?? b[1]) &&
-	            (a.b ?? a[2]) === (b.b ?? b[2]) &&
-	            (a.a ?? a[3]) === (b.a ?? b[3]));
-	    };
-	    static fromArray = (arr, out = new ColorRGBA()) => {
-	        out[0] = arr[0];
-	        out[1] = arr[1];
-	        out[2] = arr[2];
-	        out[3] = arr[3];
-	        return out;
-	    };
-	    static fromHex = (hex, alpha = 255, out = new ColorRGBA()) => {
-	        out[0] = hex >> 16;
-	        out[1] = (hex >> 8) & 255;
-	        out[2] = hex & 255;
-	        out[3] = alpha;
-	        return out;
-	    };
-	    static fromHSL = (h, s, l, out = new ColorRGBA) => {
-	        var r, g, b;
-	        if (s === 0) {
-	            r = g = b = l; // achromatic
-	        }
-	        else {
-	            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-	            var p = 2 * l - q;
-	            r = hue2rgb(p, q, h + 1 / 3);
-	            g = hue2rgb(p, q, h);
-	            b = hue2rgb(p, q, h - 1 / 3);
-	        }
-	        out[0] = Math.round(r * 255);
-	        out[1] = Math.round(g * 255);
-	        out[2] = Math.round(b * 255);
-	        out[3] = 255;
-	        return out;
-	    };
-	    static fromJson = (json, out = new ColorRGBA()) => {
-	        out[0] = json.r;
-	        out[1] = json.g;
-	        out[2] = json.b;
-	        out[3] = json.a;
-	        return out;
-	    };
-	    static fromScalar = (scalar, alpha = 255, out = new ColorRGBA()) => {
-	        out[0] = scalar;
-	        out[1] = scalar;
-	        out[2] = scalar;
-	        out[3] = alpha;
-	        return out;
-	    };
-	    static fromString = (str, out = new ColorRGBA()) => {
-	        if (str in COLOR_HEX_MAP) {
-	            return ColorRGBA.fromHex(COLOR_HEX_MAP[str], 255, out);
-	        }
-	        else if (str.startsWith("#")) {
-	            str = str.substr(1);
-	            return ColorRGBA.fromScalar(parseInt(str, 16), 255, out);
-	        }
-	        else if (str.startsWith("rgba(")) {
-	            str = str.substring(4, str.length - 1);
-	            const arr = str.split(",");
-	            out[0] = parseInt(arr[0], 10);
-	            out[1] = parseInt(arr[1], 10);
-	            out[2] = parseInt(arr[2], 10);
-	            out[3] = parseInt(arr[3], 10);
-	        }
-	        return out;
-	    };
-	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorRGBA()) => {
-	        const gray = ColorRGBA.averageWeighted(color, wr, wg, wb);
-	        ColorRGBA.fromScalar(gray, color[3], out);
-	        return out;
-	    };
-	    dataType = ArraybufferDataType.COLOR_RGBA;
-	    constructor(r = 0, g = 0, b = 0, a = 255) {
-	        super(4);
-	        this[0] = r;
-	        this[1] = g;
-	        this[2] = b;
-	        this[3] = a;
-	    }
-	    get r() {
-	        return this[0];
-	    }
-	    set r(val) {
-	        this[0] = val;
-	    }
-	    get g() {
-	        return this[1];
-	    }
-	    set g(val) {
-	        this[1] = val;
-	    }
-	    get b() {
-	        return this[2];
-	    }
-	    set b(val) {
-	        this[2] = val;
-	    }
-	    get a() {
-	        return this[3];
-	    }
-	    set a(val) {
-	        this[3] = val;
-	    }
-	}
+	};
 
 	class ColorRGB extends Uint8Array {
 	    static average = (color) => {
@@ -767,7 +645,7 @@
 	    return min + Math.floor(Math.random() * (max - min + 1));
 	};
 
-	let len$3 = 0, sum$1 = 0;
+	let len$2 = 0, sum$1 = 0;
 	/**
 	 * @function sumArray
 	 * @desc 求数组的和
@@ -778,8 +656,8 @@
 	 */
 	var sumArray = (arr) => {
 	    sum$1 = 0;
-	    len$3 = arr.length;
-	    for (let i = 0; i < len$3; i++) {
+	    len$2 = arr.length;
+	    for (let i = 0; i < len$2; i++) {
 	        sum$1 += arr[i];
 	    }
 	    return sum$1;
@@ -1143,7 +1021,7 @@
 	let x$4 = 0, y$4 = 0;
 	const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 	class Matrix2 extends Float32Array {
-	    static UNIT_MATRIX2 = new Matrix2(UNIT_MATRIX2_DATA);
+	    static UNIT_MATRIX2 = new Matrix2([1, 0, 0, 1]);
 	    static add = (a, b, out) => {
 	        out[0] = a[0] + b[0];
 	        out[1] = a[1] + b[1];
@@ -1659,8 +1537,8 @@
 	    }
 	}
 
-	let ax$2, ay$2, az$2, bx$2, by$2, bz$2;
-	let ag, s$3;
+	let ax$1, ay$1, az$1, bx$1, by$1, bz$1;
+	let ag, s$2;
 	class Vector3 extends Float32Array {
 	    static VECTOR3_ZERO = new Vector3(0, 0, 0);
 	    static VECTOR3_ONE = new Vector3(1, 1, 1);
@@ -1683,13 +1561,13 @@
 	        return out;
 	    };
 	    static angle = (a, b) => {
-	        ax$2 = a[0];
-	        ay$2 = a[1];
-	        az$2 = a[2];
-	        bx$2 = b[0];
-	        by$2 = b[1];
-	        bz$2 = b[2];
-	        const mag1 = Math.sqrt(ax$2 * ax$2 + ay$2 * ay$2 + az$2 * az$2), mag2 = Math.sqrt(bx$2 * bx$2 + by$2 * by$2 + bz$2 * bz$2), mag = mag1 * mag2, cosine = mag && Vector3.dot(a, b) / mag;
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        bx$1 = b[0];
+	        by$1 = b[1];
+	        bz$1 = b[2];
+	        const mag1 = Math.sqrt(ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1), mag2 = Math.sqrt(bx$1 * bx$1 + by$1 * by$1 + bz$1 * bz$1), mag = mag1 * mag2, cosine = mag && Vector3.dot(a, b) / mag;
 	        return Math.acos(clampCommon(cosine, -1, 1));
 	    };
 	    static clamp = (a, min, max, out = new Vector3()) => {
@@ -1726,31 +1604,31 @@
 	        return out;
 	    };
 	    static cross = (a, b, out = new Vector3()) => {
-	        ax$2 = a[0];
-	        ay$2 = a[1];
-	        az$2 = a[2];
-	        bx$2 = b[0];
-	        by$2 = b[1];
-	        bz$2 = b[2];
-	        out[0] = ay$2 * bz$2 - az$2 * by$2;
-	        out[1] = az$2 * bx$2 - ax$2 * bz$2;
-	        out[2] = ax$2 * by$2 - ay$2 * bx$2;
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        bx$1 = b[0];
+	        by$1 = b[1];
+	        bz$1 = b[2];
+	        out[0] = ay$1 * bz$1 - az$1 * by$1;
+	        out[1] = az$1 * bx$1 - ax$1 * bz$1;
+	        out[2] = ax$1 * by$1 - ay$1 * bx$1;
 	        return out;
 	    };
 	    static distanceTo = (a, b) => {
-	        ax$2 = b[0] - a[0];
-	        ay$2 = b[1] - a[1];
-	        az$2 = b[2] - a[2];
-	        return Math.hypot(ax$2, ay$2, az$2);
+	        ax$1 = b[0] - a[0];
+	        ay$1 = b[1] - a[1];
+	        az$1 = b[2] - a[2];
+	        return Math.hypot(ax$1, ay$1, az$1);
 	    };
 	    static distanceToManhattan = (a, b) => {
 	        return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
 	    };
 	    static distanceToSquared = (a, b) => {
-	        ax$2 = a[0] - b[0];
-	        ay$2 = a[1] - b[1];
-	        az$2 = a[2] - b[2];
-	        return ax$2 * ax$2 + ay$2 * ay$2 + az$2 * az$2;
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        return ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1;
 	    };
 	    static divide = (a, b, out = new Vector3()) => {
 	        out[0] = a[0] / b[0];
@@ -1776,7 +1654,7 @@
 	        out[2] = a[offset + 2];
 	        return out;
 	    };
-	    static fromScalar = (num, out = new Vector3(3)) => {
+	    static fromScalar = (num, out = new Vector3()) => {
 	        out[0] = out[1] = out[2] = num;
 	        return out;
 	    };
@@ -1784,6 +1662,12 @@
 	        out[0] = x;
 	        out[1] = y;
 	        out[2] = z;
+	        return out;
+	    };
+	    static fromMatrix4Translate = (mat, out = new Vector3()) => {
+	        out[0] = mat[12];
+	        out[1] = mat[13];
+	        out[2] = mat[14];
 	        return out;
 	    };
 	    static hermite = (a, b, c, d, t, out = new Vector3()) => {
@@ -1864,39 +1748,39 @@
 	        return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
 	    };
 	    static rotateX = (a, b, rad, out = new Vector3()) => {
-	        ax$2 = a[0] - b[0];
-	        ay$2 = a[1] - b[1];
-	        az$2 = a[2] - b[2];
-	        bx$2 = ax$2;
-	        by$2 = ay$2 * Math.cos(rad) - az$2 * Math.sin(rad);
-	        bz$2 = ay$2 * Math.sin(rad) + az$2 * Math.cos(rad);
-	        out[0] = bx$2 + b[0];
-	        out[1] = by$2 + b[1];
-	        out[2] = bz$2 + b[2];
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        bx$1 = ax$1;
+	        by$1 = ay$1 * Math.cos(rad) - az$1 * Math.sin(rad);
+	        bz$1 = ay$1 * Math.sin(rad) + az$1 * Math.cos(rad);
+	        out[0] = bx$1 + b[0];
+	        out[1] = by$1 + b[1];
+	        out[2] = bz$1 + b[2];
 	        return out;
 	    };
 	    static rotateY = (a, b, rad, out = new Vector3()) => {
-	        ax$2 = a[0] - b[0];
-	        ay$2 = a[1] - b[1];
-	        az$2 = a[2] - b[2];
-	        bx$2 = az$2 * Math.sin(rad) + ax$2 * Math.cos(rad);
-	        by$2 = ay$2;
-	        bz$2 = az$2 * Math.cos(rad) - ax$2 * Math.sin(rad);
-	        out[0] = bx$2 + b[0];
-	        out[1] = by$2 + b[1];
-	        out[2] = bz$2 + b[2];
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        bx$1 = az$1 * Math.sin(rad) + ax$1 * Math.cos(rad);
+	        by$1 = ay$1;
+	        bz$1 = az$1 * Math.cos(rad) - ax$1 * Math.sin(rad);
+	        out[0] = bx$1 + b[0];
+	        out[1] = by$1 + b[1];
+	        out[2] = bz$1 + b[2];
 	        return out;
 	    };
 	    static rotateZ = (a, b, rad, out = new Vector3()) => {
-	        ax$2 = a[0] - b[0];
-	        ay$2 = a[1] - b[1];
-	        az$2 = a[2] - b[2];
-	        bx$2 = ax$2 * Math.cos(rad) - ay$2 * Math.sin(rad);
-	        by$2 = ax$2 * Math.sin(rad) + ay$2 * Math.cos(rad);
-	        bz$2 = az$2;
-	        out[0] = bx$2 + b[0];
-	        out[1] = by$2 + b[1];
-	        out[2] = bz$2 + b[2];
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        bx$1 = ax$1 * Math.cos(rad) - ay$1 * Math.sin(rad);
+	        by$1 = ax$1 * Math.sin(rad) + ay$1 * Math.cos(rad);
+	        bz$1 = az$1;
+	        out[0] = bx$1 + b[0];
+	        out[1] = by$1 + b[1];
+	        out[2] = bz$1 + b[2];
 	        return out;
 	    };
 	    static round = (a, out = new Vector3()) => {
@@ -1916,35 +1800,35 @@
 	    };
 	    static slerp = (a, b, t, out = new Vector3()) => {
 	        ag = Math.acos(Math.min(Math.max(Vector3.dot(a, b), -1), 1));
-	        s$3 = Math.sin(ag);
-	        ax$2 = Math.sin((1 - t) * ag) / s$3;
-	        bx$2 = Math.sin(t * ag) / s$3;
-	        out[0] = ax$2 * a[0] + bx$2 * b[0];
-	        out[1] = ax$2 * a[1] + bx$2 * b[1];
-	        out[2] = ax$2 * a[2] + bx$2 * b[2];
+	        s$2 = Math.sin(ag);
+	        ax$1 = Math.sin((1 - t) * ag) / s$2;
+	        bx$1 = Math.sin(t * ag) / s$2;
+	        out[0] = ax$1 * a[0] + bx$1 * b[0];
+	        out[1] = ax$1 * a[1] + bx$1 * b[1];
+	        out[2] = ax$1 * a[2] + bx$1 * b[2];
 	        return out;
 	    };
 	    static toString = (a) => {
 	        return `(${a[0]}, ${a[1]}, ${a[2]})`;
 	    };
 	    static transformMatrix3 = (a, m, out = new Vector3()) => {
-	        ax$2 = a[0];
-	        ay$2 = a[1];
-	        az$2 = a[2];
-	        out[0] = ax$2 * m[0] + ay$2 * m[3] + az$2 * m[6];
-	        out[1] = ax$2 * m[1] + ay$2 * m[4] + az$2 * m[7];
-	        out[2] = ax$2 * m[2] + ay$2 * m[5] + az$2 * m[8];
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        out[0] = ax$1 * m[0] + ay$1 * m[3] + az$1 * m[6];
+	        out[1] = ax$1 * m[1] + ay$1 * m[4] + az$1 * m[7];
+	        out[2] = ax$1 * m[2] + ay$1 * m[5] + az$1 * m[8];
 	        return out;
 	    };
 	    static transformMatrix4 = (a, m, out = new Vector3()) => {
-	        ax$2 = a[0];
-	        ay$2 = a[1];
-	        az$2 = a[2];
-	        ag = m[3] * ax$2 + m[7] * ay$2 + m[11] * az$2 + m[15];
-	        ag = ag || 1.0;
-	        out[0] = (m[0] * ax$2 + m[4] * ay$2 + m[8] * az$2 + m[12]) / ag;
-	        out[1] = (m[1] * ax$2 + m[5] * ay$2 + m[9] * az$2 + m[13]) / ag;
-	        out[2] = (m[2] * ax$2 + m[6] * ay$2 + m[10] * az$2 + m[14]) / ag;
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        ag = m[3] * ax$1 + m[7] * ay$1 + m[11] * az$1 + m[15];
+	        ag = ag ? 1 / ag : 1.0;
+	        out[0] = (m[0] * ax$1 + m[4] * ay$1 + m[8] * az$1 + m[12]) * ag;
+	        out[1] = (m[1] * ax$1 + m[5] * ay$1 + m[9] * az$1 + m[13]) * ag;
+	        out[2] = (m[2] * ax$1 + m[6] * ay$1 + m[10] * az$1 + m[14]) * ag;
 	        return out;
 	    };
 	    static transformQuat = (a, q, out = new Vector3()) => {
@@ -2001,7 +1885,7 @@
 	/* eslint-disable max-lines */
 	let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
 	let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
-	let x$2 = 0, y$2 = 0, z = 0, det = 0, len$2 = 0, s$2 = 0, t = 0, a = 0, b = 0, c$2 = 0, d = 0, e = 0, f = 0;
+	let x$2 = 0, y$2 = 0, z = 0, det = 0, len$1 = 0, s$1 = 0, t = 0, a = 0, b = 0, c$1 = 0, d = 0, e = 0, f = 0;
 	const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 	class Matrix4 extends Float32Array {
 	    static UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
@@ -2050,24 +1934,24 @@
 	        z = euler.z;
 	        a = Math.cos(x$2);
 	        b = Math.sin(x$2);
-	        c$2 = Math.cos(y$2);
+	        c$1 = Math.cos(y$2);
 	        d = Math.sin(y$2);
 	        e = Math.cos(z);
 	        f = Math.sin(z);
 	        if (euler.order === exports.EulerRotationOrders.XYZ) {
 	            const ae = a * e, af = a * f, be = b * e, bf = b * f;
-	            out[0] = c$2 * e;
-	            out[4] = -c$2 * f;
+	            out[0] = c$1 * e;
+	            out[4] = -c$1 * f;
 	            out[8] = d;
 	            out[1] = af + be * d;
 	            out[5] = ae - bf * d;
-	            out[9] = -b * c$2;
+	            out[9] = -b * c$1;
 	            out[2] = bf - ae * d;
 	            out[6] = be + af * d;
-	            out[10] = a * c$2;
+	            out[10] = a * c$1;
 	        }
 	        else if (euler.order === exports.EulerRotationOrders.YXZ) {
-	            const ce = c$2 * e, cf = c$2 * f, de = d * e, df = d * f;
+	            const ce = c$1 * e, cf = c$1 * f, de = d * e, df = d * f;
 	            out[0] = ce + df * b;
 	            out[4] = de * b - cf;
 	            out[8] = a * d;
@@ -2076,10 +1960,10 @@
 	            out[9] = -b;
 	            out[2] = cf * b - de;
 	            out[6] = df + ce * b;
-	            out[10] = a * c$2;
+	            out[10] = a * c$1;
 	        }
 	        else if (euler.order === exports.EulerRotationOrders.ZXY) {
-	            const ce = c$2 * e, cf = c$2 * f, de = d * e, df = d * f;
+	            const ce = c$1 * e, cf = c$1 * f, de = d * e, df = d * f;
 	            out[0] = ce - df * b;
 	            out[4] = -a * f;
 	            out[8] = de + cf * b;
@@ -2088,23 +1972,23 @@
 	            out[9] = df - ce * b;
 	            out[2] = -a * d;
 	            out[6] = b;
-	            out[10] = a * c$2;
+	            out[10] = a * c$1;
 	        }
 	        else if (euler.order === exports.EulerRotationOrders.ZYX) {
 	            const ae = a * e, af = a * f, be = b * e, bf = b * f;
-	            out[0] = c$2 * e;
+	            out[0] = c$1 * e;
 	            out[4] = be * d - af;
 	            out[8] = ae * d + bf;
-	            out[1] = c$2 * f;
+	            out[1] = c$1 * f;
 	            out[5] = bf * d + ae;
 	            out[9] = af * d - be;
 	            out[2] = -d;
-	            out[6] = b * c$2;
-	            out[10] = a * c$2;
+	            out[6] = b * c$1;
+	            out[10] = a * c$1;
 	        }
 	        else if (euler.order === exports.EulerRotationOrders.YZX) {
-	            const ac = a * c$2, ad = a * d, bc = b * c$2, bd = b * d;
-	            out[0] = c$2 * e;
+	            const ac = a * c$1, ad = a * d, bc = b * c$1, bd = b * d;
+	            out[0] = c$1 * e;
 	            out[4] = bd - ac * f;
 	            out[8] = bc * f + ad;
 	            out[1] = f;
@@ -2115,8 +1999,8 @@
 	            out[10] = ac - bd * f;
 	        }
 	        else if (euler.order === exports.EulerRotationOrders.XZY) {
-	            const ac = a * c$2, ad = a * d, bc = b * c$2, bd = b * d;
-	            out[0] = c$2 * e;
+	            const ac = a * c$1, ad = a * d, bc = b * c$1, bd = b * d;
+	            out[0] = c$1 * e;
 	            out[4] = -f;
 	            out[8] = d * e;
 	            out[1] = ac * f + bd;
@@ -2211,28 +2095,28 @@
 	        x$2 = axis[0];
 	        y$2 = axis[1];
 	        z = axis[2];
-	        len$2 = Math.hypot(x$2, y$2, z);
-	        if (len$2 < EPSILON) {
+	        len$1 = Math.hypot(x$2, y$2, z);
+	        if (len$1 < EPSILON) {
 	            return null;
 	        }
-	        len$2 = 1 / len$2;
-	        x$2 *= len$2;
-	        y$2 *= len$2;
-	        z *= len$2;
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
-	        t = 1 - c$2;
-	        out[0] = x$2 * x$2 * t + c$2;
-	        out[1] = y$2 * x$2 * t + z * s$2;
-	        out[2] = z * x$2 * t - y$2 * s$2;
+	        len$1 = 1 / len$1;
+	        x$2 *= len$1;
+	        y$2 *= len$1;
+	        z *= len$1;
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
+	        t = 1 - c$1;
+	        out[0] = x$2 * x$2 * t + c$1;
+	        out[1] = y$2 * x$2 * t + z * s$1;
+	        out[2] = z * x$2 * t - y$2 * s$1;
 	        out[3] = 0;
-	        out[4] = x$2 * y$2 * t - z * s$2;
-	        out[5] = y$2 * y$2 * t + c$2;
-	        out[6] = z * y$2 * t + x$2 * s$2;
+	        out[4] = x$2 * y$2 * t - z * s$1;
+	        out[5] = y$2 * y$2 * t + c$1;
+	        out[6] = z * y$2 * t + x$2 * s$1;
 	        out[7] = 0;
-	        out[8] = x$2 * z * t + y$2 * s$2;
-	        out[9] = y$2 * z * t - x$2 * s$2;
-	        out[10] = z * z * t + c$2;
+	        out[8] = x$2 * z * t + y$2 * s$1;
+	        out[9] = y$2 * z * t - x$2 * s$1;
+	        out[10] = z * z * t + c$1;
 	        out[11] = 0;
 	        out[12] = 0;
 	        out[13] = 0;
@@ -2241,19 +2125,19 @@
 	        return out;
 	    };
 	    static fromRotationX = (rad, out = new Matrix4()) => {
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
 	        out[0] = 1;
 	        out[1] = 0;
 	        out[2] = 0;
 	        out[3] = 0;
 	        out[4] = 0;
-	        out[5] = c$2;
-	        out[6] = s$2;
+	        out[5] = c$1;
+	        out[6] = s$1;
 	        out[7] = 0;
 	        out[8] = 0;
-	        out[9] = -s$2;
-	        out[10] = c$2;
+	        out[9] = -s$1;
+	        out[10] = c$1;
 	        out[11] = 0;
 	        out[12] = 0;
 	        out[13] = 0;
@@ -2262,19 +2146,19 @@
 	        return out;
 	    };
 	    static fromRotationY = (rad, out = new Matrix4()) => {
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
-	        out[0] = c$2;
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
+	        out[0] = c$1;
 	        out[1] = 0;
-	        out[2] = -s$2;
+	        out[2] = -s$1;
 	        out[3] = 0;
 	        out[4] = 0;
 	        out[5] = 1;
 	        out[6] = 0;
 	        out[7] = 0;
-	        out[8] = s$2;
+	        out[8] = s$1;
 	        out[9] = 0;
-	        out[10] = c$2;
+	        out[10] = c$1;
 	        out[11] = 0;
 	        out[12] = 0;
 	        out[13] = 0;
@@ -2283,14 +2167,14 @@
 	        return out;
 	    };
 	    static fromRotationZ = (rad, out = new Matrix4()) => {
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
-	        out[0] = c$2;
-	        out[1] = s$2;
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
+	        out[0] = c$1;
+	        out[1] = s$1;
 	        out[2] = 0;
 	        out[3] = 0;
-	        out[4] = -s$2;
-	        out[5] = c$2;
+	        out[4] = -s$1;
+	        out[5] = c$1;
 	        out[6] = 0;
 	        out[7] = 0;
 	        out[8] = 0;
@@ -2611,10 +2495,10 @@
 	        return out;
 	    };
 	    static orthogonal = (left, right, bottom, top, near, far, out = new Matrix4()) => {
-	        c$2 = 1 / (left - right);
+	        c$1 = 1 / (left - right);
 	        b = 1 / (bottom - top);
 	        a = 1 / (near - far);
-	        out[0] = -2 * c$2;
+	        out[0] = -2 * c$1;
 	        out[1] = 0;
 	        out[2] = 0;
 	        out[3] = 0;
@@ -2626,17 +2510,17 @@
 	        out[9] = 0;
 	        out[10] = 2 * a;
 	        out[11] = 0;
-	        out[12] = (left + right) * c$2;
+	        out[12] = (left + right) * c$1;
 	        out[13] = (top + bottom) * b;
 	        out[14] = (far + near) * a;
 	        out[15] = 1;
 	        return out;
 	    };
 	    static orthogonalZ0 = (left, right, bottom, top, near, far, out = new Matrix4()) => {
-	        c$2 = 1 / (left - right);
+	        c$1 = 1 / (left - right);
 	        b = 1 / (bottom - top);
 	        a = 1 / (near - far);
-	        out[0] = -2 * c$2;
+	        out[0] = -2 * c$1;
 	        out[1] = 0;
 	        out[2] = 0;
 	        out[3] = 0;
@@ -2648,7 +2532,7 @@
 	        out[9] = 0;
 	        out[10] = a;
 	        out[11] = 0;
-	        out[12] = (left + right) * c$2;
+	        out[12] = (left + right) * c$1;
 	        out[13] = (top + bottom) * b;
 	        out[14] = near * a;
 	        out[15] = 1;
@@ -2712,17 +2596,17 @@
 	        x$2 = axis[0];
 	        y$2 = axis[1];
 	        z = axis[2];
-	        len$2 = Math.hypot(x$2, y$2, z);
-	        if (len$2 < EPSILON) {
+	        len$1 = Math.hypot(x$2, y$2, z);
+	        if (len$1 < EPSILON) {
 	            return null;
 	        }
-	        len$2 = 1 / len$2;
-	        x$2 *= len$2;
-	        y$2 *= len$2;
-	        z *= len$2;
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
-	        t = 1 - c$2;
+	        len$1 = 1 / len$1;
+	        x$2 *= len$1;
+	        y$2 *= len$1;
+	        z *= len$1;
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
+	        t = 1 - c$1;
 	        a00 = a[0];
 	        a01 = a[1];
 	        a02 = a[2];
@@ -2735,15 +2619,15 @@
 	        a21 = a[9];
 	        a22 = a[10];
 	        a23 = a[11];
-	        b00 = x$2 * x$2 * t + c$2;
-	        b01 = y$2 * x$2 * t + z * s$2;
-	        b02 = z * x$2 * t - y$2 * s$2;
-	        b10 = x$2 * y$2 * t - z * s$2;
-	        b11 = y$2 * y$2 * t + c$2;
-	        b12 = z * y$2 * t + x$2 * s$2;
-	        b20 = x$2 * z * t + y$2 * s$2;
-	        b21 = y$2 * z * t - x$2 * s$2;
-	        b22 = z * z * t + c$2;
+	        b00 = x$2 * x$2 * t + c$1;
+	        b01 = y$2 * x$2 * t + z * s$1;
+	        b02 = z * x$2 * t - y$2 * s$1;
+	        b10 = x$2 * y$2 * t - z * s$1;
+	        b11 = y$2 * y$2 * t + c$1;
+	        b12 = z * y$2 * t + x$2 * s$1;
+	        b20 = x$2 * z * t + y$2 * s$1;
+	        b21 = y$2 * z * t - x$2 * s$1;
+	        b22 = z * z * t + c$1;
 	        out[0] = a00 * b00 + a10 * b01 + a20 * b02;
 	        out[1] = a01 * b00 + a11 * b01 + a21 * b02;
 	        out[2] = a02 * b00 + a12 * b01 + a22 * b02;
@@ -2765,8 +2649,8 @@
 	        return out;
 	    };
 	    static rotateX = (a, rad, out = new Matrix4()) => {
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
 	        a10 = a[4];
 	        a11 = a[5];
 	        a12 = a[6];
@@ -2785,19 +2669,19 @@
 	            out[14] = a[14];
 	            out[15] = a[15];
 	        }
-	        out[4] = a10 * c$2 + a20 * s$2;
-	        out[5] = a11 * c$2 + a21 * s$2;
-	        out[6] = a12 * c$2 + a22 * s$2;
-	        out[7] = a13 * c$2 + a23 * s$2;
-	        out[8] = a20 * c$2 - a10 * s$2;
-	        out[9] = a21 * c$2 - a11 * s$2;
-	        out[10] = a22 * c$2 - a12 * s$2;
-	        out[11] = a23 * c$2 - a13 * s$2;
+	        out[4] = a10 * c$1 + a20 * s$1;
+	        out[5] = a11 * c$1 + a21 * s$1;
+	        out[6] = a12 * c$1 + a22 * s$1;
+	        out[7] = a13 * c$1 + a23 * s$1;
+	        out[8] = a20 * c$1 - a10 * s$1;
+	        out[9] = a21 * c$1 - a11 * s$1;
+	        out[10] = a22 * c$1 - a12 * s$1;
+	        out[11] = a23 * c$1 - a13 * s$1;
 	        return out;
 	    };
 	    static rotateY = (a, rad, out = new Matrix4()) => {
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
 	        a00 = a[0];
 	        a01 = a[1];
 	        a02 = a[2];
@@ -2816,19 +2700,19 @@
 	            out[14] = a[14];
 	            out[15] = a[15];
 	        }
-	        out[0] = a00 * c$2 - a20 * s$2;
-	        out[1] = a01 * c$2 - a21 * s$2;
-	        out[2] = a02 * c$2 - a22 * s$2;
-	        out[3] = a03 * c$2 - a23 * s$2;
-	        out[8] = a00 * s$2 + a20 * c$2;
-	        out[9] = a01 * s$2 + a21 * c$2;
-	        out[10] = a02 * s$2 + a22 * c$2;
-	        out[11] = a03 * s$2 + a23 * c$2;
+	        out[0] = a00 * c$1 - a20 * s$1;
+	        out[1] = a01 * c$1 - a21 * s$1;
+	        out[2] = a02 * c$1 - a22 * s$1;
+	        out[3] = a03 * c$1 - a23 * s$1;
+	        out[8] = a00 * s$1 + a20 * c$1;
+	        out[9] = a01 * s$1 + a21 * c$1;
+	        out[10] = a02 * s$1 + a22 * c$1;
+	        out[11] = a03 * s$1 + a23 * c$1;
 	        return out;
 	    };
 	    static rotateZ = (a, rad, out = new Matrix4()) => {
-	        s$2 = Math.sin(rad);
-	        c$2 = Math.cos(rad);
+	        s$1 = Math.sin(rad);
+	        c$1 = Math.cos(rad);
 	        a00 = a[0];
 	        a01 = a[1];
 	        a02 = a[2];
@@ -2847,14 +2731,14 @@
 	            out[14] = a[14];
 	            out[15] = a[15];
 	        }
-	        out[0] = a00 * c$2 + a10 * s$2;
-	        out[1] = a01 * c$2 + a11 * s$2;
-	        out[2] = a02 * c$2 + a12 * s$2;
-	        out[3] = a03 * c$2 + a13 * s$2;
-	        out[4] = a10 * c$2 - a00 * s$2;
-	        out[5] = a11 * c$2 - a01 * s$2;
-	        out[6] = a12 * c$2 - a02 * s$2;
-	        out[7] = a13 * c$2 - a03 * s$2;
+	        out[0] = a00 * c$1 + a10 * s$1;
+	        out[1] = a01 * c$1 + a11 * s$1;
+	        out[2] = a02 * c$1 + a12 * s$1;
+	        out[3] = a03 * c$1 + a13 * s$1;
+	        out[4] = a10 * c$1 - a00 * s$1;
+	        out[5] = a11 * c$1 - a01 * s$1;
+	        out[6] = a12 * c$1 - a02 * s$1;
+	        out[7] = a13 * c$1 - a03 * s$1;
 	        return out;
 	    };
 	    static scale = (a, v, out = new Matrix4()) => {
@@ -3178,303 +3062,7 @@
 	    }
 	}
 
-	let ax$1, ay$1, az$1, aw$1, bx$1, by$1, bz$1, bw;
-	let s$1 = 0, c$1 = 0, rad = 0, dotTmp = 0, omega = 0, len$1 = 0, scale0 = 0, scale1 = 0;
-	const tmpVec3 = new Float32Array(3);
-	class Quaternion extends Float32Array {
-	    static angleTo = (a, b) => {
-	        dotTmp = Quaternion.dot(a, b);
-	        return Math.acos(2 * dotTmp * dotTmp - 1);
-	    };
-	    static conjugate = (a, out = new Quaternion()) => {
-	        out[0] = -a[0];
-	        out[1] = -a[1];
-	        out[2] = -a[2];
-	        out[3] = a[3];
-	        return out;
-	    };
-	    static create = (x = 0, y = 0, z = 0, w = 1, out = new Quaternion()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        out[3] = w;
-	        return out;
-	    };
-	    static dot = (a, b) => {
-	        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
-	    };
-	    static fromAxisAngle = (axis, rad, out = new Quaternion()) => {
-	        rad = rad * 0.5;
-	        s$1 = Math.sin(rad);
-	        out[0] = s$1 * axis[0];
-	        out[1] = s$1 * axis[1];
-	        out[2] = s$1 * axis[2];
-	        out[3] = Math.cos(rad);
-	        return out;
-	    };
-	    static fromMatrix3 = (m, out = new Quaternion()) => {
-	        const fTrace = m[0] + m[4] + m[8];
-	        let fRoot;
-	        if (fTrace > 0.0) {
-	            fRoot = Math.sqrt(fTrace + 1.0); // 2w
-	            out[3] = 0.5 * fRoot;
-	            fRoot = 0.5 / fRoot; // 1/(4w)
-	            out[0] = (m[5] - m[7]) * fRoot;
-	            out[1] = (m[6] - m[2]) * fRoot;
-	            out[2] = (m[1] - m[3]) * fRoot;
-	        }
-	        else {
-	            let i = 0;
-	            if (m[4] > m[0])
-	                i = 1;
-	            if (m[8] > m[i * 3 + i])
-	                i = 2;
-	            const j = (i + 1) % 3;
-	            const k = (i + 2) % 3;
-	            fRoot = Math.sqrt(m[i * 3 + i] - m[j * 3 + j] - m[k * 3 + k] + 1.0);
-	            out[i] = 0.5 * fRoot;
-	            fRoot = 0.5 / fRoot;
-	            out[3] = (m[j * 3 + k] - m[k * 3 + j]) * fRoot;
-	            out[j] = (m[j * 3 + i] + m[i * 3 + j]) * fRoot;
-	            out[k] = (m[k * 3 + i] + m[i * 3 + k]) * fRoot;
-	        }
-	        return out;
-	    };
-	    static identity = (out = new Quaternion()) => {
-	        out[0] = 0;
-	        out[1] = 0;
-	        out[2] = 0;
-	        out[3] = 1;
-	        return out;
-	    };
-	    static invert = (a, out = new Quaternion()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        dotTmp = ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1 + aw$1 * aw$1;
-	        if (dotTmp) {
-	            c$1 = 1.0 / dotTmp;
-	            out[0] = -ax$1 * c$1;
-	            out[1] = -ay$1 * c$1;
-	            out[2] = -az$1 * c$1;
-	            out[3] = aw$1 * c$1;
-	        }
-	        else {
-	            out[0] = 0;
-	            out[1] = 0;
-	            out[2] = 0;
-	            out[3] = 0;
-	        }
-	        return out;
-	    };
-	    static lerp = (a, b, t, out = new Quaternion()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        out[0] = ax$1 + t * (b[0] - ax$1);
-	        out[1] = ay$1 + t * (b[1] - ay$1);
-	        out[2] = az$1 + t * (b[2] - az$1);
-	        out[3] = aw$1 + t * (b[3] - aw$1);
-	        return out;
-	    };
-	    static multiply = (a, b, out = new Quaternion()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        bx$1 = b[0];
-	        by$1 = b[1];
-	        bz$1 = b[2];
-	        bw = b[3];
-	        out[0] = ax$1 * bw + aw$1 * bx$1 + ay$1 * bz$1 - az$1 * by$1;
-	        out[1] = ay$1 * bw + aw$1 * by$1 + az$1 * bx$1 - ax$1 * bz$1;
-	        out[2] = az$1 * bw + aw$1 * bz$1 + ax$1 * by$1 - ay$1 * bx$1;
-	        out[3] = aw$1 * bw - ax$1 * bx$1 - ay$1 * by$1 - az$1 * bz$1;
-	        return out;
-	    };
-	    static normalize = (a, out = new Quaternion()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        len$1 = ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1 + aw$1 * aw$1;
-	        if (len$1 > 0) {
-	            len$1 = 1 / Math.sqrt(len$1);
-	        }
-	        out[0] = ax$1 * len$1;
-	        out[1] = ay$1 * len$1;
-	        out[2] = az$1 * len$1;
-	        out[3] = aw$1 * len$1;
-	        return out;
-	    };
-	    static random = (out = new Quaternion()) => {
-	        ax$1 = Math.random();
-	        ay$1 = Math.random();
-	        az$1 = Math.random();
-	        c$1 = Math.sqrt(1 - ax$1);
-	        s$1 = Math.sqrt(ax$1);
-	        out[0] = c$1 * Math.sin(2.0 * Math.PI * ay$1);
-	        out[1] = c$1 * Math.cos(2.0 * Math.PI * ay$1);
-	        out[2] = s$1 * Math.sin(2.0 * Math.PI * az$1);
-	        out[3] = s$1 * Math.cos(2.0 * Math.PI * az$1);
-	        return out;
-	    };
-	    static rotationTo = (a, b, out = new Quaternion()) => {
-	        dotTmp = Vector3.dot(a, b);
-	        if (dotTmp < -1 + EPSILON) {
-	            Vector3.cross(Vector3.VECTOR3_LEFT, a, tmpVec3);
-	            if (Vector3.norm(tmpVec3) < EPSILON) {
-	                Vector3.cross(Vector3.VECTOR3_TOP, a, tmpVec3);
-	            }
-	            Vector3.normalize(tmpVec3, tmpVec3);
-	            Quaternion.fromAxisAngle(tmpVec3, Math.PI, out);
-	            return out;
-	        }
-	        else if (dotTmp > 1 - EPSILON) {
-	            out[0] = 0;
-	            out[1] = 0;
-	            out[2] = 0;
-	            out[3] = 1;
-	            return out;
-	        }
-	        else {
-	            Vector3.cross(tmpVec3, a, b);
-	            out[0] = tmpVec3[0];
-	            out[1] = tmpVec3[1];
-	            out[2] = tmpVec3[2];
-	            out[3] = 1 + dotTmp;
-	            return Quaternion.normalize(out, out);
-	        }
-	    };
-	    static rotateX = (a, rad, out = new Quaternion()) => {
-	        rad *= 0.5;
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        bx$1 = Math.sin(rad);
-	        bw = Math.cos(rad);
-	        out[0] = ax$1 * bw + aw$1 * bx$1;
-	        out[1] = ay$1 * bw + az$1 * bx$1;
-	        out[2] = az$1 * bw - ay$1 * bx$1;
-	        out[3] = aw$1 * bw - ax$1 * bx$1;
-	        return out;
-	    };
-	    static rotateY = (a, rad, out = new Quaternion()) => {
-	        rad *= 0.5;
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        by$1 = Math.sin(rad);
-	        bw = Math.cos(rad);
-	        out[0] = ax$1 * bw - az$1 * by$1;
-	        out[1] = ay$1 * bw + aw$1 * by$1;
-	        out[2] = az$1 * bw + ax$1 * by$1;
-	        out[3] = aw$1 * bw - ay$1 * by$1;
-	        return out;
-	    };
-	    static rotateZ = (a, rad, out = new Quaternion()) => {
-	        rad *= 0.5;
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        bz$1 = Math.sin(rad);
-	        bw = Math.cos(rad);
-	        out[0] = ax$1 * bw + ay$1 * bz$1;
-	        out[1] = ay$1 * bw - ax$1 * bz$1;
-	        out[2] = az$1 * bw + aw$1 * bz$1;
-	        out[3] = aw$1 * bw - az$1 * bz$1;
-	        return out;
-	    };
-	    static slerp = (a, b, t, out = new Quaternion()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        aw$1 = a[3];
-	        bx$1 = b[0];
-	        by$1 = b[1];
-	        bz$1 = b[2];
-	        bw = b[3];
-	        c$1 = ax$1 * bx$1 + ay$1 * by$1 + az$1 * bz$1 + aw$1 * bw;
-	        if (c$1 < 0.0) {
-	            c$1 = -c$1;
-	            bx$1 = -bx$1;
-	            by$1 = -by$1;
-	            bz$1 = -bz$1;
-	            bw = -bw;
-	        }
-	        if (1.0 - c$1 > EPSILON) {
-	            omega = Math.acos(c$1);
-	            s$1 = Math.sin(omega);
-	            scale0 = Math.sin((1.0 - t) * omega) / s$1;
-	            scale1 = Math.sin(t * omega) / s$1;
-	        }
-	        else {
-	            scale0 = 1.0 - t;
-	            scale1 = t;
-	        }
-	        out[0] = scale0 * ax$1 + scale1 * bx$1;
-	        out[1] = scale0 * ay$1 + scale1 * by$1;
-	        out[2] = scale0 * az$1 + scale1 * bz$1;
-	        out[3] = scale0 * aw$1 + scale1 * bw;
-	        return out;
-	    };
-	    static toAxisAngle = (q, outAxis) => {
-	        rad = Math.acos(q[3]) * 2.0;
-	        s$1 = Math.sin(rad / 2.0);
-	        if (s$1 > EPSILON) {
-	            outAxis[0] = q[0] / s$1;
-	            outAxis[1] = q[1] / s$1;
-	            outAxis[2] = q[2] / s$1;
-	        }
-	        else {
-	            outAxis[0] = 1;
-	            outAxis[1] = 0;
-	            outAxis[2] = 0;
-	        }
-	        return rad;
-	    };
-	    static toString = (a) => {
-	        return `quat("${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-	    };
-	    length;
-	    dataType = ArraybufferDataType.QUATERNION;
-	    constructor(x = 0, y = 0, z = 0, w = 0) {
-	        super(4);
-	        this[0] = x;
-	        this[1] = y;
-	        this[2] = z;
-	        this[3] = w;
-	    }
-	    get x() {
-	        return this[0];
-	    }
-	    set x(value) {
-	        this[0] = value;
-	    }
-	    get y() {
-	        return this[1];
-	    }
-	    set y(value) {
-	        this[1] = value;
-	    }
-	    get z() {
-	        return this[2];
-	    }
-	    set z(value) {
-	        this[2] = value;
-	    }
-	    get w() {
-	        return this[3];
-	    }
-	    set w(value) {
-	        this[3] = value;
-	    }
-	}
+	new Vector3();
 
 	var rndFloat = (low, high) => {
 	    return low + Math.random() * (high - low);
@@ -3493,7 +3081,6 @@
 	const ta = new Vector3();
 	// const ma: Matrix3 = new Matrix3();
 	const tb = new Vector3(), vA = new Vector3();
-	const defaultMax = [1, 1, 1];
 	class Cube {
 	    static clampPoint = (a, point, out = new Vector3()) => {
 	        return Vector3.clamp(point, a.min, a.max, out);
@@ -3645,7 +3232,7 @@
 	    };
 	    min = new Vector3();
 	    max = new Vector3();
-	    constructor(a = new Vector3(), b = Vector3.fromArray(defaultMax)) {
+	    constructor(a = new Vector3(), b = Vector3.VECTOR3_ONE) {
 	        Vector3.min(a, b, this.min);
 	        Vector3.max(a, b, this.max);
 	    }
@@ -3941,11 +3528,8 @@
 	            rect.min[1] <= box.min[1] &&
 	            box.max[1] <= rect.max[1]);
 	    };
-	    static create = (a = Vector2.create(), b = Vector2.create(1, 1)) => {
-	        return {
-	            max: Vector2.max(a, b),
-	            min: Vector2.min(a, b)
-	        };
+	    static create = (a = Vector2.VECTOR2_ZERO, b = Vector2.VECTOR2_ONE) => {
+	        return new Rectangle2(a, b);
 	    };
 	    static equals = (a, b) => {
 	        return Vector2.equals(a.min, b.min) && Vector2.equals(a.max, b.max);
@@ -3983,9 +3567,9 @@
 	    static width = (a) => {
 	        return a.max[0] - a.min[0];
 	    };
-	    min = Vector2.create();
-	    max = Vector2.create();
-	    constructor(a = Vector2.create(), b = Vector2.create(1, 1)) {
+	    min = new Vector2();
+	    max = new Vector2();
+	    constructor(a = Vector2.VECTOR2_ZERO, b = Vector2.VECTOR2_ONE) {
 	        Vector2.min(a, b, this.min);
 	        Vector2.max(a, b, this.max);
 	    }
@@ -4011,10 +3595,10 @@
 	        r = a.radius + b.radius;
 	        return Vector3.distanceToSquared(a.position, b.position) <= r * r;
 	    };
-	    position;
+	    position = new Vector3();
 	    radius;
-	    constructor(position = new Vector3(), radius = 1) {
-	        this.position = position;
+	    constructor(position = Vector3.VECTOR3_ZERO, radius = 1) {
+	        this.position.set(position);
 	        this.radius = radius;
 	    }
 	}
@@ -4119,6 +3703,18 @@
 	    static at = (a, b, out = new Vector3()) => {
 	        return Vector3.multiplyScalar(a.direction, b, out);
 	    };
+	    static distanceToPlane = (ray, plane) => {
+	        const denominator = Vector3.dot(plane.normal, ray.direction);
+	        if (denominator === 0) {
+	            // line is coplanar, return origin
+	            if (plane.distanceToPoint(ray.position) === 0) {
+	                return 0;
+	            }
+	            return null;
+	        }
+	        const t = -(Vector3.dot(ray.position, plane.normal) + plane.distance) / denominator;
+	        return t >= 0 ? t : null;
+	    };
 	    static distanceToPoint = (a, point) => {
 	        return Math.sqrt(Ray3.distanceSqToPoint(a, point));
 	    };
@@ -4139,7 +3735,14 @@
 	        Vector3.normalize(Vector3.minus(b, a.position, out.direction));
 	        return out;
 	    };
-	    static intersectSphere = (ray, sphere, target) => {
+	    static intersectPlanePoint = (ray, plane, out = new Vector3()) => {
+	        const t = Ray3.distanceToPlane(ray, plane);
+	        if (t === null) {
+	            return null;
+	        }
+	        return Ray3.at(ray, t, out);
+	    };
+	    static intersectSpherePoint = (ray, sphere, target) => {
 	        Vector3.minus(sphere.position, ray.position, v);
 	        dis = Vector3.dot(v, ray.direction);
 	        d2 = Vector3.dot(v, v) - dis * dis;
@@ -4155,14 +3758,30 @@
 	            return Ray3.at(ray, t1, target);
 	        return Ray3.at(ray, t0, target);
 	    };
-	    static intersectsSphere = (ray, sphere) => {
+	    static isIntersectSphere = (ray, sphere) => {
 	        return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
 	    };
-	    position;
-	    direction;
-	    constructor(position = new Vector3(), direction = new Vector3(0, 0, -1)) {
-	        this.position = position;
-	        this.direction = Vector3.normalize(direction);
+	    static intersectsPlane = (ray, plane) => {
+	        const distToPoint = plane.distanceToPoint(ray.position);
+	        if (distToPoint === 0) {
+	            return true;
+	        }
+	        const denominator = Vector3.dot(plane.normal, ray.direction);
+	        if (denominator * distToPoint < 0) {
+	            return true;
+	        }
+	        return false;
+	    };
+	    static recast = (ray, distance, out = new Ray3()) => {
+	        v.set(Ray3.at(ray, distance));
+	        out.direction.set(v);
+	        return out;
+	    };
+	    position = new Vector3();
+	    direction = new Vector3();
+	    constructor(position = Vector3.VECTOR3_ZERO, direction = Vector3.VECTOR3_BACK) {
+	        this.position.set(position);
+	        Vector3.normalize(direction, this.direction);
 	    }
 	}
 
@@ -4434,7 +4053,6 @@
 	exports.ColorGPU = ColorGPU;
 	exports.ColorHSL = ColorHSL;
 	exports.ColorRGB = ColorRGB;
-	exports.ColorRGBA = ColorRGBA;
 	exports.Constants = constants;
 	exports.Cube = Cube;
 	exports.Easing = index;
@@ -4443,7 +4061,6 @@
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;
 	exports.Polar = Polar;
-	exports.Quaternion = Quaternion;
 	exports.Ray3 = Ray3;
 	exports.Rectangle2 = Rectangle2;
 	exports.Sphere = Sphere;
@@ -4471,4 +4088,3 @@
 	exports.sumArray = sumArray;
 
 }));
-//# sourceMappingURL=Mathx.js.map

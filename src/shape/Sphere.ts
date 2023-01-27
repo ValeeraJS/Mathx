@@ -1,11 +1,11 @@
-import Vector3, { IVector3, Vector3Like } from "./../vector/Vector3";
-import Cube from "./Cube";
-import ICube from "./interfaces/ICube";
-import ISphere from "./interfaces/ISphere";
+import { Vector3, IVector3, Vector3Like } from "./../vector/Vector3";
+import { Cube } from "./Cube";
+import { ICube } from "./interfaces/ICube";
+import { ISphere } from "./interfaces/ISphere";
 
 let r = 0;
 
-export default class Sphere implements ISphere {
+export class Sphere implements ISphere {
 	public static boundingBox = (a: ISphere, out: Cube = new Cube()): ICube => {
 		Vector3.minusScalar(a.position, a.radius, out.min);
 		Vector3.addScalar(a.position, a.radius, out.max);

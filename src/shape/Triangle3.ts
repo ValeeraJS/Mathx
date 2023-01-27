@@ -1,10 +1,10 @@
-import Vector3 from "../vector/Vector3";
-import ITriangle3 from "./interfaces/ITriangle3";
+import { Vector3 } from "../vector/Vector3";
+import { ITriangle3 } from "./interfaces/ITriangle3";
 
 const ab = new Vector3();
 const bc = new Vector3();
 
-export default class Triangle3 implements ITriangle3 {
+export class Triangle3 implements ITriangle3 {
 	public static area = (t: ITriangle3): number => {
 		const c = Triangle3.getABLength(t);
 		const a = Triangle3.getBCLength(t);

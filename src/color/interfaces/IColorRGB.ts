@@ -4,4 +4,4 @@ export interface IColorRGBJson {
 	b: number;
 }
 
-export default interface IColorRGB extends Uint8Array, IColorRGBJson {}
+export interface IColorRGB extends Uint8Array, IColorRGBJson {}

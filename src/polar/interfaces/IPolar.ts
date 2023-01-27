@@ -15,7 +15,7 @@
  * @memberof Mathx.IPolar
  * @member {number} Mathx.IPolar.y
  */
-export default interface IPolar {
+export interface IPolar {
 	r: number;
 	a: number;
 }

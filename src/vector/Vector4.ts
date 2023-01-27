@@ -1,6 +1,6 @@
 // import clampCommon from "../common/clamp";
 // import clampSafeCommon from "../common/clampSafe";
-import ArraybufferDataType from "../ArraybufferDataType";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 import closeToCommon from "../common/closeTo";
 
 export interface IVector4Json {
@@ -26,7 +26,7 @@ let A: number,
 	I: number,
 	J: number;
 
-export default class Vector4 extends Float32Array implements IVector4 {
+export class Vector4 extends Float32Array implements IVector4 {
 	public static readonly VECTOR3_ZERO = new Vector4(0, 0, 0, 0);
 	public static readonly VECTOR3_ONE = new Vector4(1, 1, 1, 1);
 	public static add = (

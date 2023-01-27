@@ -1,7 +1,7 @@
-import IColorRGBA, { IColorRGBAJson } from "./interfaces/IColorRGBA";
-import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
-import IColorRGB from "./interfaces/IColorRGB";
-import ArraybufferDataType from "../ArraybufferDataType";
+import { IColorRGBA, IColorRGBAJson } from "./interfaces/IColorRGBA";
+import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
+import { IColorRGB } from "./interfaces/IColorRGB";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
 import { hue2rgb } from "./hue2color";
 

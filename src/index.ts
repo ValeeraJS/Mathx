@@ -10,4 +10,4 @@ export * from "./random";
 export * from "./shape";
 export * from "./ray";
 export * from "./vector";
-export { default as ArraybufferDataType } from "./ArraybufferDataType";
+export * from "./ArraybufferDataType";

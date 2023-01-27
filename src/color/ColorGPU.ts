@@ -1,12 +1,12 @@
-import IColorGPU, { IColorGPUJson } from "./interfaces/IColorGPU";
-import COLOR_HEX_MAP from "./COLOR_HEX_MAP";
-import IColorRGB from "./interfaces/IColorRGB";
-import IColorRGBA from "./interfaces/IColorRGBA";
-import ArraybufferDataType from "../ArraybufferDataType";
+import { IColorGPU, IColorGPUJson } from "./interfaces/IColorGPU";
+import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
+import { IColorRGB } from "./interfaces/IColorRGB";
+import { IColorRGBA } from "./interfaces/IColorRGBA";
+import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_BLUE, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_RED } from "../constants";
 import { hue2rgb } from "./hue2color";
 
-export default class ColorGPU extends Float32Array implements IColorGPU {
+export class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
 		return (color[0] + color[1] + color[2]) / 3;
 	};

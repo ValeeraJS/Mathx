@@ -1,30 +1,30 @@
-import { IVector3, Vector3Like } from "../vector/Vector3";
-import ICube from "./interfaces/ICube";
-import ISphere from "./interfaces/ISphere";
-import ITriangle3 from "./interfaces/ITriangle3";
-export default class Cube implements ICube {
-    static clampPoint: (a: ICube, point: Float32Array | number[] | IVector3, out?: Vector3Like) => Vector3Like;
-    static containsPoint: (a: ICube, b: Float32Array | number[] | IVector3) => boolean;
+import { Vector3, IVector3, Vector3Like } from "../vector/Vector3";
+import { ICube } from "./interfaces/ICube";
+import { ISphere } from "./interfaces/ISphere";
+import { ITriangle3 } from "./interfaces/ITriangle3";
+export declare class Cube implements ICube {
+    static clampPoint: (a: ICube, point: Vector3Like, out?: Vector3) => Vector3;
+    static containsPoint: (a: ICube, b: Vector3Like) => boolean;
     static containsCube: (a: ICube, b: ICube) => boolean;
     static depth: (a: ICube) => number;
     static equals: (a: ICube, b: ICube) => boolean;
-    static getCenter: (a: ICube, out?: Vector3Like) => Vector3Like;
-    static getSize: (a: ICube, out?: Vector3Like) => Vector3Like;
+    static getCenter: (a: ICube, out?: Vector3) => Vector3;
+    static getSize: (a: ICube, out?: Vector3) => Vector3;
     static height: (a: ICube) => number;
-    static intersect: (a: ICube, b: ICube, out?: ICube) => ICube;
+    static intersect: (a: ICube, b: ICube, out?: Cube) => Cube;
     static intersectsBox: (a: ICube, b: ICube) => boolean;
     static intersectsSphere: (a: ICube, b: ISphere) => boolean;
     static intersectsTriangle: (a: ICube, b: ITriangle3) => boolean;
     static isEmpty: (a: ICube) => boolean;
-    static round: (a: ICube, out?: ICube) => ICube;
-    static size: (a: ICube, out?: Vector3Like) => Vector3Like;
-    static stretch: (a: ICube, b: Float32Array | number[] | IVector3, c: Float32Array | number[] | IVector3, out?: ICube) => ICube;
+    static round: (a: ICube, out?: Cube) => Cube;
+    static size: (a: ICube, out?: Vector3) => Vector3;
+    static stretch: (a: ICube, b: Float32Array | number[] | IVector3, c: Float32Array | number[] | IVector3, out?: Cube) => Cube;
     static surfaceArea: (a: ICube) => number;
-    static translate: (a: ICube, b: Float32Array | number[] | IVector3, out?: ICube) => ICube;
-    static union: (a: ICube, b: ICube, out?: ICube) => ICube;
+    static translate: (a: ICube, b: Float32Array | number[] | IVector3, out?: Cube) => Cube;
+    static union: (a: ICube, b: ICube, out?: Cube) => Cube;
     static volume: (a: ICube) => number;
     static width: (a: ICube) => number;
-    min: IVector3;
-    max: IVector3;
-    constructor(a?: IVector3, b?: Vector3Like);
+    min: Vector3;
+    max: Vector3;
+    constructor(a?: Vector3Like, b?: Vector3Like);
 }

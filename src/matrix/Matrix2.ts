@@ -15,8 +15,8 @@ let x = 0,
 
 const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 
-export default class Matrix2 extends Float32Array {
-	public static readonly UNIT_MATRIX2 = new Matrix2(UNIT_MATRIX2_DATA);
+export class Matrix2 extends Float32Array {
+	public static readonly UNIT_MATRIX2 = new Matrix2([1, 0, 0, 1]);
 	public static add = (
 		a: Float32Array | number[] | Matrix2,
 		b: Float32Array | number[] | Matrix2,
