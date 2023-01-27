@@ -71,11 +71,7 @@
 			"LICENSE",
 			"README.md",
 			"build/Mathx.js",
-			"build/Mathx.min.js",
-			"build/Mathx.module.js",
-			"build/Mathx.legacy.js",
-			"build/Mathx.legacy.min.js",
-			"build/Mathx.legacy.module.js"
+			"build/Mathx.module.js"
 		],
 		"directories": {}
 	},
