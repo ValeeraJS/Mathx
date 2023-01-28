@@ -271,6 +271,128 @@
 	    return p;
 	};
 
+	class ColorRGBA extends Uint8Array {
+	    static average = (color) => {
+	        return (color[0] + color[1] + color[2]) / 3;
+	    };
+	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
+	        return color[0] * wr + color[1] * wg + color[2] * wb;
+	    };
+	    static clone = (color) => {
+	        return new ColorRGBA(color[0], color[1], color[2], color[3]);
+	    };
+	    static create = (r = 0, g = 0, b = 0, a = 1) => {
+	        return new ColorRGBA(r, g, b, a);
+	    };
+	    static equals = (a, b) => {
+	        return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
+	            (a.g ?? a[1]) === (b.g ?? b[1]) &&
+	            (a.b ?? a[2]) === (b.b ?? b[2]) &&
+	            (a.a ?? a[3]) === (b.a ?? b[3]));
+	    };
+	    static fromArray = (arr, out = new ColorRGBA()) => {
+	        out[0] = arr[0];
+	        out[1] = arr[1];
+	        out[2] = arr[2];
+	        out[3] = arr[3];
+	        return out;
+	    };
+	    static fromHex = (hex, alpha = 255, out = new ColorRGBA()) => {
+	        out[0] = hex >> 16;
+	        out[1] = (hex >> 8) & 255;
+	        out[2] = hex & 255;
+	        out[3] = alpha;
+	        return out;
+	    };
+	    static fromHSL = (h, s, l, out = new ColorRGBA) => {
+	        var r, g, b;
+	        if (s === 0) {
+	            r = g = b = l; // achromatic
+	        }
+	        else {
+	            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	            var p = 2 * l - q;
+	            r = hue2rgb(p, q, h + 1 / 3);
+	            g = hue2rgb(p, q, h);
+	            b = hue2rgb(p, q, h - 1 / 3);
+	        }
+	        out[0] = Math.round(r * 255);
+	        out[1] = Math.round(g * 255);
+	        out[2] = Math.round(b * 255);
+	        out[3] = 255;
+	        return out;
+	    };
+	    static fromJson = (json, out = new ColorRGBA()) => {
+	        out[0] = json.r;
+	        out[1] = json.g;
+	        out[2] = json.b;
+	        out[3] = json.a;
+	        return out;
+	    };
+	    static fromScalar = (scalar, alpha = 255, out = new ColorRGBA()) => {
+	        out[0] = scalar;
+	        out[1] = scalar;
+	        out[2] = scalar;
+	        out[3] = alpha;
+	        return out;
+	    };
+	    static fromString = (str, out = new ColorRGBA()) => {
+	        if (str in COLOR_HEX_MAP) {
+	            return ColorRGBA.fromHex(COLOR_HEX_MAP[str], 255, out);
+	        }
+	        else if (str.startsWith("#")) {
+	            str = str.substr(1);
+	            return ColorRGBA.fromScalar(parseInt(str, 16), 255, out);
+	        }
+	        else if (str.startsWith("rgba(")) {
+	            str = str.substring(4, str.length - 1);
+	            const arr = str.split(",");
+	            out[0] = parseInt(arr[0], 10);
+	            out[1] = parseInt(arr[1], 10);
+	            out[2] = parseInt(arr[2], 10);
+	            out[3] = parseInt(arr[3], 10);
+	        }
+	        return out;
+	    };
+	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorRGBA()) => {
+	        const gray = ColorRGBA.averageWeighted(color, wr, wg, wb);
+	        ColorRGBA.fromScalar(gray, color[3], out);
+	        return out;
+	    };
+	    dataType = ArraybufferDataType.COLOR_RGBA;
+	    constructor(r = 0, g = 0, b = 0, a = 255) {
+	        super(4);
+	        this[0] = r;
+	        this[1] = g;
+	        this[2] = b;
+	        this[3] = a;
+	    }
+	    get r() {
+	        return this[0];
+	    }
+	    set r(val) {
+	        this[0] = val;
+	    }
+	    get g() {
+	        return this[1];
+	    }
+	    set g(val) {
+	        this[1] = val;
+	    }
+	    get b() {
+	        return this[2];
+	    }
+	    set b(val) {
+	        this[2] = val;
+	    }
+	    get a() {
+	        return this[3];
+	    }
+	    set a(val) {
+	        this[3] = val;
+	    }
+	}
+
 	class ColorRGB extends Uint8Array {
 	    static average = (color) => {
 	        return (color[0] + color[1] + color[2]) / 3;
@@ -4050,6 +4172,7 @@
 	exports.ColorGPU = ColorGPU;
 	exports.ColorHSL = ColorHSL;
 	exports.ColorRGB = ColorRGB;
+	exports.ColorRGBA = ColorRGBA;
 	exports.Constants = constants;
 	exports.Cube = Cube;
 	exports.Easing = index;

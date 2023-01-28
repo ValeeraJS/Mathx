@@ -1,6 +1,6 @@
 import { IColorRGBA, IColorRGBAJson } from "./interfaces/IColorRGBA";
 import { IColorRGB } from "./interfaces/IColorRGB";
-export default class ColorRGBA extends Uint8Array implements IColorRGBA {
+export declare class ColorRGBA extends Uint8Array implements IColorRGBA {
     static average: (color: IColorRGB | IColorRGBA) => number;
     static averageWeighted: (color: IColorRGB | IColorRGBA | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
     static clone: (color: IColorRGBA | ArrayLike<number>) => IColorRGBA;

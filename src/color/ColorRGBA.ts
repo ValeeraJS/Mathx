@@ -5,7 +5,7 @@ import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
 import { hue2rgb } from "./hue2color";
 
-export default class ColorRGBA extends Uint8Array implements IColorRGBA {
+export class ColorRGBA extends Uint8Array implements IColorRGBA {
 	public static average = (color: IColorRGB | IColorRGBA): number => {
 		return (color[0] + color[1] + color[2]) / 3;
 	};
