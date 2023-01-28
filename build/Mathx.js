@@ -1854,7 +1854,6 @@
 	        out[2] = z + uvz + uuvz;
 	        return out;
 	    };
-	    length;
 	    dataType = ArraybufferDataType.VECTOR3;
 	    constructor(x = 0, y = 0, z = 0) {
 	        super(3);
@@ -3494,7 +3493,6 @@
 	        out[1] = m[1] * x + m[4] * y + m[7];
 	        return out;
 	    };
-	    length;
 	    dataType = ArraybufferDataType.VECTOR2;
 	    constructor(x = 0, y = 0) {
 	        super(2);
@@ -4013,7 +4011,6 @@
 	        out[3] = a[3];
 	        return out;
 	    };
-	    length;
 	    dataType = ArraybufferDataType.VECTOR4;
 	    constructor(x = 0, y = 0, z = 0, w = 0) {
 	        super(4);

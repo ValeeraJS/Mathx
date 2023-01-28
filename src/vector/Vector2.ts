@@ -424,7 +424,6 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public readonly length!: 2;
 	public readonly dataType = ArraybufferDataType.VECTOR2;
 	public constructor(x = 0, y = 0) {
 		super(2);

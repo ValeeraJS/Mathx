@@ -403,7 +403,6 @@ export class Vector4 extends Float32Array implements IVector4 {
 		return out;
 	};
 
-	public readonly length!: 4;
 	public readonly dataType = ArraybufferDataType.VECTOR4;
 	public constructor(x = 0, y = 0, z = 0, w = 0) {
 		super(4);

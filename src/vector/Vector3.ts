@@ -587,7 +587,6 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public readonly length!: 3;
 	public readonly dataType = ArraybufferDataType.VECTOR3;
 	public constructor(x = 0, y = 0, z = 0) {
 		super(3);

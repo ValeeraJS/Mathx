@@ -62,7 +62,6 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static transformMatrix3: (a: Vector3Like, m: Vector3Like, out?: Vector3) => Vector3;
     static transformMatrix4: (a: Vector3Like, m: Matrix4, out?: Vector3) => Vector3;
     static transformQuat: (a: Vector3Like, q: Vector3Like, out?: Vector3) => Vector3;
-    readonly length: 3;
     readonly dataType: string;
     constructor(x?: number, y?: number, z?: number);
     get x(): number;

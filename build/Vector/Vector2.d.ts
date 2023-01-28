@@ -65,7 +65,6 @@ export declare class Vector2 extends Float32Array implements IVector2 {
     }) => IPolar;
     static toString: (a: Vector2Like) => string;
     static transformMatrix3: (a: Vector2Like, m: Float32Array | number[], out?: Vector2) => Vector2;
-    readonly length: 2;
     readonly dataType: string;
     constructor(x?: number, y?: number);
     get x(): number;

@@ -39,7 +39,6 @@ export declare class Vector4 extends Float32Array implements IVector4 {
     static toString: (a: Vector4Like) => string;
     static transformMatrix4: (a: Vector4Like, m: Float32Array, out?: Vector4) => Vector4;
     static transformQuat: (a: Vector4Like, q: Float32Array | number[], out?: Vector4) => Vector4;
-    readonly length: 4;
     readonly dataType: string;
     constructor(x?: number, y?: number, z?: number, w?: number);
     get x(): number;
