@@ -4169,6 +4169,10 @@
 	}
 
 	class Spherical extends Float32Array {
+	    static fromArray(arr, out = new Spherical) {
+	        out.set(arr);
+	        return out;
+	    }
 	    static fromVector3(v, out = new Spherical) {
 	        const x = v[0];
 	        const y = v[1];
@@ -4209,6 +4213,9 @@
 	    }
 	    set theta(value) {
 	        this[2] = value;
+	    }
+	    fromArray(arr) {
+	        return Spherical.fromArray(arr, this);
 	    }
 	    toVector3(out = new Vector3()) {
 	        const rst = this[0] * Math.sin(this[2]);

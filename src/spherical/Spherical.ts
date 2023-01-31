@@ -9,9 +9,14 @@ export interface ISphericalJson {
 };
 
 export interface ISpherical extends Float32Array, ISphericalJson { };
-export type SphericalLike = ISpherical | Spherical | Float32Array;
+export type SphericalLike = ISpherical | Spherical | Float32Array | number[];
 
 export class Spherical extends Float32Array implements ISpherical{
+
+    static fromArray(arr: SphericalLike, out: Spherical = new Spherical): Spherical {
+        out.set(arr);
+        return out;
+    }
 
     static fromVector3(v: Vector3Like, out = new Spherical): Spherical {
         const x = v[0];
@@ -62,6 +67,10 @@ export class Spherical extends Float32Array implements ISpherical{
 
     set theta(value: number) {
         this[2] = value;
+    }
+
+    fromArray(arr: SphericalLike): this {
+        return Spherical.fromArray(arr, this) as this;
     }
 
     toVector3(out: Vector3Like = new Vector3()): Vector3Like {
