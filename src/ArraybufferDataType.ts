@@ -10,6 +10,7 @@ export const ArraybufferDataType = {
 	MATRIX4: "mat4",
 	POLAR: "polar",
 	QUATERNION: "qua",
+	SPHERICAL: "spherical",
 	VECTOR2: "vec2",
 	VECTOR3: "vec3",
 	VECTOR4: "vec4"

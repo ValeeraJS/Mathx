@@ -10,6 +10,7 @@ export declare const ArraybufferDataType: {
     MATRIX4: string;
     POLAR: string;
     QUATERNION: string;
+    SPHERICAL: string;
     VECTOR2: string;
     VECTOR3: string;
     VECTOR4: string;
