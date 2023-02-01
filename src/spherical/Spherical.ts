@@ -75,9 +75,9 @@ export class Spherical extends Float32Array implements ISpherical{
 
     toVector3(out: Vector3Like = new Vector3()): Vector3Like {
         const rst = this[0] * Math.sin(this[2]);
-        out[0] =  rst * Math.cos(this[1]);
-        out[1] =  rst * Math.sin(this[1]);
-        out[2] =  this[0] * Math.cos(this[2]);
+        out[2] =  rst * Math.cos(this[1]);
+        out[0] =  rst * Math.sin(this[1]);
+        out[1] =  this[0] * Math.cos(this[2]);
         return out;
     }
 }
