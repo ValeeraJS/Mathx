@@ -4,6 +4,7 @@ export * from "./color";
 export * from "./common";
 export * as Easing from "./easing";
 export * from "./euler";
+export * from "./line";
 export * from "./matrix";
 export * from "./polar";
 export * from "./quaternion";
