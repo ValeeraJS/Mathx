@@ -192,7 +192,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static fromArray = (arr: Vector2Like | ArrayLike<number>, index = 0, out: Vector2 = new Vector2()): Vector2 => {
+	public static fromArray = (arr: Vector2Like, index = 0, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = arr[index];
 		out[1] = arr[index + 1];
 

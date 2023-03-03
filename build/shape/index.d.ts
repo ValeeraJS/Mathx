@@ -4,6 +4,8 @@ export * from "./interfaces/ISphere";
 export * from "./interfaces/ITriangle2";
 export * from "./interfaces/ITriangle3";
 export * from "./Cube";
+export * from "./Frustum";
+export * from "./Plane3";
 export * from "./Rectangle2";
 export * from "./Sphere";
 export * from "./Triangle2";

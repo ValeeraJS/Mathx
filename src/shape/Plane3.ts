@@ -6,8 +6,17 @@ const v2 = new Vector3();
 const v3 = new Vector3();
 
 export class Plane3 {
-    normal: Vector3 = new Vector3();
-    distance: number;
+    static normalize(p: Plane3, out: Plane3 = new Plane3): Plane3 {
+        const normal = p.normal;
+
+        const factor = 1.0 / Vector3.norm(normal);
+        Vector3.multiplyScalar(normal, factor, out.normal);
+        out.distance = p.distance * factor;
+
+        return out;
+    }
+    public normal: Vector3 = new Vector3();
+    public distance: number;
     constructor(normal: Vector3 = Vector3.VECTOR3_TOP, distance: number = 0) {
         this.normal.set(normal);
         this.distance = distance;
@@ -19,6 +28,11 @@ export class Plane3 {
 
     distanceToSphere(sphere: Sphere) {
         return this.distanceToPoint(sphere.position) - sphere.radius;
+    }
+
+    from(p: Plane3) {
+        this.distance = p.distance;
+        this.normal.set(p.normal);
     }
 
     fromCoplanarPoints(a: Vector3Like, b: Vector3Like, c: Vector3Like): this {
@@ -46,6 +60,12 @@ export class Plane3 {
 
         return this;
 
+    }
+
+    normalize(): this {
+        Plane3.normalize(this, this);
+
+        return this;
     }
 
     projectPoint(point: Vector3Like, out: Vector3 = new Vector3()): Vector3 {

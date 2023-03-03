@@ -3814,7 +3814,7 @@ class Ray3 {
 }
 
 // import Matrix3 from "../matrix/Matrix3";
-const v1 = new Vector3(), v2 = new Vector3(), v0 = new Vector3(), f1 = new Vector3(), f2 = new Vector3(), f0 = new Vector3();
+const v1$1 = new Vector3(), v2$1 = new Vector3(), v0 = new Vector3(), f1 = new Vector3(), f2 = new Vector3(), f0 = new Vector3();
 const ta = new Vector3();
 // const ma: Matrix3 = new Matrix3();
 const tb = new Vector3(), vA = new Vector3();
@@ -3879,12 +3879,12 @@ class Cube {
         Vector3.minus(a.max, ta, tb);
         // translate triangle to aabb origin
         Vector3.minus(b.a, ta, v0);
-        Vector3.minus(b.b, ta, v1);
-        Vector3.minus(b.c, ta, v2);
+        Vector3.minus(b.b, ta, v1$1);
+        Vector3.minus(b.c, ta, v2$1);
         // compute edge vectors for triangle
-        Vector3.minus(v1, v0, f0);
-        Vector3.minus(v2, v1, f1);
-        Vector3.minus(v0, v2, f2);
+        Vector3.minus(v1$1, v0, f0);
+        Vector3.minus(v2$1, v1$1, f1);
+        Vector3.minus(v0, v2$1, f2);
         // test against axes that are given by cross product combinations of the edges of the triangle and the edges of the aabb
         // make an axis testing of each of the 3 sides of the aabb against each of the 3 sides of the triangle = 9 axis of separation
         // axis_ij = u_i x f_j (u0, u1, u2 = face normals of aabb = x,y,z axes vectors since aabb is axis aligned)
@@ -3917,19 +3917,19 @@ class Cube {
             f2[0],
             0
         ];
-        if (!satForAxes(axes, v0, v1, v2, tb)) {
+        if (!satForAxes(axes, v0, v1$1, v2$1, tb)) {
             return false;
         }
         // test 3 face normals from the aabb
         // ta = Matrix3.identity(); ???
-        if (!satForAxes(axes, v0, v1, v2, tb)) {
+        if (!satForAxes(axes, v0, v1$1, v2$1, tb)) {
             return false;
         }
         // finally testing the face normal of the triangle
         // use already existing triangle edge vectors here
         Vector3.cross(f0, f1, ta);
         // axes = [_triangleNormal.x, _triangleNormal.y, _triangleNormal.z];
-        return satForAxes(ta, v0, v1, v2, tb);
+        return satForAxes(ta, v0, v1$1, v2$1, tb);
     };
     static isEmpty = (a) => {
         return a.max[0] < a.min[0] || a.max[0] < a.min[0] || a.max[0] < a.min[0];
@@ -3995,6 +3995,239 @@ function satForAxes(axes, v0, v1, v2, extents) {
         }
     }
     return true;
+}
+
+const v1 = new Vector3();
+const v2 = new Vector3();
+const v3 = new Vector3();
+class Plane3 {
+    static normalize(p, out = new Plane3) {
+        const normal = p.normal;
+        const factor = 1.0 / Vector3.norm(normal);
+        Vector3.multiplyScalar(normal, factor, out.normal);
+        out.distance = p.distance * factor;
+        return out;
+    }
+    normal = new Vector3();
+    distance;
+    constructor(normal = Vector3.VECTOR3_TOP, distance = 0) {
+        this.normal.set(normal);
+        this.distance = distance;
+    }
+    distanceToPoint(point) {
+        return Vector3.dot(this.normal, point) + this.distance;
+    }
+    distanceToSphere(sphere) {
+        return this.distanceToPoint(sphere.position) - sphere.radius;
+    }
+    from(p) {
+        this.distance = p.distance;
+        this.normal.set(p.normal);
+    }
+    fromCoplanarPoints(a, b, c) {
+        Vector3.minus(b, a, v1);
+        Vector3.minus(c, a, v2);
+        Vector3.cross(v1, v2, v3);
+        Vector3.normalize(v3, v3);
+        // TODO check zero vec
+        return this.formCoplanarPointAndNormal(a, v3);
+    }
+    formCoplanarPointAndNormal(point, normal) {
+        this.normal.set(normal);
+        this.distance = -Vector3.dot(point, normal);
+        return this;
+    }
+    negate() {
+        this.distance *= -1;
+        Vector3.negate(this.normal, this.normal);
+        return this;
+    }
+    normalize() {
+        Plane3.normalize(this, this);
+        return this;
+    }
+    projectPoint(point, out = new Vector3()) {
+        out.set(this.normal);
+        Vector3.multiplyScalar(out, -this.distanceToPoint(point), out);
+        return Vector3.add(out, point, out);
+    }
+    set(normal, distance = this.distance) {
+        this.normal.set(normal);
+        this.distance = distance;
+        return this;
+    }
+}
+
+const _vector = new Vector3();
+class Frustum {
+    near;
+    far;
+    left;
+    right;
+    bottom;
+    top;
+    constructor(matrix) {
+        this.near = new Plane3();
+        this.far = new Plane3();
+        this.left = new Plane3();
+        this.right = new Plane3();
+        this.top = new Plane3();
+        this.bottom = new Plane3();
+        matrix && this.applyProjectionMatrix(matrix);
+    }
+    applyProjectionMatrix(matrix) {
+        const m11 = matrix[0];
+        const m12 = matrix[1];
+        const m13 = matrix[2];
+        const m14 = matrix[3];
+        const m21 = matrix[4];
+        const m22 = matrix[5];
+        const m23 = matrix[6];
+        const m24 = matrix[7];
+        const m31 = matrix[8];
+        const m32 = matrix[9];
+        const m33 = matrix[10];
+        const m34 = matrix[11];
+        const m41 = matrix[12];
+        const m42 = matrix[13];
+        const m43 = matrix[14];
+        const m44 = matrix[15];
+        Vector3.set(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
+        this.near.distance = m44 + m43;
+        this.near.normalize();
+        Vector3.set(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
+        this.far.distance = m44 - m43;
+        this.far.normalize();
+        Vector3.set(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
+        this.left.distance = m44 + m41;
+        this.left.normalize();
+        Vector3.set(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
+        this.right.distance = m44 - m41;
+        this.right.normalize();
+        Vector3.set(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
+        this.bottom.distance = m44 + m42;
+        this.bottom.normalize();
+        Vector3.set(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
+        this.top.distance = m44 - m42;
+        this.top.normalize();
+        return this;
+    }
+    clone() {
+        return new Frustum().from(this);
+    }
+    from(frustum) {
+        this.near.from(frustum.near);
+        this.far.from(frustum.far);
+        this.left.from(frustum.left);
+        this.right.from(frustum.right);
+        this.bottom.from(frustum.bottom);
+        this.top.from(frustum.top);
+        return this;
+    }
+    intersectsSphere(sphere) {
+        const p = sphere.position;
+        const r = -sphere.radius;
+        let distance = this.near.distanceToPoint(p);
+        if (distance < r) {
+            return false;
+        }
+        distance = this.far.distanceToPoint(p);
+        if (distance < r) {
+            return false;
+        }
+        distance = this.right.distanceToPoint(p);
+        if (distance < r) {
+            return false;
+        }
+        distance = this.left.distanceToPoint(p);
+        if (distance < r) {
+            return false;
+        }
+        distance = this.top.distanceToPoint(p);
+        if (distance < r) {
+            return false;
+        }
+        distance = this.bottom.distanceToPoint(p);
+        if (distance < r) {
+            return false;
+        }
+        return true;
+    }
+    intersectsBox(box) {
+        let plane = this.right;
+        _vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
+        _vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
+        _vector.z = plane.normal.z > 0 ? box.max.z : box.min.z;
+        if (plane.distanceToPoint(_vector) < 0) {
+            return false;
+        }
+        plane = this.left;
+        _vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
+        _vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
+        _vector.z = plane.normal.z > 0 ? box.max.z : box.min.z;
+        if (plane.distanceToPoint(_vector) < 0) {
+            return false;
+        }
+        plane = this.top;
+        _vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
+        _vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
+        _vector.z = plane.normal.z > 0 ? box.max.z : box.min.z;
+        if (plane.distanceToPoint(_vector) < 0) {
+            return false;
+        }
+        plane = this.bottom;
+        _vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
+        _vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
+        _vector.z = plane.normal.z > 0 ? box.max.z : box.min.z;
+        if (plane.distanceToPoint(_vector) < 0) {
+            return false;
+        }
+        plane = this.near;
+        _vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
+        _vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
+        _vector.z = plane.normal.z > 0 ? box.max.z : box.min.z;
+        if (plane.distanceToPoint(_vector) < 0) {
+            return false;
+        }
+        plane = this.far;
+        _vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
+        _vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
+        _vector.z = plane.normal.z > 0 ? box.max.z : box.min.z;
+        if (plane.distanceToPoint(_vector) < 0) {
+            return false;
+        }
+        return true;
+    }
+    containsPoint(point) {
+        if (this.right.distanceToPoint(point) < 0) {
+            return false;
+        }
+        if (this.left.distanceToPoint(point) < 0) {
+            return false;
+        }
+        if (this.top.distanceToPoint(point) < 0) {
+            return false;
+        }
+        if (this.bottom.distanceToPoint(point) < 0) {
+            return false;
+        }
+        if (this.near.distanceToPoint(point) < 0) {
+            return false;
+        }
+        if (this.far.distanceToPoint(point) < 0) {
+            return false;
+        }
+        return true;
+    }
+    set(right, left, top, bottom, near, far) {
+        this.right.from(right);
+        this.left.from(left);
+        this.top.from(top);
+        this.bottom.from(bottom);
+        this.near.from(near);
+        this.far.from(far);
+        return this;
+    }
 }
 
 class Rectangle2 {
@@ -4237,4 +4470,4 @@ class Spherical extends Float32Array {
     }
 }
 
-export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorHSL, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Line3, Matrix2, Matrix3, Matrix4, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorHSL, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
