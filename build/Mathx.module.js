@@ -2,6 +2,8 @@ const ArraybufferDataType = {
     COLOR_GPU: "col",
     COLOR_RGB: "col_rgb",
     COLOR_RGBA: "col_rgba",
+    COLOR_RYB: "col_ryb",
+    COLOR_RYBA: "col_ryba",
     COLOR_HSL: "col_hsl",
     COLOR_HSLA: "col_hsla",
     EULER: "euler",
@@ -13,7 +15,7 @@ const ArraybufferDataType = {
     SPHERICAL: "spherical",
     VECTOR2: "vec2",
     VECTOR3: "vec3",
-    VECTOR4: "vec4"
+    VECTOR4: "vec4",
 };
 
 const DEG_TO_RAD = Math.PI / 180;
@@ -191,11 +193,14 @@ const COLOR_HEX_MAP = {
     white: 0xffffff,
     whitesmoke: 0xf5f5f5,
     yellow: 0xffff00,
-    yellowgreen: 0x9acd32
+    yellowgreen: 0x9acd32,
 };
 
-let max = 0, min = 0;
-let h = 0, s$3 = 0, l = 0;
+let max = 0;
+let min = 0;
+let h = 0;
+let s$3 = 0;
+let l = 0;
 class ColorHSL extends Float32Array {
     dataType = ArraybufferDataType.COLOR_HSL;
     static fromRGBUnsignedNormal(r, g, b, out = new ColorHSL()) {
@@ -292,6 +297,43 @@ class ColorRGBA extends Uint8Array {
         out[3] = arr[3];
         return out;
     };
+    static fromColorRYB = (color, out = new ColorRGBA()) => {
+        let r = color[0], y = color[1], b = color[2];
+        // Remove the whiteness from the color.
+        let w = Math.min(r, y, b);
+        r -= w;
+        y -= w;
+        b -= w;
+        let my = Math.max(r, y, b);
+        // Get the green out of the yellow and blue
+        let g = Math.min(y, b);
+        y -= g;
+        b -= g;
+        if (b && g) {
+            b *= 2.0;
+            g *= 2.0;
+        }
+        // Redistribute the remaining yellow.
+        r += y;
+        g += y;
+        // Normalize to values.
+        let mg = Math.max(r, g, b);
+        if (mg) {
+            let n = my / mg;
+            r *= n;
+            g *= n;
+            b *= n;
+        }
+        // Add the white back in.
+        r += w;
+        g += w;
+        b += w;
+        out[0] = r;
+        out[1] = g;
+        out[2] = b;
+        out[3] = 1;
+        return out;
+    };
     static fromHex = (hex, alpha = 255, out = new ColorRGBA()) => {
         out[0] = hex >> 16;
         out[1] = (hex >> 8) & 255;
@@ -299,14 +341,16 @@ class ColorRGBA extends Uint8Array {
         out[3] = alpha;
         return out;
     };
-    static fromHSL = (h, s, l, out = new ColorRGBA) => {
-        var r, g, b;
+    static fromHSL = (h, s, l, out = new ColorRGBA()) => {
+        let r;
+        let g;
+        let b;
         if (s === 0) {
             r = g = b = l; // achromatic
         }
         else {
-            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            var p = 2 * l - q;
+            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            let p = 2 * l - q;
             r = hue2rgb(p, q, h + 1 / 3);
             g = hue2rgb(p, q, h);
             b = hue2rgb(p, q, h - 1 / 3);
@@ -402,9 +446,7 @@ class ColorRGB extends Uint8Array {
         return new ColorRGB(r, g, b);
     };
     static equals = (a, b) => {
-        return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
-            (a.g ?? a[1]) === (b.g ?? b[1]) &&
-            (a.b ?? a[2]) === (b.b ?? b[2]));
+        return (a.r ?? a[0]) === (b.r ?? b[0]) && (a.g ?? a[1]) === (b.g ?? b[1]) && (a.b ?? a[2]) === (b.b ?? b[2]);
     };
     static fromArray = (arr, out = new ColorRGB()) => {
         out[0] = arr[0];
@@ -412,20 +454,58 @@ class ColorRGB extends Uint8Array {
         out[2] = arr[2];
         return out;
     };
+    static fromColorRYB(color, out = new ColorRGB()) {
+        let r = color[0], y = color[1], b = color[2];
+        // Remove the whiteness from the color.
+        let w = Math.min(r, y, b);
+        r -= w;
+        y -= w;
+        b -= w;
+        let my = Math.max(r, y, b);
+        // Get the green out of the yellow and blue
+        let g = Math.min(y, b);
+        y -= g;
+        b -= g;
+        if (b && g) {
+            b *= 2.0;
+            g *= 2.0;
+        }
+        // Redistribute the remaining yellow.
+        r += y;
+        g += y;
+        // Normalize to values.
+        let mg = Math.max(r, g, b);
+        if (mg) {
+            let n = my / mg;
+            r *= n;
+            g *= n;
+            b *= n;
+        }
+        // Add the white back in.
+        r += w;
+        g += w;
+        b += w;
+        out[0] = r;
+        out[1] = g;
+        out[2] = b;
+        return out;
+    }
     static fromHex = (hex, out = new ColorRGB()) => {
         out[0] = hex >> 16;
         out[1] = (hex >> 8) & 255;
         out[2] = hex & 255;
         return out;
     };
-    static fromHSL = (h, s, l, out = new ColorRGB) => {
-        var r, g, b;
+    static fromHSL = (h, s, l, out = new ColorRGB()) => {
+        let r;
+        let g;
+        let b;
         if (s === 0) {
             r = g = b = l; // achromatic
         }
         else {
-            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            var p = 2 * l - q;
+            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            let p = 2 * l - q;
             r = hue2rgb(p, q, h + 1 / 3);
             g = hue2rgb(p, q, h);
             b = hue2rgb(p, q, h - 1 / 3);
@@ -452,7 +532,7 @@ class ColorRGB extends Uint8Array {
             return ColorRGB.fromHex(COLOR_HEX_MAP[str], out);
         }
         else if (str.startsWith("#")) {
-            str = str.substr(1);
+            str = str.substring(1);
             return ColorRGB.fromScalar(parseInt(str, 16), out);
         }
         else if (str.startsWith("rgb(")) {
@@ -496,6 +576,83 @@ class ColorRGB extends Uint8Array {
     }
 }
 
+class ColorRYB extends Uint8Array {
+    static average = (color) => {
+        return (color[0] + color[1] + color[2]) / 3;
+    };
+    static averageWeighted = (color, wr = 0.333333, wy = 0.333334, wb = 0.333333) => {
+        return color[0] * wr + color[1] * wy + color[2] * wb;
+    };
+    static clone = (color) => {
+        return new ColorRYB(color[0], color[1], color[2]);
+    };
+    static create = (r = 0, g = 0, b = 0) => {
+        return new ColorRYB(r, g, b);
+    };
+    static equals = (a, b) => {
+        return (a.r ?? a[0]) === (b.r ?? b[0]) && (a.y ?? a[1]) === (b.y ?? b[1]) && (a.b ?? a[2]) === (b.b ?? b[2]);
+    };
+    static fromArray = (arr, out = new ColorRYB()) => {
+        out[0] = arr[0];
+        out[1] = arr[1];
+        out[2] = arr[2];
+        return out;
+    };
+    static fromJson = (json, out = new ColorRYB()) => {
+        out[0] = json.r;
+        out[1] = json.y;
+        out[2] = json.b;
+        return out;
+    };
+    static fromRGB = (rgb, out = new ColorRYB()) => {
+        rgb[0];
+        rgb[1];
+        rgb[2];
+        return out;
+    };
+    static fromScalar = (scalar, out = new ColorRYB()) => {
+        out[0] = scalar;
+        out[1] = scalar;
+        out[2] = scalar;
+        return out;
+    };
+    static fromString = (str, out = new ColorRYB()) => {
+        if (str.startsWith("ryb(")) {
+            str = str.substring(4, str.length - 1);
+            const arr = str.split(",");
+            out[0] = parseInt(arr[0], 10);
+            out[1] = parseInt(arr[1], 10);
+            out[2] = parseInt(arr[2], 10);
+        }
+        return out;
+    };
+    dataType = ArraybufferDataType.COLOR_RGB;
+    constructor(r = 0, y = 0, b = 0) {
+        super(3);
+        this[0] = r;
+        this[1] = y;
+        this[2] = b;
+    }
+    get r() {
+        return this[0];
+    }
+    set r(val) {
+        this[0] = val;
+    }
+    get y() {
+        return this[1];
+    }
+    set y(val) {
+        this[1] = val;
+    }
+    get b() {
+        return this[2];
+    }
+    set b(val) {
+        this[2] = val;
+    }
+}
+
 class ColorGPU extends Float32Array {
     static average = (color) => {
         return (color[0] + color[1] + color[2]) / 3;
@@ -522,14 +679,16 @@ class ColorGPU extends Float32Array {
         out[3] = arr[3];
         return out;
     };
-    static fromColorHSL = (h, s, l, out = new ColorGPU) => {
-        var r, g, b;
+    static fromColorHSL = (h, s, l, out = new ColorGPU()) => {
+        let r;
+        let g;
+        let b;
         if (s === 0) {
             r = g = b = l; // achromatic
         }
         else {
-            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            var p = 2 * l - q;
+            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            let p = 2 * l - q;
             r = hue2rgb(p, q, h + 1 / 3);
             g = hue2rgb(p, q, h);
             b = hue2rgb(p, q, h - 1 / 3);
@@ -551,6 +710,43 @@ class ColorGPU extends Float32Array {
         out[1] = color[1] / 255;
         out[2] = color[2] / 255;
         out[3] = color[3] / 255;
+        return out;
+    }
+    static fromColorRYB(color, out = new ColorGPU()) {
+        let r = color[0], y = color[1], b = color[2];
+        // Remove the whiteness from the color.
+        let w = Math.min(r, y, b);
+        r -= w;
+        y -= w;
+        b -= w;
+        let my = Math.max(r, y, b);
+        // Get the green out of the yellow and blue
+        let g = Math.min(y, b);
+        y -= g;
+        b -= g;
+        if (b && g) {
+            b *= 2.0;
+            g *= 2.0;
+        }
+        // Redistribute the remaining yellow.
+        r += y;
+        g += y;
+        // Normalize to values.
+        let mg = Math.max(r, g, b);
+        if (mg) {
+            let n = my / mg;
+            r *= n;
+            g *= n;
+            b *= n;
+        }
+        // Add the white back in.
+        r += w;
+        g += w;
+        b += w;
+        out[0] = r / 255;
+        out[1] = g / 255;
+        out[2] = b / 255;
+        out[3] = 1;
         return out;
     }
     static fromHex = (hex, alpha = 1, out = new ColorGPU()) => {
@@ -1387,8 +1583,14 @@ class Vector2 extends Float32Array {
     }
 }
 
-let ax$1, ay$1, az$1, bx$1, by$1, bz$1;
-let ag, s$1;
+let ax$1;
+let ay$1;
+let az$1;
+let bx$1;
+let by$1;
+let bz$1;
+let ag;
+let s$1;
 class Vector3 extends Float32Array {
     static VECTOR3_ZERO = new Vector3(0, 0, 0);
     static VECTOR3_ONE = new Vector3(1, 1, 1);
@@ -1417,7 +1619,10 @@ class Vector3 extends Float32Array {
         bx$1 = b[0];
         by$1 = b[1];
         bz$1 = b[2];
-        const mag1 = Math.sqrt(ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1), mag2 = Math.sqrt(bx$1 * bx$1 + by$1 * by$1 + bz$1 * bz$1), mag = mag1 * mag2, cosine = mag && Vector3.dot(a, b) / mag;
+        const mag1 = Math.sqrt(ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1);
+        const mag2 = Math.sqrt(bx$1 * bx$1 + by$1 * by$1 + bz$1 * bz$1);
+        const mag = mag1 * mag2;
+        const cosine = mag && Vector3.dot(a, b) / mag;
         return Math.acos(clamp(cosine, -1, 1));
     };
     static clamp = (a, min, max, out = new Vector3()) => {
@@ -1682,13 +1887,22 @@ class Vector3 extends Float32Array {
         return out;
     };
     static transformQuat = (a, q, out = new Vector3()) => {
-        const qx = q[0], qy = q[1], qz = q[2], qw = q[3];
-        const x = a[0], y = a[1], z = a[2];
+        const qx = q[0];
+        const qy = q[1];
+        const qz = q[2];
+        const qw = q[3];
+        const x = a[0];
+        const y = a[1];
+        const z = a[2];
         // var qvec = [qx, qy, qz];
         // var uv = vec3.cross([], qvec, a);
-        let uvx = qy * z - qz * y, uvy = qz * x - qx * z, uvz = qx * y - qy * x;
+        let uvx = qy * z - qz * y;
+        let uvy = qz * x - qx * z;
+        let uvz = qx * y - qy * x;
         // var uuv = vec3.cross([], qvec, uv);
-        let uuvx = qy * uvz - qz * uvy, uuvy = qz * uvx - qx * uvz, uuvz = qx * uvy - qy * uvx;
+        let uuvx = qy * uvz - qz * uvy;
+        let uuvy = qz * uvx - qx * uvz;
+        let uuvz = qx * uvy - qy * uvx;
         // vec3.scale(uv, uv, 2 * w);
         const w2 = qw * 2;
         uvx *= w2;
@@ -4470,4 +4684,4 @@ class Spherical extends Float32Array {
     }
 }
 
-export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorHSL, ColorRGB, ColorRGBA, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };
+export { ArraybufferDataType, COLOR_HEX_MAP, ColorGPU, ColorHSL, ColorRGB, ColorRGBA, ColorRYB, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, Vector2, Vector3, Vector4, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, floorPowerOfTwo, floorToZeroCommon as floorToZero, isPowerOfTwo, lerp, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, sum, sumArray };

@@ -1,8 +1,11 @@
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { IColorHSL } from "./interfaces/IColorHSL";
 
-let max = 0, min = 0;
-let h = 0, s = 0, l = 0;
+let max = 0;
+let min = 0;
+let h = 0;
+let s = 0;
+let l = 0;
 
 export class ColorHSL extends Float32Array implements IColorHSL {
 	public readonly dataType = ArraybufferDataType.COLOR_HSL;
@@ -18,9 +21,15 @@ export class ColorHSL extends Float32Array implements IColorHSL {
 			let d = max - min;
 			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 			switch (max) {
-				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-				case g: h = (b - r) / d + 2; break;
-				case b: h = (r - g) / d + 4; break;
+				case r:
+					h = (g - b) / d + (g < b ? 6 : 0);
+					break;
+				case g:
+					h = (b - r) / d + 2;
+					break;
+				case b:
+					h = (r - g) / d + 4;
+					break;
 			}
 			h /= 6;
 		}

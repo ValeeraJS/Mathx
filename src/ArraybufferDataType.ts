@@ -2,6 +2,8 @@ export const ArraybufferDataType = {
 	COLOR_GPU: "col",
 	COLOR_RGB: "col_rgb",
 	COLOR_RGBA: "col_rgba",
+	COLOR_RYB: "col_ryb",
+	COLOR_RYBA: "col_ryba",
 	COLOR_HSL: "col_hsl",
 	COLOR_HSLA: "col_hsla",
 	EULER: "euler",
@@ -13,5 +15,5 @@ export const ArraybufferDataType = {
 	SPHERICAL: "spherical",
 	VECTOR2: "vec2",
 	VECTOR3: "vec3",
-	VECTOR4: "vec4"
+	VECTOR4: "vec4",
 };

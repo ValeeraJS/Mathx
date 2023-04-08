@@ -1,5 +1,6 @@
 import { IColorRGB, IColorRGBJson } from "./interfaces/IColorRGB";
 import { IColorRGBAJson } from ".";
+import { IColorRYB } from "./interfaces/IColorRYB";
 export declare class ColorRGB extends Uint8Array implements IColorRGB {
     static average: (color: IColorRGB) => number;
     static averageWeighted: (color: IColorRGB | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
@@ -7,6 +8,7 @@ export declare class ColorRGB extends Uint8Array implements IColorRGB {
     static create: (r?: number, g?: number, b?: number) => IColorRGB;
     static equals: (a: IColorRGB, b: IColorRGB) => boolean;
     static fromArray: (arr: ArrayLike<number>, out?: IColorRGB) => IColorRGB;
+    static fromColorRYB(color: IColorRYB | number[] | Uint8Array, out?: IColorRGB): IColorRGB;
     static fromHex: (hex: number, out?: IColorRGB) => IColorRGB;
     static fromHSL: (h: number, s: number, l: number, out?: ColorRGB) => ColorRGB;
     static fromJson: (json: IColorRGBJson | IColorRGBAJson, out?: IColorRGB) => IColorRGB;

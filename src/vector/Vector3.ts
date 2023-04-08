@@ -4,8 +4,14 @@ import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
 import { Matrix4 } from "../matrix/Matrix4";
 
-let ax: number, ay: number, az: number, bx: number, by: number, bz: number;
-let ag: number, s: number;
+let ax: number;
+let ay: number;
+let az: number;
+let bx: number;
+let by: number;
+let bz: number;
+let ag: number;
+let s: number;
 
 export interface IVector3Json {
 	x: number;
@@ -13,7 +19,7 @@ export interface IVector3Json {
 	z: number;
 }
 
-export interface IVector3 extends Float32Array, IVector3Json { };
+export interface IVector3 extends Float32Array, IVector3Json {}
 export type Vector3Like = IVector3 | Vector3 | number[] | Float32Array;
 
 export class Vector3 extends Float32Array implements IVector3 {
@@ -26,11 +32,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 	public static readonly VECTOR3_FRONT = new Vector3(0, 0, -1);
 	public static readonly VECTOR3_BACK = new Vector3(0, 0, 1);
 
-	public static add = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static add = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] + b[0];
 		out[1] = a[1] + b[1];
 		out[2] = a[2] + b[2];
@@ -38,11 +40,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static addScalar = (
-		a: Vector3Like,
-		b: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static addScalar = (a: Vector3Like, b: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] + b;
 		out[1] = a[1] + b;
 		out[2] = a[2] + b;
@@ -50,20 +48,17 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static angle = (
-		a: Vector3Like,
-		b: Vector3Like
-	): number => {
+	public static angle = (a: Vector3Like, b: Vector3Like): number => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
 		bx = b[0];
 		by = b[1];
 		bz = b[2];
-		const mag1 = Math.sqrt(ax * ax + ay * ay + az * az),
-			mag2 = Math.sqrt(bx * bx + by * by + bz * bz),
-			mag = mag1 * mag2,
-			cosine = mag && Vector3.dot(a, b) / mag;
+		const mag1 = Math.sqrt(ax * ax + ay * ay + az * az);
+		const mag2 = Math.sqrt(bx * bx + by * by + bz * bz);
+		const mag = mag1 * mag2;
+		const cosine = mag && Vector3.dot(a, b) / mag;
 
 		return Math.acos(clampCommon(cosine, -1, 1));
 	};
@@ -72,7 +67,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		a: Vector3Like,
 		min: Vector3Like,
 		max: Vector3Like,
-		out: Vector3 = new Vector3()
+		out: Vector3 = new Vector3(),
 	): Vector3 => {
 		out[0] = clampCommon(a[0], min[0], max[0]);
 		out[1] = clampCommon(a[1], min[1], max[1]);
@@ -85,7 +80,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		a: Vector3Like,
 		min: Vector3Like,
 		max: Vector3Like,
-		out: Vector3 = new Vector3()
+		out: Vector3 = new Vector3(),
 	): Vector3 => {
 		out[0] = clampSafeCommon(a[0], min[0], max[0]);
 		out[1] = clampSafeCommon(a[1], min[1], max[1]);
@@ -94,12 +89,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static clampScalar = (
-		a: Vector3Like,
-		min: number,
-		max: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static clampScalar = (a: Vector3Like, min: number, max: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = clampCommon(a[0], min, max);
 		out[1] = clampCommon(a[1], min, max);
 		out[2] = clampCommon(a[2], min, max);
@@ -107,10 +97,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static clone = (
-		a: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static clone = (a: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0];
 		out[1] = a[1];
 		out[2] = a[2];
@@ -118,10 +105,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static closeTo = (
-		a: Vector3Like,
-		b: Vector3Like
-	): boolean => {
+	public static closeTo = (a: Vector3Like, b: Vector3Like): boolean => {
 		return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
 	};
 
@@ -133,11 +117,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static cross = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static cross = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
@@ -152,10 +132,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static distanceTo = (
-		a: Vector3Like,
-		b: Vector3Like
-	): number => {
+	public static distanceTo = (a: Vector3Like, b: Vector3Like): number => {
 		ax = b[0] - a[0];
 		ay = b[1] - a[1];
 		az = b[2] - a[2];
@@ -163,17 +140,11 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return Math.hypot(ax, ay, az);
 	};
 
-	public static distanceToManhattan = (
-		a: Vector3Like,
-		b: Vector3Like
-	): number => {
+	public static distanceToManhattan = (a: Vector3Like, b: Vector3Like): number => {
 		return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
 	};
 
-	public static distanceToSquared = (
-		a: Vector3Like,
-		b: Vector3Like
-	): number => {
+	public static distanceToSquared = (a: Vector3Like, b: Vector3Like): number => {
 		ax = a[0] - b[0];
 		ay = a[1] - b[1];
 		az = a[2] - b[2];
@@ -181,11 +152,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return ax * ax + ay * ay + az * az;
 	};
 
-	public static divide = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static divide = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] / b[0];
 		out[1] = a[1] / b[1];
 		out[2] = a[2] / b[2];
@@ -193,11 +160,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static divideScalar = (
-		a: Vector3Like,
-		b: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static divideScalar = (a: Vector3Like, b: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] / b;
 		out[1] = a[1] / b;
 		out[2] = a[2] / b;
@@ -205,24 +168,18 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static dot = (
-		a: Vector3Like,
-		b: Vector3Like
-	): number => {
+	public static dot = (a: Vector3Like, b: Vector3Like): number => {
 		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 	};
 
-	public static equals = (
-		a: Vector3Like,
-		b: Vector3Like
-	): boolean => {
+	public static equals = (a: Vector3Like, b: Vector3Like): boolean => {
 		return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 	};
 
 	public static fromArray = (
 		a: ArrayLike<number> | Vector3Like,
 		offset = 0,
-		out: Vector3 = new Vector3()
+		out: Vector3 = new Vector3(),
 	): Vector3 => {
 		out[0] = a[offset];
 		out[1] = a[offset + 1];
@@ -237,12 +194,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static fromValues = (
-		x: number,
-		y: number,
-		z: number,
-		out: Vector3 = new Vector3(3)
-	): Vector3 => {
+	public static fromValues = (x: number, y: number, z: number, out: Vector3 = new Vector3(3)): Vector3 => {
 		out[0] = x;
 		out[1] = y;
 		out[2] = z;
@@ -255,7 +207,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		out[1] = mat[13];
 		out[2] = mat[14];
 		return out;
-	}
+	};
 
 	public static hermite = (
 		a: Vector3Like,
@@ -263,7 +215,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		c: Vector3Like,
 		d: Vector3Like,
 		t: number,
-		out: Vector3 = new Vector3()
+		out: Vector3 = new Vector3(),
 	): Vector3 => {
 		ag = t * t;
 		const factor1 = ag * (2 * t - 3) + 1;
@@ -278,10 +230,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static inverse = (
-		a: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static inverse = (a: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = 1.0 / a[0];
 		out[1] = 1.0 / a[1];
 		out[2] = 1.0 / a[2];
@@ -301,12 +250,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
 	};
 
-	public static lerp = (
-		a: Vector3Like,
-		b: Vector3Like,
-		alpha: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static lerp = (a: Vector3Like, b: Vector3Like, alpha: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] += (b[0] - a[0]) * alpha;
 		out[1] += (b[1] - a[1]) * alpha;
 		out[2] += (b[2] - a[2]) * alpha;
@@ -314,11 +258,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static max = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static max = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = Math.max(a[0], b[0]);
 		out[1] = Math.max(a[1], b[1]);
 		out[2] = Math.max(a[2], b[2]);
@@ -326,11 +266,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static min = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static min = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = Math.min(a[0], b[0]);
 		out[1] = Math.min(a[1], b[1]);
 		out[2] = Math.min(a[2], b[2]);
@@ -338,11 +274,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static minus = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static minus = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] - b[0];
 		out[1] = a[1] - b[1];
 		out[2] = a[2] - b[2];
@@ -350,11 +282,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static minusScalar = (
-		a: Vector3Like,
-		b: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static minusScalar = (a: Vector3Like, b: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] - b;
 		out[1] = a[1] - b;
 		out[2] = a[2] - b;
@@ -362,11 +290,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static multiply = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static multiply = (a: Vector3Like, b: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] * b[0];
 		out[1] = a[1] * b[1];
 		out[2] = a[2] * b[2];
@@ -374,11 +298,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static multiplyScalar = (
-		a: Vector3Like,
-		scalar: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static multiplyScalar = (a: Vector3Like, scalar: number, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = a[0] * scalar;
 		out[1] = a[1] * scalar;
 		out[2] = a[2] * scalar;
@@ -386,10 +306,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static negate = (
-		a: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static negate = (a: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = -a[0];
 		out[1] = -a[1];
 		out[2] = -a[2];
@@ -397,19 +314,11 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static normalize = (
-		a: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static normalize = (a: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
 	};
 
-	public static rotateX = (
-		a: Vector3Like,
-		b: Vector3Like,
-		rad: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static rotateX = (a: Vector3Like, b: Vector3Like, rad: number, out: Vector3 = new Vector3()): Vector3 => {
 		ax = a[0] - b[0];
 		ay = a[1] - b[1];
 		az = a[2] - b[2];
@@ -425,12 +334,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static rotateY = (
-		a: Vector3Like,
-		b: Vector3Like,
-		rad: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static rotateY = (a: Vector3Like, b: Vector3Like, rad: number, out: Vector3 = new Vector3()): Vector3 => {
 		ax = a[0] - b[0];
 		ay = a[1] - b[1];
 		az = a[2] - b[2];
@@ -446,12 +350,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static rotateZ = (
-		a: Vector3Like,
-		b: Vector3Like,
-		rad: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static rotateZ = (a: Vector3Like, b: Vector3Like, rad: number, out: Vector3 = new Vector3()): Vector3 => {
 		ax = a[0] - b[0];
 		ay = a[1] - b[1];
 		az = a[2] - b[2];
@@ -467,10 +366,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static round = (
-		a: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static round = (a: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		out[0] = Math.round(a[0]);
 		out[1] = Math.round(a[1]);
 		out[2] = Math.round(a[2]);
@@ -486,20 +382,11 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static setNorm = (
-		a: Vector3Like,
-		len: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static setNorm = (a: Vector3Like, len: number, out: Vector3 = new Vector3()): Vector3 => {
 		return Vector3.multiplyScalar(Vector3.normalize(a, out), len, out);
 	};
 
-	public static slerp = (
-		a: Vector3Like,
-		b: Vector3Like,
-		t: number,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static slerp = (a: Vector3Like, b: Vector3Like, t: number, out: Vector3 = new Vector3()): Vector3 => {
 		ag = Math.acos(Math.min(Math.max(Vector3.dot(a, b), -1), 1));
 		s = Math.sin(ag);
 
@@ -516,11 +403,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return `(${a[0]}, ${a[1]}, ${a[2]})`;
 	};
 
-	public static transformMatrix3 = (
-		a: Vector3Like,
-		m: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static transformMatrix3 = (a: Vector3Like, m: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
@@ -531,11 +414,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static transformMatrix4 = (
-		a: Vector3Like,
-		m: Matrix4,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+	public static transformMatrix4 = (a: Vector3Like, m: Matrix4, out: Vector3 = new Vector3()): Vector3 => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
@@ -548,27 +427,23 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static transformQuat = (
-		a: Vector3Like,
-		q: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
-		const qx = q[0],
-			qy = q[1],
-			qz = q[2],
-			qw = q[3];
-		const x = a[0],
-			y = a[1],
-			z = a[2];
+	public static transformQuat = (a: Vector3Like, q: Vector3Like, out: Vector3 = new Vector3()): Vector3 => {
+		const qx = q[0];
+		const qy = q[1];
+		const qz = q[2];
+		const qw = q[3];
+		const x = a[0];
+		const y = a[1];
+		const z = a[2];
 		// var qvec = [qx, qy, qz];
 		// var uv = vec3.cross([], qvec, a);
-		let uvx = qy * z - qz * y,
-			uvy = qz * x - qx * z,
-			uvz = qx * y - qy * x;
+		let uvx = qy * z - qz * y;
+		let uvy = qz * x - qx * z;
+		let uvz = qx * y - qy * x;
 		// var uuv = vec3.cross([], qvec, uv);
-		let uuvx = qy * uvz - qz * uvy,
-			uuvy = qz * uvx - qx * uvz,
-			uuvz = qx * uvy - qy * uvx;
+		let uuvx = qy * uvz - qz * uvy;
+		let uuvy = qz * uvx - qx * uvz;
+		let uuvz = qx * uvy - qy * uvx;
 		// vec3.scale(uv, uv, 2 * w);
 		const w2 = qw * 2;
 

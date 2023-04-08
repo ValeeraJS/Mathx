@@ -4,6 +4,7 @@ import { IColorRGBAJson } from ".";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
 import { hue2rgb } from "./hue2color";
+import { IColorRYB } from "./interfaces/IColorRYB";
 
 export class ColorRGB extends Uint8Array implements IColorRGB {
 	public static average = (color: IColorRGB): number => {
@@ -14,7 +15,7 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 		color: IColorRGB | ArrayLike<number>,
 		wr = WEIGHT_GRAY_RED,
 		wg = WEIGHT_GRAY_GREEN,
-		wb = WEIGHT_GRAY_BLUE
+		wb = WEIGHT_GRAY_BLUE,
 	): number => {
 		return color[0] * wr + color[1] * wg + color[2] * wb;
 	};
@@ -28,23 +29,61 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 	};
 
 	public static equals = (a: IColorRGB, b: IColorRGB): boolean => {
-		return (
-			(a.r ?? a[0]) === (b.r ?? b[0]) &&
-			(a.g ?? a[1]) === (b.g ?? b[1]) &&
-			(a.b ?? a[2]) === (b.b ?? b[2])
-		);
+		return (a.r ?? a[0]) === (b.r ?? b[0]) && (a.g ?? a[1]) === (b.g ?? b[1]) && (a.b ?? a[2]) === (b.b ?? b[2]);
 	};
 
-	public static fromArray = (
-		arr: ArrayLike<number>,
-		out: IColorRGB = new ColorRGB()
-	): IColorRGB => {
+	public static fromArray = (arr: ArrayLike<number>, out: IColorRGB = new ColorRGB()): IColorRGB => {
 		out[0] = arr[0];
 		out[1] = arr[1];
 		out[2] = arr[2];
 
 		return out;
 	};
+
+	public static fromColorRYB(color: IColorRYB | number[] | Uint8Array, out: IColorRGB = new ColorRGB()): IColorRGB {
+		let r = color[0], y = color[1], b = color[2];
+		// Remove the whiteness from the color.
+		let w = Math.min(r, y, b);
+		r -= w;
+		y -= w;
+		b -= w;
+
+		let my = Math.max(r, y, b);
+
+		// Get the green out of the yellow and blue
+		let g = Math.min(y, b);
+		y -= g;
+		b -= g;
+
+		if (b && g) {
+			b *= 2.0;
+			g *= 2.0;
+		}
+
+		// Redistribute the remaining yellow.
+		r += y;
+		g += y;
+
+		// Normalize to values.
+		let mg = Math.max(r, g, b);
+		if (mg) {
+			let n = my / mg;
+			r *= n;
+			g *= n;
+			b *= n;
+		}
+
+		// Add the white back in.
+		r += w;
+		g += w;
+		b += w;
+
+		out[0] = r;
+		out[1] = g;
+		out[2] = b;
+
+		return out;
+	}
 
 	public static fromHex = (hex: number, out: IColorRGB = new ColorRGB()): IColorRGB => {
 		out[0] = hex >> 16;
@@ -54,14 +93,16 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 		return out;
 	};
 
-	public static fromHSL = (h: number, s: number, l: number, out = new ColorRGB) => {
-		var r, g, b;
+	public static fromHSL = (h: number, s: number, l: number, out = new ColorRGB()) => {
+		let r;
+		let g;
+		let b;
 
 		if (s === 0) {
 			r = g = b = l; // achromatic
 		} else {
-			var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-			var p = 2 * l - q;
+			let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+			let p = 2 * l - q;
 			r = hue2rgb(p, q, h + 1 / 3);
 			g = hue2rgb(p, q, h);
 			b = hue2rgb(p, q, h - 1 / 3);
@@ -72,12 +113,9 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 		out[2] = Math.round(b * 255);
 
 		return out;
-	}
+	};
 
-	public static fromJson = (
-		json: IColorRGBJson | IColorRGBAJson,
-		out: IColorRGB = new ColorRGB()
-	): IColorRGB => {
+	public static fromJson = (json: IColorRGBJson | IColorRGBAJson, out: IColorRGB = new ColorRGB()): IColorRGB => {
 		out[0] = json.r;
 		out[1] = json.g;
 		out[2] = json.b;
@@ -97,7 +135,7 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 		if (str in COLOR_HEX_MAP) {
 			return ColorRGB.fromHex(COLOR_HEX_MAP[str], out);
 		} else if (str.startsWith("#")) {
-			str = str.substr(1);
+			str = str.substring(1);
 
 			return ColorRGB.fromScalar(parseInt(str, 16), out);
 		} else if (str.startsWith("rgb(")) {
@@ -117,7 +155,7 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 		wr = WEIGHT_GRAY_RED,
 		wg = WEIGHT_GRAY_GREEN,
 		wb = WEIGHT_GRAY_BLUE,
-		out: IColorRGB = new ColorRGB()
+		out: IColorRGB = new ColorRGB(),
 	): IColorRGB => {
 		const gray = ColorRGB.averageWeighted(color, wr, wg, wb);
 
