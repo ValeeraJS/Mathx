@@ -2,6 +2,7 @@ import { IColorGPU, IColorGPUJson } from "./interfaces/IColorGPU";
 import { IColorRGB } from "./interfaces/IColorRGB";
 import { IColorRGBA } from "./interfaces/IColorRGBA";
 import { IColorRYB } from "./interfaces/IColorRYB";
+import { IColorHSV } from "./interfaces/IColorHSV";
 export declare class ColorGPU extends Float32Array implements IColorGPU {
     static average: (color: IColorGPU | ArrayLike<number>) => number;
     static averageWeighted: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
@@ -10,6 +11,7 @@ export declare class ColorGPU extends Float32Array implements IColorGPU {
     static equals: (a: IColorGPU, b: IColorGPU) => boolean;
     static fromArray: (arr: Float32Array | IColorGPU | number[], out?: IColorGPU) => IColorGPU;
     static fromColorHSL: (h: number, s: number, l: number, out?: ColorGPU) => ColorGPU;
+    static fromColorHSV: (color: IColorHSV | number[] | Float32Array, out?: ColorGPU) => ColorGPU;
     static fromColorRGB(color: IColorRGB | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
     static fromColorRGBA(color: IColorRGBA | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
     static fromColorRYB(color: IColorRYB | number[] | Uint8Array, out?: IColorGPU): IColorGPU;

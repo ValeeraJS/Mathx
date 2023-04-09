@@ -4,8 +4,13 @@ import { IColorRGB } from "./interfaces/IColorRGB";
 import { IColorRGBA } from "./interfaces/IColorRGBA";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_BLUE, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_RED } from "../constants";
-import { hue2rgb } from "./hue2color";
+import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
+import { IColorHSV } from "./interfaces/IColorHSV";
+
+let r: number;
+let g: number;
+let b: number;
 
 export class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
@@ -51,10 +56,6 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 	};
 
 	public static fromColorHSL = (h: number, s: number, l: number, out = new ColorGPU()) => {
-		let r;
-		let g;
-		let b;
-
 		if (s === 0) {
 			r = g = b = l; // achromatic
 		} else {
@@ -68,6 +69,47 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		out[0] = r;
 		out[1] = g;
 		out[2] = b;
+		out[3] = 1;
+
+		return out;
+	};
+
+	public static fromColorHSV = (color: IColorHSV | number[] | Float32Array, out = new ColorGPU()) => {
+		const s = color[1];
+		const v = color[2];
+		const h6 = color[0] * 6;
+		const hi = Math.floor(h6);
+		const f = h6 - hi;
+		const p = v * (1 - s);
+		const q = v * (1 - f * s);
+		const t = v * (1 - (1 - f) * s);
+
+		if (hi === 0 || hi === 6) {
+			out[0] = v;
+			out[1] = t;
+			out[2] = p;
+		} else if (hi === 1) {
+			out[0] = q;
+			out[1] = v;
+			out[2] = p;
+		} else if (hi === 2) {
+			out[0] = p;
+			out[1] = v;
+			out[2] = t;
+		} else if (hi === 3) {
+			out[0] = p;
+			out[1] = q;
+			out[2] = v;
+		} else if (hi === 4) {
+			out[0] = t;
+			out[1] = p;
+			out[2] = v;
+		} else if (hi === 5) {
+			out[0] = v;
+			out[1] = p;
+			out[2] = q;
+		}
+		out[3] = 1;
 
 		return out;
 	};
@@ -91,7 +133,9 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 	}
 
 	public static fromColorRYB(color: IColorRYB | number[] | Uint8Array, out: IColorGPU = new ColorGPU()): IColorGPU {
-		let r = color[0], y = color[1], b = color[2];
+		let r = color[0];
+		let y = color[1];
+		let b = color[2];
 		// Remove the whiteness from the color.
 		let w = Math.min(r, y, b);
 		r -= w;
@@ -166,7 +210,7 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		if (str in COLOR_HEX_MAP) {
 			return ColorGPU.fromHex(COLOR_HEX_MAP[str], 1, out);
 		} else if (str.startsWith("#")) {
-			str = str.substr(1);
+			str = str.substring(1);
 
 			return ColorGPU.fromHex(parseInt(str, 16), 1, out);
 		} else if (str.startsWith("rgb(")) {

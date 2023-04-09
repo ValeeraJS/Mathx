@@ -3,7 +3,7 @@ import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
 import { IColorRGB } from "./interfaces/IColorRGB";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
-import { hue2rgb } from "./hue2color";
+import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
 
 export class ColorRGBA extends Uint8Array implements IColorRGBA {
@@ -45,9 +45,14 @@ export class ColorRGBA extends Uint8Array implements IColorRGBA {
 
 		return out;
 	};
-	
-	public static fromColorRYB = (color: IColorRYB | number[] | Uint8Array, out: IColorRGBA = new ColorRGBA()): IColorRGBA => {
-		let r = color[0], y = color[1], b = color[2];
+
+	public static fromColorRYB = (
+		color: IColorRYB | number[] | Uint8Array,
+		out: IColorRGBA = new ColorRGBA(),
+	): IColorRGBA => {
+		let r = color[0];
+		let y = color[1];
+		let b = color[2];
 		// Remove the whiteness from the color.
 		let w = Math.min(r, y, b);
 		r -= w;
@@ -90,8 +95,7 @@ export class ColorRGBA extends Uint8Array implements IColorRGBA {
 		out[3] = 1;
 
 		return out;
-	}
-
+	};
 
 	public static fromHex = (hex: number, alpha = 255, out: IColorRGBA = new ColorRGBA()): IColorRGBA => {
 		out[0] = hex >> 16;

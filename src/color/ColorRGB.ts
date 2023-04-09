@@ -3,7 +3,7 @@ import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
 import { IColorRGBAJson } from ".";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
-import { hue2rgb } from "./hue2color";
+import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
 
 export class ColorRGB extends Uint8Array implements IColorRGB {
@@ -41,7 +41,9 @@ export class ColorRGB extends Uint8Array implements IColorRGB {
 	};
 
 	public static fromColorRYB(color: IColorRYB | number[] | Uint8Array, out: IColorRGB = new ColorRGB()): IColorRGB {
-		let r = color[0], y = color[1], b = color[2];
+		let r = color[0];
+		let y = color[1];
+		let b = color[2];
 		// Remove the whiteness from the color.
 		let w = Math.min(r, y, b);
 		r -= w;
