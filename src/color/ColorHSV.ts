@@ -8,7 +8,7 @@ let s = 0;
 let v = 0;
 
 export class ColorHSV extends Float32Array implements IColorHSV {
-	public readonly dataType = ArraybufferDataType.COLOR_HSL;
+	public readonly dataType = ArraybufferDataType.COLOR_HSV;
 
 	public static fromRGBUnsignedNormal(r: number, g: number, b: number, out: ColorHSV = new ColorHSV()): ColorHSV {
 		max = Math.max(r, g, b);

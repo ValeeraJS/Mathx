@@ -6,6 +6,9 @@ export declare const ArraybufferDataType: {
     COLOR_RYBA: string;
     COLOR_HSL: string;
     COLOR_HSLA: string;
+    COLOR_HSV: string;
+    COLOR_HSVA: string;
+    COLOR_CMYK: string;
     EULER: string;
     MATRIX2: string;
     MATRIX3: string;

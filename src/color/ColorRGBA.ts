@@ -151,7 +151,7 @@ export class ColorRGBA extends Uint8Array implements IColorRGBA {
 		if (str in COLOR_HEX_MAP) {
 			return ColorRGBA.fromHex(COLOR_HEX_MAP[str], 255, out);
 		} else if (str.startsWith("#")) {
-			str = str.substr(1);
+			str = str.substring(1);
 
 			return ColorRGBA.fromScalar(parseInt(str, 16), 255, out);
 		} else if (str.startsWith("rgba(")) {

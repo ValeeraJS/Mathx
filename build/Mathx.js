@@ -12,6 +12,9 @@
 	    COLOR_RYBA: "col_ryba",
 	    COLOR_HSL: "col_hsl",
 	    COLOR_HSLA: "col_hsla",
+	    COLOR_HSV: "col_hsv",
+	    COLOR_HSVA: "col_hsva",
+	    COLOR_CMYK: "col_cmyk",
 	    EULER: "euler",
 	    MATRIX2: "mat2",
 	    MATRIX3: "mat3",
@@ -202,6 +205,50 @@
 	    yellowgreen: 0x9acd32,
 	};
 
+	let max$2 = 0;
+	class ColorCMYK extends Float32Array {
+	    dataType = ArraybufferDataType.COLOR_CMYK;
+	    static fromRGBUnsignedNormal(r, g, b, out = new ColorCMYK()) {
+	        max$2 = Math.max(r, g, b);
+	        out[0] = 1 - r / max$2;
+	        out[1] = 1 - g / max$2;
+	        out[2] = 1 - b / max$2;
+	        out[3] = 1 - max$2;
+	        return out;
+	    }
+	    constructor(c = 0, m = 0, y = 0, k = 0) {
+	        super(4);
+	        this[0] = c;
+	        this[1] = m;
+	        this[2] = y;
+	        this[3] = k;
+	    }
+	    get c() {
+	        return this[0];
+	    }
+	    set c(val) {
+	        this[0] = val;
+	    }
+	    get m() {
+	        return this[1];
+	    }
+	    set m(val) {
+	        this[1] = val;
+	    }
+	    get y() {
+	        return this[2];
+	    }
+	    set y(val) {
+	        this[2] = val;
+	    }
+	    get k() {
+	        return this[3];
+	    }
+	    set k(val) {
+	        this[3] = val;
+	    }
+	}
+
 	let max$1 = 0;
 	let min$1 = 0;
 	let h$1 = 0;
@@ -269,7 +316,7 @@
 	let s$3 = 0;
 	let v$2 = 0;
 	class ColorHSV extends Float32Array {
-	    dataType = ArraybufferDataType.COLOR_HSL;
+	    dataType = ArraybufferDataType.COLOR_HSV;
 	    static fromRGBUnsignedNormal(r, g, b, out = new ColorHSV()) {
 	        max = Math.max(r, g, b);
 	        min = Math.min(r, g, b);
@@ -455,7 +502,7 @@
 	            return ColorRGBA.fromHex(COLOR_HEX_MAP[str], 255, out);
 	        }
 	        else if (str.startsWith("#")) {
-	            str = str.substr(1);
+	            str = str.substring(1);
 	            return ColorRGBA.fromScalar(parseInt(str, 16), 255, out);
 	        }
 	        else if (str.startsWith("rgba(")) {
@@ -759,7 +806,18 @@
 	        out[3] = arr[3];
 	        return out;
 	    };
-	    static fromColorHSL = (h, s, l, out = new ColorGPU()) => {
+	    static fromColorCMYK = (arr, out = new ColorGPU()) => {
+	        const k = 1 - arr[3];
+	        out[0] = (1 - arr[0]) * k;
+	        out[1] = (1 - arr[1]) * k;
+	        out[2] = (1 - arr[2]) * k;
+	        out[3] = 1;
+	        return out;
+	    };
+	    static fromColorHSL = (color, out = new ColorGPU()) => {
+	        let h = color[0];
+	        let s = color[1];
+	        let l = color[2];
 	        if (s === 0) {
 	            r$2 = g = b$1 = l; // achromatic
 	        }
@@ -4808,6 +4866,7 @@
 
 	exports.ArraybufferDataType = ArraybufferDataType;
 	exports.COLOR_HEX_MAP = COLOR_HEX_MAP;
+	exports.ColorCMYK = ColorCMYK;
 	exports.ColorGPU = ColorGPU;
 	exports.ColorHSL = ColorHSL;
 	exports.ColorHSV = ColorHSV;

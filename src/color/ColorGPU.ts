@@ -7,6 +7,7 @@ import { WEIGHT_GRAY_BLUE, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_RED } from "../constan
 import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
 import { IColorHSV } from "./interfaces/IColorHSV";
+import { IColorCMYK } from "./interfaces/IColorCMYK";
 
 let r: number;
 let g: number;
@@ -55,7 +56,23 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		return out;
 	};
 
-	public static fromColorHSL = (h: number, s: number, l: number, out = new ColorGPU()) => {
+	public static fromColorCMYK = (
+		arr: Float32Array | IColorCMYK | number[],
+		out: IColorGPU = new ColorGPU(),
+	): IColorGPU => {
+		const k = 1 - arr[3];
+		out[0] = (1 - arr[0]) * k;
+		out[1] = (1 - arr[1]) * k;
+		out[2] = (1 - arr[2]) * k;
+		out[3] = 1;
+
+		return out;
+	};
+
+	public static fromColorHSL = (color: IColorHSV | number[] | Float32Array, out = new ColorGPU()) => {
+		let h = color[0];
+		let s = color[1];
+		let l = color[2];
 		if (s === 0) {
 			r = g = b = l; // achromatic
 		} else {
