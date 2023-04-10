@@ -1,55 +1,55 @@
 /* eslint-disable max-lines */
 import { IEulerAngle, EulerRotationOrders } from "../euler/IEulerAngle";
-import { Vector3, IVector3 } from "../vector/Vector3";
+import { Vector3, IVector3, Vector3Like } from "../vector/Vector3";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
 import { Matrix3 } from "./Matrix3";
 
-let a00 = 0,
-	a01 = 0,
-	a02 = 0,
-	a03 = 0,
-	a11 = 0,
-	a10 = 0,
-	a12 = 0,
-	a13 = 0,
-	a20 = 0,
-	a21 = 0,
-	a22 = 0,
-	a23 = 0,
-	a31 = 0,
-	a30 = 0,
-	a32 = 0,
-	a33 = 0;
-let b00 = 0,
-	b01 = 0,
-	b02 = 0,
-	b03 = 0,
-	b11 = 0,
-	b10 = 0,
-	b12 = 0,
-	b13 = 0,
-	b20 = 0,
-	b21 = 0,
-	b22 = 0,
-	b23 = 0,
-	b31 = 0,
-	b30 = 0,
-	b32 = 0,
-	b33 = 0;
-let x = 0,
-	y = 0,
-	z = 0,
-	det = 0,
-	len = 0,
-	s = 0,
-	t = 0,
-	a = 0,
-	b = 0,
-	c = 0,
-	d = 0,
-	e = 0,
-	f = 0;
+let a00 = 0;
+let a01 = 0;
+let a02 = 0;
+let a03 = 0;
+let a11 = 0;
+let a10 = 0;
+let a12 = 0;
+let a13 = 0;
+let a20 = 0;
+let a21 = 0;
+let a22 = 0;
+let a23 = 0;
+let a31 = 0;
+let a30 = 0;
+let a32 = 0;
+let a33 = 0;
+let b00 = 0;
+let b01 = 0;
+let b02 = 0;
+let b03 = 0;
+let b11 = 0;
+let b10 = 0;
+let b12 = 0;
+let b13 = 0;
+let b20 = 0;
+let b21 = 0;
+let b22 = 0;
+let b23 = 0;
+let b31 = 0;
+let b30 = 0;
+let b32 = 0;
+let b33 = 0;
+let x = 0;
+let y = 0;
+let z = 0;
+let det = 0;
+let len = 0;
+let s = 0;
+let t = 0;
+let a = 0;
+let b = 0;
+let c = 0;
+let d = 0;
+let e = 0;
+let f = 0;
 
 const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
@@ -99,10 +99,7 @@ export class Matrix4 extends Float32Array {
 		return a13 * b12 - a03 * b13 + a33 * b20 - a23 * b21;
 	};
 
-	public static fromArray = (
-		source: Matrix4 | Float32Array | number[],
-		out: Matrix4 = new Matrix4()
-	): Matrix4 => {
+	public static fromArray = (source: Matrix4 | Float32Array | number[], out: Matrix4 = new Matrix4()): Matrix4 => {
 		out.set(source);
 
 		return out;
@@ -121,10 +118,10 @@ export class Matrix4 extends Float32Array {
 		f = Math.sin(z);
 
 		if (euler.order === EulerRotationOrders.XYZ) {
-			const ae = a * e,
-				af = a * f,
-				be = b * e,
-				bf = b * f;
+			const ae = a * e;
+			const af = a * f;
+			const be = b * e;
+			const bf = b * f;
 
 			out[0] = c * e;
 			out[4] = -c * f;
@@ -138,10 +135,10 @@ export class Matrix4 extends Float32Array {
 			out[6] = be + af * d;
 			out[10] = a * c;
 		} else if (euler.order === EulerRotationOrders.YXZ) {
-			const ce = c * e,
-				cf = c * f,
-				de = d * e,
-				df = d * f;
+			const ce = c * e;
+			const cf = c * f;
+			const de = d * e;
+			const df = d * f;
 
 			out[0] = ce + df * b;
 			out[4] = de * b - cf;
@@ -155,10 +152,10 @@ export class Matrix4 extends Float32Array {
 			out[6] = df + ce * b;
 			out[10] = a * c;
 		} else if (euler.order === EulerRotationOrders.ZXY) {
-			const ce = c * e,
-				cf = c * f,
-				de = d * e,
-				df = d * f;
+			const ce = c * e;
+			const cf = c * f;
+			const de = d * e;
+			const df = d * f;
 
 			out[0] = ce - df * b;
 			out[4] = -a * f;
@@ -172,10 +169,10 @@ export class Matrix4 extends Float32Array {
 			out[6] = b;
 			out[10] = a * c;
 		} else if (euler.order === EulerRotationOrders.ZYX) {
-			const ae = a * e,
-				af = a * f,
-				be = b * e,
-				bf = b * f;
+			const ae = a * e;
+			const af = a * f;
+			const be = b * e;
+			const bf = b * f;
 
 			out[0] = c * e;
 			out[4] = be * d - af;
@@ -189,10 +186,10 @@ export class Matrix4 extends Float32Array {
 			out[6] = b * c;
 			out[10] = a * c;
 		} else if (euler.order === EulerRotationOrders.YZX) {
-			const ac = a * c,
-				ad = a * d,
-				bc = b * c,
-				bd = b * d;
+			const ac = a * c;
+			const ad = a * d;
+			const bc = b * c;
+			const bd = b * d;
 
 			out[0] = c * e;
 			out[4] = bd - ac * f;
@@ -206,10 +203,10 @@ export class Matrix4 extends Float32Array {
 			out[6] = ad * f + bc;
 			out[10] = ac - bd * f;
 		} else if (euler.order === EulerRotationOrders.XZY) {
-			const ac = a * c,
-				ad = a * d,
-				bc = b * c,
-				bd = b * d;
+			const ac = a * c;
+			const ad = a * d;
+			const bc = b * c;
+			const bd = b * d;
 
 			out[0] = c * e;
 			out[4] = -f;
@@ -238,10 +235,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromMatrix3 = (
-		data: Float32Array | number[] | Matrix3,
-		out = new Matrix4()
-	): Matrix4 => {
+	public static fromMatrix3 = (data: Float32Array | number[] | Matrix3, out = new Matrix4()): Matrix4 => {
 		out[0] = data[0];
 		out[1] = data[1];
 		out[2] = data[2];
@@ -265,10 +259,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromMatrix3MVP = (
-		data: Float32Array | number[] | Matrix3,
-		out = new Matrix4()
-	): Matrix4 => {
+	public static fromMatrix3MVP = (data: Float32Array | number[] | Matrix3, out = new Matrix4()): Matrix4 => {
 		out[0] = data[0];
 		out[1] = data[1];
 		out[2] = 0;
@@ -293,10 +284,10 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static fromQuaternion = (q: Float32Array, out: Matrix4 = new Matrix4()): Matrix4 => {
-		const x = q[0],
-			y = q[1],
-			z = q[2],
-			w = q[3];
+		const x = q[0];
+		const y = q[1];
+		const z = q[2];
+		const w = q[3];
 		const x2 = x + x;
 		const y2 = y + y;
 		const z2 = z + z;
@@ -334,11 +325,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromRotation = (
-		rad: number,
-		axis: Float32Array | number[] | IVector3,
-		out: Matrix4 = new Matrix4()
-	): Matrix4 | null => {
+	public static fromRotation = (rad: number, axis: Vector3Like, out: Matrix4 = new Matrix4()): Matrix4 | null => {
 		x = axis[0];
 		y = axis[1];
 		z = axis[2];
@@ -449,10 +436,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromScaling = (
-		v: Float32Array | IVector3 | number[],
-		out: Matrix4 = new Matrix4()
-	): Matrix4 => {
+	public static fromScaling = (v: Vector3Like, out: Matrix4 = new Matrix4()): Matrix4 => {
 		out[0] = v[0];
 		out[1] = 0;
 		out[2] = 0;
@@ -473,10 +457,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromTranslation = (
-		v: Float32Array | number[] | IVector3,
-		out: Matrix4 = new Matrix4()
-	): Matrix4 => {
+	public static fromTranslation = (v: Vector3Like, out: Matrix4 = new Matrix4()): Matrix4 => {
 		out[0] = 1;
 		out[1] = 0;
 		out[2] = 0;
@@ -518,10 +499,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static invert = (
-		a: Float32Array | Matrix4 | number[],
-		out: Matrix4 = new Matrix4()
-	): Matrix4 | null => {
+	public static invert = (a: Float32Array | Matrix4 | number[], out: Matrix4 = new Matrix4()): Matrix4 | null => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -586,9 +564,18 @@ export class Matrix4 extends Float32Array {
 		eye: Float32Array | number[] | IVector3,
 		center: Float32Array | number[] | IVector3,
 		up: Float32Array = Vector3.VECTOR3_TOP,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
-		let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
+		let x0;
+		let x1;
+		let x2;
+		let y0;
+		let y1;
+		let y2;
+		let z0;
+		let z1;
+		let z2;
+		let len;
 		const eyex = eye[0];
 		const eyey = eye[1];
 		const eyez = eye[2];
@@ -666,7 +653,7 @@ export class Matrix4 extends Float32Array {
 	public static multiply = (
 		a: Float32Array | number[] | Matrix4,
 		b: Float32Array | number[] | Matrix4,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -731,7 +718,7 @@ export class Matrix4 extends Float32Array {
 	public static multiplyScaleMatrix = (
 		a: Float32Array | number[] | Matrix4,
 		b: Float32Array | number[] | Matrix4,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -783,7 +770,7 @@ export class Matrix4 extends Float32Array {
 	public static multiplyTranslateMatrix = (
 		a: Float32Array | number[] | Matrix4,
 		b: Float32Array | number[] | Matrix4,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -838,7 +825,7 @@ export class Matrix4 extends Float32Array {
 		top: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		c = 1 / (left - right);
 		b = 1 / (bottom - top);
@@ -871,7 +858,7 @@ export class Matrix4 extends Float32Array {
 		top: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		c = 1 / (left - right);
 		b = 1 / (bottom - top);
@@ -902,7 +889,7 @@ export class Matrix4 extends Float32Array {
 		aspect: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		f = 1.0 / Math.tan(fovy / 2);
 
@@ -937,7 +924,7 @@ export class Matrix4 extends Float32Array {
 		aspect: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		f = 1.0 / Math.tan(fovy / 2);
 
@@ -970,8 +957,8 @@ export class Matrix4 extends Float32Array {
 	public static rotate = (
 		a: Float32Array | Matrix4 | number[],
 		rad: number,
-		axis: Float32Array | number[] | IVector3,
-		out: Matrix4 = new Matrix4()
+		axis: Vector3Like,
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 | null => {
 		x = axis[0];
 		y = axis[1];
@@ -1040,7 +1027,7 @@ export class Matrix4 extends Float32Array {
 	public static rotateX = (
 		a: Float32Array | Matrix4 | number[],
 		rad: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
@@ -1079,7 +1066,7 @@ export class Matrix4 extends Float32Array {
 	public static rotateY = (
 		a: Float32Array | Matrix4 | number[],
 		rad: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
@@ -1118,7 +1105,7 @@ export class Matrix4 extends Float32Array {
 	public static rotateZ = (
 		a: Float32Array | Matrix4 | number[],
 		rad: number,
-		out: Matrix4 = new Matrix4()
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
@@ -1156,8 +1143,8 @@ export class Matrix4 extends Float32Array {
 
 	public static scale = (
 		a: Float32Array | Matrix4 | number[],
-		v: Float32Array | IVector3 | number[],
-		out: Matrix4 = new Matrix4()
+		v: Vector3Like,
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		x = v[0];
 		y = v[1];
@@ -1186,21 +1173,21 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static targetTo = (
-		eye: Float32Array | IVector3 | number[],
-		target: Float32Array | IVector3 | number[],
-		up: Float32Array | IVector3 | number[] = Vector3.VECTOR3_TOP,
-		out: Matrix4 = new Matrix4()
+		eye: Vector3Like,
+		target: Vector3Like,
+		up: Vector3Like = Vector3.VECTOR3_TOP,
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
-		const eyex = eye[0],
-			eyey = eye[1],
-			eyez = eye[2],
-			upx = up[0],
-			upy = up[1],
-			upz = up[2];
+		const eyex = eye[0];
+		const eyey = eye[1];
+		const eyez = eye[2];
+		const upx = up[0];
+		const upy = up[1];
+		const upz = up[2];
 
-		let z0 = eyex - target[0],
-			z1 = eyey - target[1],
-			z2 = eyez - target[2];
+		let z0 = eyex - target[0];
+		let z1 = eyey - target[1];
+		let z2 = eyez - target[2];
 
 		let len = z0 * z0 + z1 * z1 + z2 * z2;
 
@@ -1211,9 +1198,9 @@ export class Matrix4 extends Float32Array {
 			z2 *= len;
 		}
 
-		let x0 = upy * z2 - upz * z1,
-			x1 = upz * z0 - upx * z2,
-			x2 = upx * z1 - upy * z0;
+		let x0 = upy * z2 - upz * z1;
+		let x1 = upz * z0 - upx * z2;
+		let x2 = upx * z1 - upy * z0;
 
 		len = x0 * x0 + x1 * x1 + x2 * x2;
 		if (len > 0) {
@@ -1245,8 +1232,8 @@ export class Matrix4 extends Float32Array {
 
 	public static translate = (
 		a: Float32Array | Matrix4 | number[],
-		v: Float32Array | IVector3 | number[],
-		out: Matrix4 = new Matrix4()
+		v: Vector3Like,
+		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		x = v[0];
 		y = v[1];
@@ -1293,10 +1280,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static transpose = (
-		a: Float32Array | Matrix4 | number[],
-		out: Matrix4 = new Matrix4()
-	): Matrix4 => {
+	public static transpose = (a: Float32Array | Matrix4 | number[], out: Matrix4 = new Matrix4()): Matrix4 => {
 		if (out === a) {
 			a01 = a[1];
 			a02 = a[2];

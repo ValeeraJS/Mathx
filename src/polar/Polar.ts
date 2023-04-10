@@ -1,7 +1,8 @@
-import {ArraybufferDataType} from "../ArraybufferDataType";
-import {IPolar} from "./interfaces/IPolar";
+import { ArraybufferDataType } from "../ArraybufferDataType";
+import { IPolar } from "./interfaces/IPolar";
 
-let x: number, y: number;
+let x: number;
+let y: number;
 
 /**
  * @class
@@ -26,21 +27,21 @@ export class Polar extends Float32Array implements IPolar {
 		return new Polar(r, a);
 	}
 
-	public get a() : number {
+	public get a(): number {
 		return this[1];
-	};
-	
-	public set a(v: number) {
-		this[1] = v;;
-	};
+	}
 
-	public get r() : number {
+	public set a(v: number) {
+		this[1] = v;
+	}
+
+	public get r(): number {
 		return this[0];
-	};
-	
+	}
+
 	public set r(v: number) {
-		this[0] = v;;
-	};
+		this[0] = v;
+	}
 	public readonly dataType = ArraybufferDataType.POLAR;
 	/**
 	 * @public

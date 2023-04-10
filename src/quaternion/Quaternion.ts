@@ -4,15 +4,22 @@ import { IPairs4Float32 } from "../common/interfaces/IPairs4";
 import { Matrix3 } from "../matrix/Matrix3";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 
-let ax: number, ay: number, az: number, aw: number, bx: number, by: number, bz: number, bw: number;
-let s = 0,
-	c = 0,
-	rad = 0,
-	dotTmp = 0,
-	omega = 0,
-	len = 0,
-	scale0 = 0,
-	scale1 = 0;
+let ax: number;
+let ay: number;
+let az: number;
+let aw: number;
+let bx: number;
+let by: number;
+let bz: number;
+let bw: number;
+let s = 0;
+let c = 0;
+let rad = 0;
+let dotTmp = 0;
+let omega = 0;
+let len = 0;
+let scale0 = 0;
+let scale1 = 0;
 const tmpVec3 = new Vector3();
 
 export interface IQuaternionJson {
@@ -22,12 +29,12 @@ export interface IQuaternionJson {
 	w: number;
 }
 
-export interface IQuaternion extends IPairs4Float32, IQuaternionJson { }
+export interface IQuaternion extends IPairs4Float32, IQuaternionJson {}
 
 export default class Quaternion extends Float32Array implements IQuaternion {
 	public static angleTo = (
 		a: Float32Array | number[] | IQuaternion,
-		b: Float32Array | number[] | IQuaternion
+		b: Float32Array | number[] | IQuaternion,
 	): number => {
 		dotTmp = Quaternion.dot(a, b);
 
@@ -36,7 +43,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 
 	public static conjugate = (
 		a: Float32Array | number[] | IQuaternion,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		out[0] = -a[0];
 		out[1] = -a[1];
@@ -57,7 +64,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 
 	public static dot = (
 		a: Float32Array | IQuaternion | number[],
-		b: Float32Array | IQuaternion | number[]
+		b: Float32Array | IQuaternion | number[],
 	): number => {
 		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 	};
@@ -65,7 +72,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 	public static fromAxisAngle = (
 		axis: Float32Array | IVector3 | number[],
 		rad: number,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		rad = rad * 0.5;
 		s = Math.sin(rad);
@@ -79,7 +86,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 
 	public static fromMatrix3 = (
 		m: Float32Array | Matrix3 | number[],
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		const fTrace = m[0] + m[4] + m[8];
 		let fRoot;
@@ -121,7 +128,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 
 	public static invert = (
 		a: Float32Array | IQuaternion | number[],
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		ax = a[0];
 		ay = a[1];
@@ -149,7 +156,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 		a: Float32Array | IQuaternion | number[],
 		b: Float32Array | IQuaternion | number[],
 		t: number,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		ax = a[0];
 		ay = a[1];
@@ -166,7 +173,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 	public static multiply = (
 		a: Float32Array | IQuaternion | number[],
 		b: Float32Array | IQuaternion | number[],
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		ax = a[0];
 		ay = a[1];
@@ -187,7 +194,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 
 	public static normalize = (
 		a: Float32Array | IQuaternion | number[],
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		ax = a[0];
 		ay = a[1];
@@ -221,11 +228,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 		return out;
 	};
 
-	public static rotationTo = (
-		a: Vector3Like,
-		b: Vector3Like,
-		out: Quaternion = new Quaternion()
-	): Quaternion => {
+	public static rotationTo = (a: Vector3Like, b: Vector3Like, out: Quaternion = new Quaternion()): Quaternion => {
 		dotTmp = Vector3.dot(a, b);
 		if (dotTmp < -1 + EPSILON) {
 			Vector3.cross(Vector3.VECTOR3_LEFT, a, tmpVec3);
@@ -257,7 +260,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 	public static rotateX = (
 		a: Float32Array | IQuaternion | number[],
 		rad: number,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		rad *= 0.5;
 
@@ -279,7 +282,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 	public static rotateY = (
 		a: Float32Array | IQuaternion | number[],
 		rad: number,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		rad *= 0.5;
 
@@ -301,7 +304,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 	public static rotateZ = (
 		a: Float32Array | IQuaternion | number[],
 		rad: number,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		rad *= 0.5;
 
@@ -324,7 +327,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 		a: Float32Array | IQuaternion | number[],
 		b: Float32Array | IQuaternion | number[],
 		t: number,
-		out: Quaternion = new Quaternion()
+		out: Quaternion = new Quaternion(),
 	): Quaternion => {
 		ax = a[0];
 		ay = a[1];
@@ -362,10 +365,7 @@ export default class Quaternion extends Float32Array implements IQuaternion {
 		return out;
 	};
 
-	public static toAxisAngle = (
-		q: Float32Array | IQuaternion | number[],
-		outAxis: IVector3
-	): number => {
+	public static toAxisAngle = (q: Float32Array | IQuaternion | number[], outAxis: IVector3): number => {
 		rad = Math.acos(q[3]) * 2.0;
 		s = Math.sin(rad / 2.0);
 		if (s > EPSILON) {

@@ -1,17 +1,17 @@
 import closeToCommon from "../common/closeTo";
-import { IVector2 } from "./../vector/Vector2";
+import { IVector2, Vector2Like } from "./../vector/Vector2";
 
-let a00 = 0,
-	a01 = 0,
-	a10 = 0,
-	a11 = 0;
-let b00 = 0,
-	b01 = 0,
-	b10 = 0,
-	b11 = 0,
-	det = 0;
-let x = 0,
-	y = 0;
+let a00 = 0;
+let a01 = 0;
+let a10 = 0;
+let a11 = 0;
+let b00 = 0;
+let b01 = 0;
+let b10 = 0;
+let b11 = 0;
+let det = 0;
+let x = 0;
+let y = 0;
 
 const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 
@@ -20,7 +20,7 @@ export class Matrix2 extends Float32Array {
 	public static add = (
 		a: Float32Array | number[] | Matrix2,
 		b: Float32Array | number[] | Matrix2,
-		out: Matrix2
+		out: Matrix2,
 	): Matrix2 => {
 		out[0] = a[0] + b[0];
 		out[1] = a[1] + b[1];
@@ -44,10 +44,7 @@ export class Matrix2 extends Float32Array {
 		return new Matrix2(source);
 	};
 
-	public static closeTo = (
-		a: Float32Array | number[] | Matrix2,
-		b: Float32Array | number[] | Matrix2
-	): boolean => {
+	public static closeTo = (a: Float32Array | number[] | Matrix2, b: Float32Array | number[] | Matrix2): boolean => {
 		a00 = a[0];
 		a10 = a[1];
 		a01 = a[2];
@@ -57,12 +54,7 @@ export class Matrix2 extends Float32Array {
 		b01 = b[2];
 		b11 = b[3];
 
-		return (
-			closeToCommon(a00, b00) &&
-			closeToCommon(a01, b01) &&
-			closeToCommon(a10, b10) &&
-			closeToCommon(a11, b11)
-		);
+		return closeToCommon(a00, b00) && closeToCommon(a01, b01) && closeToCommon(a10, b10) && closeToCommon(a11, b11);
 	};
 
 	public static create = (a = UNIT_MATRIX2_DATA): Matrix2 => {
@@ -73,10 +65,7 @@ export class Matrix2 extends Float32Array {
 		return a[0] * a[3] - a[1] * a[2];
 	};
 
-	public static equals = (
-		a: Float32Array | number[] | Matrix2,
-		b: Float32Array | number[] | Matrix2
-	): boolean => {
+	public static equals = (a: Float32Array | number[] | Matrix2, b: Float32Array | number[] | Matrix2): boolean => {
 		return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 	};
 
@@ -84,10 +73,7 @@ export class Matrix2 extends Float32Array {
 		return Math.hypot(a[0], a[1], a[2], a[3]);
 	};
 
-	public static fromArray = (
-		source: Matrix2 | Float32Array | number[],
-		out: Matrix2 = new Matrix2()
-	): Matrix2 => {
+	public static fromArray = (source: Matrix2 | Float32Array | number[], out: Matrix2 = new Matrix2()): Matrix2 => {
 		out.set(source);
 
 		return out;
@@ -104,10 +90,7 @@ export class Matrix2 extends Float32Array {
 		return out;
 	};
 
-	public static fromScaling = (
-		v: Float32Array | IVector2 | number[],
-		out: Matrix2 = new Matrix2()
-	): Matrix2 => {
+	public static fromScaling = (v: Vector2Like, out: Matrix2 = new Matrix2()): Matrix2 => {
 		out[0] = v[0];
 		out[1] = 0;
 		out[2] = 0;
@@ -125,10 +108,7 @@ export class Matrix2 extends Float32Array {
 		return out;
 	};
 
-	public static invert = (
-		a: Float32Array | Matrix2 | number[],
-		out: Matrix2 = new Matrix2()
-	): Matrix2 | null => {
+	public static invert = (a: Float32Array | Matrix2 | number[], out: Matrix2 = new Matrix2()): Matrix2 | null => {
 		a00 = a[0];
 		a10 = a[1];
 		a01 = a[2];
@@ -153,7 +133,7 @@ export class Matrix2 extends Float32Array {
 	public static minus = (
 		a: Float32Array | Matrix2 | number[],
 		b: Float32Array | Matrix2 | number[],
-		out: Matrix2 = new Matrix2()
+		out: Matrix2 = new Matrix2(),
 	): Float32Array => {
 		out[0] = a[0] - b[0];
 		out[1] = a[1] - b[1];
@@ -166,7 +146,7 @@ export class Matrix2 extends Float32Array {
 	public static multiply = (
 		a: Float32Array | Matrix2 | number[],
 		b: Float32Array | Matrix2 | number[],
-		out: Matrix2 = new Matrix2()
+		out: Matrix2 = new Matrix2(),
 	): Float32Array => {
 		a00 = a[0];
 		a10 = a[1];
@@ -187,7 +167,7 @@ export class Matrix2 extends Float32Array {
 	public static multiplyScalar = (
 		a: Float32Array | Matrix2 | number[],
 		b: number,
-		out: Matrix2 = new Matrix2()
+		out: Matrix2 = new Matrix2(),
 	): Float32Array => {
 		out[0] = a[0] * b;
 		out[1] = a[1] * b;
@@ -200,7 +180,7 @@ export class Matrix2 extends Float32Array {
 	public static rotate = (
 		a: Float32Array | Matrix2 | number[],
 		rad: number,
-		out: Matrix2 = new Matrix2()
+		out: Matrix2 = new Matrix2(),
 	): Float32Array => {
 		a00 = a[0];
 		a10 = a[1];
@@ -218,8 +198,8 @@ export class Matrix2 extends Float32Array {
 
 	public static scale = (
 		a: Float32Array | Matrix2 | number[],
-		v: Float32Array | IVector2 | number[],
-		out: Matrix2 = new Matrix2()
+		v: Vector2Like,
+		out: Matrix2 = new Matrix2(),
 	): Float32Array => {
 		a00 = a[0];
 		a10 = a[1];
@@ -239,10 +219,7 @@ export class Matrix2 extends Float32Array {
 		return `mat2(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 	};
 
-	public static transpose = (
-		a: Float32Array | Matrix2 | number[],
-		out: Matrix2 = new Matrix2()
-	): Float32Array => {
+	public static transpose = (a: Float32Array | Matrix2 | number[], out: Matrix2 = new Matrix2()): Float32Array => {
 		if (out === a) {
 			a01 = a[1];
 			out[1] = a[2];

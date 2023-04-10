@@ -1,26 +1,26 @@
-import { IVector2 } from "../vector/Vector2";
+import { IVector2, Vector2Like } from "../vector/Vector2";
 import { Matrix2 } from "./Matrix2";
 
-let a00 = 0,
-	a01 = 0,
-	a02 = 0,
-	a11 = 0,
-	a10 = 0,
-	a12 = 0,
-	a20 = 0,
-	a21 = 0,
-	a22 = 0;
-let b00 = 0,
-	b01 = 0,
-	b02 = 0,
-	b11 = 0,
-	b10 = 0,
-	b12 = 0,
-	b20 = 0,
-	b21 = 0,
-	b22 = 0;
-let x = 0,
-	y = 0;
+let a00 = 0;
+let a01 = 0;
+let a02 = 0;
+let a11 = 0;
+let a10 = 0;
+let a12 = 0;
+let a20 = 0;
+let a21 = 0;
+let a22 = 0;
+let b00 = 0;
+let b01 = 0;
+let b02 = 0;
+let b11 = 0;
+let b10 = 0;
+let b12 = 0;
+let b20 = 0;
+let b21 = 0;
+let b22 = 0;
+let x = 0;
+let y = 0;
 
 const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
@@ -82,26 +82,16 @@ export class Matrix3 extends Float32Array {
 		a21 = a[7];
 		a22 = a[8];
 
-		return (
-			a00 * (a22 * a11 - a12 * a21) +
-			a01 * (-a22 * a10 + a12 * a20) +
-			a02 * (a21 * a10 - a11 * a20)
-		);
+		return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a21 * a10 - a11 * a20);
 	};
 
-	public static fromArray = (
-		source: Matrix3 | Float32Array | number[],
-		out: Matrix3 = new Matrix3()
-	): Matrix3 => {
+	public static fromArray = (source: Matrix3 | Float32Array | number[], out: Matrix3 = new Matrix3()): Matrix3 => {
 		out.set(source);
 
 		return out;
 	};
 
-	public static fromMatrix2 = (
-		mat4: Float32Array | number[] | Matrix2,
-		out: Matrix3 = new Matrix3()
-	): Matrix3 => {
+	public static fromMatrix2 = (mat4: Float32Array | number[] | Matrix2, out: Matrix3 = new Matrix3()): Matrix3 => {
 		out[0] = mat4[0];
 		out[1] = mat4[1];
 		out[2] = 0;
@@ -117,10 +107,7 @@ export class Matrix3 extends Float32Array {
 		return out;
 	};
 
-	public static fromMatrix4 = (
-		mat4: Float32Array | number[],
-		out: Matrix3 = new Matrix3()
-	): Matrix3 => {
+	public static fromMatrix4 = (mat4: Float32Array | number[], out: Matrix3 = new Matrix3()): Matrix3 => {
 		out[0] = mat4[0];
 		out[1] = mat4[1];
 		out[2] = mat4[2];
@@ -155,10 +142,7 @@ export class Matrix3 extends Float32Array {
 		return out;
 	};
 
-	public static fromScaling = (
-		v: Float32Array | IVector2 | number[],
-		out: Matrix3 = new Matrix3()
-	): Matrix3 => {
+	public static fromScaling = (v: Vector2Like, out: Matrix3 = new Matrix3()): Matrix3 => {
 		out[0] = v[0];
 		out[1] = 0;
 		out[2] = 0;
@@ -174,10 +158,23 @@ export class Matrix3 extends Float32Array {
 		return out;
 	};
 
-	public static fromTranslation = (
-		v: Float32Array | IVector2 | number[],
-		out: Matrix3 = new Matrix3()
-	): Matrix3 => {
+	public static fromSkew = (v: Vector2Like, out: Matrix3 = new Matrix3()): Matrix3 => {
+		out[0] = 1;
+		out[1] = v[1];
+		out[2] = 0;
+
+		out[3] = v[0];
+		out[4] = 1;
+		out[5] = 0;
+
+		out[6] = 0;
+		out[7] = 0;
+		out[8] = 1;
+
+		return out;
+	};
+
+	public static fromTranslation = (v: Vector2Like, out: Matrix3 = new Matrix3()): Matrix3 => {
 		out[0] = 1;
 		out[1] = 0;
 		out[2] = 0;
@@ -205,10 +202,7 @@ export class Matrix3 extends Float32Array {
 		return out;
 	};
 
-	public static invert = (
-		a: Float32Array | number[] | Matrix3,
-		out: Matrix3 = new Matrix3()
-	): Matrix3 | null => {
+	public static invert = (a: Float32Array | number[] | Matrix3, out: Matrix3 = new Matrix3()): Matrix3 | null => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -247,7 +241,7 @@ export class Matrix3 extends Float32Array {
 	public static multiply = (
 		a: Float32Array | number[] | Matrix3,
 		b: Float32Array | number[] | Matrix3,
-		out: Matrix3 = new Matrix3()
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -287,7 +281,7 @@ export class Matrix3 extends Float32Array {
 	public static multiplyRotationMatrix = (
 		a: Float32Array | number[] | Matrix3,
 		b: Float32Array | number[] | Matrix3,
-		out: Matrix3 = new Matrix3()
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -322,7 +316,7 @@ export class Matrix3 extends Float32Array {
 	public static multiplyScaleMatrix = (
 		a: Float32Array | number[] | Matrix3,
 		b: Float32Array | number[] | Matrix3,
-		out: Matrix3 = new Matrix3()
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -355,7 +349,7 @@ export class Matrix3 extends Float32Array {
 	public static multiplyTranslateMatrix = (
 		a: Float32Array | number[] | Matrix3,
 		b: Float32Array | number[] | Matrix3,
-		out: Matrix3 = new Matrix3()
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -388,7 +382,7 @@ export class Matrix3 extends Float32Array {
 	public static rotate = (
 		a: Float32Array | number[] | Matrix3,
 		rad: number,
-		out: Matrix3 = new Matrix3()
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -419,8 +413,8 @@ export class Matrix3 extends Float32Array {
 
 	public static scale = (
 		a: Float32Array | number[] | Matrix3,
-		v: Float32Array | number[] | IVector2,
-		out: Matrix3 = new Matrix3()
+		v: Vector2Like,
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		x = v[0];
 		y = v[1];
@@ -442,8 +436,8 @@ export class Matrix3 extends Float32Array {
 
 	public static translate = (
 		a: Float32Array | number[] | Matrix3,
-		v: Float32Array | number[] | IVector2,
-		out: Matrix3 = new Matrix3()
+		v: Vector2Like,
+		out: Matrix3 = new Matrix3(),
 	): Matrix3 => {
 		a00 = a[0];
 		a01 = a[1];
@@ -472,10 +466,7 @@ export class Matrix3 extends Float32Array {
 		return out;
 	};
 
-	public static transpose = (
-		a: Float32Array | number[] | Matrix3,
-		out: Matrix3 = new Matrix3()
-	): Matrix3 => {
+	public static transpose = (a: Float32Array | number[] | Matrix3, out: Matrix3 = new Matrix3()): Matrix3 => {
 		if (out === a) {
 			a01 = a[1];
 			a02 = a[2];
