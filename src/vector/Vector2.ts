@@ -16,7 +16,7 @@ export interface IVector2Json {
 	y: number;
 }
 
-export interface IVector2 extends Float32Array, IVector2Json { };
+export interface IVector2 extends Float32Array, IVector2Json {}
 export type Vector2Like = IVector2 | Vector2 | number[] | Float32Array;
 
 export class Vector2 extends Float32Array implements IVector2 {
@@ -27,22 +27,14 @@ export class Vector2 extends Float32Array implements IVector2 {
 	public static readonly VECTOR2_RIGHT = new Vector2(1, 0);
 	public static readonly VECTOR2_ONE = new Vector2(1, 1);
 
-	public static add = (
-		a: Vector2Like,
-		b: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static add = (a: Vector2Like, b: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = a[0] + b[0];
 		out[1] = a[1] + b[1];
 
 		return out;
 	};
 
-	public static addScalar = (
-		a: Vector2Like,
-		b: number,
-		out: Vector2 = new Vector2(2)
-	): Vector2 => {
+	public static addScalar = (a: Vector2Like, b: number, out: Vector2 = new Vector2(2)): Vector2 => {
 		out[0] = a[0] + b;
 		out[1] = a[1] + b;
 
@@ -53,10 +45,11 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return Math.atan2(a[1], a[0]);
 	};
 
-	public static ceil = (
-		a: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static area = (a: Vector2Like): number => {
+		return a[0] * a[1];
+	};
+
+	public static ceil = (a: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = Math.ceil(a[0]);
 		out[1] = Math.ceil(a[1]);
 
@@ -67,7 +60,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		a: Vector2Like,
 		min: Vector2Like,
 		max: Vector2Like,
-		out: Vector2 = new Vector2()
+		out: Vector2 = new Vector2(),
 	): Vector2 => {
 		out[0] = clampCommon(a[0], min[0], max[0]);
 		out[1] = clampCommon(a[1], min[1], max[1]);
@@ -79,7 +72,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		a: Vector2Like,
 		min: Vector2Like,
 		max: Vector2Like,
-		out: Vector2 = new Vector2()
+		out: Vector2 = new Vector2(),
 	): Vector2 => {
 		out[0] = clampSafeCommon(a[0], min[0], max[0]);
 		out[1] = clampSafeCommon(a[1], min[1], max[1]);
@@ -91,7 +84,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		a: Vector2Like,
 		min: Vector2Like,
 		max: Vector2Like,
-		out: Vector2 = new Vector2()
+		out: Vector2 = new Vector2(),
 	): Vector2 => {
 		out[0] = clampSafeCommon(a[0], min[0], max[0]);
 		out[1] = clampSafeCommon(a[1], min[1], max[1]);
@@ -99,12 +92,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static clampScalar = (
-		a: Vector2Like,
-		min: number,
-		max: number,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static clampScalar = (a: Vector2Like, min: number, max: number, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = clampCommon(a[0], min, max);
 		out[1] = clampCommon(a[1], min, max);
 
@@ -238,98 +226,63 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return a[0] * a[0] + a[1] * a[1];
 	};
 
-	public static lerp = (
-		a: Vector2Like,
-		b: Vector2Like,
-		alpha: number,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static lerp = (a: Vector2Like, b: Vector2Like, alpha: number, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = (b[0] - a[0]) * alpha + a[0];
 		out[1] = (b[1] - a[1]) * alpha + a[1];
 
 		return out;
 	};
 
-	public static max = (
-		a: Vector2Like,
-		b: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static max = (a: Vector2Like, b: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = Math.max(a[0], b[0]);
 		out[1] = Math.max(a[1], b[1]);
 
 		return out;
 	};
 
-	public static min = (
-		a: Vector2Like,
-		b: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static min = (a: Vector2Like, b: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = Math.min(a[0], b[0]);
 		out[1] = Math.min(a[1], b[1]);
 
 		return out;
 	};
 
-	public static minus = (
-		a: Vector2Like,
-		b: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static minus = (a: Vector2Like, b: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = a[0] - b[0];
 		out[1] = a[1] - b[0];
 
 		return out;
 	};
 
-	public static minusScalar = (
-		a: Vector2Like,
-		num: number,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static minusScalar = (a: Vector2Like, num: number, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = a[0] - num;
 		out[1] = a[1] - num;
 
 		return out;
 	};
 
-	public static multiply = (
-		a: Vector2Like,
-		b: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static multiply = (a: Vector2Like, b: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = a[0] * b[0];
 		out[1] = a[1] * b[1];
 
 		return out;
 	};
 
-	public static multiplyScalar = (
-		a: Vector2Like,
-		scalar: number,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static multiplyScalar = (a: Vector2Like, scalar: number, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = a[0] * scalar;
 		out[1] = a[1] * scalar;
 
 		return out;
 	};
 
-	public static negate = (
-		a: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static negate = (a: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = -a[0];
 		out[1] = -a[1];
 
 		return out;
 	};
 
-	public static normalize = (
-		a: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static normalize = (a: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		return Vector2.divideScalar(a, Vector2.norm(a) || 1, out);
 	};
 
@@ -345,7 +298,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		a: Vector2Like,
 		angle: number,
 		center: Vector2Like = Vector2.VECTOR2_ZERO,
-		out: Vector2 = new Vector2(2)
+		out: Vector2 = new Vector2(2),
 	): Vector2 => {
 		c = Math.cos(angle);
 		s = Math.sin(angle);
@@ -359,10 +312,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static round = (
-		a: Vector2Like,
-		out: Vector2 = new Vector2()
-	): Vector2 => {
+	public static round = (a: Vector2Like, out: Vector2 = new Vector2()): Vector2 => {
 		out[0] = Math.round(a[0]);
 		out[1] = Math.round(a[1]);
 
@@ -376,31 +326,21 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static setNorm = (
-		a: Vector2Like,
-		length: number,
-		out: Vector2 = new Vector2(2)
-	): Vector2 => {
+	public static setNorm = (a: Vector2Like, length: number, out: Vector2 = new Vector2(2)): Vector2 => {
 		Vector2.normalize(a, out);
 		Vector2.multiplyScalar(out, length, out);
 
 		return out;
 	};
 
-	public static toArray = (
-		a: Vector2Like,
-		arr: number[] = []
-	): number[] => {
+	public static toArray = (a: Vector2Like, arr: number[] = []): number[] => {
 		arr[0] = a[0];
 		arr[1] = a[1];
 
 		return arr;
 	};
 
-	public static toPalorJson = (
-		a: Vector2Like,
-		p = { a: 0, r: 0 }
-	): IPolar => {
+	public static toPalorJson = (a: Vector2Like, p = { a: 0, r: 0 }): IPolar => {
 		p.r = Vector2.norm(a);
 		p.a = Vector2.angle(a);
 
@@ -414,7 +354,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 	public static transformMatrix3 = (
 		a: Vector2Like,
 		m: Float32Array | number[],
-		out: Vector2 = new Vector2()
+		out: Vector2 = new Vector2(),
 	): Vector2 => {
 		x = a[0];
 		y = a[1];

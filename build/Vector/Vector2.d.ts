@@ -16,6 +16,7 @@ export declare class Vector2 extends Float32Array implements IVector2 {
     static add: (a: Vector2Like, b: Vector2Like, out?: Vector2) => Vector2;
     static addScalar: (a: Vector2Like, b: number, out?: Vector2) => Vector2;
     static angle: (a: Vector2Like) => number;
+    static area: (a: Vector2Like) => number;
     static ceil: (a: Vector2Like, out?: Vector2) => Vector2;
     static clamp: (a: Vector2Like, min: Vector2Like, max: Vector2Like, out?: Vector2) => Vector2;
     static clampSafe: (a: Vector2Like, min: Vector2Like, max: Vector2Like, out?: Vector2) => Vector2;

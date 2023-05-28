@@ -1,5 +1,5 @@
 import closeToCommon from "../common/closeTo";
-import { IVector2, Vector2Like } from "./../vector/Vector2";
+import { Vector2Like } from "./../vector/Vector2";
 
 let a00 = 0;
 let a01 = 0;

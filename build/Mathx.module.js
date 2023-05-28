@@ -1527,6 +1527,9 @@ class Vector2 extends Float32Array {
     static angle = (a) => {
         return Math.atan2(a[1], a[0]);
     };
+    static area = (a) => {
+        return a[0] * a[1];
+    };
     static ceil = (a, out = new Vector2()) => {
         out[0] = Math.ceil(a[0]);
         out[1] = Math.ceil(a[1]);
@@ -2092,6 +2095,9 @@ class Vector3 extends Float32Array {
         out[2] = z + uvz + uuvz;
         return out;
     };
+    volume = (a) => {
+        return a[0] * a[1] * a[2];
+    };
     dataType = ArraybufferDataType.VECTOR3;
     constructor(x = 0, y = 0, z = 0) {
         super(3);
@@ -2120,9 +2126,28 @@ class Vector3 extends Float32Array {
 }
 
 // import clampCommon from "../common/clamp";
-let ax, ay, az, aw, bx, by, bz, len$1;
-let ix, iy, iz, iw;
-let A, B, C, D, E, F, G, H, I, J;
+let ax;
+let ay;
+let az;
+let aw;
+let bx;
+let by;
+let bz;
+let len$1;
+let ix;
+let iy;
+let iz;
+let iw;
+let A;
+let B;
+let C;
+let D;
+let E;
+let F;
+let G;
+let H;
+let I;
+let J;
 class Vector4 extends Float32Array {
     static VECTOR3_ZERO = new Vector4(0, 0, 0, 0);
     static VECTOR3_ONE = new Vector4(1, 1, 1, 1);
@@ -2398,9 +2423,17 @@ class Line3 {
     }
 }
 
-let a00$2 = 0, a01$2 = 0, a10$2 = 0, a11$2 = 0;
-let b00$2 = 0, b01$2 = 0, b10$2 = 0, b11$2 = 0, det$1 = 0;
-let x$3 = 0, y$3 = 0;
+let a00$2 = 0;
+let a01$2 = 0;
+let a10$2 = 0;
+let a11$2 = 0;
+let b00$2 = 0;
+let b01$2 = 0;
+let b10$2 = 0;
+let b11$2 = 0;
+let det$1 = 0;
+let x$3 = 0;
+let y$3 = 0;
 const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 class Matrix2 extends Float32Array {
     static UNIT_MATRIX2 = new Matrix2([1, 0, 0, 1]);
@@ -2431,10 +2464,7 @@ class Matrix2 extends Float32Array {
         b10$2 = b[1];
         b01$2 = b[2];
         b11$2 = b[3];
-        return (closeTo(a00$2, b00$2) &&
-            closeTo(a01$2, b01$2) &&
-            closeTo(a10$2, b10$2) &&
-            closeTo(a11$2, b11$2));
+        return closeTo(a00$2, b00$2) && closeTo(a01$2, b01$2) && closeTo(a10$2, b10$2) && closeTo(a11$2, b11$2);
     };
     static create = (a = UNIT_MATRIX2_DATA) => {
         return new Matrix2(a);
@@ -2568,9 +2598,26 @@ class Matrix2 extends Float32Array {
     }
 }
 
-let a00$1 = 0, a01$1 = 0, a02$1 = 0, a11$1 = 0, a10$1 = 0, a12$1 = 0, a20$1 = 0, a21$1 = 0, a22$1 = 0;
-let b00$1 = 0, b01$1 = 0, b02$1 = 0, b11$1 = 0, b10$1 = 0, b12$1 = 0, b20$1 = 0, b21$1 = 0, b22$1 = 0;
-let x$2 = 0, y$2 = 0;
+let a00$1 = 0;
+let a01$1 = 0;
+let a02$1 = 0;
+let a11$1 = 0;
+let a10$1 = 0;
+let a12$1 = 0;
+let a20$1 = 0;
+let a21$1 = 0;
+let a22$1 = 0;
+let b00$1 = 0;
+let b01$1 = 0;
+let b02$1 = 0;
+let b11$1 = 0;
+let b10$1 = 0;
+let b12$1 = 0;
+let b20$1 = 0;
+let b21$1 = 0;
+let b22$1 = 0;
+let x$2 = 0;
+let y$2 = 0;
 const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 class Matrix3 extends Float32Array {
     static UNIT_MATRIX3 = new Matrix3(UNIT_MATRIX3_DATA);
@@ -2617,9 +2664,7 @@ class Matrix3 extends Float32Array {
         a20$1 = a[6];
         a21$1 = a[7];
         a22$1 = a[8];
-        return (a00$1 * (a22$1 * a11$1 - a12$1 * a21$1) +
-            a01$1 * (-a22$1 * a10$1 + a12$1 * a20$1) +
-            a02$1 * (a21$1 * a10$1 - a11$1 * a20$1));
+        return a00$1 * (a22$1 * a11$1 - a12$1 * a21$1) + a01$1 * (-a22$1 * a10$1 + a12$1 * a20$1) + a02$1 * (a21$1 * a10$1 - a11$1 * a20$1);
     };
     static fromArray = (source, out = new Matrix3()) => {
         out.set(source);
@@ -2669,6 +2714,18 @@ class Matrix3 extends Float32Array {
         out[2] = 0;
         out[3] = 0;
         out[4] = v[1];
+        out[5] = 0;
+        out[6] = 0;
+        out[7] = 0;
+        out[8] = 1;
+        return out;
+    };
+    static fromSkew = (v, out = new Matrix3()) => {
+        out[0] = 1;
+        out[1] = v[1];
+        out[2] = 0;
+        out[3] = v[0];
+        out[4] = 1;
         out[5] = 0;
         out[6] = 0;
         out[7] = 0;
@@ -2920,9 +2977,51 @@ class Matrix3 extends Float32Array {
 }
 
 /* eslint-disable max-lines */
-let a00 = 0, a01 = 0, a02 = 0, a03 = 0, a11 = 0, a10 = 0, a12 = 0, a13 = 0, a20 = 0, a21 = 0, a22 = 0, a23 = 0, a31 = 0, a30 = 0, a32 = 0, a33 = 0;
-let b00 = 0, b01 = 0, b02 = 0, b03 = 0, b11 = 0, b10 = 0, b12 = 0, b13 = 0, b20 = 0, b21 = 0, b22 = 0, b23 = 0, b31 = 0, b30 = 0, b32 = 0, b33 = 0;
-let x$1 = 0, y$1 = 0, z = 0, det = 0, len = 0, s = 0, t = 0, a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
+let a00 = 0;
+let a01 = 0;
+let a02 = 0;
+let a03 = 0;
+let a11 = 0;
+let a10 = 0;
+let a12 = 0;
+let a13 = 0;
+let a20 = 0;
+let a21 = 0;
+let a22 = 0;
+let a23 = 0;
+let a31 = 0;
+let a30 = 0;
+let a32 = 0;
+let a33 = 0;
+let b00 = 0;
+let b01 = 0;
+let b02 = 0;
+let b03 = 0;
+let b11 = 0;
+let b10 = 0;
+let b12 = 0;
+let b13 = 0;
+let b20 = 0;
+let b21 = 0;
+let b22 = 0;
+let b23 = 0;
+let b31 = 0;
+let b30 = 0;
+let b32 = 0;
+let b33 = 0;
+let x$1 = 0;
+let y$1 = 0;
+let z = 0;
+let det = 0;
+let len = 0;
+let s = 0;
+let t = 0;
+let a = 0;
+let b = 0;
+let c = 0;
+let d = 0;
+let e = 0;
+let f = 0;
 const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 class Matrix4 extends Float32Array {
     static UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
@@ -2976,7 +3075,10 @@ class Matrix4 extends Float32Array {
         e = Math.cos(z);
         f = Math.sin(z);
         if (euler.order === EulerRotationOrders.XYZ) {
-            const ae = a * e, af = a * f, be = b * e, bf = b * f;
+            const ae = a * e;
+            const af = a * f;
+            const be = b * e;
+            const bf = b * f;
             out[0] = c * e;
             out[4] = -c * f;
             out[8] = d;
@@ -2988,7 +3090,10 @@ class Matrix4 extends Float32Array {
             out[10] = a * c;
         }
         else if (euler.order === EulerRotationOrders.YXZ) {
-            const ce = c * e, cf = c * f, de = d * e, df = d * f;
+            const ce = c * e;
+            const cf = c * f;
+            const de = d * e;
+            const df = d * f;
             out[0] = ce + df * b;
             out[4] = de * b - cf;
             out[8] = a * d;
@@ -3000,7 +3105,10 @@ class Matrix4 extends Float32Array {
             out[10] = a * c;
         }
         else if (euler.order === EulerRotationOrders.ZXY) {
-            const ce = c * e, cf = c * f, de = d * e, df = d * f;
+            const ce = c * e;
+            const cf = c * f;
+            const de = d * e;
+            const df = d * f;
             out[0] = ce - df * b;
             out[4] = -a * f;
             out[8] = de + cf * b;
@@ -3012,7 +3120,10 @@ class Matrix4 extends Float32Array {
             out[10] = a * c;
         }
         else if (euler.order === EulerRotationOrders.ZYX) {
-            const ae = a * e, af = a * f, be = b * e, bf = b * f;
+            const ae = a * e;
+            const af = a * f;
+            const be = b * e;
+            const bf = b * f;
             out[0] = c * e;
             out[4] = be * d - af;
             out[8] = ae * d + bf;
@@ -3024,7 +3135,10 @@ class Matrix4 extends Float32Array {
             out[10] = a * c;
         }
         else if (euler.order === EulerRotationOrders.YZX) {
-            const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+            const ac = a * c;
+            const ad = a * d;
+            const bc = b * c;
+            const bd = b * d;
             out[0] = c * e;
             out[4] = bd - ac * f;
             out[8] = bc * f + ad;
@@ -3036,7 +3150,10 @@ class Matrix4 extends Float32Array {
             out[10] = ac - bd * f;
         }
         else if (euler.order === EulerRotationOrders.XZY) {
-            const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+            const ac = a * c;
+            const ad = a * d;
+            const bc = b * c;
+            const bd = b * d;
             out[0] = c * e;
             out[4] = -f;
             out[8] = d * e;
@@ -3097,7 +3214,10 @@ class Matrix4 extends Float32Array {
         return out;
     };
     static fromQuaternion = (q, out = new Matrix4()) => {
-        const x = q[0], y = q[1], z = q[2], w = q[3];
+        const x = q[0];
+        const y = q[1];
+        const z = q[2];
+        const w = q[3];
         const x2 = x + x;
         const y2 = y + y;
         const z2 = z + z;
@@ -3334,7 +3454,16 @@ class Matrix4 extends Float32Array {
         return out;
     };
     static lookAt = (eye, center, up = Vector3.VECTOR3_TOP, out = new Matrix4()) => {
-        let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
+        let x0;
+        let x1;
+        let x2;
+        let y0;
+        let y1;
+        let y2;
+        let z0;
+        let z1;
+        let z2;
+        let len;
         const eyex = eye[0];
         const eyey = eye[1];
         const eyez = eye[2];
@@ -3803,8 +3932,15 @@ class Matrix4 extends Float32Array {
         return out;
     };
     static targetTo = (eye, target, up = Vector3.VECTOR3_TOP, out = new Matrix4()) => {
-        const eyex = eye[0], eyey = eye[1], eyez = eye[2], upx = up[0], upy = up[1], upz = up[2];
-        let z0 = eyex - target[0], z1 = eyey - target[1], z2 = eyez - target[2];
+        const eyex = eye[0];
+        const eyey = eye[1];
+        const eyez = eye[2];
+        const upx = up[0];
+        const upy = up[1];
+        const upz = up[2];
+        let z0 = eyex - target[0];
+        let z1 = eyey - target[1];
+        let z2 = eyez - target[2];
         let len = z0 * z0 + z1 * z1 + z2 * z2;
         if (len > 0) {
             len = 1 / Math.sqrt(len);
@@ -3812,7 +3948,9 @@ class Matrix4 extends Float32Array {
             z1 *= len;
             z2 *= len;
         }
-        let x0 = upy * z2 - upz * z1, x1 = upz * z0 - upx * z2, x2 = upx * z1 - upy * z0;
+        let x0 = upy * z2 - upz * z1;
+        let x1 = upz * z0 - upx * z2;
+        let x2 = upx * z1 - upy * z0;
         len = x0 * x0 + x1 * x1 + x2 * x2;
         if (len > 0) {
             len = 1 / Math.sqrt(len);
@@ -3926,7 +4064,8 @@ class Matrix4 extends Float32Array {
     }
 }
 
-let x, y;
+let x;
+let y;
 /**
  * @class
  * @classdesc 极坐标
@@ -3952,19 +4091,15 @@ class Polar extends Float32Array {
     get a() {
         return this[1];
     }
-    ;
     set a(v) {
         this[1] = v;
     }
-    ;
     get r() {
         return this[0];
     }
-    ;
     set r(v) {
         this[0] = v;
     }
-    ;
     dataType = ArraybufferDataType.POLAR;
     /**
      * @public
@@ -4618,12 +4753,21 @@ class Frustum {
     }
 }
 
+const DIRTY_TAG_SIZE = 1;
+const DIRTY_TAG_CENTER = 2;
+const DIRTY_TAG_AREA = 4;
+const DIRTY_TAG_ALL = 7;
+const vec2 = new Vector2();
+const halpVec = [0.5, 0.5];
 class Rectangle2 {
     static area = (a) => {
         return (a.max[0] - a.min[0]) * (a.max[1] - a.min[1]);
     };
+    static center = (a, out = new Vector2()) => {
+        return Vector2.add(a.min, Vector2.multiplyScalar(Rectangle2.size(a, out), 0.5, out), out);
+    };
     static containsPoint = (rect, a) => {
-        return (a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1]);
+        return a[0] >= rect.min[0] && a[0] <= rect.max[0] && a[1] >= rect.min[1] && a[1] <= rect.max[1];
     };
     static containsRectangle = (rect, box) => {
         return (rect.min[0] <= box.min[0] &&
@@ -4652,6 +4796,49 @@ class Rectangle2 {
         Vector2.min(a.max, b.max, out.max);
         return out;
     };
+    static size = (a, out = new Vector2()) => {
+        return Vector2.minus(a.max, a.min, out);
+    };
+    static split = (a, rateBottomLeft = halpVec, bottomLeft = new Rectangle2(), bottomRight = new Rectangle2(), topLeft = new Rectangle2(), topRight = new Rectangle2()) => {
+        Rectangle2.size(a, vec2);
+        Vector2.multiply(vec2, rateBottomLeft, vec2);
+        bottomLeft.min.set(a.min);
+        Vector2.add(a.min, vec2, bottomLeft.max);
+        topRight.min.set(bottomLeft.max);
+        topRight.max.set(a.max);
+        bottomRight.min.x = bottomLeft.max.x;
+        bottomRight.max.x = a.max[0];
+        bottomRight.min.y = a.min[1];
+        bottomRight.max.y = bottomLeft.max[1];
+        topLeft.min.x = a.min[0];
+        topLeft.min.y = bottomLeft.max[1];
+        topLeft.max.x = bottomLeft.max[0];
+        topLeft.max.y = a.max[1];
+        topLeft.dirty = topRight.dirty = bottomRight.dirty = bottomLeft.dirty = DIRTY_TAG_ALL;
+        return [bottomLeft, bottomRight, topLeft, topRight];
+    };
+    static splitHerizontal = (a, rateLeft = 0.5, left = new Rectangle2(), right = new Rectangle2()) => {
+        Rectangle2.size(a, vec2);
+        left.min.set(a.min);
+        vec2.x *= rateLeft;
+        Vector2.add(left.min, vec2, left.max);
+        right.min.x = left.max.x;
+        right.min.y = left.min.y;
+        right.max.set(a.max);
+        left.dirty = right.dirty = DIRTY_TAG_ALL;
+        return [left, right];
+    };
+    static splitVertical = (a, rateBottom = 0.5, bottom = new Rectangle2(), top = new Rectangle2()) => {
+        Rectangle2.size(a, vec2);
+        bottom.min.set(a.min);
+        vec2.y *= rateBottom;
+        Vector2.add(bottom.min, vec2, bottom.max);
+        top.min.x = bottom.min.x;
+        top.min.y = bottom.max.y;
+        top.max.set(a.max);
+        bottom.dirty = top.dirty = DIRTY_TAG_ALL;
+        return [bottom, top];
+    };
     static stretch = (a, b, c, out = new Rectangle2()) => {
         Vector2.add(a.min, b, out.min);
         Vector2.add(a.max, c, out.max);
@@ -4670,11 +4857,51 @@ class Rectangle2 {
     static width = (a) => {
         return a.max[0] - a.min[0];
     };
-    min = new Vector2();
-    max = new Vector2();
+    #min = new Vector2();
+    #max = new Vector2();
+    #size = new Vector2();
+    #center = new Vector2();
+    dirty;
+    #area = 0;
     constructor(a = Vector2.VECTOR2_ZERO, b = Vector2.VECTOR2_ONE) {
-        Vector2.min(a, b, this.min);
-        Vector2.max(a, b, this.max);
+        Vector2.min(a, b, this.#min);
+        Vector2.max(a, b, this.#max);
+        this.dirty = DIRTY_TAG_ALL;
+    }
+    get area() {
+        if (this.dirty & DIRTY_TAG_AREA) {
+            this.#area = Vector2.area(this.size);
+            this.dirty -= DIRTY_TAG_AREA;
+        }
+        return this.#area;
+    }
+    get center() {
+        if (this.dirty & DIRTY_TAG_CENTER) {
+            Vector2.add(this.#min, Vector2.multiplyScalar(this.size, 0.5), this.#center);
+            this.dirty -= DIRTY_TAG_CENTER;
+        }
+        return this.#center;
+    }
+    get size() {
+        if (this.dirty & DIRTY_TAG_SIZE) {
+            Vector2.minus(this.#max, this.#min, this.#size);
+            this.dirty -= DIRTY_TAG_SIZE;
+        }
+        return this.#size;
+    }
+    set max(vec2) {
+        this.#max.set(vec2);
+        this.dirty = DIRTY_TAG_ALL;
+    }
+    get max() {
+        return this.#max;
+    }
+    set min(vec2) {
+        this.#min.set(vec2);
+        this.dirty = DIRTY_TAG_ALL;
+    }
+    get min() {
+        return this.#min;
     }
 }
 

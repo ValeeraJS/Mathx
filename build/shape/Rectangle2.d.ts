@@ -1,7 +1,9 @@
 import { Vector2, Vector2Like } from "../vector/Vector2";
 import { IRectangle2 } from "./interfaces/IRectangle2";
 export declare class Rectangle2 implements IRectangle2 {
+    #private;
     static area: (a: IRectangle2) => number;
+    static center: (a: IRectangle2, out?: Vector2) => Vector2;
     static containsPoint: (rect: IRectangle2, a: Float32Array) => boolean;
     static containsRectangle: (rect: IRectangle2, box: IRectangle2) => boolean;
     static create: (a?: Vector2Like, b?: Vector2Like) => Rectangle2;
@@ -10,11 +12,21 @@ export declare class Rectangle2 implements IRectangle2 {
     static getSize: (a: IRectangle2, out?: Vector2) => Vector2;
     static height: (a: IRectangle2) => number;
     static intersect: (a: IRectangle2, b: IRectangle2, out?: Rectangle2) => Rectangle2;
+    static size: (a: IRectangle2, out?: Vector2) => Vector2;
+    static split: (a: IRectangle2, rateBottomLeft?: Vector2Like, bottomLeft?: Rectangle2, bottomRight?: Rectangle2, topLeft?: Rectangle2, topRight?: Rectangle2) => Rectangle2[];
+    static splitHerizontal: (a: IRectangle2, rateLeft?: number, left?: Rectangle2, right?: Rectangle2) => Rectangle2[];
+    static splitVertical: (a: IRectangle2, rateBottom?: number, bottom?: Rectangle2, top?: Rectangle2) => Rectangle2[];
     static stretch: (a: IRectangle2, b: Vector2Like, c: Vector2Like, out?: Rectangle2) => Rectangle2;
     static translate: (a: IRectangle2, b: Vector2Like, out?: Rectangle2) => Rectangle2;
     static union: (a: IRectangle2, b: IRectangle2, out?: Rectangle2) => Rectangle2;
     static width: (a: IRectangle2) => number;
-    min: Vector2;
-    max: Vector2;
+    dirty: number;
     constructor(a?: Vector2Like, b?: Vector2Like);
+    get area(): number;
+    get center(): Vector2;
+    get size(): Vector2;
+    set max(vec2: Vector2Like);
+    get max(): Vector2;
+    set min(vec2: Vector2Like);
+    get min(): Vector2;
 }

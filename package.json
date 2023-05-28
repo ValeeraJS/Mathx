@@ -1,6 +1,6 @@
 {
 	"name": "@valeera/mathx",
-	"version": "0.1.61",
+	"version": "0.1.61-alpha1",
 	"description": "A math library written in TS.",
 	"main": "build/Mathx.js",
 	"repository": "ValeeraJS/Mathx",

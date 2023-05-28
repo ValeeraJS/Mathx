@@ -1,5 +1,5 @@
 import { IEulerAngle } from "../euler/IEulerAngle";
-import { IVector3 } from "../vector/Vector3";
+import { IVector3, Vector3Like } from "../vector/Vector3";
 import { Matrix3 } from "./Matrix3";
 export declare class Matrix4 extends Float32Array {
     static readonly UNIT_MATRIX4: Matrix4;
@@ -11,12 +11,12 @@ export declare class Matrix4 extends Float32Array {
     static fromMatrix3: (data: Float32Array | number[] | Matrix3, out?: Matrix4) => Matrix4;
     static fromMatrix3MVP: (data: Float32Array | number[] | Matrix3, out?: Matrix4) => Matrix4;
     static fromQuaternion: (q: Float32Array, out?: Matrix4) => Matrix4;
-    static fromRotation: (rad: number, axis: Float32Array | number[] | IVector3, out?: Matrix4) => Matrix4 | null;
+    static fromRotation: (rad: number, axis: Vector3Like, out?: Matrix4) => Matrix4 | null;
     static fromRotationX: (rad: number, out?: Matrix4) => Matrix4;
     static fromRotationY: (rad: number, out?: Matrix4) => Matrix4;
     static fromRotationZ: (rad: number, out?: Matrix4) => Matrix4;
-    static fromScaling: (v: Float32Array | IVector3 | number[], out?: Matrix4) => Matrix4;
-    static fromTranslation: (v: Float32Array | number[] | IVector3, out?: Matrix4) => Matrix4;
+    static fromScaling: (v: Vector3Like, out?: Matrix4) => Matrix4;
+    static fromTranslation: (v: Vector3Like, out?: Matrix4) => Matrix4;
     static identity: (out?: Matrix4) => Matrix4;
     static invert: (a: Float32Array | Matrix4 | number[], out?: Matrix4) => Matrix4 | null;
     static lookAt: (eye: Float32Array | number[] | IVector3, center: Float32Array | number[] | IVector3, up?: Float32Array, out?: Matrix4) => Matrix4;
@@ -27,13 +27,13 @@ export declare class Matrix4 extends Float32Array {
     static orthogonalZ0: (left: number, right: number, bottom: number, top: number, near: number, far: number, out?: Matrix4) => Matrix4;
     static perspective: (fovy: number, aspect: number, near: number, far: number, out?: Matrix4) => Matrix4;
     static perspectiveZ0: (fovy: number, aspect: number, near: number, far: number, out?: Matrix4) => Matrix4;
-    static rotate: (a: Float32Array | Matrix4 | number[], rad: number, axis: Float32Array | number[] | IVector3, out?: Matrix4) => Matrix4 | null;
+    static rotate: (a: Float32Array | Matrix4 | number[], rad: number, axis: Vector3Like, out?: Matrix4) => Matrix4 | null;
     static rotateX: (a: Float32Array | Matrix4 | number[], rad: number, out?: Matrix4) => Matrix4;
     static rotateY: (a: Float32Array | Matrix4 | number[], rad: number, out?: Matrix4) => Matrix4;
     static rotateZ: (a: Float32Array | Matrix4 | number[], rad: number, out?: Matrix4) => Matrix4;
-    static scale: (a: Float32Array | Matrix4 | number[], v: Float32Array | IVector3 | number[], out?: Matrix4) => Matrix4;
-    static targetTo: (eye: Float32Array | IVector3 | number[], target: Float32Array | IVector3 | number[], up?: Float32Array | IVector3 | number[], out?: Matrix4) => Matrix4;
-    static translate: (a: Float32Array | Matrix4 | number[], v: Float32Array | IVector3 | number[], out?: Matrix4) => Matrix4;
+    static scale: (a: Float32Array | Matrix4 | number[], v: Vector3Like, out?: Matrix4) => Matrix4;
+    static targetTo: (eye: Vector3Like, target: Vector3Like, up?: Vector3Like, out?: Matrix4) => Matrix4;
+    static translate: (a: Float32Array | Matrix4 | number[], v: Vector3Like, out?: Matrix4) => Matrix4;
     static transpose: (a: Float32Array | Matrix4 | number[], out?: Matrix4) => Matrix4;
     constructor(data?: Matrix4 | Float32Array | number[]);
 }

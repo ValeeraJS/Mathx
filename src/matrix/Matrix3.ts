@@ -1,4 +1,4 @@
-import { IVector2, Vector2Like } from "../vector/Vector2";
+import { Vector2Like } from "../vector/Vector2";
 import { Matrix2 } from "./Matrix2";
 
 let a00 = 0;
