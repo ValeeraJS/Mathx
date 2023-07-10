@@ -1,5 +1,6 @@
 import { Vector2Like } from "../vector/Vector2";
 import { Matrix2 } from "./Matrix2";
+export declare const UNIT_MATRIX3_DATA: number[];
 export declare class Matrix3 extends Float32Array {
     static readonly UNIT_MATRIX3: Matrix3;
     static clone: (source: Matrix3 | Float32Array | number[]) => Matrix3;
@@ -33,3 +34,4 @@ export declare class Matrix3 extends Float32Array {
     static transpose: (a: Float32Array | number[] | Matrix3, out?: Matrix3) => Matrix3;
     constructor(data?: Float32Array | number[] | Matrix3);
 }
+export type Matrix3Like = Matrix3 | number[] | Float32Array;

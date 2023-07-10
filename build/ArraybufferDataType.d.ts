@@ -1,14 +1,15 @@
 export declare const ArraybufferDataType: {
+    COLOR_CMYK: string;
     COLOR_GPU: string;
-    COLOR_RGB: string;
-    COLOR_RGBA: string;
-    COLOR_RYB: string;
-    COLOR_RYBA: string;
     COLOR_HSL: string;
     COLOR_HSLA: string;
     COLOR_HSV: string;
     COLOR_HSVA: string;
-    COLOR_CMYK: string;
+    COLOR_RGB: string;
+    COLOR_RGBA: string;
+    COLOR_RYB: string;
+    COLOR_RYBA: string;
+    COLOR_XYZ: string;
     EULER: string;
     MATRIX2: string;
     MATRIX3: string;

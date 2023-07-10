@@ -3,13 +3,13 @@ import { ICube } from "./interfaces/ICube";
 import { ISphere } from "./interfaces/ISphere";
 import { ITriangle3 } from "./interfaces/ITriangle3";
 export declare class Cube implements ICube {
-    static clampPoint: (a: ICube, point: Vector3Like, out?: Vector3) => Vector3;
+    static center: <T extends Vector3Like = Vector3>(a: ICube, out?: T) => T;
+    static clampPoint: <T extends Vector3Like = Vector3>(a: ICube, point: Vector3Like, out?: T) => T;
     static containsPoint: (a: ICube, b: Vector3Like) => boolean;
     static containsCube: (a: ICube, b: ICube) => boolean;
     static depth: (a: ICube) => number;
     static equals: (a: ICube, b: ICube) => boolean;
-    static getCenter: (a: ICube, out?: Vector3) => Vector3;
-    static getSize: (a: ICube, out?: Vector3) => Vector3;
+    static getSize: <T extends Vector3Like = Vector3>(a: ICube, out?: T) => T;
     static height: (a: ICube) => number;
     static intersect: (a: ICube, b: ICube, out?: Cube) => Cube;
     static intersectsBox: (a: ICube, b: ICube) => boolean;
@@ -17,7 +17,7 @@ export declare class Cube implements ICube {
     static intersectsTriangle: (a: ICube, b: ITriangle3) => boolean;
     static isEmpty: (a: ICube) => boolean;
     static round: (a: ICube, out?: Cube) => Cube;
-    static size: (a: ICube, out?: Vector3) => Vector3;
+    static size: <T extends Vector3Like = Vector3>(a: ICube, out?: T) => T;
     static stretch: (a: ICube, b: Float32Array | number[] | IVector3, c: Float32Array | number[] | IVector3, out?: Cube) => Cube;
     static surfaceArea: (a: ICube) => number;
     static translate: (a: ICube, b: Float32Array | number[] | IVector3, out?: Cube) => Cube;

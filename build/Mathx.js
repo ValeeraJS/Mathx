@@ -5,16 +5,17 @@
 })(this, (function (exports) { 'use strict';
 
 	const ArraybufferDataType = {
+	    COLOR_CMYK: "col_cmyk",
 	    COLOR_GPU: "col",
-	    COLOR_RGB: "col_rgb",
-	    COLOR_RGBA: "col_rgba",
-	    COLOR_RYB: "col_ryb",
-	    COLOR_RYBA: "col_ryba",
 	    COLOR_HSL: "col_hsl",
 	    COLOR_HSLA: "col_hsla",
 	    COLOR_HSV: "col_hsv",
 	    COLOR_HSVA: "col_hsva",
-	    COLOR_CMYK: "col_cmyk",
+	    COLOR_RGB: "col_rgb",
+	    COLOR_RGBA: "col_rgba",
+	    COLOR_RYB: "col_ryb",
+	    COLOR_RYBA: "col_ryba",
+	    COLOR_XYZ: "col_xyz",
 	    EULER: "euler",
 	    MATRIX2: "mat2",
 	    MATRIX3: "mat3",
@@ -249,10 +250,1327 @@
 	    }
 	}
 
+	const hue2rgb = (p, q, t) => {
+	    if (t < 0)
+	        t += 1;
+	    if (t > 1)
+	        t -= 1;
+	    if (t < 1 / 6)
+	        return p + (q - p) * 6 * t;
+	    if (t < 1 / 2)
+	        return q;
+	    if (t < 2 / 3)
+	        return p + (q - p) * (2 / 3 - t) * 6;
+	    return p;
+	};
+	const linearToSrgb = (c) => {
+	    if (c <= 0) {
+	        return 0;
+	    }
+	    else if (c >= 1) {
+	        return 1;
+	    }
+	    else if (c < 0.0031308) {
+	        return c * 12.92;
+	    }
+	    else {
+	        return Math.pow(c, 1 / 2.4) * 1.055 - 0.055;
+	    }
+	};
+	const srgbToLinear = (x) => {
+	    if (x <= 0) {
+	        return 0;
+	    }
+	    else if (x >= 1) {
+	        return 1;
+	    }
+	    else if (x < 0.04045) {
+	        return x / 12.92;
+	    }
+	    else {
+	        return Math.pow((x + 0.055) / 1.055, 2.4);
+	    }
+	};
+
+	/**
+	 * @function clamp
+	 * @desc 将目标值限定在指定区间内。假定min小于等于max才能得到正确的结果。
+	 * @see clampSafe
+	 * @param {number} val 目标值
+	 * @param {number} min 最小值，必须小于等于max
+	 * @param {number} max 最大值，必须大于等于min
+	 * @returns {number} 限制之后的值
+	 * @example Mathx.clamp(1, 0, 2); // 1;
+	 * Mathx.clamp(-1, 0, 2); // 0;
+	 * Mathx.clamp(3, 0, 2); // 2;
+	 */
+	var clamp = (val, min, max) => {
+	    return Math.max(min, Math.min(max, val));
+	};
+
+	/**
+	 * @function clampSafe
+	 * @desc 与clamp函数功能一样，将目标值限定在指定区间内。但此函数是安全的，不要求第二个参数必须小于第三个参数
+	 * @see clamp
+	 * @param {number} val 目标值
+	 * @param {number} a 区间中一个最值
+	 * @param {number} b 区间中另一个最值
+	 * @returns {number} 限制之后的值
+	 * @example Mathx.clamp(1, 0, 2); // 1;
+	 * Mathx.clamp(1, 2, 0); // 1;
+	 * Mathx.clamp(-1, 0, 2); // 0;
+	 * Mathx.clamp(-1, 2, 0); // 0;
+	 * Mathx.clamp(3, 0, 2); // 2;
+	 * Mathx.clamp(3, 2, 0); // 2;
+	 */
+	var clampSafeCommon = (val, a, b) => {
+	    if (a > b) {
+	        return Math.max(b, Math.min(a, val));
+	    }
+	    else if (b > a) {
+	        return Math.max(a, Math.min(b, val));
+	    }
+	    return a;
+	};
+
+	/**
+	 * @function closeTo
+	 * @desc 判断一个数是否在另一个数的邻域内，通常用于检验浮点计算是否精度在EPSILON以内
+	 * @param {number} val 需要判断的数值
+	 * @param {number} target 目标数值
+	 * @param {number} [epsilon = Number.EPSILON] 邻域半径
+	 * @example Mathx.closeTo(0.1 + 0.2, 0.3); // true;
+	 * Mathx.clamp(2, 3, 1); // true;
+	 * Mathx.clamp(2, 3, 0.5); // false;
+	 */
+	var closeTo = (val, target, epsilon = EPSILON) => {
+	    return Math.abs(val - target) <= epsilon;
+	};
+
+	/**
+	 * @function floorToZero
+	 * @desc 以0为中心取整
+	 * @param {number} num 数值
+	 * @return {number} 取整之后的结果
+	 * @example Mathx.roundToZero(0.8 ); // 0;
+	 * Mathx.roundToZero(-0.8); // 0;
+	 * Mathx.roundToZero(-1.1); // -1;
+	 */
+	var floorToZero = (num) => {
+	    return num < 0 ? Math.ceil(num) : Math.floor(num);
+	};
+
+	let x$4 = 0;
+	let y$4 = 0;
+	let c$1 = 0;
+	let s$4 = 0;
+	class Vector2 extends Float32Array {
+	    static VECTOR2_ZERO = new Vector2(0, 0);
+	    static VECTOR2_TOP = new Vector2(0, 1);
+	    static VECTOR2_BOTTOM = new Vector2(0, -1);
+	    static VECTOR2_LEFT = new Vector2(-1, 0);
+	    static VECTOR2_RIGHT = new Vector2(1, 0);
+	    static VECTOR2_ONE = new Vector2(1, 1);
+	    static add = (a, b, out = new Vector2()) => {
+	        out[0] = a[0] + b[0];
+	        out[1] = a[1] + b[1];
+	        return out;
+	    };
+	    static addScalar = (a, b, out = new Vector2()) => {
+	        out[0] = a[0] + b;
+	        out[1] = a[1] + b;
+	        return out;
+	    };
+	    static angle = (a) => {
+	        return Math.atan2(a[1], a[0]);
+	    };
+	    static area = (a) => {
+	        return a[0] * a[1];
+	    };
+	    static ceil = (a, out = new Vector2()) => {
+	        out[0] = Math.ceil(a[0]);
+	        out[1] = Math.ceil(a[1]);
+	        return out;
+	    };
+	    static clamp = (a, min, max, out = new Vector2()) => {
+	        out[0] = clamp(a[0], min[0], max[0]);
+	        out[1] = clamp(a[1], min[1], max[1]);
+	        return out;
+	    };
+	    static clampSafe = (a, min, max, out = new Vector2()) => {
+	        out[0] = clampSafeCommon(a[0], min[0], max[0]);
+	        out[1] = clampSafeCommon(a[1], min[1], max[1]);
+	        return out;
+	    };
+	    static clampLength = (a, min, max, out = new Vector2()) => {
+	        out[0] = clampSafeCommon(a[0], min[0], max[0]);
+	        out[1] = clampSafeCommon(a[1], min[1], max[1]);
+	        return out;
+	    };
+	    static clampScalar = (a, min, max, out = new Vector2()) => {
+	        out[0] = clamp(a[0], min, max);
+	        out[1] = clamp(a[1], min, max);
+	        return out;
+	    };
+	    static closeTo = (a, b, epsilon = EPSILON) => {
+	        return Vector2.distanceTo(a, b) <= epsilon;
+	    };
+	    static closeToRect = (a, b, epsilon = EPSILON) => {
+	        return closeTo(a[0], b[0], epsilon) && closeTo(a[1], b[1], epsilon);
+	    };
+	    static closeToManhattan = (a, b, epsilon = EPSILON) => {
+	        return Vector2.distanceToManhattan(a, b) <= epsilon;
+	    };
+	    static clone = (a, out = new Vector2()) => {
+	        out[0] = a[0];
+	        out[1] = a[1];
+	        return out;
+	    };
+	    static cross = (a, b) => {
+	        return a[0] * b[1] - a[1] * b[0];
+	    };
+	    static create = (x = 0, y = 0) => {
+	        const out = new Vector2();
+	        out[0] = x;
+	        out[1] = y;
+	        return out;
+	    };
+	    static distanceTo = (a, b) => {
+	        x$4 = b[0] - a[0];
+	        y$4 = b[1] - a[1];
+	        return Math.hypot(x$4, y$4);
+	    };
+	    static distanceToManhattan = (a, b) => {
+	        return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+	    };
+	    static distanceToSquared = (a, b) => {
+	        x$4 = a[0] - b[0];
+	        y$4 = a[1] - b[1];
+	        return x$4 * x$4 + y$4 * y$4;
+	    };
+	    static divide = (a, b, out = new Vector2()) => {
+	        out[0] = a[0] / b[0];
+	        out[1] = a[1] / b[1];
+	        return out;
+	    };
+	    static divideScalar = (a, scalar, out = new Vector2()) => {
+	        return Vector2.multiplyScalar(a, 1 / scalar, out);
+	    };
+	    static dot = (a, b) => {
+	        return a[0] * b[0] + a[1] * b[1];
+	    };
+	    static equals = (a, b) => {
+	        return a[0] === b[0] && a[1] === b[1];
+	    };
+	    static floor = (a, out = new Vector2()) => {
+	        out[0] = Math.floor(a[0]);
+	        out[1] = Math.floor(a[1]);
+	        return out;
+	    };
+	    static floorToZero = (a, out = new Vector2()) => {
+	        out[0] = floorToZero(a[0]);
+	        out[1] = floorToZero(a[1]);
+	        return out;
+	    };
+	    static fromArray = (arr, index = 0, out = new Vector2()) => {
+	        out[0] = arr[index];
+	        out[1] = arr[index + 1];
+	        return out;
+	    };
+	    static fromJson = (j, out = new Vector2()) => {
+	        out[0] = j.x;
+	        out[1] = j.y;
+	        return out;
+	    };
+	    static fromPolar = (p, out = new Vector2()) => {
+	        out[0] = Math.cos(p.a) * p.r;
+	        out[1] = Math.sin(p.a) * p.r;
+	        return out;
+	    };
+	    static fromScalar = (value = 0, out = new Vector2()) => {
+	        out[0] = out[1] = value;
+	        return out;
+	    };
+	    static fromValues = (x, y, out = new Vector2()) => {
+	        out[0] = x;
+	        out[1] = y;
+	        return out;
+	    };
+	    static inverse = (a, out = new Vector2()) => {
+	        out[0] = 1 / a[0] || 0;
+	        out[1] = 1 / a[1] || 0;
+	        return out;
+	    };
+	    static norm = (a) => {
+	        return Math.sqrt(a[0] * a[0] + a[1] * a[1]);
+	    };
+	    static lengthManhattan = (a) => {
+	        return Math.abs(a[0]) + Math.abs(a[1]);
+	    };
+	    static lengthSquared = (a) => {
+	        return a[0] * a[0] + a[1] * a[1];
+	    };
+	    static lerp = (a, b, alpha, out = new Vector2()) => {
+	        out[0] = (b[0] - a[0]) * alpha + a[0];
+	        out[1] = (b[1] - a[1]) * alpha + a[1];
+	        return out;
+	    };
+	    static max = (a, b, out = new Vector2()) => {
+	        out[0] = Math.max(a[0], b[0]);
+	        out[1] = Math.max(a[1], b[1]);
+	        return out;
+	    };
+	    static min = (a, b, out = new Vector2()) => {
+	        out[0] = Math.min(a[0], b[0]);
+	        out[1] = Math.min(a[1], b[1]);
+	        return out;
+	    };
+	    static minus = (a, b, out = new Vector2()) => {
+	        out[0] = a[0] - b[0];
+	        out[1] = a[1] - b[0];
+	        return out;
+	    };
+	    static minusScalar = (a, num, out = new Vector2()) => {
+	        out[0] = a[0] - num;
+	        out[1] = a[1] - num;
+	        return out;
+	    };
+	    static multiply = (a, b, out = new Vector2()) => {
+	        out[0] = a[0] * b[0];
+	        out[1] = a[1] * b[1];
+	        return out;
+	    };
+	    static multiplyScalar = (a, scalar, out = new Vector2()) => {
+	        out[0] = a[0] * scalar;
+	        out[1] = a[1] * scalar;
+	        return out;
+	    };
+	    static negate = (a, out = new Vector2()) => {
+	        out[0] = -a[0];
+	        out[1] = -a[1];
+	        return out;
+	    };
+	    static normalize = (a, out = new Vector2()) => {
+	        return Vector2.divideScalar(a, Vector2.norm(a) || 1, out);
+	    };
+	    static random = (norm = 1, out = new Vector2()) => {
+	        x$4 = Math.random() * DEG_360_RAD;
+	        out[0] = Math.cos(x$4) * norm;
+	        out[1] = Math.sin(x$4) * norm;
+	        return out;
+	    };
+	    static rotate = (a, angle, center = Vector2.VECTOR2_ZERO, out = new Vector2()) => {
+	        c$1 = Math.cos(angle);
+	        s$4 = Math.sin(angle);
+	        x$4 = a[0] - center[0];
+	        y$4 = a[1] - center[1];
+	        out[0] = x$4 * c$1 - y$4 * s$4 + center[0];
+	        out[1] = x$4 * s$4 + y$4 * c$1 + center[1];
+	        return out;
+	    };
+	    static round = (a, out = new Vector2()) => {
+	        out[0] = Math.round(a[0]);
+	        out[1] = Math.round(a[1]);
+	        return out;
+	    };
+	    static setNorm = (a, norm, out = new Vector2(2)) => {
+	        Vector2.normalize(a, out);
+	        return Vector2.multiplyScalar(out, norm, out);
+	    };
+	    static toArray = (a, arr = []) => {
+	        arr[0] = a[0];
+	        arr[1] = a[1];
+	        return arr;
+	    };
+	    static toPalorJson = (a, p = { a: 0, r: 0 }) => {
+	        p.r = Vector2.norm(a);
+	        p.a = Vector2.angle(a);
+	        return p;
+	    };
+	    static toString = (a) => {
+	        return `(${a[0]}, ${a[1]})`;
+	    };
+	    static transformMatrix3 = (a, m, out = new Vector2()) => {
+	        x$4 = a[0];
+	        y$4 = a[1];
+	        out[0] = m[0] * x$4 + m[3] * y$4 + m[6];
+	        out[1] = m[1] * x$4 + m[4] * y$4 + m[7];
+	        return out;
+	    };
+	    dataType = ArraybufferDataType.VECTOR2;
+	    constructor(x = 0, y = 0) {
+	        super(2);
+	        this[0] = x;
+	        this[1] = y;
+	    }
+	    get x() {
+	        return this[0];
+	    }
+	    set x(value) {
+	        this[0] = value;
+	    }
+	    get y() {
+	        return this[1];
+	    }
+	    set y(value) {
+	        this[1] = value;
+	    }
+	}
+
+	let ax$1;
+	let ay$1;
+	let az$1;
+	let bx$1;
+	let by$1;
+	let bz$1;
+	let ag;
+	let s$3;
+	class Vector3 extends Float32Array {
+	    static VECTOR3_ZERO = new Vector3(0, 0, 0);
+	    static VECTOR3_ONE = new Vector3(1, 1, 1);
+	    static VECTOR3_TOP = new Vector3(0, 1, 0);
+	    static VECTOR3_BOTTOM = new Vector3(0, -1, 0);
+	    static VECTOR3_LEFT = new Vector3(-1, 0, 0);
+	    static VECTOR3_RIGHT = new Vector3(1, 0, 0);
+	    static VECTOR3_FRONT = new Vector3(0, 0, -1);
+	    static VECTOR3_BACK = new Vector3(0, 0, 1);
+	    static add = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] + b[0];
+	        out[1] = a[1] + b[1];
+	        out[2] = a[2] + b[2];
+	        return out;
+	    };
+	    static addScalar = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] + b;
+	        out[1] = a[1] + b;
+	        out[2] = a[2] + b;
+	        return out;
+	    };
+	    static angle = (a, b) => {
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        bx$1 = b[0];
+	        by$1 = b[1];
+	        bz$1 = b[2];
+	        const mag1 = Math.sqrt(ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1);
+	        const mag2 = Math.sqrt(bx$1 * bx$1 + by$1 * by$1 + bz$1 * bz$1);
+	        const mag = mag1 * mag2;
+	        const cosine = mag && Vector3.dot(a, b) / mag;
+	        return Math.acos(clamp(cosine, -1, 1));
+	    };
+	    static clamp = (a, min, max, out = new Vector3()) => {
+	        out[0] = clamp(a[0], min[0], max[0]);
+	        out[1] = clamp(a[1], min[1], max[1]);
+	        out[2] = clamp(a[2], min[2], max[2]);
+	        return out;
+	    };
+	    static clampSafe = (a, min, max, out = new Vector3()) => {
+	        out[0] = clampSafeCommon(a[0], min[0], max[0]);
+	        out[1] = clampSafeCommon(a[1], min[1], max[1]);
+	        out[1] = clampSafeCommon(a[2], min[2], max[2]);
+	        return out;
+	    };
+	    static clampScalar = (a, min, max, out = new Vector3()) => {
+	        out[0] = clamp(a[0], min, max);
+	        out[1] = clamp(a[1], min, max);
+	        out[2] = clamp(a[2], min, max);
+	        return out;
+	    };
+	    static clone = (a, out = new Vector3()) => {
+	        out[0] = a[0];
+	        out[1] = a[1];
+	        out[2] = a[2];
+	        return out;
+	    };
+	    static closeTo = (a, b) => {
+	        return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]);
+	    };
+	    static create = (x = 0, y = 0, z = 0) => {
+	        const out = new Vector3();
+	        out[0] = x;
+	        out[1] = y;
+	        out[2] = z;
+	        return out;
+	    };
+	    static cross = (a, b, out = new Vector3()) => {
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        bx$1 = b[0];
+	        by$1 = b[1];
+	        bz$1 = b[2];
+	        out[0] = ay$1 * bz$1 - az$1 * by$1;
+	        out[1] = az$1 * bx$1 - ax$1 * bz$1;
+	        out[2] = ax$1 * by$1 - ay$1 * bx$1;
+	        return out;
+	    };
+	    static distanceTo = (a, b) => {
+	        ax$1 = b[0] - a[0];
+	        ay$1 = b[1] - a[1];
+	        az$1 = b[2] - a[2];
+	        return Math.hypot(ax$1, ay$1, az$1);
+	    };
+	    static distanceToManhattan = (a, b) => {
+	        return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
+	    };
+	    static distanceToSquared = (a, b) => {
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        return ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1;
+	    };
+	    static divide = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] / b[0];
+	        out[1] = a[1] / b[1];
+	        out[2] = a[2] / b[2];
+	        return out;
+	    };
+	    static divideScalar = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] / b;
+	        out[1] = a[1] / b;
+	        out[2] = a[2] / b;
+	        return out;
+	    };
+	    static dot = (a, b) => {
+	        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+	    };
+	    static equals = (a, b) => {
+	        return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+	    };
+	    static floor = (a, out = new Vector3()) => {
+	        out[0] = Math.floor(a[0]);
+	        out[1] = Math.floor(a[1]);
+	        out[2] = Math.floor(a[2]);
+	        return out;
+	    };
+	    static fromArray = (a, offset = 0, out = new Vector3()) => {
+	        out[0] = a[offset];
+	        out[1] = a[offset + 1];
+	        out[2] = a[offset + 2];
+	        return out;
+	    };
+	    static fromScalar = (num, out = new Vector3()) => {
+	        out[0] = out[1] = out[2] = num;
+	        return out;
+	    };
+	    static fromValues = (x, y, z, out = new Vector3()) => {
+	        out[0] = x;
+	        out[1] = y;
+	        out[2] = z;
+	        return out;
+	    };
+	    static fromMatrix4Translate = (mat, out = new Vector3()) => {
+	        out[0] = mat[12];
+	        out[1] = mat[13];
+	        out[2] = mat[14];
+	        return out;
+	    };
+	    static hermite = (a, b, c, d, t, out = new Vector3()) => {
+	        ag = t * t;
+	        const factor1 = ag * (2 * t - 3) + 1;
+	        const factor2 = ag * (t - 2) + t;
+	        const factor3 = ag * (t - 1);
+	        const factor4 = ag * (3 - 2 * t);
+	        out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
+	        out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
+	        out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+	        return out;
+	    };
+	    static inverse = (a, out = new Vector3()) => {
+	        out[0] = 1.0 / a[0];
+	        out[1] = 1.0 / a[1];
+	        out[2] = 1.0 / a[2];
+	        return out;
+	    };
+	    static norm = (a) => {
+	        return Math.sqrt(Vector3.lengthSquared(a));
+	    };
+	    static lengthManhattan = (a) => {
+	        return Math.abs(a[0]) + Math.abs(a[1]) + Math.abs(a[2]);
+	    };
+	    static lengthSquared = (a) => {
+	        return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
+	    };
+	    static lerp = (a, b, alpha, out = new Vector3()) => {
+	        out[0] += (b[0] - a[0]) * alpha;
+	        out[1] += (b[1] - a[1]) * alpha;
+	        out[2] += (b[2] - a[2]) * alpha;
+	        return out;
+	    };
+	    static max = (a, b, out = new Vector3()) => {
+	        out[0] = Math.max(a[0], b[0]);
+	        out[1] = Math.max(a[1], b[1]);
+	        out[2] = Math.max(a[2], b[2]);
+	        return out;
+	    };
+	    static min = (a, b, out = new Vector3()) => {
+	        out[0] = Math.min(a[0], b[0]);
+	        out[1] = Math.min(a[1], b[1]);
+	        out[2] = Math.min(a[2], b[2]);
+	        return out;
+	    };
+	    static minus = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] - b[0];
+	        out[1] = a[1] - b[1];
+	        out[2] = a[2] - b[2];
+	        return out;
+	    };
+	    static minusScalar = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] - b;
+	        out[1] = a[1] - b;
+	        out[2] = a[2] - b;
+	        return out;
+	    };
+	    static multiply = (a, b, out = new Vector3()) => {
+	        out[0] = a[0] * b[0];
+	        out[1] = a[1] * b[1];
+	        out[2] = a[2] * b[2];
+	        return out;
+	    };
+	    static multiplyScalar = (a, scalar, out = new Vector3()) => {
+	        out[0] = a[0] * scalar;
+	        out[1] = a[1] * scalar;
+	        out[2] = a[2] * scalar;
+	        return out;
+	    };
+	    static negate = (a, out = new Vector3()) => {
+	        out[0] = -a[0];
+	        out[1] = -a[1];
+	        out[2] = -a[2];
+	        return out;
+	    };
+	    static normalize = (a, out = new Vector3()) => {
+	        return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
+	    };
+	    static rotateX = (a, b, rad, out = new Vector3()) => {
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        bx$1 = ax$1;
+	        by$1 = ay$1 * Math.cos(rad) - az$1 * Math.sin(rad);
+	        bz$1 = ay$1 * Math.sin(rad) + az$1 * Math.cos(rad);
+	        out[0] = bx$1 + b[0];
+	        out[1] = by$1 + b[1];
+	        out[2] = bz$1 + b[2];
+	        return out;
+	    };
+	    static rotateY = (a, b, rad, out = new Vector3()) => {
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        bx$1 = az$1 * Math.sin(rad) + ax$1 * Math.cos(rad);
+	        by$1 = ay$1;
+	        bz$1 = az$1 * Math.cos(rad) - ax$1 * Math.sin(rad);
+	        out[0] = bx$1 + b[0];
+	        out[1] = by$1 + b[1];
+	        out[2] = bz$1 + b[2];
+	        return out;
+	    };
+	    static rotateZ = (a, b, rad, out = new Vector3()) => {
+	        ax$1 = a[0] - b[0];
+	        ay$1 = a[1] - b[1];
+	        az$1 = a[2] - b[2];
+	        bx$1 = ax$1 * Math.cos(rad) - ay$1 * Math.sin(rad);
+	        by$1 = ax$1 * Math.sin(rad) + ay$1 * Math.cos(rad);
+	        bz$1 = az$1;
+	        out[0] = bx$1 + b[0];
+	        out[1] = by$1 + b[1];
+	        out[2] = bz$1 + b[2];
+	        return out;
+	    };
+	    static round = (a, out = new Vector3()) => {
+	        out[0] = Math.round(a[0]);
+	        out[1] = Math.round(a[1]);
+	        out[2] = Math.round(a[2]);
+	        return out;
+	    };
+	    static setNorm = (a, norm, out = new Vector3()) => {
+	        return Vector3.multiplyScalar(Vector3.normalize(a, out), norm, out);
+	    };
+	    static slerp = (a, b, t, out = new Vector3()) => {
+	        ag = Math.acos(Math.min(Math.max(Vector3.dot(a, b), -1), 1));
+	        s$3 = Math.sin(ag);
+	        ax$1 = Math.sin((1 - t) * ag) / s$3;
+	        bx$1 = Math.sin(t * ag) / s$3;
+	        out[0] = ax$1 * a[0] + bx$1 * b[0];
+	        out[1] = ax$1 * a[1] + bx$1 * b[1];
+	        out[2] = ax$1 * a[2] + bx$1 * b[2];
+	        return out;
+	    };
+	    static toString = (a) => {
+	        return `(${a[0]}, ${a[1]}, ${a[2]})`;
+	    };
+	    static transformMatrix3 = (a, m, out = new Vector3()) => {
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        out[0] = ax$1 * m[0] + ay$1 * m[3] + az$1 * m[6];
+	        out[1] = ax$1 * m[1] + ay$1 * m[4] + az$1 * m[7];
+	        out[2] = ax$1 * m[2] + ay$1 * m[5] + az$1 * m[8];
+	        return out;
+	    };
+	    static transformMatrix4 = (a, m, out = new Vector3()) => {
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        ag = m[3] * ax$1 + m[7] * ay$1 + m[11] * az$1 + m[15];
+	        ag = ag ? 1 / ag : 1.0;
+	        out[0] = (m[0] * ax$1 + m[4] * ay$1 + m[8] * az$1 + m[12]) * ag;
+	        out[1] = (m[1] * ax$1 + m[5] * ay$1 + m[9] * az$1 + m[13]) * ag;
+	        out[2] = (m[2] * ax$1 + m[6] * ay$1 + m[10] * az$1 + m[14]) * ag;
+	        return out;
+	    };
+	    static transformQuat = (a, q, out = new Vector3()) => {
+	        const qx = q[0];
+	        const qy = q[1];
+	        const qz = q[2];
+	        const qw = q[3];
+	        const x = a[0];
+	        const y = a[1];
+	        const z = a[2];
+	        // var qvec = [qx, qy, qz];
+	        // var uv = vec3.cross([], qvec, a);
+	        let uvx = qy * z - qz * y;
+	        let uvy = qz * x - qx * z;
+	        let uvz = qx * y - qy * x;
+	        // var uuv = vec3.cross([], qvec, uv);
+	        let uuvx = qy * uvz - qz * uvy;
+	        let uuvy = qz * uvx - qx * uvz;
+	        let uuvz = qx * uvy - qy * uvx;
+	        // vec3.scale(uv, uv, 2 * w);
+	        const w2 = qw * 2;
+	        uvx *= w2;
+	        uvy *= w2;
+	        uvz *= w2;
+	        // vec3.scale(uuv, uuv, 2);
+	        uuvx *= 2;
+	        uuvy *= 2;
+	        uuvz *= 2;
+	        // return vec3.add(out, a, vec3.add(out, uv, uuv));
+	        out[0] = x + uvx + uuvx;
+	        out[1] = y + uvy + uuvy;
+	        out[2] = z + uvz + uuvz;
+	        return out;
+	    };
+	    static volume = (a) => {
+	        return a[0] * a[1] * a[2];
+	    };
+	    dataType = ArraybufferDataType.VECTOR3;
+	    constructor(x = 0, y = 0, z = 0) {
+	        super(3);
+	        this[0] = x;
+	        this[1] = y;
+	        this[2] = z;
+	    }
+	    get x() {
+	        return this[0];
+	    }
+	    set x(value) {
+	        this[0] = value;
+	    }
+	    get y() {
+	        return this[1];
+	    }
+	    set y(value) {
+	        this[1] = value;
+	    }
+	    get z() {
+	        return this[2];
+	    }
+	    set z(value) {
+	        this[2] = value;
+	    }
+	}
+
+	let ax;
+	let ay;
+	let az;
+	let aw;
+	let bx;
+	let by;
+	let bz;
+	let len$2;
+	let ix;
+	let iy;
+	let iz;
+	let iw;
+	let A;
+	let B;
+	let C;
+	let D;
+	let E;
+	let F;
+	let G;
+	let H;
+	let I;
+	let J;
+	class Vector4 extends Float32Array {
+	    static VECTOR4_ZERO = new Vector4(0, 0, 0, 0);
+	    static VECTOR4_ONE = new Vector4(1, 1, 1, 1);
+	    static add = (a, b, out = new Vector4()) => {
+	        out[0] = a[0] + b[0];
+	        out[1] = a[1] + b[1];
+	        out[2] = a[2] + b[2];
+	        out[3] = a[3] + b[3];
+	        return out;
+	    };
+	    static ceil = (a, out = new Vector4()) => {
+	        out[0] = Math.ceil(a[0]);
+	        out[1] = Math.ceil(a[1]);
+	        out[2] = Math.ceil(a[2]);
+	        out[3] = Math.ceil(a[3]);
+	        return out;
+	    };
+	    static closeTo = (a, b) => {
+	        return (closeTo(a[0], b[0]) &&
+	            closeTo(a[1], b[1]) &&
+	            closeTo(a[2], b[2]) &&
+	            closeTo(a[3], b[3]));
+	    };
+	    static create = (x = 0, y = 0, z = 0, w = 0) => {
+	        const out = new Vector4();
+	        out[0] = x;
+	        out[1] = y;
+	        out[2] = z;
+	        out[3] = w;
+	        return out;
+	    };
+	    static cross = (u, v, w, out = new Vector4(4)) => {
+	        A = v[0] * w[1] - v[1] * w[0];
+	        B = v[0] * w[2] - v[2] * w[0];
+	        C = v[0] * w[3] - v[3] * w[0];
+	        D = v[1] * w[2] - v[2] * w[1];
+	        E = v[1] * w[3] - v[3] * w[1];
+	        F = v[2] * w[3] - v[3] * w[2];
+	        G = u[0];
+	        H = u[1];
+	        I = u[2];
+	        J = u[3];
+	        out[0] = H * F - I * E + J * D;
+	        out[1] = -(G * F) + I * C - J * B;
+	        out[2] = G * E - H * C + J * A;
+	        out[3] = -(G * D) + H * B - I * A;
+	        return out;
+	    };
+	    static distanceTo = (a, b) => {
+	        ax = b[0] - a[0];
+	        ay = b[1] - a[1];
+	        az = b[2] - a[2];
+	        aw = b[3] - a[3];
+	        return Math.hypot(ax, ay, az, aw);
+	    };
+	    static distanceToSquared = (a, b) => {
+	        ax = b[0] - a[0];
+	        ay = b[1] - a[1];
+	        az = b[2] - a[2];
+	        aw = b[3] - a[3];
+	        return ax * ax + ay * ay + az * az + aw * aw;
+	    };
+	    static divide = (a, b, out = new Vector4()) => {
+	        out[0] = a[0] / b[0];
+	        out[1] = a[1] / b[1];
+	        out[2] = a[2] / b[2];
+	        out[3] = a[3] / b[3];
+	        return out;
+	    };
+	    static dot = (a, b) => {
+	        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+	    };
+	    static equals = (a, b) => {
+	        return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
+	    };
+	    static floor = (a, out = new Vector4()) => {
+	        out[0] = Math.floor(a[0]);
+	        out[1] = Math.floor(a[1]);
+	        out[2] = Math.floor(a[2]);
+	        out[3] = Math.floor(a[3]);
+	        return out;
+	    };
+	    static fromArray = (a, offset = 0, out = new Vector4()) => {
+	        out[0] = a[offset];
+	        out[1] = a[offset + 1];
+	        out[2] = a[offset + 2];
+	        out[3] = a[offset + 3];
+	        return out;
+	    };
+	    static fromScalar = (num, out = new Vector4()) => {
+	        out[0] = out[1] = out[2] = out[3] = num;
+	        return out;
+	    };
+	    static fromValues = (x, y, z, w, out = new Vector4()) => {
+	        out[0] = x;
+	        out[1] = y;
+	        out[2] = z;
+	        out[3] = w;
+	        return out;
+	    };
+	    static inverse = (a, out = new Vector4()) => {
+	        out[0] = 1.0 / a[0];
+	        out[1] = 1.0 / a[1];
+	        out[2] = 1.0 / a[2];
+	        out[3] = 1.0 / a[3];
+	        return out;
+	    };
+	    static norm = (a) => {
+	        return Math.hypot(a[0], a[1], a[2], a[3]);
+	    };
+	    static lengthSquared = (a) => {
+	        ax = a[0];
+	        ay = a[1];
+	        az = a[2];
+	        aw = a[3];
+	        return ax * ax + ay * ay + az * az + aw * aw;
+	    };
+	    static lerp = (a, b, t, out = new Vector4()) => {
+	        ax = a[0];
+	        ay = a[1];
+	        az = a[2];
+	        aw = a[3];
+	        out[0] = ax + t * (b[0] - ax);
+	        out[1] = ay + t * (b[1] - ay);
+	        out[2] = az + t * (b[2] - az);
+	        out[3] = aw + t * (b[3] - aw);
+	        return out;
+	    };
+	    static max = (a, b, out = new Vector4()) => {
+	        out[0] = Math.max(a[0], b[0]);
+	        out[1] = Math.max(a[1], b[1]);
+	        out[2] = Math.max(a[2], b[2]);
+	        out[3] = Math.max(a[3], b[3]);
+	        return out;
+	    };
+	    static min = (a, b, out = new Vector4()) => {
+	        out[0] = Math.min(a[0], b[0]);
+	        out[1] = Math.min(a[1], b[1]);
+	        out[2] = Math.min(a[2], b[2]);
+	        out[3] = Math.min(a[3], b[3]);
+	        return out;
+	    };
+	    static minus = (a, b, out = new Vector4()) => {
+	        out[0] = a[0] - b[0];
+	        out[1] = a[1] - b[1];
+	        out[2] = a[2] - b[2];
+	        out[3] = a[3] - b[3];
+	        return out;
+	    };
+	    static multiply = (a, b, out = new Vector4()) => {
+	        out[0] = a[0] * b[0];
+	        out[1] = a[1] * b[1];
+	        out[2] = a[2] * b[2];
+	        out[3] = a[3] * b[3];
+	        return out;
+	    };
+	    static multiplyScalar = (a, b, out = new Vector4()) => {
+	        out[0] = a[0] * b;
+	        out[1] = a[1] * b;
+	        out[2] = a[2] * b;
+	        out[3] = a[3] * b;
+	        return out;
+	    };
+	    static negate = (a, out = new Vector4()) => {
+	        out[0] = -a[0];
+	        out[1] = -a[1];
+	        out[2] = -a[2];
+	        out[3] = -a[3];
+	        return out;
+	    };
+	    static normalize = (a, out = new Vector4()) => {
+	        ax = a[0];
+	        ay = a[1];
+	        az = a[2];
+	        aw = a[3];
+	        len$2 = ax * ax + ay * ay + az * az + aw * aw;
+	        if (len$2 > 0) {
+	            len$2 = 1 / Math.sqrt(len$2);
+	        }
+	        out[0] = ax * len$2;
+	        out[1] = ay * len$2;
+	        out[2] = az * len$2;
+	        out[3] = aw * len$2;
+	        return out;
+	    };
+	    static round = (a, out = new Vector4()) => {
+	        out[0] = Math.round(a[0]);
+	        out[1] = Math.round(a[1]);
+	        out[2] = Math.round(a[2]);
+	        out[3] = Math.round(a[3]);
+	        return out;
+	    };
+	    static setNorm = (a, length, out = new Vector4(2)) => {
+	        Vector4.normalize(a, out);
+	        Vector4.multiplyScalar(out, length, out);
+	        return out;
+	    };
+	    static toString = (a) => {
+	        return `(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
+	    };
+	    static transformMatrix4 = (a, m, out = new Vector4()) => {
+	        ax = a[0];
+	        ay = a[1];
+	        az = a[2];
+	        aw = a[3];
+	        out[0] = m[0] * ax + m[4] * ay + m[8] * az + m[12] * aw;
+	        out[1] = m[1] * ax + m[5] * ay + m[9] * az + m[13] * aw;
+	        out[2] = m[2] * ax + m[6] * ay + m[10] * az + m[14] * aw;
+	        out[3] = m[3] * ax + m[7] * ay + m[11] * az + m[15] * aw;
+	        return out;
+	    };
+	    static transformQuat = (a, q, out = new Vector4()) => {
+	        bx = a[0];
+	        by = a[1];
+	        bz = a[2];
+	        ax = q[0];
+	        ay = q[1];
+	        az = q[2];
+	        aw = q[3];
+	        ix = aw * bx + ay * bz - az * by;
+	        iy = aw * by + az * bx - ax * bz;
+	        iz = aw * bz + ax * by - ay * bx;
+	        iw = -ax * bx - ay * by - az * bz;
+	        out[0] = ix * aw + iw * -ax + iy * -az - iz * -ay;
+	        out[1] = iy * aw + iw * -ay + iz * -ax - ix * -az;
+	        out[2] = iz * aw + iw * -az + ix * -ay - iy * -ax;
+	        out[3] = a[3];
+	        return out;
+	    };
+	    dataType = ArraybufferDataType.VECTOR4;
+	    constructor(x = 0, y = 0, z = 0, w = 0) {
+	        super(4);
+	        this[0] = x;
+	        this[1] = y;
+	        this[2] = z;
+	        this[3] = w;
+	    }
+	    get x() {
+	        return this[0];
+	    }
+	    set x(value) {
+	        this[0] = value;
+	    }
+	    get y() {
+	        return this[1];
+	    }
+	    set y(value) {
+	        this[1] = value;
+	    }
+	    get z() {
+	        return this[2];
+	    }
+	    set z(value) {
+	        this[2] = value;
+	    }
+	    get w() {
+	        return this[3];
+	    }
+	    set w(value) {
+	        this[3] = value;
+	    }
+	}
+
+	const MATRIX_XYZ2RGB = new Float32Array([3.2404542, -0.9692660, 0.0556434, -1.5371385, 1.8760108, -0.2040259, -0.4985314, 0.0415560, 1.0572252]);
+	const MATRIX_RGB2XYZ = new Float32Array([0.4124564, 0.2126729, 0.0193339, 0.3575761, 0.7151522, 0.1191920, 0.1804375, 0.0721750, 0.9503041]);
+	const tmpVec3 = new Float32Array(3);
+	class ColorXYZ extends Float32Array {
+	    static clone = (color) => {
+	        return new ColorXYZ(color[0], color[1], color[2]);
+	    };
+	    static create = (r = 0, g = 0, b = 0) => {
+	        return new ColorXYZ(r, g, b);
+	    };
+	    static equals = (a, b) => {
+	        return (a.x ?? a[0]) === (b.x ?? b[0]) && (a.y ?? a[1]) === (b.y ?? b[1]) && (a.z ?? a[2]) === (b.z ?? b[2]);
+	    };
+	    static fromArray = (arr, out = new ColorXYZ()) => {
+	        out[0] = arr[0];
+	        out[1] = arr[1];
+	        out[2] = arr[2];
+	        return out;
+	    };
+	    static fromColorGPU = (color, out = new ColorXYZ()) => {
+	        return Vector3.transformMatrix3(color, MATRIX_RGB2XYZ, out);
+	    };
+	    static fromJson = (json, out = new ColorXYZ()) => {
+	        out[0] = json.x;
+	        out[1] = json.y;
+	        out[2] = json.z;
+	        return out;
+	    };
+	    static fromRGBUnsignedNormal = (r, g, b, out = new ColorXYZ()) => {
+	        tmpVec3[0] = r;
+	        tmpVec3[1] = g;
+	        tmpVec3[2] = b;
+	        return ColorXYZ.fromColorGPU(tmpVec3, out);
+	    };
+	    static fromScalar = (scalar, out = new ColorXYZ()) => {
+	        out[0] = scalar;
+	        out[1] = scalar;
+	        out[2] = scalar;
+	        return out;
+	    };
+	    dataType = ArraybufferDataType.COLOR_RGB;
+	    constructor(r = 0, y = 0, b = 0) {
+	        super(3);
+	        this[0] = r;
+	        this[1] = y;
+	        this[2] = b;
+	    }
+	    get x() {
+	        return this[0];
+	    }
+	    set x(val) {
+	        this[0] = val;
+	    }
+	    get y() {
+	        return this[1];
+	    }
+	    set y(val) {
+	        this[1] = val;
+	    }
+	    get z() {
+	        return this[2];
+	    }
+	    set z(val) {
+	        this[2] = val;
+	    }
+	}
+
+	let r$2;
+	let g;
+	let b$1;
+	class ColorGPU extends Float32Array {
+	    static average = (color) => {
+	        return (color[0] + color[1] + color[2]) / 3;
+	    };
+	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
+	        return color[0] * wr + color[1] * wg + color[2] * wb;
+	    };
+	    static clone = (color) => {
+	        return new ColorGPU(color[0], color[1], color[2], color[3]);
+	    };
+	    static create = (r = 0, g = 0, b = 0, a = 0) => {
+	        return new ColorGPU(r, g, b, a);
+	    };
+	    static equals = (a, b) => {
+	        return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
+	            (a.g ?? a[1]) === (b.g ?? b[1]) &&
+	            (a.b ?? a[2]) === (b.b ?? b[2]) &&
+	            (a.a ?? a[3]) === (b.a ?? b[3]));
+	    };
+	    static fromArray = (arr, out = new ColorGPU()) => {
+	        out[0] = arr[0];
+	        out[1] = arr[1];
+	        out[2] = arr[2];
+	        out[3] = arr[3];
+	        return out;
+	    };
+	    static fromColorCMYK = (arr, out = new ColorGPU()) => {
+	        const k = 1 - arr[3];
+	        out[0] = (1 - arr[0]) * k;
+	        out[1] = (1 - arr[1]) * k;
+	        out[2] = (1 - arr[2]) * k;
+	        out[3] = 1;
+	        return out;
+	    };
+	    static fromColorHSL = (color, out = new ColorGPU()) => {
+	        let h = color[0];
+	        let s = color[1];
+	        let l = color[2];
+	        if (s === 0) {
+	            r$2 = g = b$1 = l; // achromatic
+	        }
+	        else {
+	            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	            let p = 2 * l - q;
+	            r$2 = hue2rgb(p, q, h + 1 / 3);
+	            g = hue2rgb(p, q, h);
+	            b$1 = hue2rgb(p, q, h - 1 / 3);
+	        }
+	        out[0] = r$2;
+	        out[1] = g;
+	        out[2] = b$1;
+	        out[3] = 1;
+	        return out;
+	    };
+	    static fromColorHSV = (color, out = new ColorGPU()) => {
+	        const s = color[1];
+	        const v = color[2];
+	        const h6 = color[0] * 6;
+	        const hi = Math.floor(h6);
+	        const f = h6 - hi;
+	        const p = v * (1 - s);
+	        const q = v * (1 - f * s);
+	        const t = v * (1 - (1 - f) * s);
+	        if (hi === 0 || hi === 6) {
+	            out[0] = v;
+	            out[1] = t;
+	            out[2] = p;
+	        }
+	        else if (hi === 1) {
+	            out[0] = q;
+	            out[1] = v;
+	            out[2] = p;
+	        }
+	        else if (hi === 2) {
+	            out[0] = p;
+	            out[1] = v;
+	            out[2] = t;
+	        }
+	        else if (hi === 3) {
+	            out[0] = p;
+	            out[1] = q;
+	            out[2] = v;
+	        }
+	        else if (hi === 4) {
+	            out[0] = t;
+	            out[1] = p;
+	            out[2] = v;
+	        }
+	        else if (hi === 5) {
+	            out[0] = v;
+	            out[1] = p;
+	            out[2] = q;
+	        }
+	        out[3] = 1;
+	        return out;
+	    };
+	    static fromColorRGB(color, out = new ColorGPU()) {
+	        out[0] = color[0] / 255;
+	        out[1] = color[1] / 255;
+	        out[2] = color[2] / 255;
+	        out[3] = 1;
+	        return out;
+	    }
+	    static fromColorRGBA(color, out = new ColorGPU()) {
+	        out[0] = color[0] / 255;
+	        out[1] = color[1] / 255;
+	        out[2] = color[2] / 255;
+	        out[3] = color[3] / 255;
+	        return out;
+	    }
+	    static fromColorRYB(color, out = new ColorGPU()) {
+	        let r = color[0];
+	        let y = color[1];
+	        let b = color[2];
+	        // Remove the whiteness from the color.
+	        let w = Math.min(r, y, b);
+	        r -= w;
+	        y -= w;
+	        b -= w;
+	        let my = Math.max(r, y, b);
+	        // Get the green out of the yellow and blue
+	        let g = Math.min(y, b);
+	        y -= g;
+	        b -= g;
+	        if (b && g) {
+	            b *= 2.0;
+	            g *= 2.0;
+	        }
+	        // Redistribute the remaining yellow.
+	        r += y;
+	        g += y;
+	        // Normalize to values.
+	        let mg = Math.max(r, g, b);
+	        if (mg) {
+	            let n = my / mg;
+	            r *= n;
+	            g *= n;
+	            b *= n;
+	        }
+	        // Add the white back in.
+	        r += w;
+	        g += w;
+	        b += w;
+	        out[0] = r / 255;
+	        out[1] = g / 255;
+	        out[2] = b / 255;
+	        out[3] = 1;
+	        return out;
+	    }
+	    static fromColorXYZ = (color, out = new ColorGPU()) => {
+	        Vector3.transformMatrix3(color, MATRIX_XYZ2RGB, out);
+	        return out;
+	    };
+	    static fromHex = (hex, alpha = 1, out = new ColorGPU()) => {
+	        out[0] = (hex >> 16) / 255;
+	        out[1] = ((hex >> 8) & 255) / 255;
+	        out[2] = (hex & 255) / 255;
+	        out[3] = alpha;
+	        return out;
+	    };
+	    static fromJson = (json, out = new ColorGPU()) => {
+	        out[0] = json.r;
+	        out[1] = json.g;
+	        out[2] = json.b;
+	        out[3] = json.a;
+	        return out;
+	    };
+	    static fromScalar = (scalar, out = new ColorGPU()) => {
+	        out[0] = scalar;
+	        out[1] = scalar;
+	        out[2] = scalar;
+	        return out;
+	    };
+	    static fromString = (str, out = new ColorGPU()) => {
+	        if (str in COLOR_HEX_MAP) {
+	            return ColorGPU.fromHex(COLOR_HEX_MAP[str], 1, out);
+	        }
+	        else if (str.startsWith("#")) {
+	            str = str.substring(1);
+	            return ColorGPU.fromHex(parseInt(str, 16), 1, out);
+	        }
+	        else if (str.startsWith("rgb(")) {
+	            str = str.substring(4, str.length - 1);
+	            const arr = str.split(",");
+	            out[0] = parseInt(arr[0], 10) / 255;
+	            out[1] = parseInt(arr[1], 10) / 255;
+	            out[2] = parseInt(arr[2], 10) / 255;
+	        }
+	        return out;
+	    };
+	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorGPU()) => {
+	        const gray = ColorGPU.averageWeighted(color, wr, wg, wb);
+	        ColorGPU.fromScalar(gray, out);
+	        return out;
+	    };
+	    dataType = ArraybufferDataType.COLOR_GPU;
+	    constructor(r = 0, g = 0, b = 0, a = 0) {
+	        super(4);
+	        this[0] = r;
+	        this[1] = g;
+	        this[2] = b;
+	        this[3] = a;
+	    }
+	    get r() {
+	        return this[0];
+	    }
+	    set r(val) {
+	        this[0] = val;
+	    }
+	    get g() {
+	        return this[1];
+	    }
+	    set g(val) {
+	        this[1] = val;
+	    }
+	    get b() {
+	        return this[2];
+	    }
+	    set b(val) {
+	        this[2] = val;
+	    }
+	    get a() {
+	        return this[3];
+	    }
+	    set a(val) {
+	        this[3] = val;
+	    }
+	}
+
 	let max$1 = 0;
 	let min$1 = 0;
 	let h$1 = 0;
-	let s$4 = 0;
+	let s$2 = 0;
 	let l = 0;
 	class ColorHSL extends Float32Array {
 	    dataType = ArraybufferDataType.COLOR_HSL;
@@ -261,11 +1579,11 @@
 	        min$1 = Math.min(r, g, b);
 	        l = (max$1 + min$1) / 2;
 	        if (max$1 === min$1) {
-	            h$1 = s$4 = 0;
+	            h$1 = s$2 = 0;
 	        }
 	        else {
 	            let d = max$1 - min$1;
-	            s$4 = l > 0.5 ? d / (2 - max$1 - min$1) : d / (max$1 + min$1);
+	            s$2 = l > 0.5 ? d / (2 - max$1 - min$1) : d / (max$1 + min$1);
 	            switch (max$1) {
 	                case r:
 	                    h$1 = (g - b) / d + (g < b ? 6 : 0);
@@ -280,7 +1598,7 @@
 	            h$1 /= 6;
 	        }
 	        out[0] = h$1;
-	        out[1] = s$4;
+	        out[1] = s$2;
 	        out[2] = l;
 	        return out;
 	    }
@@ -313,7 +1631,7 @@
 	let max = 0;
 	let min = 0;
 	let h = 0;
-	let s$3 = 0;
+	let s$1 = 0;
 	let v$2 = 0;
 	class ColorHSV extends Float32Array {
 	    dataType = ArraybufferDataType.COLOR_HSV;
@@ -326,7 +1644,7 @@
 	        }
 	        else {
 	            let d = max - min;
-	            s$3 = v$2 > 0.5 ? d / (2 - max - min) : d / (max + min);
+	            s$1 = v$2 > 0.5 ? d / (2 - max - min) : d / (max + min);
 	            switch (max) {
 	                case r:
 	                    h = (g - b) / d + (g < b ? 6 : 0);
@@ -341,13 +1659,13 @@
 	            h /= 6;
 	        }
 	        if (max) {
-	            s$3 = 1 - min / max;
+	            s$1 = 1 - min / max;
 	        }
 	        else {
-	            s$3 = 0;
+	            s$1 = 0;
 	        }
 	        out[0] = h;
-	        out[1] = s$3;
+	        out[1] = s$1;
 	        out[2] = v$2;
 	        return out;
 	    }
@@ -376,20 +1694,6 @@
 	        this[2] = val;
 	    }
 	}
-
-	const hue2rgb = (p, q, t) => {
-	    if (t < 0)
-	        t += 1;
-	    if (t > 1)
-	        t -= 1;
-	    if (t < 1 / 6)
-	        return p + (q - p) * 6 * t;
-	    if (t < 1 / 2)
-	        return q;
-	    if (t < 2 / 3)
-	        return p + (q - p) * (2 / 3 - t) * 6;
-	    return p;
-	};
 
 	class ColorRGBA extends Uint8Array {
 	    static average = (color) => {
@@ -777,265 +2081,8 @@
 	    }
 	}
 
-	let r$2;
-	let g;
-	let b$1;
-	class ColorGPU extends Float32Array {
-	    static average = (color) => {
-	        return (color[0] + color[1] + color[2]) / 3;
-	    };
-	    static averageWeighted = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE) => {
-	        return color[0] * wr + color[1] * wg + color[2] * wb;
-	    };
-	    static clone = (color) => {
-	        return new ColorGPU(color[0], color[1], color[2], color[3]);
-	    };
-	    static create = (r = 0, g = 0, b = 0, a = 0) => {
-	        return new ColorGPU(r, g, b, a);
-	    };
-	    static equals = (a, b) => {
-	        return ((a.r ?? a[0]) === (b.r ?? b[0]) &&
-	            (a.g ?? a[1]) === (b.g ?? b[1]) &&
-	            (a.b ?? a[2]) === (b.b ?? b[2]) &&
-	            (a.a ?? a[3]) === (b.a ?? b[3]));
-	    };
-	    static fromArray = (arr, out = new ColorGPU()) => {
-	        out[0] = arr[0];
-	        out[1] = arr[1];
-	        out[2] = arr[2];
-	        out[3] = arr[3];
-	        return out;
-	    };
-	    static fromColorCMYK = (arr, out = new ColorGPU()) => {
-	        const k = 1 - arr[3];
-	        out[0] = (1 - arr[0]) * k;
-	        out[1] = (1 - arr[1]) * k;
-	        out[2] = (1 - arr[2]) * k;
-	        out[3] = 1;
-	        return out;
-	    };
-	    static fromColorHSL = (color, out = new ColorGPU()) => {
-	        let h = color[0];
-	        let s = color[1];
-	        let l = color[2];
-	        if (s === 0) {
-	            r$2 = g = b$1 = l; // achromatic
-	        }
-	        else {
-	            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-	            let p = 2 * l - q;
-	            r$2 = hue2rgb(p, q, h + 1 / 3);
-	            g = hue2rgb(p, q, h);
-	            b$1 = hue2rgb(p, q, h - 1 / 3);
-	        }
-	        out[0] = r$2;
-	        out[1] = g;
-	        out[2] = b$1;
-	        out[3] = 1;
-	        return out;
-	    };
-	    static fromColorHSV = (color, out = new ColorGPU()) => {
-	        const s = color[1];
-	        const v = color[2];
-	        const h6 = color[0] * 6;
-	        const hi = Math.floor(h6);
-	        const f = h6 - hi;
-	        const p = v * (1 - s);
-	        const q = v * (1 - f * s);
-	        const t = v * (1 - (1 - f) * s);
-	        if (hi === 0 || hi === 6) {
-	            out[0] = v;
-	            out[1] = t;
-	            out[2] = p;
-	        }
-	        else if (hi === 1) {
-	            out[0] = q;
-	            out[1] = v;
-	            out[2] = p;
-	        }
-	        else if (hi === 2) {
-	            out[0] = p;
-	            out[1] = v;
-	            out[2] = t;
-	        }
-	        else if (hi === 3) {
-	            out[0] = p;
-	            out[1] = q;
-	            out[2] = v;
-	        }
-	        else if (hi === 4) {
-	            out[0] = t;
-	            out[1] = p;
-	            out[2] = v;
-	        }
-	        else if (hi === 5) {
-	            out[0] = v;
-	            out[1] = p;
-	            out[2] = q;
-	        }
-	        out[3] = 1;
-	        return out;
-	    };
-	    static fromColorRGB(color, out = new ColorGPU()) {
-	        out[0] = color[0] / 255;
-	        out[1] = color[1] / 255;
-	        out[2] = color[2] / 255;
-	        out[3] = 1;
-	        return out;
-	    }
-	    static fromColorRGBA(color, out = new ColorGPU()) {
-	        out[0] = color[0] / 255;
-	        out[1] = color[1] / 255;
-	        out[2] = color[2] / 255;
-	        out[3] = color[3] / 255;
-	        return out;
-	    }
-	    static fromColorRYB(color, out = new ColorGPU()) {
-	        let r = color[0];
-	        let y = color[1];
-	        let b = color[2];
-	        // Remove the whiteness from the color.
-	        let w = Math.min(r, y, b);
-	        r -= w;
-	        y -= w;
-	        b -= w;
-	        let my = Math.max(r, y, b);
-	        // Get the green out of the yellow and blue
-	        let g = Math.min(y, b);
-	        y -= g;
-	        b -= g;
-	        if (b && g) {
-	            b *= 2.0;
-	            g *= 2.0;
-	        }
-	        // Redistribute the remaining yellow.
-	        r += y;
-	        g += y;
-	        // Normalize to values.
-	        let mg = Math.max(r, g, b);
-	        if (mg) {
-	            let n = my / mg;
-	            r *= n;
-	            g *= n;
-	            b *= n;
-	        }
-	        // Add the white back in.
-	        r += w;
-	        g += w;
-	        b += w;
-	        out[0] = r / 255;
-	        out[1] = g / 255;
-	        out[2] = b / 255;
-	        out[3] = 1;
-	        return out;
-	    }
-	    static fromHex = (hex, alpha = 1, out = new ColorGPU()) => {
-	        out[0] = (hex >> 16) / 255;
-	        out[1] = ((hex >> 8) & 255) / 255;
-	        out[2] = (hex & 255) / 255;
-	        out[3] = alpha;
-	        return out;
-	    };
-	    static fromJson = (json, out = new ColorGPU()) => {
-	        out[0] = json.r;
-	        out[1] = json.g;
-	        out[2] = json.b;
-	        out[3] = json.a;
-	        return out;
-	    };
-	    static fromScalar = (scalar, out = new ColorGPU()) => {
-	        out[0] = scalar;
-	        out[1] = scalar;
-	        out[2] = scalar;
-	        return out;
-	    };
-	    static fromString = (str, out = new ColorGPU()) => {
-	        if (str in COLOR_HEX_MAP) {
-	            return ColorGPU.fromHex(COLOR_HEX_MAP[str], 1, out);
-	        }
-	        else if (str.startsWith("#")) {
-	            str = str.substring(1);
-	            return ColorGPU.fromHex(parseInt(str, 16), 1, out);
-	        }
-	        else if (str.startsWith("rgb(")) {
-	            str = str.substring(4, str.length - 1);
-	            const arr = str.split(",");
-	            out[0] = parseInt(arr[0], 10) / 255;
-	            out[1] = parseInt(arr[1], 10) / 255;
-	            out[2] = parseInt(arr[2], 10) / 255;
-	        }
-	        return out;
-	    };
-	    static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorGPU()) => {
-	        const gray = ColorGPU.averageWeighted(color, wr, wg, wb);
-	        ColorGPU.fromScalar(gray, out);
-	        return out;
-	    };
-	    dataType = ArraybufferDataType.COLOR_GPU;
-	    constructor(r = 0, g = 0, b = 0, a = 0) {
-	        super(4);
-	        this[0] = r;
-	        this[1] = g;
-	        this[2] = b;
-	        this[3] = a;
-	    }
-	    get r() {
-	        return this[0];
-	    }
-	    set r(val) {
-	        this[0] = val;
-	    }
-	    get g() {
-	        return this[1];
-	    }
-	    set g(val) {
-	        this[1] = val;
-	    }
-	    get b() {
-	        return this[2];
-	    }
-	    set b(val) {
-	        this[2] = val;
-	    }
-	    get a() {
-	        return this[3];
-	    }
-	    set a(val) {
-	        this[3] = val;
-	    }
-	}
-
 	var ceilPowerOfTwo = (value) => {
 	    return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2));
-	};
-
-	/**
-	 * @function clamp
-	 * @desc 将目标值限定在指定区间内。假定min小于等于max才能得到正确的结果。
-	 * @see clampSafe
-	 * @param {number} val 目标值
-	 * @param {number} min 最小值，必须小于等于max
-	 * @param {number} max 最大值，必须大于等于min
-	 * @returns {number} 限制之后的值
-	 * @example Mathx.clamp(1, 0, 2); // 1;
-	 * Mathx.clamp(-1, 0, 2); // 0;
-	 * Mathx.clamp(3, 0, 2); // 2;
-	 */
-	var clamp = (val, min, max) => {
-	    return Math.max(min, Math.min(max, val));
-	};
-
-	/**
-	 * @function floorToZero
-	 * @desc 以0为中心取整
-	 * @param {number} num 数值
-	 * @return {number} 取整之后的结果
-	 * @example Mathx.roundToZero(0.8 ); // 0;
-	 * Mathx.roundToZero(-0.8); // 0;
-	 * Mathx.roundToZero(-1.1); // -1;
-	 */
-	var floorToZeroCommon = (num) => {
-	    return num < 0 ? Math.ceil(num) : Math.floor(num);
 	};
 
 	let circle, v$1;
@@ -1051,7 +2098,7 @@
 	 */
 	var clampCircle = (val, min, max) => {
 	    circle = max - min;
-	    v$1 = floorToZeroCommon(min / circle) * circle + (val % circle);
+	    v$1 = floorToZero(min / circle) * circle + (val % circle);
 	    if (v$1 < min) {
 	        return v$1 + circle;
 	    }
@@ -1059,45 +2106,6 @@
 	        return v$1 - circle;
 	    }
 	    return v$1;
-	};
-
-	/**
-	 * @function clampSafe
-	 * @desc 与clamp函数功能一样，将目标值限定在指定区间内。但此函数是安全的，不要求第二个参数必须小于第三个参数
-	 * @see clamp
-	 * @param {number} val 目标值
-	 * @param {number} a 区间中一个最值
-	 * @param {number} b 区间中另一个最值
-	 * @returns {number} 限制之后的值
-	 * @example Mathx.clamp(1, 0, 2); // 1;
-	 * Mathx.clamp(1, 2, 0); // 1;
-	 * Mathx.clamp(-1, 0, 2); // 0;
-	 * Mathx.clamp(-1, 2, 0); // 0;
-	 * Mathx.clamp(3, 0, 2); // 2;
-	 * Mathx.clamp(3, 2, 0); // 2;
-	 */
-	var clampSafeCommon = (val, a, b) => {
-	    if (a > b) {
-	        return Math.max(b, Math.min(a, val));
-	    }
-	    else if (b > a) {
-	        return Math.max(a, Math.min(b, val));
-	    }
-	    return a;
-	};
-
-	/**
-	 * @function closeTo
-	 * @desc 判断一个数是否在另一个数的邻域内，通常用于检验浮点计算是否精度在EPSILON以内
-	 * @param {number} val 需要判断的数值
-	 * @param {number} target 目标数值
-	 * @param {number} [epsilon = Number.EPSILON] 邻域半径
-	 * @example Mathx.closeTo(0.1 + 0.2, 0.3); // true;
-	 * Mathx.clamp(2, 3, 1); // true;
-	 * Mathx.clamp(2, 3, 0.5); // false;
-	 */
-	var closeTo = (val, target, epsilon = EPSILON) => {
-	    return Math.abs(val - target) <= epsilon;
 	};
 
 	var floorPowerOfTwo = (value) => {
@@ -1138,7 +2146,7 @@
 	    return min + Math.floor(Math.random() * (max - min + 1));
 	};
 
-	let len$2 = 0, sum$1 = 0;
+	let len$1 = 0, sum$1 = 0;
 	/**
 	 * @function sumArray
 	 * @desc 求数组的和
@@ -1149,8 +2157,8 @@
 	 */
 	var sumArray = (arr) => {
 	    sum$1 = 0;
-	    len$2 = arr.length;
-	    for (let i = 0; i < len$2; i++) {
+	    len$1 = arr.length;
+	    for (let i = 0; i < len$1; i++) {
 	        sum$1 += arr[i];
 	    }
 	    return sum$1;
@@ -1506,909 +2514,6 @@
 	    }
 	    set z(value) {
 	        this[2] = value;
-	    }
-	}
-
-	let x$4 = 0;
-	let y$4 = 0;
-	let c$1 = 0;
-	let s$2 = 0;
-	class Vector2 extends Float32Array {
-	    static VECTOR2_ZERO = new Vector2(0, 0);
-	    static VECTOR2_TOP = new Vector2(0, 1);
-	    static VECTOR2_BOTTOM = new Vector2(0, -1);
-	    static VECTOR2_LEFT = new Vector2(-1, 0);
-	    static VECTOR2_RIGHT = new Vector2(1, 0);
-	    static VECTOR2_ONE = new Vector2(1, 1);
-	    static add = (a, b, out = new Vector2()) => {
-	        out[0] = a[0] + b[0];
-	        out[1] = a[1] + b[1];
-	        return out;
-	    };
-	    static addScalar = (a, b, out = new Vector2(2)) => {
-	        out[0] = a[0] + b;
-	        out[1] = a[1] + b;
-	        return out;
-	    };
-	    static angle = (a) => {
-	        return Math.atan2(a[1], a[0]);
-	    };
-	    static area = (a) => {
-	        return a[0] * a[1];
-	    };
-	    static ceil = (a, out = new Vector2()) => {
-	        out[0] = Math.ceil(a[0]);
-	        out[1] = Math.ceil(a[1]);
-	        return out;
-	    };
-	    static clamp = (a, min, max, out = new Vector2()) => {
-	        out[0] = clamp(a[0], min[0], max[0]);
-	        out[1] = clamp(a[1], min[1], max[1]);
-	        return out;
-	    };
-	    static clampSafe = (a, min, max, out = new Vector2()) => {
-	        out[0] = clampSafeCommon(a[0], min[0], max[0]);
-	        out[1] = clampSafeCommon(a[1], min[1], max[1]);
-	        return out;
-	    };
-	    static clampLength = (a, min, max, out = new Vector2()) => {
-	        out[0] = clampSafeCommon(a[0], min[0], max[0]);
-	        out[1] = clampSafeCommon(a[1], min[1], max[1]);
-	        return out;
-	    };
-	    static clampScalar = (a, min, max, out = new Vector2()) => {
-	        out[0] = clamp(a[0], min, max);
-	        out[1] = clamp(a[1], min, max);
-	        return out;
-	    };
-	    static closeTo = (a, b, epsilon = EPSILON) => {
-	        return Vector2.distanceTo(a, b) <= epsilon;
-	    };
-	    static closeToRect = (a, b, epsilon = EPSILON) => {
-	        return closeTo(a[0], b[0], epsilon) && closeTo(a[1], b[1], epsilon);
-	    };
-	    static closeToManhattan = (a, b, epsilon = EPSILON) => {
-	        return Vector2.distanceToManhattan(a, b) <= epsilon;
-	    };
-	    static clone = (a, out = new Vector2()) => {
-	        out[0] = a[0];
-	        out[1] = a[1];
-	        return out;
-	    };
-	    static cross = (a, b) => {
-	        return a[0] * b[1] - a[1] * b[0];
-	    };
-	    static create = (x = 0, y = 0, out = new Vector2()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        return out;
-	    };
-	    static distanceTo = (a, b) => {
-	        x$4 = b[0] - a[0];
-	        y$4 = b[1] - a[1];
-	        return Math.hypot(x$4, y$4);
-	    };
-	    static distanceToManhattan = (a, b) => {
-	        return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
-	    };
-	    static distanceToSquared = (a, b) => {
-	        x$4 = a[0] - b[0];
-	        y$4 = a[1] - b[1];
-	        return x$4 * x$4 + y$4 * y$4;
-	    };
-	    static divide = (a, b, out = new Vector2()) => {
-	        out[0] = a[0] / b[0];
-	        out[1] = a[1] / b[1];
-	        return out;
-	    };
-	    static divideScalar = (a, scalar, out = new Vector2()) => {
-	        return Vector2.multiplyScalar(a, 1 / scalar, out);
-	    };
-	    static dot = (a, b) => {
-	        return a[0] * b[0] + a[1] * b[1];
-	    };
-	    static equals = (a, b) => {
-	        return a[0] === b[0] && a[1] === b[1];
-	    };
-	    static floor = (a, out = new Vector2()) => {
-	        out[0] = Math.floor(a[0]);
-	        out[1] = Math.floor(a[1]);
-	        return out;
-	    };
-	    static floorToZero = (a, out = new Vector2()) => {
-	        out[0] = floorToZeroCommon(a[0]);
-	        out[1] = floorToZeroCommon(a[1]);
-	        return out;
-	    };
-	    static fromArray = (arr, index = 0, out = new Vector2()) => {
-	        out[0] = arr[index];
-	        out[1] = arr[index + 1];
-	        return out;
-	    };
-	    static fromJson = (j, out = new Vector2()) => {
-	        out[0] = j.x;
-	        out[1] = j.y;
-	        return out;
-	    };
-	    static fromPolar = (p, out = new Vector2()) => {
-	        out[0] = Math.cos(p.a) * p.r;
-	        out[1] = Math.sin(p.a) * p.r;
-	        return out;
-	    };
-	    static fromScalar = (value = 0, out = new Vector2()) => {
-	        out[0] = out[1] = value;
-	        return out;
-	    };
-	    static inverse = (a, out = new Vector2()) => {
-	        out[0] = 1 / a[0] || 0;
-	        out[1] = 1 / a[1] || 0;
-	        return out;
-	    };
-	    static norm = (a) => {
-	        return Math.sqrt(a[0] * a[0] + a[1] * a[1]);
-	    };
-	    static lengthManhattan = (a) => {
-	        return Math.abs(a[0]) + Math.abs(a[1]);
-	    };
-	    static lengthSquared = (a) => {
-	        return a[0] * a[0] + a[1] * a[1];
-	    };
-	    static lerp = (a, b, alpha, out = new Vector2()) => {
-	        out[0] = (b[0] - a[0]) * alpha + a[0];
-	        out[1] = (b[1] - a[1]) * alpha + a[1];
-	        return out;
-	    };
-	    static max = (a, b, out = new Vector2()) => {
-	        out[0] = Math.max(a[0], b[0]);
-	        out[1] = Math.max(a[1], b[1]);
-	        return out;
-	    };
-	    static min = (a, b, out = new Vector2()) => {
-	        out[0] = Math.min(a[0], b[0]);
-	        out[1] = Math.min(a[1], b[1]);
-	        return out;
-	    };
-	    static minus = (a, b, out = new Vector2()) => {
-	        out[0] = a[0] - b[0];
-	        out[1] = a[1] - b[0];
-	        return out;
-	    };
-	    static minusScalar = (a, num, out = new Vector2()) => {
-	        out[0] = a[0] - num;
-	        out[1] = a[1] - num;
-	        return out;
-	    };
-	    static multiply = (a, b, out = new Vector2()) => {
-	        out[0] = a[0] * b[0];
-	        out[1] = a[1] * b[1];
-	        return out;
-	    };
-	    static multiplyScalar = (a, scalar, out = new Vector2()) => {
-	        out[0] = a[0] * scalar;
-	        out[1] = a[1] * scalar;
-	        return out;
-	    };
-	    static negate = (a, out = new Vector2()) => {
-	        out[0] = -a[0];
-	        out[1] = -a[1];
-	        return out;
-	    };
-	    static normalize = (a, out = new Vector2()) => {
-	        return Vector2.divideScalar(a, Vector2.norm(a) || 1, out);
-	    };
-	    static random = (norm = 1, out = new Vector2()) => {
-	        x$4 = Math.random() * DEG_360_RAD;
-	        out[0] = Math.cos(x$4) * norm;
-	        out[1] = Math.sin(x$4) * norm;
-	        return out;
-	    };
-	    static rotate = (a, angle, center = Vector2.VECTOR2_ZERO, out = new Vector2(2)) => {
-	        c$1 = Math.cos(angle);
-	        s$2 = Math.sin(angle);
-	        x$4 = a[0] - center[0];
-	        y$4 = a[1] - center[1];
-	        out[0] = x$4 * c$1 - y$4 * s$2 + center[0];
-	        out[1] = x$4 * s$2 + y$4 * c$1 + center[1];
-	        return out;
-	    };
-	    static round = (a, out = new Vector2()) => {
-	        out[0] = Math.round(a[0]);
-	        out[1] = Math.round(a[1]);
-	        return out;
-	    };
-	    static set = (x = 0, y = 0, out = new Vector2()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        return out;
-	    };
-	    static setNorm = (a, length, out = new Vector2(2)) => {
-	        Vector2.normalize(a, out);
-	        Vector2.multiplyScalar(out, length, out);
-	        return out;
-	    };
-	    static toArray = (a, arr = []) => {
-	        arr[0] = a[0];
-	        arr[1] = a[1];
-	        return arr;
-	    };
-	    static toPalorJson = (a, p = { a: 0, r: 0 }) => {
-	        p.r = Vector2.norm(a);
-	        p.a = Vector2.angle(a);
-	        return p;
-	    };
-	    static toString = (a) => {
-	        return `(${a[0]}, ${a[1]})`;
-	    };
-	    static transformMatrix3 = (a, m, out = new Vector2()) => {
-	        x$4 = a[0];
-	        y$4 = a[1];
-	        out[0] = m[0] * x$4 + m[3] * y$4 + m[6];
-	        out[1] = m[1] * x$4 + m[4] * y$4 + m[7];
-	        return out;
-	    };
-	    dataType = ArraybufferDataType.VECTOR2;
-	    constructor(x = 0, y = 0) {
-	        super(2);
-	        this[0] = x;
-	        this[1] = y;
-	    }
-	    get x() {
-	        return this[0];
-	    }
-	    set x(value) {
-	        this[0] = value;
-	    }
-	    get y() {
-	        return this[1];
-	    }
-	    set y(value) {
-	        this[1] = value;
-	    }
-	}
-
-	let ax$1;
-	let ay$1;
-	let az$1;
-	let bx$1;
-	let by$1;
-	let bz$1;
-	let ag;
-	let s$1;
-	class Vector3 extends Float32Array {
-	    static VECTOR3_ZERO = new Vector3(0, 0, 0);
-	    static VECTOR3_ONE = new Vector3(1, 1, 1);
-	    static VECTOR3_TOP = new Vector3(0, 1, 0);
-	    static VECTOR3_BOTTOM = new Vector3(0, -1, 0);
-	    static VECTOR3_LEFT = new Vector3(-1, 0, 0);
-	    static VECTOR3_RIGHT = new Vector3(1, 0, 0);
-	    static VECTOR3_FRONT = new Vector3(0, 0, -1);
-	    static VECTOR3_BACK = new Vector3(0, 0, 1);
-	    static add = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] + b[0];
-	        out[1] = a[1] + b[1];
-	        out[2] = a[2] + b[2];
-	        return out;
-	    };
-	    static addScalar = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] + b;
-	        out[1] = a[1] + b;
-	        out[2] = a[2] + b;
-	        return out;
-	    };
-	    static angle = (a, b) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        bx$1 = b[0];
-	        by$1 = b[1];
-	        bz$1 = b[2];
-	        const mag1 = Math.sqrt(ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1);
-	        const mag2 = Math.sqrt(bx$1 * bx$1 + by$1 * by$1 + bz$1 * bz$1);
-	        const mag = mag1 * mag2;
-	        const cosine = mag && Vector3.dot(a, b) / mag;
-	        return Math.acos(clamp(cosine, -1, 1));
-	    };
-	    static clamp = (a, min, max, out = new Vector3()) => {
-	        out[0] = clamp(a[0], min[0], max[0]);
-	        out[1] = clamp(a[1], min[1], max[1]);
-	        out[2] = clamp(a[2], min[2], max[2]);
-	        return out;
-	    };
-	    static clampSafe = (a, min, max, out = new Vector3()) => {
-	        out[0] = clampSafeCommon(a[0], min[0], max[0]);
-	        out[1] = clampSafeCommon(a[1], min[1], max[1]);
-	        out[1] = clampSafeCommon(a[2], min[2], max[2]);
-	        return out;
-	    };
-	    static clampScalar = (a, min, max, out = new Vector3()) => {
-	        out[0] = clamp(a[0], min, max);
-	        out[1] = clamp(a[1], min, max);
-	        out[2] = clamp(a[2], min, max);
-	        return out;
-	    };
-	    static clone = (a, out = new Vector3()) => {
-	        out[0] = a[0];
-	        out[1] = a[1];
-	        out[2] = a[2];
-	        return out;
-	    };
-	    static closeTo = (a, b) => {
-	        return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]);
-	    };
-	    static create = (x = 0, y = 0, z = 0, out = new Vector3()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        return out;
-	    };
-	    static cross = (a, b, out = new Vector3()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        bx$1 = b[0];
-	        by$1 = b[1];
-	        bz$1 = b[2];
-	        out[0] = ay$1 * bz$1 - az$1 * by$1;
-	        out[1] = az$1 * bx$1 - ax$1 * bz$1;
-	        out[2] = ax$1 * by$1 - ay$1 * bx$1;
-	        return out;
-	    };
-	    static distanceTo = (a, b) => {
-	        ax$1 = b[0] - a[0];
-	        ay$1 = b[1] - a[1];
-	        az$1 = b[2] - a[2];
-	        return Math.hypot(ax$1, ay$1, az$1);
-	    };
-	    static distanceToManhattan = (a, b) => {
-	        return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
-	    };
-	    static distanceToSquared = (a, b) => {
-	        ax$1 = a[0] - b[0];
-	        ay$1 = a[1] - b[1];
-	        az$1 = a[2] - b[2];
-	        return ax$1 * ax$1 + ay$1 * ay$1 + az$1 * az$1;
-	    };
-	    static divide = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] / b[0];
-	        out[1] = a[1] / b[1];
-	        out[2] = a[2] / b[2];
-	        return out;
-	    };
-	    static divideScalar = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] / b;
-	        out[1] = a[1] / b;
-	        out[2] = a[2] / b;
-	        return out;
-	    };
-	    static dot = (a, b) => {
-	        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-	    };
-	    static equals = (a, b) => {
-	        return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
-	    };
-	    static fromArray = (a, offset = 0, out = new Vector3()) => {
-	        out[0] = a[offset];
-	        out[1] = a[offset + 1];
-	        out[2] = a[offset + 2];
-	        return out;
-	    };
-	    static fromScalar = (num, out = new Vector3()) => {
-	        out[0] = out[1] = out[2] = num;
-	        return out;
-	    };
-	    static fromValues = (x, y, z, out = new Vector3(3)) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        return out;
-	    };
-	    static fromMatrix4Translate = (mat, out = new Vector3()) => {
-	        out[0] = mat[12];
-	        out[1] = mat[13];
-	        out[2] = mat[14];
-	        return out;
-	    };
-	    static hermite = (a, b, c, d, t, out = new Vector3()) => {
-	        ag = t * t;
-	        const factor1 = ag * (2 * t - 3) + 1;
-	        const factor2 = ag * (t - 2) + t;
-	        const factor3 = ag * (t - 1);
-	        const factor4 = ag * (3 - 2 * t);
-	        out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
-	        out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
-	        out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
-	        return out;
-	    };
-	    static inverse = (a, out = new Vector3()) => {
-	        out[0] = 1.0 / a[0];
-	        out[1] = 1.0 / a[1];
-	        out[2] = 1.0 / a[2];
-	        return out;
-	    };
-	    static norm = (a) => {
-	        return Math.sqrt(Vector3.lengthSquared(a));
-	    };
-	    static lengthManhattan = (a) => {
-	        return Math.abs(a[0]) + Math.abs(a[1]) + Math.abs(a[2]);
-	    };
-	    static lengthSquared = (a) => {
-	        return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
-	    };
-	    static lerp = (a, b, alpha, out = new Vector3()) => {
-	        out[0] += (b[0] - a[0]) * alpha;
-	        out[1] += (b[1] - a[1]) * alpha;
-	        out[2] += (b[2] - a[2]) * alpha;
-	        return out;
-	    };
-	    static max = (a, b, out = new Vector3()) => {
-	        out[0] = Math.max(a[0], b[0]);
-	        out[1] = Math.max(a[1], b[1]);
-	        out[2] = Math.max(a[2], b[2]);
-	        return out;
-	    };
-	    static min = (a, b, out = new Vector3()) => {
-	        out[0] = Math.min(a[0], b[0]);
-	        out[1] = Math.min(a[1], b[1]);
-	        out[2] = Math.min(a[2], b[2]);
-	        return out;
-	    };
-	    static minus = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] - b[0];
-	        out[1] = a[1] - b[1];
-	        out[2] = a[2] - b[2];
-	        return out;
-	    };
-	    static minusScalar = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] - b;
-	        out[1] = a[1] - b;
-	        out[2] = a[2] - b;
-	        return out;
-	    };
-	    static multiply = (a, b, out = new Vector3()) => {
-	        out[0] = a[0] * b[0];
-	        out[1] = a[1] * b[1];
-	        out[2] = a[2] * b[2];
-	        return out;
-	    };
-	    static multiplyScalar = (a, scalar, out = new Vector3()) => {
-	        out[0] = a[0] * scalar;
-	        out[1] = a[1] * scalar;
-	        out[2] = a[2] * scalar;
-	        return out;
-	    };
-	    static negate = (a, out = new Vector3()) => {
-	        out[0] = -a[0];
-	        out[1] = -a[1];
-	        out[2] = -a[2];
-	        return out;
-	    };
-	    static normalize = (a, out = new Vector3()) => {
-	        return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
-	    };
-	    static rotateX = (a, b, rad, out = new Vector3()) => {
-	        ax$1 = a[0] - b[0];
-	        ay$1 = a[1] - b[1];
-	        az$1 = a[2] - b[2];
-	        bx$1 = ax$1;
-	        by$1 = ay$1 * Math.cos(rad) - az$1 * Math.sin(rad);
-	        bz$1 = ay$1 * Math.sin(rad) + az$1 * Math.cos(rad);
-	        out[0] = bx$1 + b[0];
-	        out[1] = by$1 + b[1];
-	        out[2] = bz$1 + b[2];
-	        return out;
-	    };
-	    static rotateY = (a, b, rad, out = new Vector3()) => {
-	        ax$1 = a[0] - b[0];
-	        ay$1 = a[1] - b[1];
-	        az$1 = a[2] - b[2];
-	        bx$1 = az$1 * Math.sin(rad) + ax$1 * Math.cos(rad);
-	        by$1 = ay$1;
-	        bz$1 = az$1 * Math.cos(rad) - ax$1 * Math.sin(rad);
-	        out[0] = bx$1 + b[0];
-	        out[1] = by$1 + b[1];
-	        out[2] = bz$1 + b[2];
-	        return out;
-	    };
-	    static rotateZ = (a, b, rad, out = new Vector3()) => {
-	        ax$1 = a[0] - b[0];
-	        ay$1 = a[1] - b[1];
-	        az$1 = a[2] - b[2];
-	        bx$1 = ax$1 * Math.cos(rad) - ay$1 * Math.sin(rad);
-	        by$1 = ax$1 * Math.sin(rad) + ay$1 * Math.cos(rad);
-	        bz$1 = az$1;
-	        out[0] = bx$1 + b[0];
-	        out[1] = by$1 + b[1];
-	        out[2] = bz$1 + b[2];
-	        return out;
-	    };
-	    static round = (a, out = new Vector3()) => {
-	        out[0] = Math.round(a[0]);
-	        out[1] = Math.round(a[1]);
-	        out[2] = Math.round(a[2]);
-	        return out;
-	    };
-	    static set = (x = 0, y = 0, z = 0, out = new Vector3()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        return out;
-	    };
-	    static setNorm = (a, len, out = new Vector3()) => {
-	        return Vector3.multiplyScalar(Vector3.normalize(a, out), len, out);
-	    };
-	    static slerp = (a, b, t, out = new Vector3()) => {
-	        ag = Math.acos(Math.min(Math.max(Vector3.dot(a, b), -1), 1));
-	        s$1 = Math.sin(ag);
-	        ax$1 = Math.sin((1 - t) * ag) / s$1;
-	        bx$1 = Math.sin(t * ag) / s$1;
-	        out[0] = ax$1 * a[0] + bx$1 * b[0];
-	        out[1] = ax$1 * a[1] + bx$1 * b[1];
-	        out[2] = ax$1 * a[2] + bx$1 * b[2];
-	        return out;
-	    };
-	    static toString = (a) => {
-	        return `(${a[0]}, ${a[1]}, ${a[2]})`;
-	    };
-	    static transformMatrix3 = (a, m, out = new Vector3()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        out[0] = ax$1 * m[0] + ay$1 * m[3] + az$1 * m[6];
-	        out[1] = ax$1 * m[1] + ay$1 * m[4] + az$1 * m[7];
-	        out[2] = ax$1 * m[2] + ay$1 * m[5] + az$1 * m[8];
-	        return out;
-	    };
-	    static transformMatrix4 = (a, m, out = new Vector3()) => {
-	        ax$1 = a[0];
-	        ay$1 = a[1];
-	        az$1 = a[2];
-	        ag = m[3] * ax$1 + m[7] * ay$1 + m[11] * az$1 + m[15];
-	        ag = ag ? 1 / ag : 1.0;
-	        out[0] = (m[0] * ax$1 + m[4] * ay$1 + m[8] * az$1 + m[12]) * ag;
-	        out[1] = (m[1] * ax$1 + m[5] * ay$1 + m[9] * az$1 + m[13]) * ag;
-	        out[2] = (m[2] * ax$1 + m[6] * ay$1 + m[10] * az$1 + m[14]) * ag;
-	        return out;
-	    };
-	    static transformQuat = (a, q, out = new Vector3()) => {
-	        const qx = q[0];
-	        const qy = q[1];
-	        const qz = q[2];
-	        const qw = q[3];
-	        const x = a[0];
-	        const y = a[1];
-	        const z = a[2];
-	        // var qvec = [qx, qy, qz];
-	        // var uv = vec3.cross([], qvec, a);
-	        let uvx = qy * z - qz * y;
-	        let uvy = qz * x - qx * z;
-	        let uvz = qx * y - qy * x;
-	        // var uuv = vec3.cross([], qvec, uv);
-	        let uuvx = qy * uvz - qz * uvy;
-	        let uuvy = qz * uvx - qx * uvz;
-	        let uuvz = qx * uvy - qy * uvx;
-	        // vec3.scale(uv, uv, 2 * w);
-	        const w2 = qw * 2;
-	        uvx *= w2;
-	        uvy *= w2;
-	        uvz *= w2;
-	        // vec3.scale(uuv, uuv, 2);
-	        uuvx *= 2;
-	        uuvy *= 2;
-	        uuvz *= 2;
-	        // return vec3.add(out, a, vec3.add(out, uv, uuv));
-	        out[0] = x + uvx + uuvx;
-	        out[1] = y + uvy + uuvy;
-	        out[2] = z + uvz + uuvz;
-	        return out;
-	    };
-	    volume = (a) => {
-	        return a[0] * a[1] * a[2];
-	    };
-	    dataType = ArraybufferDataType.VECTOR3;
-	    constructor(x = 0, y = 0, z = 0) {
-	        super(3);
-	        this[0] = x;
-	        this[1] = y;
-	        this[2] = z;
-	    }
-	    get x() {
-	        return this[0];
-	    }
-	    set x(value) {
-	        this[0] = value;
-	    }
-	    get y() {
-	        return this[1];
-	    }
-	    set y(value) {
-	        this[1] = value;
-	    }
-	    get z() {
-	        return this[2];
-	    }
-	    set z(value) {
-	        this[2] = value;
-	    }
-	}
-
-	// import clampCommon from "../common/clamp";
-	let ax;
-	let ay;
-	let az;
-	let aw;
-	let bx;
-	let by;
-	let bz;
-	let len$1;
-	let ix;
-	let iy;
-	let iz;
-	let iw;
-	let A;
-	let B;
-	let C;
-	let D;
-	let E;
-	let F;
-	let G;
-	let H;
-	let I;
-	let J;
-	class Vector4 extends Float32Array {
-	    static VECTOR3_ZERO = new Vector4(0, 0, 0, 0);
-	    static VECTOR3_ONE = new Vector4(1, 1, 1, 1);
-	    static add = (a, b, out = new Vector4()) => {
-	        out[0] = a[0] + b[0];
-	        out[1] = a[1] + b[1];
-	        out[2] = a[2] + b[2];
-	        out[3] = a[3] + b[3];
-	        return out;
-	    };
-	    static ceil = (a, out = new Vector4()) => {
-	        out[0] = Math.ceil(a[0]);
-	        out[1] = Math.ceil(a[1]);
-	        out[2] = Math.ceil(a[2]);
-	        out[3] = Math.ceil(a[3]);
-	        return out;
-	    };
-	    static closeTo = (a, b) => {
-	        return (closeTo(a[0], b[0]) &&
-	            closeTo(a[1], b[1]) &&
-	            closeTo(a[2], b[2]) &&
-	            closeTo(a[3], b[3]));
-	    };
-	    static create = (x = 0, y = 0, z = 0, w = 0, out = new Vector4()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        out[3] = w;
-	        return out;
-	    };
-	    static cross = (u, v, w, out = new Vector4(4)) => {
-	        A = v[0] * w[1] - v[1] * w[0];
-	        B = v[0] * w[2] - v[2] * w[0];
-	        C = v[0] * w[3] - v[3] * w[0];
-	        D = v[1] * w[2] - v[2] * w[1];
-	        E = v[1] * w[3] - v[3] * w[1];
-	        F = v[2] * w[3] - v[3] * w[2];
-	        G = u[0];
-	        H = u[1];
-	        I = u[2];
-	        J = u[3];
-	        out[0] = H * F - I * E + J * D;
-	        out[1] = -(G * F) + I * C - J * B;
-	        out[2] = G * E - H * C + J * A;
-	        out[3] = -(G * D) + H * B - I * A;
-	        return out;
-	    };
-	    static distanceTo = (a, b) => {
-	        ax = b[0] - a[0];
-	        ay = b[1] - a[1];
-	        az = b[2] - a[2];
-	        aw = b[3] - a[3];
-	        return Math.hypot(ax, ay, az, aw);
-	    };
-	    static distanceToSquared = (a, b) => {
-	        ax = b[0] - a[0];
-	        ay = b[1] - a[1];
-	        az = b[2] - a[2];
-	        aw = b[3] - a[3];
-	        return ax * ax + ay * ay + az * az + aw * aw;
-	    };
-	    static divide = (a, b, out = new Vector4()) => {
-	        out[0] = a[0] / b[0];
-	        out[1] = a[1] / b[1];
-	        out[2] = a[2] / b[2];
-	        out[3] = a[3] / b[3];
-	        return out;
-	    };
-	    static dot = (a, b) => {
-	        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
-	    };
-	    static equals = (a, b) => {
-	        return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
-	    };
-	    static floor = (a, out = new Vector4()) => {
-	        out[0] = Math.floor(a[0]);
-	        out[1] = Math.floor(a[1]);
-	        out[2] = Math.floor(a[2]);
-	        out[3] = Math.floor(a[3]);
-	        return out;
-	    };
-	    static fromValues = (x, y, z, w, out = new Vector4()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        out[3] = w;
-	        return out;
-	    };
-	    static inverse = (a, out = new Vector4()) => {
-	        out[0] = 1.0 / a[0];
-	        out[1] = 1.0 / a[1];
-	        out[2] = 1.0 / a[2];
-	        out[3] = 1.0 / a[3];
-	        return out;
-	    };
-	    static norm = (a) => {
-	        return Math.hypot(a[0], a[1], a[2], a[3]);
-	    };
-	    static lengthSquared = (a) => {
-	        ax = a[0];
-	        ay = a[1];
-	        az = a[2];
-	        aw = a[3];
-	        return ax * ax + ay * ay + az * az + aw * aw;
-	    };
-	    static lerp = (a, b, t, out = new Vector4()) => {
-	        ax = a[0];
-	        ay = a[1];
-	        az = a[2];
-	        aw = a[3];
-	        out[0] = ax + t * (b[0] - ax);
-	        out[1] = ay + t * (b[1] - ay);
-	        out[2] = az + t * (b[2] - az);
-	        out[3] = aw + t * (b[3] - aw);
-	        return out;
-	    };
-	    static max = (a, b, out = new Vector4()) => {
-	        out[0] = Math.max(a[0], b[0]);
-	        out[1] = Math.max(a[1], b[1]);
-	        out[2] = Math.max(a[2], b[2]);
-	        out[3] = Math.max(a[3], b[3]);
-	        return out;
-	    };
-	    static min = (a, b, out = new Vector4()) => {
-	        out[0] = Math.min(a[0], b[0]);
-	        out[1] = Math.min(a[1], b[1]);
-	        out[2] = Math.min(a[2], b[2]);
-	        out[3] = Math.min(a[3], b[3]);
-	        return out;
-	    };
-	    static minus = (a, b, out = new Vector4()) => {
-	        out[0] = a[0] - b[0];
-	        out[1] = a[1] - b[1];
-	        out[2] = a[2] - b[2];
-	        out[3] = a[3] - b[3];
-	        return out;
-	    };
-	    static multiply = (a, b, out = new Vector4()) => {
-	        out[0] = a[0] * b[0];
-	        out[1] = a[1] * b[1];
-	        out[2] = a[2] * b[2];
-	        out[3] = a[3] * b[3];
-	        return out;
-	    };
-	    static multiplyScalar = (a, b, out = new Vector4()) => {
-	        out[0] = a[0] * b;
-	        out[1] = a[1] * b;
-	        out[2] = a[2] * b;
-	        out[3] = a[3] * b;
-	        return out;
-	    };
-	    static negate = (a, out = new Vector4()) => {
-	        out[0] = -a[0];
-	        out[1] = -a[1];
-	        out[2] = -a[2];
-	        out[3] = -a[3];
-	        return out;
-	    };
-	    static normalize = (a, out = new Vector4()) => {
-	        ax = a[0];
-	        ay = a[1];
-	        az = a[2];
-	        aw = a[3];
-	        len$1 = ax * ax + ay * ay + az * az + aw * aw;
-	        if (len$1 > 0) {
-	            len$1 = 1 / Math.sqrt(len$1);
-	        }
-	        out[0] = ax * len$1;
-	        out[1] = ay * len$1;
-	        out[2] = az * len$1;
-	        out[3] = aw * len$1;
-	        return out;
-	    };
-	    static round = (a, out = new Vector4()) => {
-	        out[0] = Math.round(a[0]);
-	        out[1] = Math.round(a[1]);
-	        out[2] = Math.round(a[2]);
-	        out[3] = Math.round(a[3]);
-	        return out;
-	    };
-	    static set = (x = 0, y = 0, z = 0, w = 0, out = new Vector4()) => {
-	        out[0] = x;
-	        out[1] = y;
-	        out[2] = z;
-	        out[4] = w;
-	        return out;
-	    };
-	    static setNorm = (a, length, out = new Vector4(2)) => {
-	        Vector4.normalize(a, out);
-	        Vector4.multiplyScalar(out, length, out);
-	        return out;
-	    };
-	    static toString = (a) => {
-	        return `(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
-	    };
-	    static transformMatrix4 = (a, m, out = new Vector4()) => {
-	        ax = a[0];
-	        ay = a[1];
-	        az = a[2];
-	        aw = a[3];
-	        out[0] = m[0] * ax + m[4] * ay + m[8] * az + m[12] * aw;
-	        out[1] = m[1] * ax + m[5] * ay + m[9] * az + m[13] * aw;
-	        out[2] = m[2] * ax + m[6] * ay + m[10] * az + m[14] * aw;
-	        out[3] = m[3] * ax + m[7] * ay + m[11] * az + m[15] * aw;
-	        return out;
-	    };
-	    static transformQuat = (a, q, out = new Vector4()) => {
-	        bx = a[0];
-	        by = a[1];
-	        bz = a[2];
-	        ax = q[0];
-	        ay = q[1];
-	        az = q[2];
-	        aw = q[3];
-	        ix = aw * bx + ay * bz - az * by;
-	        iy = aw * by + az * bx - ax * bz;
-	        iz = aw * bz + ax * by - ay * bx;
-	        iw = -ax * bx - ay * by - az * bz;
-	        out[0] = ix * aw + iw * -ax + iy * -az - iz * -ay;
-	        out[1] = iy * aw + iw * -ay + iz * -ax - ix * -az;
-	        out[2] = iz * aw + iw * -az + ix * -ay - iy * -ax;
-	        out[3] = a[3];
-	        return out;
-	    };
-	    dataType = ArraybufferDataType.VECTOR4;
-	    constructor(x = 0, y = 0, z = 0, w = 0) {
-	        super(4);
-	        this[0] = x;
-	        this[1] = y;
-	        this[2] = z;
-	        this[3] = w;
-	    }
-	    get x() {
-	        return this[0];
-	    }
-	    set x(value) {
-	        this[0] = value;
-	    }
-	    get y() {
-	        return this[1];
-	    }
-	    set y(value) {
-	        this[1] = value;
-	    }
-	    get z() {
-	        return this[2];
-	    }
-	    set z(value) {
-	        this[2] = value;
-	    }
-	    get w() {
-	        return this[3];
-	    }
-	    set w(value) {
-	        this[3] = value;
 	    }
 	}
 
@@ -4299,7 +4404,7 @@
 	        }
 	        return Ray3.at(ray, t, out);
 	    };
-	    static intersectSpherePoint = (ray, sphere, target) => {
+	    static intersectSpherePoint = (ray, sphere, out = new Vector3()) => {
 	        Vector3.minus(sphere.position, ray.position, v);
 	        dis = Vector3.dot(v, ray.direction);
 	        d2 = Vector3.dot(v, v) - dis * dis;
@@ -4312,8 +4417,8 @@
 	        if (t0 < 0 && t1 < 0)
 	            return null;
 	        if (t0 < 0)
-	            return Ray3.at(ray, t1, target);
-	        return Ray3.at(ray, t0, target);
+	            return Ray3.at(ray, t1, out);
+	        return Ray3.at(ray, t0, out);
 	    };
 	    static isIntersectSphere = (ray, sphere) => {
 	        return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
@@ -4348,6 +4453,10 @@
 	// const ma: Matrix3 = new Matrix3();
 	const tb = new Vector3(), vA = new Vector3();
 	class Cube {
+	    static center = (a, out = new Vector3()) => {
+	        Vector3.add(a.min, a.max, out);
+	        return Vector3.multiplyScalar(out, 0.5, out);
+	    };
 	    static clampPoint = (a, point, out = new Vector3()) => {
 	        return Vector3.clamp(point, a.min, a.max, out);
 	    };
@@ -4372,10 +4481,6 @@
 	    };
 	    static equals = (a, b) => {
 	        return Vector3.equals(a.min, b.min) && Vector3.equals(a.max, b.max);
-	    };
-	    static getCenter = (a, out = new Vector3()) => {
-	        Vector3.add(a.min, a.max, out);
-	        return Vector3.multiplyScalar(out, 0.5, out);
 	    };
 	    static getSize = (a, out = new Vector3()) => {
 	        return Vector3.minus(a.max, a.min, out);
@@ -4404,7 +4509,7 @@
 	        if (Cube.isEmpty(a)) {
 	            return false;
 	        }
-	        Cube.getCenter(a, ta);
+	        Cube.center(a, ta);
 	        Vector3.minus(a.max, ta, tb);
 	        // translate triangle to aabb origin
 	        Vector3.minus(b.a, ta, v0);
@@ -4576,7 +4681,7 @@
 	        return this;
 	    }
 	    projectPoint(point, out = new Vector3()) {
-	        out.set(this.normal);
+	        Vector3.fromArray(this.normal, 0, out);
 	        Vector3.multiplyScalar(out, -this.distanceToPoint(point), out);
 	        return Vector3.add(out, point, out);
 	    }
@@ -4621,22 +4726,22 @@
 	        const m42 = matrix[13];
 	        const m43 = matrix[14];
 	        const m44 = matrix[15];
-	        Vector3.set(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
+	        Vector3.fromValues(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
 	        this.near.distance = m44 + m43;
 	        this.near.normalize();
-	        Vector3.set(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
+	        Vector3.fromValues(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
 	        this.far.distance = m44 - m43;
 	        this.far.normalize();
-	        Vector3.set(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
+	        Vector3.fromValues(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
 	        this.left.distance = m44 + m41;
 	        this.left.normalize();
-	        Vector3.set(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
+	        Vector3.fromValues(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
 	        this.right.distance = m44 - m41;
 	        this.right.normalize();
-	        Vector3.set(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
+	        Vector3.fromValues(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
 	        this.bottom.distance = m44 + m42;
 	        this.bottom.normalize();
-	        Vector3.set(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
+	        Vector3.fromValues(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
 	        this.top.distance = m44 - m42;
 	        this.top.normalize();
 	        return this;
@@ -5011,7 +5116,7 @@
 	    static getCALength = (t) => {
 	        return Vector3.distanceTo(t.c, t.a);
 	    };
-	    static normal = (t, out = Vector3.create()) => {
+	    static normal = (t, out = new Vector3()) => {
 	        Vector3.minus(t.c, t.b, bc);
 	        Vector3.minus(t.b, t.a, ab);
 	        Vector3.cross(ab, bc, out);
@@ -5100,12 +5205,15 @@
 	exports.ColorRGB = ColorRGB;
 	exports.ColorRGBA = ColorRGBA;
 	exports.ColorRYB = ColorRYB;
+	exports.ColorXYZ = ColorXYZ;
 	exports.Constants = constants;
 	exports.Cube = Cube;
 	exports.Easing = index;
 	exports.EulerAngle = EulerAngle;
 	exports.Frustum = Frustum;
 	exports.Line3 = Line3;
+	exports.MATRIX_RGB2XYZ = MATRIX_RGB2XYZ;
+	exports.MATRIX_XYZ2RGB = MATRIX_XYZ2RGB;
 	exports.Matrix2 = Matrix2;
 	exports.Matrix3 = Matrix3;
 	exports.Matrix4 = Matrix4;
@@ -5117,6 +5225,7 @@
 	exports.Spherical = Spherical;
 	exports.Triangle2 = Triangle2;
 	exports.Triangle3 = Triangle3;
+	exports.UNIT_MATRIX3_DATA = UNIT_MATRIX3_DATA;
 	exports.Vector2 = Vector2;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;
@@ -5126,15 +5235,18 @@
 	exports.clampSafe = clampSafeCommon;
 	exports.closeTo = closeTo;
 	exports.floorPowerOfTwo = floorPowerOfTwo;
-	exports.floorToZero = floorToZeroCommon;
+	exports.floorToZero = floorToZero;
+	exports.hue2rgb = hue2rgb;
 	exports.isPowerOfTwo = isPowerOfTwo;
 	exports.lerp = lerp;
+	exports.linearToSrgb = linearToSrgb;
 	exports.mapRange = mapRange;
 	exports.randFloat = randFloat;
 	exports.randInt = randInt;
 	exports.rndFloat = rndFloat;
 	exports.rndFloatRange = rndFloatRange;
 	exports.rndInt = rndInt;
+	exports.srgbToLinear = srgbToLinear;
 	exports.sum = sum;
 	exports.sumArray = sumArray;
 

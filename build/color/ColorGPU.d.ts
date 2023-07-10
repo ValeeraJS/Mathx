@@ -4,6 +4,7 @@ import { IColorRGBA } from "./interfaces/IColorRGBA";
 import { IColorRYB } from "./interfaces/IColorRYB";
 import { IColorHSV } from "./interfaces/IColorHSV";
 import { IColorCMYK } from "./interfaces/IColorCMYK";
+import { IColorXYZ } from "./interfaces/IColorXYZ";
 export declare class ColorGPU extends Float32Array implements IColorGPU {
     static average: (color: IColorGPU | ArrayLike<number>) => number;
     static averageWeighted: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;
@@ -17,6 +18,7 @@ export declare class ColorGPU extends Float32Array implements IColorGPU {
     static fromColorRGB(color: IColorRGB | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
     static fromColorRGBA(color: IColorRGBA | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
     static fromColorRYB(color: IColorRYB | number[] | Uint8Array, out?: IColorGPU): IColorGPU;
+    static fromColorXYZ: (color: IColorXYZ | number[] | Float32Array, out?: IColorGPU) => IColorGPU;
     static fromHex: (hex: number, alpha?: number, out?: IColorGPU) => IColorGPU;
     static fromJson: (json: IColorGPUJson, out?: IColorGPU) => IColorGPU;
     static fromScalar: (scalar: number, out?: IColorGPU) => IColorGPU;
@@ -33,3 +35,4 @@ export declare class ColorGPU extends Float32Array implements IColorGPU {
     get a(): number;
     set a(val: number);
 }
+export type ColorGPULike = ColorGPU | number[] | Float32Array;

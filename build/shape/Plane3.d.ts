@@ -12,6 +12,6 @@ export declare class Plane3 {
     formCoplanarPointAndNormal(point: Vector3Like, normal: Vector3Like): this;
     negate(): this;
     normalize(): this;
-    projectPoint(point: Vector3Like, out?: Vector3): Vector3;
+    projectPoint<T extends Vector3Like = Vector3>(point: Vector3Like, out?: T): T;
     set(normal: Vector3Like, distance?: number): this;
 }
