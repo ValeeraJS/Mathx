@@ -25,7 +25,7 @@ export class Frustum {
 		matrix && this.applyProjectionMatrix(matrix);
 	}
 
-	applyProjectionMatrix(matrix: Matrix4) {
+	applyProjectionMatrix(matrix: Matrix4): this {
 		const m11 = matrix[0];
 		const m12 = matrix[1];
 		const m13 = matrix[2];
@@ -43,38 +43,38 @@ export class Frustum {
 		const m43 = matrix[14];
 		const m44 = matrix[15];
 
-		Vector3.set(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
+		Vector3.fromValues(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
 		this.near.distance = m44 + m43;
 		this.near.normalize();
 
-		Vector3.set(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
+		Vector3.fromValues(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
 		this.far.distance = m44 - m43;
 		this.far.normalize();
 
-		Vector3.set(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
+		Vector3.fromValues(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
 		this.left.distance = m44 + m41;
 		this.left.normalize();
 
-		Vector3.set(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
+		Vector3.fromValues(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
 		this.right.distance = m44 - m41;
 		this.right.normalize();
 
-		Vector3.set(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
+		Vector3.fromValues(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
 		this.bottom.distance = m44 + m42;
 		this.bottom.normalize();
 
-		Vector3.set(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
+		Vector3.fromValues(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
 		this.top.distance = m44 - m42;
 		this.top.normalize();
 
 		return this;
 	}
 
-	clone() {
+	clone(): Frustum {
 		return new Frustum().from(this);
 	}
 
-	from(frustum: Frustum) {
+	from(frustum: Frustum): this {
 		this.near.from(frustum.near);
 		this.far.from(frustum.far);
 		this.left.from(frustum.left);
@@ -85,7 +85,7 @@ export class Frustum {
 		return this;
 	}
 
-	intersectsSphere(sphere: Sphere) {
+	intersectsSphere(sphere: Sphere): boolean {
 		const p = sphere.position;
 		const r = -sphere.radius;
 
@@ -122,7 +122,7 @@ export class Frustum {
 		return true;
 	}
 
-	intersectsBox(box: Cube) {
+	intersectsBox(box: Cube): boolean {
 		let plane = this.right;
 		_vector.x = plane.normal.x > 0 ? box.max.x : box.min.x;
 		_vector.y = plane.normal.y > 0 ? box.max.y : box.min.y;
@@ -180,7 +180,7 @@ export class Frustum {
 		return true;
 	}
 
-	containsPoint(point: Vector3) {
+	containsPoint(point: Vector3): boolean {
 		if (this.right.distanceToPoint(point) < 0) {
 			return false;
 		}
@@ -202,7 +202,7 @@ export class Frustum {
 		return true;
 	}
 
-	set(right: Plane3, left: Plane3, top: Plane3, bottom: Plane3, near: Plane3, far: Plane3) {
+	set(right: Plane3, left: Plane3, top: Plane3, bottom: Plane3, near: Plane3, far: Plane3): this {
 		this.right.from(right);
 		this.left.from(left);
 		this.top.from(top);
