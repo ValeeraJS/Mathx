@@ -8,6 +8,9 @@ import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
 import { IColorHSV } from "./interfaces/IColorHSV";
 import { IColorCMYK } from "./interfaces/IColorCMYK";
+import { IColorXYZ } from "./interfaces/IColorXYZ";
+import { Vector3 } from "../vector";
+import { MATRIX_XYZ2RGB } from "./ColorXYZ";
 
 let r: number;
 let g: number;
@@ -197,6 +200,12 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		return out;
 	}
 
+	public static fromColorXYZ = (color: IColorXYZ | number[] | Float32Array, out: IColorGPU = new ColorGPU()): IColorGPU => {
+		Vector3.transformMatrix3(color, MATRIX_XYZ2RGB, out);
+
+		return out;
+	};
+
 	public static fromHex = (hex: number, alpha = 1, out: IColorGPU = new ColorGPU()): IColorGPU => {
 		out[0] = (hex >> 16) / 255;
 		out[1] = ((hex >> 8) & 255) / 255;
@@ -298,3 +307,5 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		this[3] = val;
 	}
 }
+
+export type ColorGPULike = ColorGPU | number[] | Float32Array;
