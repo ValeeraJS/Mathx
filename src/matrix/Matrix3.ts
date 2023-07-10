@@ -22,7 +22,7 @@ let b22 = 0;
 let x = 0;
 let y = 0;
 
-const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+export const UNIT_MATRIX3_DATA = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
 export class Matrix3 extends Float32Array {
 	public static readonly UNIT_MATRIX3 = new Matrix3(UNIT_MATRIX3_DATA);
@@ -496,3 +496,5 @@ export class Matrix3 extends Float32Array {
 		super(data);
 	}
 }
+
+export type Matrix3Like = Matrix3 | number[] | Float32Array;
