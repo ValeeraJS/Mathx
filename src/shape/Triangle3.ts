@@ -34,7 +34,7 @@ export class Triangle3 implements ITriangle3 {
 		return Vector3.distanceTo(t.c, t.a);
 	};
 
-	public static normal = (t: ITriangle3, out: Vector3Like = Vector3.create()): Vector3Like => {
+	public static normal = <T extends Vector3Like = Vector3>(t: ITriangle3, out: T = new Vector3() as T): T => {
 		Vector3.minus(t.c, t.b, bc);
 		Vector3.minus(t.b, t.a, ab);
 
