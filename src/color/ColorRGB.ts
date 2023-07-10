@@ -1,9 +1,9 @@
 import { IColorRGB, IColorRGBJson } from "./interfaces/IColorRGB";
 import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
+import { hue2rgb } from "./utils";
 import { IColorRGBAJson } from ".";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
-import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
 
 export class ColorRGB extends Uint8Array implements IColorRGB {
