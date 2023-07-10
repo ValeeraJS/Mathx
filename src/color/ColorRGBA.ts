@@ -3,8 +3,8 @@ import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
 import { IColorRGB } from "./interfaces/IColorRGB";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_RED, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_BLUE } from "../constants";
-import { hue2rgb } from "./utils";
 import { IColorRYB } from "./interfaces/IColorRYB";
+import { hue2rgb } from "./utils";
 
 export class ColorRGBA extends Uint8Array implements IColorRGBA {
 	public static average = (color: IColorRGB | IColorRGBA): number => {
