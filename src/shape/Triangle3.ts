@@ -1,4 +1,4 @@
-import { Vector3 } from "../vector/Vector3";
+import { Vector3, Vector3Like } from "../vector/Vector3";
 import { ITriangle3 } from "./interfaces/ITriangle3";
 
 const ab = new Vector3();
@@ -34,7 +34,7 @@ export class Triangle3 implements ITriangle3 {
 		return Vector3.distanceTo(t.c, t.a);
 	};
 
-	public static normal = (t: ITriangle3, out: Vector3 = Vector3.create()): Vector3 => {
+	public static normal = (t: ITriangle3, out: Vector3Like = Vector3.create()): Vector3Like => {
 		Vector3.minus(t.c, t.b, bc);
 		Vector3.minus(t.b, t.a, ab);
 
