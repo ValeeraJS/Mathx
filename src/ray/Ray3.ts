@@ -7,7 +7,7 @@ let dis: number, r2: number, d2: number;
 const v = new Vector3();
 
 export class Ray3 implements IRay3 {
-	public static at = (a: IRay3, b: number, out: Vector3 = new Vector3()): Vector3 => {
+	public static at = <T extends Vector3Like = Vector3>(a: IRay3, b: number, out: T = new Vector3() as T): T => {
 		return Vector3.multiplyScalar(a.direction, b, out);
 	};
 
@@ -55,7 +55,7 @@ export class Ray3 implements IRay3 {
 		return out;
 	};
 
-	public static intersectPlanePoint = (ray: Ray3, plane: Plane3, out: Vector3 = new Vector3()): Vector3 | null => {
+	public static intersectPlanePoint = <T extends Vector3Like = Vector3>(ray: Ray3, plane: Plane3, out: T = new Vector3() as T): T | null => {
 		const t = Ray3.distanceToPlane(ray, plane);
 
 		if (t === null) {
@@ -65,11 +65,11 @@ export class Ray3 implements IRay3 {
 		return Ray3.at(ray, t, out);
 	}
 
-	public static intersectSpherePoint = (
+	public static intersectSpherePoint = <T extends Vector3Like = Vector3>(
 		ray: IRay3,
 		sphere: ISphere,
-		target: Vector3
-	): null | Vector3 => {
+		out: T = new Vector3() as T
+	): null | T => {
 		Vector3.minus(sphere.position, ray.position, v);
 		dis = Vector3.dot(v, ray.direction);
 		d2 = Vector3.dot(v, v) - dis * dis;
@@ -85,9 +85,9 @@ export class Ray3 implements IRay3 {
 
 		if (t0 < 0 && t1 < 0) return null;
 
-		if (t0 < 0) return Ray3.at(ray, t1, target);
+		if (t0 < 0) return Ray3.at(ray, t1, out);
 
-		return Ray3.at(ray, t0, target);
+		return Ray3.at(ray, t0, out);
 	};
 
 	public static isIntersectSphere = (ray: IRay3, sphere: ISphere): boolean => {
@@ -110,7 +110,7 @@ export class Ray3 implements IRay3 {
 		return false;
 	}
 
-	public static recast = (ray: IRay3, distance: number, out: Ray3 = new Ray3()) => {
+	public static recast = (ray: IRay3, distance: number, out: Ray3 = new Ray3()): Ray3 => {
 		v.set(Ray3.at(ray, distance));
 		out.direction.set(v);
 
