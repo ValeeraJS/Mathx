@@ -16,11 +16,17 @@ const tb: Vector3 = new Vector3(),
 	vA: Vector3 = new Vector3();
 
 export class Cube implements ICube {
-	public static clampPoint = (
+	public static center = <T extends Vector3Like = Vector3>(a: ICube, out: T = new Vector3() as T): T => {
+		Vector3.add(a.min, a.max, out);
+
+		return Vector3.multiplyScalar(out, 0.5, out);
+	};
+
+	public static clampPoint = <T extends Vector3Like = Vector3>(
 		a: ICube,
 		point: Vector3Like,
-		out: Vector3 = new Vector3()
-	): Vector3 => {
+		out: T = new Vector3() as T
+	): T => {
 		return Vector3.clamp(point, a.min, a.max, out);
 	};
 
@@ -54,13 +60,7 @@ export class Cube implements ICube {
 		return Vector3.equals(a.min, b.min) && Vector3.equals(a.max, b.max);
 	};
 
-	public static getCenter = (a: ICube, out: Vector3 = new Vector3()): Vector3 => {
-		Vector3.add(a.min, a.max, out);
-
-		return Vector3.multiplyScalar(out, 0.5, out);
-	};
-
-	public static getSize = (a: ICube, out: Vector3 = new Vector3()): Vector3 => {
+	public static getSize = <T extends Vector3Like = Vector3>(a: ICube, out: T = new Vector3() as T): T => {
 		return Vector3.minus(a.max, a.min, out);
 	};
 
@@ -97,7 +97,7 @@ export class Cube implements ICube {
 			return false;
 		}
 
-		Cube.getCenter(a, ta);
+		Cube.center(a, ta);
 		Vector3.minus(a.max, ta, tb);
 
 		// translate triangle to aabb origin
@@ -175,7 +175,7 @@ export class Cube implements ICube {
 		return out;
 	};
 
-	public static size = (a: ICube, out: Vector3 = new Vector3()): Vector3 => {
+	public static size = <T extends Vector3Like = Vector3>(a: ICube, out: T = new Vector3() as T): T => {
 		return Vector3.minus(a.max, a.min, out);
 	};
 
