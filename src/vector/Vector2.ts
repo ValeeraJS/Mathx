@@ -257,7 +257,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 
 	public static minus = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
 		out[0] = a[0] - b[0];
-		out[1] = a[1] - b[0];
+		out[1] = a[1] - b[1];
 
 		return out;
 	};
