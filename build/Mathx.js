@@ -527,7 +527,7 @@
 	    };
 	    static minus = (a, b, out = new Vector2()) => {
 	        out[0] = a[0] - b[0];
-	        out[1] = a[1] - b[0];
+	        out[1] = a[1] - b[1];
 	        return out;
 	    };
 	    static minusScalar = (a, num, out = new Vector2()) => {
@@ -2516,6 +2516,38 @@
 	        this[2] = value;
 	    }
 	}
+
+	const quadraticBezier = (t, p0, p1, p2) => {
+	    return p1 + (1 - t) * (1 - t) * (p0 - p1) + t * t * (p2 - p1);
+	};
+	const cubicBezier = (t, p0, p1, p2, p3) => {
+	    const t2 = t * t;
+	    const t3 = t2 * t;
+	    return p0 * (1 - 3 * (t - t2) - t3) + 3 * (t2 - t - t + 1) * p1 + 3 * (t2 - t3) * p2 + t3 * p3;
+	};
+
+	// https://www.mvps.org/directx/articles/catmull/
+	const catmullRom = (t, p0, p1, p2, p3, alpha = 0.5) => {
+	    const t2 = t * t;
+	    const t3 = t * t2;
+	    return alpha * (p1 + p1 + (p2 - p0) * t + (p0 + p0 - 5 * p1 + 4 * p2 - p3) * t2 + (3 * (p1 - p2) + p3 - p0) * t3);
+	};
+
+	const generateLagrange = (points) => {
+	    let n = points.length - 1;
+	    function p(i, j, x) {
+	        if (i === j) {
+	            return points[i][1];
+	        }
+	        return (((points[j][0] - x) * p(i, j - 1, x) + (x - points[i][0]) * p(i + 1, j, x)) / (points[j][0] - points[i][0]));
+	    }
+	    return function (x) {
+	        if (points.length === 0) {
+	            return 0;
+	        }
+	        return p(0, n, x);
+	    };
+	};
 
 	class Line3 {
 	    a = new Vector3();
@@ -5229,18 +5261,22 @@
 	exports.Vector2 = Vector2;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;
+	exports.catmullRom = catmullRom;
 	exports.ceilPowerOfTwo = ceilPowerOfTwo;
 	exports.clamp = clamp;
 	exports.clampCircle = clampCircle;
 	exports.clampSafe = clampSafeCommon;
 	exports.closeTo = closeTo;
+	exports.cubicBezier = cubicBezier;
 	exports.floorPowerOfTwo = floorPowerOfTwo;
 	exports.floorToZero = floorToZero;
+	exports.generateLagrange = generateLagrange;
 	exports.hue2rgb = hue2rgb;
 	exports.isPowerOfTwo = isPowerOfTwo;
 	exports.lerp = lerp;
 	exports.linearToSrgb = linearToSrgb;
 	exports.mapRange = mapRange;
+	exports.quadraticBezier = quadraticBezier;
 	exports.randFloat = randFloat;
 	exports.randInt = randInt;
 	exports.rndFloat = rndFloat;

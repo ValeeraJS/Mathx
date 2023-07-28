@@ -521,7 +521,7 @@ class Vector2 extends Float32Array {
     };
     static minus = (a, b, out = new Vector2()) => {
         out[0] = a[0] - b[0];
-        out[1] = a[1] - b[0];
+        out[1] = a[1] - b[1];
         return out;
     };
     static minusScalar = (a, num, out = new Vector2()) => {
@@ -2510,6 +2510,38 @@ class EulerAngle extends Float32Array {
         this[2] = value;
     }
 }
+
+const quadraticBezier = (t, p0, p1, p2) => {
+    return p1 + (1 - t) * (1 - t) * (p0 - p1) + t * t * (p2 - p1);
+};
+const cubicBezier = (t, p0, p1, p2, p3) => {
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return p0 * (1 - 3 * (t - t2) - t3) + 3 * (t2 - t - t + 1) * p1 + 3 * (t2 - t3) * p2 + t3 * p3;
+};
+
+// https://www.mvps.org/directx/articles/catmull/
+const catmullRom = (t, p0, p1, p2, p3, alpha = 0.5) => {
+    const t2 = t * t;
+    const t3 = t * t2;
+    return alpha * (p1 + p1 + (p2 - p0) * t + (p0 + p0 - 5 * p1 + 4 * p2 - p3) * t2 + (3 * (p1 - p2) + p3 - p0) * t3);
+};
+
+const generateLagrange = (points) => {
+    let n = points.length - 1;
+    function p(i, j, x) {
+        if (i === j) {
+            return points[i][1];
+        }
+        return (((points[j][0] - x) * p(i, j - 1, x) + (x - points[i][0]) * p(i + 1, j, x)) / (points[j][0] - points[i][0]));
+    }
+    return function (x) {
+        if (points.length === 0) {
+            return 0;
+        }
+        return p(0, n, x);
+    };
+};
 
 class Line3 {
     a = new Vector3();
@@ -5190,4 +5222,4 @@ class Spherical extends Float32Array {
     }
 }
 
-export { ArraybufferDataType, COLOR_HEX_MAP, ColorCMYK, ColorGPU, ColorHSL, ColorHSV, ColorRGB, ColorRGBA, ColorRYB, ColorXYZ, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, MATRIX_RGB2XYZ, MATRIX_XYZ2RGB, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, UNIT_MATRIX3_DATA, Vector2, Vector3, Vector4, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, floorPowerOfTwo, floorToZero, hue2rgb, isPowerOfTwo, lerp, linearToSrgb, mapRange, randFloat, randInt, rndFloat, rndFloatRange, rndInt, srgbToLinear, sum, sumArray };
+export { ArraybufferDataType, COLOR_HEX_MAP, ColorCMYK, ColorGPU, ColorHSL, ColorHSV, ColorRGB, ColorRGBA, ColorRYB, ColorXYZ, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, MATRIX_RGB2XYZ, MATRIX_XYZ2RGB, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, UNIT_MATRIX3_DATA, Vector2, Vector3, Vector4, catmullRom, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, cubicBezier, floorPowerOfTwo, floorToZero, generateLagrange, hue2rgb, isPowerOfTwo, lerp, linearToSrgb, mapRange, quadraticBezier, randFloat, randInt, rndFloat, rndFloatRange, rndInt, srgbToLinear, sum, sumArray };
