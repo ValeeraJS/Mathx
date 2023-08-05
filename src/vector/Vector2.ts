@@ -27,14 +27,22 @@ export class Vector2 extends Float32Array implements IVector2 {
 	public static readonly VECTOR2_RIGHT = new Vector2(1, 0);
 	public static readonly VECTOR2_ONE = new Vector2(1, 1);
 
-	public static add = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
+	public static add = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] + b[0];
 		out[1] = a[1] + b[1];
 
 		return out;
 	};
 
-	public static addScalar = <T extends Vector2Like = Vector2>(a: Vector2Like, b: number, out: T = new Vector2() as T): T => {
+	public static addScalar = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: number,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] + b;
 		out[1] = a[1] + b;
 
@@ -92,7 +100,12 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static clampScalar = <T extends Vector2Like = Vector2>(a: Vector2Like, min: number, max: number, out: T = new Vector2() as T): T => {
+	public static clampScalar = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		min: number,
+		max: number,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = clampCommon(a[0], min, max);
 		out[1] = clampCommon(a[1], min, max);
 
@@ -148,14 +161,22 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return x * x + y * y;
 	};
 
-	public static divide = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
+	public static divide = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] / b[0];
 		out[1] = a[1] / b[1];
 
 		return out;
 	};
 
-	public static divideScalar = <T extends Vector2Like = Vector2>(a: Vector2Like, scalar: number, out: T = new Vector2() as T): T => {
+	public static divideScalar = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		scalar: number,
+		out: T = new Vector2() as T,
+	): T => {
 		return Vector2.multiplyScalar(a, 1 / scalar, out);
 	};
 
@@ -181,7 +202,11 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static fromArray = <T extends Vector2Like = Vector2>(arr: Vector2Like, index = 0, out: T = new Vector2() as T): T => {
+	public static fromArray = <T extends Vector2Like = Vector2>(
+		arr: Vector2Like,
+		index = 0,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = arr[index];
 		out[1] = arr[index + 1];
 
@@ -208,7 +233,11 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static fromValues = <T extends Vector2Like = Vector2>(x: number, y: number, out: T = new Vector2() as T): T => {
+	public static fromValues = <T extends Vector2Like = Vector2>(
+		x: number,
+		y: number,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = x;
 		out[1] = y;
 
@@ -234,49 +263,78 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return a[0] * a[0] + a[1] * a[1];
 	};
 
-	public static lerp = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, alpha: number, out: T = new Vector2() as T): T => {
+	public static lerp = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		alpha: number,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = (b[0] - a[0]) * alpha + a[0];
 		out[1] = (b[1] - a[1]) * alpha + a[1];
 
 		return out;
 	};
 
-	public static max = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
+	public static max = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = Math.max(a[0], b[0]);
 		out[1] = Math.max(a[1], b[1]);
 
 		return out;
 	};
 
-	public static min = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
+	public static min = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = Math.min(a[0], b[0]);
 		out[1] = Math.min(a[1], b[1]);
 
 		return out;
 	};
 
-	public static minus = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
+	public static minus = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] - b[0];
 		out[1] = a[1] - b[1];
 
 		return out;
 	};
 
-	public static minusScalar = <T extends Vector2Like = Vector2>(a: Vector2Like, num: number, out: T = new Vector2() as T): T => {
+	public static minusScalar = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		num: number,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] - num;
 		out[1] = a[1] - num;
 
 		return out;
 	};
 
-	public static multiply = <T extends Vector2Like = Vector2>(a: Vector2Like, b: Vector2Like, out: T = new Vector2() as T): T => {
+	public static multiply = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		b: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] * b[0];
 		out[1] = a[1] * b[1];
 
 		return out;
 	};
 
-	public static multiplyScalar = <T extends Vector2Like = Vector2>(a: Vector2Like, scalar: number, out: T = new Vector2() as T): T => {
+	public static multiplyScalar = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		scalar: number,
+		out: T = new Vector2() as T,
+	): T => {
 		out[0] = a[0] * scalar;
 		out[1] = a[1] * scalar;
 
@@ -300,6 +358,16 @@ export class Vector2 extends Float32Array implements IVector2 {
 		out[1] = Math.sin(x) * norm;
 
 		return out;
+	};
+
+	public static reflect = <T extends Vector2Like = Vector2>(
+		origin: Vector2Like,
+		normal: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
+		Vector2.multiplyScalar(normal, 2 * Vector2.dot(origin, normal), out);
+
+		return Vector2.minus(origin, out, out);
 	};
 
 	public static rotate = <T extends Vector2Like = Vector2>(
@@ -327,7 +395,11 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static setNorm = <T extends Vector2Like = Vector2>(a: Vector2Like, norm: number, out: T = new Vector2(2) as T): T => {
+	public static setNorm = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		norm: number,
+		out: T = new Vector2(2) as T,
+	): T => {
 		Vector2.normalize(a, out);
 		return Vector2.multiplyScalar(out, norm, out);
 	};
