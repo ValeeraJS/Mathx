@@ -1,5 +1,6 @@
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import closeToCommon from "../common/closeTo";
+import type { Matrix4Like } from "../matrix";
 
 export interface IVector4Json {
 	x: number;
@@ -292,7 +293,7 @@ export class Vector4 extends Float32Array implements IVector4 {
 		return `(${a[0]}, ${a[1]}, ${a[2]}, ${a[3]})`;
 	};
 
-	public static transformMatrix4 = <T extends Vector4Like = Vector4>(a: Vector4Like, m: Float32Array, out: T = new Vector4() as T): T => {
+	public static transformMatrix4 = <T extends Vector4Like = Vector4>(a: Vector4Like, m: Matrix4Like, out: T = new Vector4() as T): T => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
@@ -307,7 +308,7 @@ export class Vector4 extends Float32Array implements IVector4 {
 
 	public static transformQuat = <T extends Vector4Like = Vector4>(
 		a: Vector4Like,
-		q: Float32Array | number[],
+		q: Matrix4Like,
 		out: T = new Vector4() as T,
 	): T => {
 		bx = a[0];
