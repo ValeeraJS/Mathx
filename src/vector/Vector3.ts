@@ -2,8 +2,8 @@ import { ArraybufferDataType } from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
-import { Matrix3Like } from "../matrix/Matrix3";
-import { Matrix4 } from "../matrix/Matrix4";
+import type { Matrix3Like } from "../matrix/Matrix3";
+import type { Matrix4Like } from "../matrix/Matrix4";
 
 let ax: number;
 let ay: number;
@@ -212,7 +212,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static fromMatrix4Translate = <T extends Vector3Like = Vector3>(mat: Matrix4, out: T = new Vector3() as T): T => {
+	public static fromMatrix4Translate = <T extends Vector3Like = Vector3>(mat: Matrix4Like, out: T = new Vector3() as T): T => {
 		out[0] = mat[12];
 		out[1] = mat[13];
 		out[2] = mat[14];
@@ -329,6 +329,13 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
 	};
 
+	public static reflect = <T extends Vector3Like = Vector3>(origin: Vector3Like, normal: Vector3Like, out: T = new Vector3() as T): T => {
+		const f = Vector3.dot(origin, normal) * 2;
+		Vector3.fromArray(normal, 0, tmpVec3);
+		Vector3.multiplyScalar(tmpVec3, f, tmpVec3);
+		return Vector3.minus(origin, tmpVec3, out);
+	};
+
 	public static rotateX = <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, rad: number, out: T = new Vector3() as T): T => {
 		ax = a[0] - b[0];
 		ay = a[1] - b[1];
@@ -417,7 +424,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static transformMatrix4 = <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix4, out: T = new Vector3() as T): T => {
+	public static transformMatrix4 = <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix4Like, out: T = new Vector3() as T): T => {
 		ax = a[0];
 		ay = a[1];
 		az = a[2];
@@ -501,3 +508,5 @@ export class Vector3 extends Float32Array implements IVector3 {
 		this[2] = value;
 	}
 }
+
+const tmpVec3 = new Float32Array(3);
