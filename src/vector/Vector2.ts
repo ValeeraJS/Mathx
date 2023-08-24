@@ -302,6 +302,13 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
+	public static reflect = <T extends Vector2Like = Vector2>(origin: Vector2Like, normal: Vector2Like, out: T = new Vector2() as T): T => {
+		const f = Vector2.dot(origin, normal) * 2;
+		Vector2.fromArray(normal, 0, tmpVec2);
+		Vector2.multiplyScalar(tmpVec2, f, tmpVec2);
+		return Vector2.minus(origin, tmpVec2, out);
+	};
+
 	public static rotate = <T extends Vector2Like = Vector2>(
 		a: Vector2Like,
 		angle: number,
@@ -386,3 +393,5 @@ export class Vector2 extends Float32Array implements IVector2 {
 		this[1] = value;
 	}
 }
+
+const tmpVec2 = new Vector2();
