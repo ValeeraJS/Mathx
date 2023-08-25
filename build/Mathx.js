@@ -559,6 +559,10 @@
 	        out[1] = Math.sin(x$4) * norm;
 	        return out;
 	    };
+	    static reflect = (origin, normal, out = new Vector2()) => {
+	        Vector2.multiplyScalar(normal, 2 * Vector2.dot(origin, normal), out);
+	        return Vector2.minus(origin, out, out);
+	    };
 	    static rotate = (a, angle, center = Vector2.VECTOR2_ZERO, out = new Vector2()) => {
 	        c$1 = Math.cos(angle);
 	        s$4 = Math.sin(angle);
@@ -793,9 +797,9 @@
 	        return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
 	    };
 	    static lerp = (a, b, alpha, out = new Vector3()) => {
-	        out[0] += (b[0] - a[0]) * alpha;
-	        out[1] += (b[1] - a[1]) * alpha;
-	        out[2] += (b[2] - a[2]) * alpha;
+	        out[0] = (b[0] - a[0]) * alpha + a[0];
+	        out[1] = (b[1] - a[1]) * alpha + a[1];
+	        out[2] = (b[2] - a[2]) * alpha + a[2];
 	        return out;
 	    };
 	    static max = (a, b, out = new Vector3()) => {
@@ -842,6 +846,10 @@
 	    };
 	    static normalize = (a, out = new Vector3()) => {
 	        return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
+	    };
+	    static reflect = (origin, normal, out = new Vector3()) => {
+	        Vector3.multiplyScalar(normal, 2 * Vector3.dot(origin, normal), out);
+	        return Vector3.minus(origin, out, out);
 	    };
 	    static rotateX = (a, b, rad, out = new Vector3()) => {
 	        ax$1 = a[0] - b[0];
@@ -2580,14 +2588,14 @@
 	const UNIT_MATRIX2_DATA = [1, 0, 0, 1];
 	class Matrix2 extends Float32Array {
 	    static UNIT_MATRIX2 = new Matrix2([1, 0, 0, 1]);
-	    static add = (a, b, out) => {
+	    static add = (a, b, out = new Matrix2()) => {
 	        out[0] = a[0] + b[0];
 	        out[1] = a[1] + b[1];
 	        out[2] = a[2] + b[2];
 	        out[3] = a[3] + b[3];
 	        return out;
 	    };
-	    static adjoint = (a, out) => {
+	    static adjoint = (a, out = new Matrix2()) => {
 	        a00$2 = a[0];
 	        out[0] = a[3];
 	        out[1] = -a[1];
@@ -2595,8 +2603,12 @@
 	        out[3] = a00$2;
 	        return out;
 	    };
-	    static clone = (source) => {
-	        return new Matrix2(source);
+	    static clone = (source, out = new Matrix2()) => {
+	        out[0] = source[0];
+	        out[1] = source[1];
+	        out[2] = source[2];
+	        out[3] = source[3];
+	        return out;
 	    };
 	    static closeTo = (a, b) => {
 	        a00$2 = a[0];
@@ -2622,7 +2634,10 @@
 	        return Math.hypot(a[0], a[1], a[2], a[3]);
 	    };
 	    static fromArray = (source, out = new Matrix2()) => {
-	        out.set(source);
+	        out[0] = source[0];
+	        out[1] = source[1];
+	        out[2] = source[2];
+	        out[3] = source[3];
 	        return out;
 	    };
 	    static fromRotation = (rad, out = new Matrix2()) => {
@@ -2662,6 +2677,13 @@
 	        out[1] = -a10$2 * det$1;
 	        out[2] = -a01$2 * det$1;
 	        out[3] = a00$2 * det$1;
+	        return out;
+	    };
+	    static lerp = (a, b, alpha, out = new Matrix2()) => {
+	        out[0] = (b[0] - a[0]) * alpha + a[0];
+	        out[1] = (b[1] - a[1]) * alpha + a[1];
+	        out[2] = (b[2] - a[2]) * alpha + a[2];
+	        out[3] = (b[3] - a[3]) * alpha + a[3];
 	        return out;
 	    };
 	    static minus = (a, b, out = new Matrix2()) => {
@@ -2810,7 +2832,15 @@
 	        return a00$1 * (a22$1 * a11$1 - a12$1 * a21$1) + a01$1 * (-a22$1 * a10$1 + a12$1 * a20$1) + a02$1 * (a21$1 * a10$1 - a11$1 * a20$1);
 	    };
 	    static fromArray = (source, out = new Matrix3()) => {
-	        out.set(source);
+	        out[0] = source[0];
+	        out[1] = source[1];
+	        out[2] = source[2];
+	        out[3] = source[3];
+	        out[4] = source[4];
+	        out[5] = source[5];
+	        out[6] = source[6];
+	        out[7] = source[7];
+	        out[8] = source[8];
 	        return out;
 	    };
 	    static fromMatrix2 = (mat4, out = new Matrix3()) => {
@@ -3168,8 +3198,24 @@
 	const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 	class Matrix4 extends Float32Array {
 	    static UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
-	    static clone = (source) => {
-	        return new Matrix4(source);
+	    static clone = (source, out = new Matrix4()) => {
+	        out[0] = source[0];
+	        out[1] = source[1];
+	        out[2] = source[2];
+	        out[3] = source[3];
+	        out[4] = source[4];
+	        out[5] = source[5];
+	        out[6] = source[6];
+	        out[7] = source[7];
+	        out[8] = source[8];
+	        out[9] = source[9];
+	        out[10] = source[10];
+	        out[11] = source[11];
+	        out[12] = source[12];
+	        out[13] = source[13];
+	        out[14] = source[14];
+	        out[15] = source[15];
+	        return out;
 	    };
 	    static create = () => {
 	        return new Matrix4(UNIT_MATRIX4_DATA);
@@ -3204,7 +3250,22 @@
 	        return a13 * b12 - a03 * b13 + a33 * b20 - a23 * b21;
 	    };
 	    static fromArray = (source, out = new Matrix4()) => {
-	        out.set(source);
+	        out[0] = source[0];
+	        out[1] = source[1];
+	        out[2] = source[2];
+	        out[3] = source[3];
+	        out[4] = source[4];
+	        out[5] = source[5];
+	        out[6] = source[6];
+	        out[7] = source[7];
+	        out[8] = source[8];
+	        out[5] = source[9];
+	        out[6] = source[10];
+	        out[7] = source[11];
+	        out[8] = source[12];
+	        out[6] = source[13];
+	        out[7] = source[14];
+	        out[8] = source[15];
 	        return out;
 	    };
 	    static fromEuler = (euler, out = new Matrix4()) => {
@@ -4202,10 +4263,17 @@
 	        }
 	        return out;
 	    };
+	    static unproject = (vec3, projectionMatrix, worldMatrix, out = new Vector3()) => {
+	        tmpMatrix4Data.set(projectionMatrix);
+	        Matrix4.invert(tmpMatrix4Data, tmpMatrix4Data);
+	        Vector3.transformMatrix4(vec3, tmpMatrix4Data, out);
+	        return Vector3.transformMatrix4(out, worldMatrix, out);
+	    };
 	    constructor(data = UNIT_MATRIX4_DATA) {
 	        super(data);
 	    }
 	}
+	const tmpMatrix4Data = new Float32Array(16);
 
 	let x;
 	let y;

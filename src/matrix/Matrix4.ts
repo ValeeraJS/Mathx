@@ -3,7 +3,8 @@ import { IEulerAngle, EulerRotationOrders } from "../euler/IEulerAngle";
 import { Vector3, Vector3Like } from "../vector/Vector3";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
-import { Matrix3 } from "./Matrix3";
+import { Matrix3Like } from "./Matrix3";
+import { QuaternionLike } from "../quaternion";
 
 let a00 = 0;
 let a01 = 0;
@@ -118,13 +119,31 @@ export class Matrix4 extends Float32Array {
 		return a13 * b12 - a03 * b13 + a33 * b20 - a23 * b21;
 	};
 
-	public static fromArray = (source: Matrix4 | Float32Array | number[], out: Matrix4 = new Matrix4()): Matrix4 => {
-		out.set(source);
+	public static fromArray = <T extends Matrix4Like = Matrix4>(
+		source: Matrix4Like,
+		out: T = new Matrix4() as T,
+	): T => {
+		out[0] = source[0];
+		out[1] = source[1];
+		out[2] = source[2];
+		out[3] = source[3];
+		out[4] = source[4];
+		out[5] = source[5];
+		out[6] = source[6];
+		out[7] = source[7];
+		out[8] = source[8];
+		out[5] = source[9];
+		out[6] = source[10];
+		out[7] = source[11];
+		out[8] = source[12];
+		out[6] = source[13];
+		out[7] = source[14];
+		out[8] = source[15];
 
 		return out;
 	};
 
-	public static fromEuler = (euler: IEulerAngle, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromEuler = <T extends Matrix4Like = Matrix4>(euler: IEulerAngle, out: T = new Matrix4() as T): T => {
 		x = euler.x;
 		y = euler.y;
 		z = euler.z;
@@ -254,7 +273,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromMatrix3 = (data: Float32Array | number[] | Matrix3, out = new Matrix4()): Matrix4 => {
+	public static fromMatrix3 = <T extends Matrix4Like>(data: Matrix3Like, out: T = new Matrix4() as T): T => {
 		out[0] = data[0];
 		out[1] = data[1];
 		out[2] = data[2];
@@ -278,7 +297,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromMatrix3MVP = (data: Float32Array | number[] | Matrix3, out = new Matrix4()): Matrix4 => {
+	public static fromMatrix3MVP = <T extends Matrix4Like>(data: Matrix3Like, out: T = new Matrix4() as T): T => {
 		out[0] = data[0];
 		out[1] = data[1];
 		out[2] = 0;
@@ -302,7 +321,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromQuaternion = (q: Float32Array, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromQuaternion = <T extends Matrix4Like>(q: QuaternionLike, out: T = new Matrix4() as T): T => {
 		const x = q[0];
 		const y = q[1];
 		const z = q[2];
@@ -344,7 +363,11 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromRotation = (rad: number, axis: Vector3Like, out: Matrix4 = new Matrix4()): Matrix4 | null => {
+	public static fromRotation = <T extends Matrix4Like>(
+		rad: number,
+		axis: Vector3Like,
+		out: T = new Matrix4() as T,
+	): T | null => {
 		x = axis[0];
 		y = axis[1];
 		z = axis[2];
@@ -383,7 +406,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromRotationX = (rad: number, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromRotationX = <T extends Matrix4Like>(rad: number, out: T = new Matrix4() as T): T => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
 
@@ -407,7 +430,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromRotationY = (rad: number, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromRotationY = <T extends Matrix4Like>(rad: number, out: T = new Matrix4() as T): T => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
 
@@ -431,7 +454,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromRotationZ = (rad: number, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromRotationZ = <T extends Matrix4Like>(rad: number, out: T = new Matrix4() as T): T => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
 
@@ -455,7 +478,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromScaling = (v: Vector3Like, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromScaling = <T extends Matrix4Like>(v: Vector3Like, out: T = new Matrix4() as T): T => {
 		out[0] = v[0];
 		out[1] = 0;
 		out[2] = 0;
@@ -476,7 +499,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromTranslation = (v: Vector3Like, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static fromTranslation = <T extends Matrix4Like>(v: Vector3Like, out: T = new Matrix4() as T): T => {
 		out[0] = 1;
 		out[1] = 0;
 		out[2] = 0;
@@ -497,7 +520,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static identity = (out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static identity = <T extends Matrix4Like>(out: T = new Matrix4() as T): T => {
 		out[0] = 1;
 		out[1] = 0;
 		out[2] = 0;
@@ -518,7 +541,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static invert = (a: Matrix4Like, out: Matrix4 = new Matrix4()): Matrix4 | null => {
+	public static invert = <T extends Matrix4Like>(a: Matrix4Like, out: T = new Matrix4() as T): T | null => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -579,12 +602,12 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static lookAt = (
+	public static lookAt = <T extends Matrix4Like>(
 		eye: Vector3Like,
 		center: Vector3Like,
 		up: Vector3Like = Vector3.VECTOR3_TOP,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		let x0;
 		let x1;
 		let x2;
@@ -669,11 +692,11 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static multiply = (
+	public static multiply = <T extends Matrix4Like>(
 		a: Matrix4Like,
 		b: Matrix4Like,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -734,11 +757,11 @@ export class Matrix4 extends Float32Array {
 	};
 
 	// 乘以缩放矩阵
-	public static multiplyScaleMatrix = (
+	public static multiplyScaleMatrix = <T extends Matrix4Like>(
 		a: Matrix4Like,
 		b: Matrix4Like,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -786,11 +809,11 @@ export class Matrix4 extends Float32Array {
 	};
 
 	// 乘以平移矩阵
-	public static multiplyTranslateMatrix = (
+	public static multiplyTranslateMatrix = <T extends Matrix4Like>(
 		a: Matrix4Like,
 		b: Matrix4Like,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -837,15 +860,15 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static orthogonal = (
+	public static orthogonal = <T extends Matrix4Like>(
 		left: number,
 		right: number,
 		bottom: number,
 		top: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		c = 1 / (left - right);
 		b = 1 / (bottom - top);
 		a = 1 / (near - far);
@@ -870,15 +893,15 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static orthogonalZ0 = (
+	public static orthogonalZ0 = <T extends Matrix4Like>(
 		left: number,
 		right: number,
 		bottom: number,
 		top: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		c = 1 / (left - right);
 		b = 1 / (bottom - top);
 		a = 1 / (near - far);
@@ -903,13 +926,13 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static perspective = (
+	public static perspective = <T extends Matrix4Like>(
 		fovy: number,
 		aspect: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		f = 1.0 / Math.tan(fovy / 2);
 
 		out[0] = f / aspect;
@@ -938,13 +961,13 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static perspectiveZ0 = (
+	public static perspectiveZ0 = <T extends Matrix4Like>(
 		fovy: number,
 		aspect: number,
 		near: number,
 		far: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		f = 1.0 / Math.tan(fovy / 2);
 
 		out[0] = f / aspect;
@@ -973,12 +996,12 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static rotate = (
+	public static rotate = <T extends Matrix4Like>(
 		a: Matrix4Like,
 		rad: number,
 		axis: Vector3Like,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 | null => {
+		out: T = new Matrix4() as T,
+	): T | null => {
 		x = axis[0];
 		y = axis[1];
 		z = axis[2];
@@ -1043,11 +1066,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static rotateX = (
-		a: Matrix4Like,
-		rad: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+	public static rotateX = <T extends Matrix4Like>(a: Matrix4Like, rad: number, out: T = new Matrix4() as T): T => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
 		a10 = a[4];
@@ -1082,11 +1101,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static rotateY = (
-		a: Matrix4Like,
-		rad: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+	public static rotateY = <T extends Matrix4Like>(a: Matrix4Like, rad: number, out: T = new Matrix4() as T): T => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
 		a00 = a[0];
@@ -1121,11 +1136,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static rotateZ = (
-		a: Matrix4Like,
-		rad: number,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+	public static rotateZ = <T extends Matrix4Like>(a: Matrix4Like, rad: number, out: T = new Matrix4() as T): T => {
 		s = Math.sin(rad);
 		c = Math.cos(rad);
 		a00 = a[0];
@@ -1160,11 +1171,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static scale = (
-		a: Matrix4Like,
-		v: Vector3Like,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+	public static scale = <T extends Matrix4Like>(a: Matrix4Like, v: Vector3Like, out: T = new Matrix4() as T): T => {
 		x = v[0];
 		y = v[1];
 		z = v[2];
@@ -1191,12 +1198,12 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static targetTo = (
+	public static targetTo = <T extends Matrix4Like>(
 		eye: Vector3Like,
 		target: Vector3Like,
 		up: Vector3Like = Vector3.VECTOR3_TOP,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		const eyex = eye[0];
 		const eyey = eye[1];
 		const eyez = eye[2];
@@ -1249,11 +1256,11 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static translate = (
+	public static translate = <T extends Matrix4Like>(
 		a: Matrix4Like,
 		v: Vector3Like,
-		out: Matrix4 = new Matrix4(),
-	): Matrix4 => {
+		out: T = new Matrix4() as T,
+	): T => {
 		x = v[0];
 		y = v[1];
 		z = v[2];
@@ -1299,7 +1306,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static transpose = (a: Matrix4Like, out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static transpose = <T extends Matrix4Like>(a: Matrix4Like, out: T = new Matrix4() as T): T => {
 		if (out === a) {
 			a01 = a[1];
 			a02 = a[2];
@@ -1342,12 +1349,17 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static unproject = <T extends Vector3Like = Vector3>(vec3: Vector3Like, projectionMatrix: Matrix4Like, worldMatrix: Matrix4Like, out: T = new Vector3() as T): T => {
+	public static unproject = <T extends Vector3Like = Vector3>(
+		vec3: Vector3Like,
+		projectionMatrix: Matrix4Like,
+		worldMatrix: Matrix4Like,
+		out: T = new Vector3() as T,
+	): T => {
 		tmpMatrix4Data.set(projectionMatrix);
 		Matrix4.invert(tmpMatrix4Data, tmpMatrix4Data);
 		Vector3.transformMatrix4(vec3, tmpMatrix4Data, out);
 		return Vector3.transformMatrix4(out, worldMatrix, out);
-	}
+	};
 
 	public constructor(data: Matrix4Like = UNIT_MATRIX4_DATA) {
 		super(data);

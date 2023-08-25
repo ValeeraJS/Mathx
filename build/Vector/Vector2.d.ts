@@ -56,6 +56,7 @@ export declare class Vector2 extends Float32Array implements IVector2 {
     static negate: <T extends Vector2Like = Vector2>(a: Vector2Like, out?: T) => T;
     static normalize: <T extends Vector2Like = Vector2>(a: Vector2Like, out?: T) => T;
     static random: <T extends Vector2Like = Vector2>(norm?: number, out?: T) => T;
+    static reflect: <T extends Vector2Like = Vector2>(origin: Vector2Like, normal: Vector2Like, out?: T) => T;
     static rotate: <T extends Vector2Like = Vector2>(a: Vector2Like, angle: number, center?: Vector2Like, out?: T) => T;
     static round: <T extends Vector2Like = Vector2>(a: Vector2Like, out?: T) => T;
     static setNorm: <T extends Vector2Like = Vector2>(a: Vector2Like, norm: number, out?: T) => T;

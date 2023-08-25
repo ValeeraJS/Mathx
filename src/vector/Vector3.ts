@@ -300,9 +300,9 @@ export class Vector3 extends Float32Array implements IVector3 {
 		alpha: number,
 		out: T = new Vector3() as T,
 	): T => {
-		out[0] += (b[0] - a[0]) * alpha;
-		out[1] += (b[1] - a[1]) * alpha;
-		out[2] += (b[2] - a[2]) * alpha;
+		out[0] = (b[0] - a[0]) * alpha + a[0];
+		out[1] = (b[1] - a[1]) * alpha + a[1];
+		out[2] = (b[2] - a[2]) * alpha + a[2];
 
 		return out;
 	};

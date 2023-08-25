@@ -9,6 +9,7 @@ export interface IQuaternionJson {
 }
 export interface IQuaternion extends IPairs4Float32, IQuaternionJson {
 }
+export type QuaternionLike = Quaternion | Float32Array | number[];
 export default class Quaternion extends Float32Array implements IQuaternion {
     static angleTo: (a: Float32Array | number[] | IQuaternion, b: Float32Array | number[] | IQuaternion) => number;
     static conjugate: (a: Float32Array | number[] | IQuaternion, out?: Quaternion) => Quaternion;

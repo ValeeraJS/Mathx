@@ -1,3 +1,4 @@
+import type { Matrix4Like } from "../matrix";
 export interface IVector4Json {
     x: number;
     y: number;
@@ -38,8 +39,8 @@ export declare class Vector4 extends Float32Array implements IVector4 {
     static round: <T extends Vector4Like = Vector4>(a: Vector4Like, out?: T) => T;
     static setNorm: <T extends Vector4Like = Vector4>(a: Vector4Like, length: number, out?: T) => T;
     static toString: (a: Vector4Like) => string;
-    static transformMatrix4: <T extends Vector4Like = Vector4>(a: Vector4Like, m: Float32Array, out?: T) => T;
-    static transformQuat: <T extends Vector4Like = Vector4>(a: Vector4Like, q: Float32Array | number[], out?: T) => T;
+    static transformMatrix4: <T extends Vector4Like = Vector4>(a: Vector4Like, m: Matrix4Like, out?: T) => T;
+    static transformQuat: <T extends Vector4Like = Vector4>(a: Vector4Like, q: Matrix4Like, out?: T) => T;
     readonly dataType: string;
     constructor(x?: number, y?: number, z?: number, w?: number);
     get x(): number;

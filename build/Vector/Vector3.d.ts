@@ -1,5 +1,5 @@
-import { Matrix3Like } from "../matrix/Matrix3";
-import { Matrix4 } from "../matrix/Matrix4";
+import type { Matrix3Like } from "../matrix/Matrix3";
+import type { Matrix4Like } from "../matrix/Matrix4";
 export interface IVector3Json {
     x: number;
     y: number;
@@ -38,7 +38,7 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static fromArray: <T extends Vector3Like = Vector3>(a: ArrayLike<number> | Vector3Like, offset?: number, out?: T) => T;
     static fromScalar: <T extends Vector3Like = Vector3>(num: number, out?: T) => T;
     static fromValues: <T extends Vector3Like = Vector3>(x: number, y: number, z: number, out?: T) => T;
-    static fromMatrix4Translate: <T extends Vector3Like = Vector3>(mat: Matrix4, out?: T) => T;
+    static fromMatrix4Translate: <T extends Vector3Like = Vector3>(mat: Matrix4Like, out?: T) => T;
     static hermite: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, c: Vector3Like, d: Vector3Like, t: number, out?: T) => T;
     static inverse: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;
     static norm: (a: Vector3Like) => number;
@@ -53,6 +53,7 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static multiplyScalar: <T extends Vector3Like = Vector3>(a: Vector3Like, scalar: number, out?: T) => T;
     static negate: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;
     static normalize: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;
+    static reflect: <T extends Vector3Like = Vector3>(origin: Vector3Like, normal: Vector3Like, out?: T) => T;
     static rotateX: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, rad: number, out?: T) => T;
     static rotateY: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, rad: number, out?: T) => T;
     static rotateZ: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, rad: number, out?: T) => T;
@@ -61,7 +62,7 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static slerp: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, t: number, out?: T) => T;
     static toString: (a: Vector3Like) => string;
     static transformMatrix3: <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix3Like, out?: T) => T;
-    static transformMatrix4: <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix4, out?: T) => T;
+    static transformMatrix4: <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix4Like, out?: T) => T;
     static transformQuat: <T extends Vector3Like = Vector3>(a: Vector3Like, q: Vector3Like, out?: T) => T;
     static volume: (a: Vector3Like) => number;
     readonly dataType: string;
