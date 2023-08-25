@@ -2,8 +2,8 @@ import { ArraybufferDataType } from "../ArraybufferDataType";
 import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
-import { Matrix3Like } from "../matrix/Matrix3";
-import { Matrix4 } from "../matrix/Matrix4";
+import type { Matrix3Like } from "../matrix/Matrix3";
+import type { Matrix4Like } from "../matrix/Matrix4";
 
 let ax: number;
 let ay: number;
@@ -243,7 +243,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 	};
 
 	public static fromMatrix4Translate = <T extends Vector3Like = Vector3>(
-		mat: Matrix4,
+		mat: Matrix4Like,
 		out: T = new Vector3() as T,
 	): T => {
 		out[0] = mat[12];
@@ -519,7 +519,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 
 	public static transformMatrix4 = <T extends Vector3Like = Vector3>(
 		a: Vector3Like,
-		m: Matrix4,
+		m: Matrix4Like,
 		out: T = new Vector3() as T,
 	): T => {
 		ax = a[0];

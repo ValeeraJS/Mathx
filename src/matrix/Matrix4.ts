@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { IEulerAngle, EulerRotationOrders } from "../euler/IEulerAngle";
-import { Vector3, IVector3, Vector3Like } from "../vector/Vector3";
+import { Vector3, Vector3Like } from "../vector/Vector3";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
 import { Matrix3 } from "./Matrix3";
@@ -53,18 +53,37 @@ let f = 0;
 
 const UNIT_MATRIX4_DATA = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
+export type Matrix4Like = Matrix4 | Float32Array | number[];
+
 export class Matrix4 extends Float32Array {
 	public static readonly UNIT_MATRIX4 = new Matrix4(UNIT_MATRIX4_DATA);
 
-	public static clone = (source: Matrix4 | Float32Array | number[]): Matrix4 => {
-		return new Matrix4(source);
+	public static clone = <T extends Matrix4Like = Matrix4>(source: Matrix4Like, out: T = new Matrix4() as T): T => {
+		out[0] = source[0];
+		out[1] = source[1];
+		out[2] = source[2];
+		out[3] = source[3];
+		out[4] = source[4];
+		out[5] = source[5];
+		out[6] = source[6];
+		out[7] = source[7];
+		out[8] = source[8];
+		out[9] = source[9];
+		out[10] = source[10];
+		out[11] = source[11];
+		out[12] = source[12];
+		out[13] = source[13];
+		out[14] = source[14];
+		out[15] = source[15];
+
+		return out;
 	};
 
 	public static create = (): Matrix4 => {
 		return new Matrix4(UNIT_MATRIX4_DATA);
 	};
 
-	public static determinant = (a: Float32Array | number[] | Matrix4): number => {
+	public static determinant = (a: Matrix4Like): number => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -499,7 +518,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static invert = (a: Float32Array | Matrix4 | number[], out: Matrix4 = new Matrix4()): Matrix4 | null => {
+	public static invert = (a: Matrix4Like, out: Matrix4 = new Matrix4()): Matrix4 | null => {
 		a00 = a[0];
 		a01 = a[1];
 		a02 = a[2];
@@ -561,9 +580,9 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static lookAt = (
-		eye: Float32Array | number[] | IVector3,
-		center: Float32Array | number[] | IVector3,
-		up: Float32Array = Vector3.VECTOR3_TOP,
+		eye: Vector3Like,
+		center: Vector3Like,
+		up: Vector3Like = Vector3.VECTOR3_TOP,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		let x0;
@@ -651,8 +670,8 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static multiply = (
-		a: Float32Array | number[] | Matrix4,
-		b: Float32Array | number[] | Matrix4,
+		a: Matrix4Like,
+		b: Matrix4Like,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		a00 = a[0];
@@ -716,8 +735,8 @@ export class Matrix4 extends Float32Array {
 
 	// 乘以缩放矩阵
 	public static multiplyScaleMatrix = (
-		a: Float32Array | number[] | Matrix4,
-		b: Float32Array | number[] | Matrix4,
+		a: Matrix4Like,
+		b: Matrix4Like,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		a00 = a[0];
@@ -768,8 +787,8 @@ export class Matrix4 extends Float32Array {
 
 	// 乘以平移矩阵
 	public static multiplyTranslateMatrix = (
-		a: Float32Array | number[] | Matrix4,
-		b: Float32Array | number[] | Matrix4,
+		a: Matrix4Like,
+		b: Matrix4Like,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
 		a00 = a[0];
@@ -955,7 +974,7 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static rotate = (
-		a: Float32Array | Matrix4 | number[],
+		a: Matrix4Like,
 		rad: number,
 		axis: Vector3Like,
 		out: Matrix4 = new Matrix4(),
@@ -1025,7 +1044,7 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static rotateX = (
-		a: Float32Array | Matrix4 | number[],
+		a: Matrix4Like,
 		rad: number,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
@@ -1064,7 +1083,7 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static rotateY = (
-		a: Float32Array | Matrix4 | number[],
+		a: Matrix4Like,
 		rad: number,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
@@ -1103,7 +1122,7 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static rotateZ = (
-		a: Float32Array | Matrix4 | number[],
+		a: Matrix4Like,
 		rad: number,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
@@ -1142,7 +1161,7 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static scale = (
-		a: Float32Array | Matrix4 | number[],
+		a: Matrix4Like,
 		v: Vector3Like,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
@@ -1231,7 +1250,7 @@ export class Matrix4 extends Float32Array {
 	};
 
 	public static translate = (
-		a: Float32Array | Matrix4 | number[],
+		a: Matrix4Like,
 		v: Vector3Like,
 		out: Matrix4 = new Matrix4(),
 	): Matrix4 => {
@@ -1280,7 +1299,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static transpose = (a: Float32Array | Matrix4 | number[], out: Matrix4 = new Matrix4()): Matrix4 => {
+	public static transpose = (a: Matrix4Like, out: Matrix4 = new Matrix4()): Matrix4 => {
 		if (out === a) {
 			a01 = a[1];
 			a02 = a[2];
@@ -1323,7 +1342,16 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public constructor(data: Matrix4 | Float32Array | number[] = UNIT_MATRIX4_DATA) {
+	public static unproject = <T extends Vector3Like = Vector3>(vec3: Vector3Like, projectionMatrix: Matrix4Like, worldMatrix: Matrix4Like, out: T = new Vector3() as T): T => {
+		tmpMatrix4Data.set(projectionMatrix);
+		Matrix4.invert(tmpMatrix4Data, tmpMatrix4Data);
+		Vector3.transformMatrix4(vec3, tmpMatrix4Data, out);
+		return Vector3.transformMatrix4(out, worldMatrix, out);
+	}
+
+	public constructor(data: Matrix4Like = UNIT_MATRIX4_DATA) {
 		super(data);
 	}
 }
+
+const tmpMatrix4Data = new Float32Array(16);
