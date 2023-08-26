@@ -3253,13 +3253,13 @@ class Matrix4 extends Float32Array {
         out[6] = source[6];
         out[7] = source[7];
         out[8] = source[8];
-        out[5] = source[9];
-        out[6] = source[10];
-        out[7] = source[11];
-        out[8] = source[12];
-        out[6] = source[13];
-        out[7] = source[14];
-        out[8] = source[15];
+        out[9] = source[9];
+        out[10] = source[10];
+        out[11] = source[11];
+        out[12] = source[12];
+        out[13] = source[13];
+        out[14] = source[14];
+        out[15] = source[15];
         return out;
     };
     static fromEuler = (euler, out = new Matrix4()) => {
