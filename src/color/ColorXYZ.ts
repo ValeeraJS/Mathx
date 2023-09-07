@@ -3,13 +3,16 @@ import { Vector3 } from "../vector";
 import { ColorGPULike } from "./ColorGPU";
 import { IColorXYZ, IColorXYZJson } from "./interfaces/IColorXYZ";
 
-export const MATRIX_XYZ2RGB = new Float32Array([3.2404542, -0.9692660, 0.0556434, -1.5371385, 1.8760108, -0.2040259, -0.4985314, 0.0415560, 1.0572252]);
-export const MATRIX_RGB2XYZ = new Float32Array([0.4124564, 0.2126729, 0.0193339, 0.3575761, 0.7151522, 0.1191920, 0.1804375, 0.0721750, 0.9503041]);
+export const MATRIX_XYZ2RGB = new Float32Array([
+	3.2404542, -0.969266, 0.0556434, -1.5371385, 1.8760108, -0.2040259, -0.4985314, 0.041556, 1.0572252,
+]);
+export const MATRIX_RGB2XYZ = new Float32Array([
+	0.4124564, 0.2126729, 0.0193339, 0.3575761, 0.7151522, 0.119192, 0.1804375, 0.072175, 0.9503041,
+]);
 
 const tmpVec3 = new Float32Array(3);
 
 export class ColorXYZ extends Float32Array implements IColorXYZ {
-
 	public static clone = (color: IColorXYZ | ArrayLike<number>): ColorXYZ => {
 		return new ColorXYZ(color[0], color[1], color[2]);
 	};
@@ -32,7 +35,7 @@ export class ColorXYZ extends Float32Array implements IColorXYZ {
 
 	public static fromColorGPU = (color: ColorGPULike, out: IColorXYZ = new ColorXYZ()): IColorXYZ => {
 		return Vector3.transformMatrix3(color, MATRIX_RGB2XYZ, out) as IColorXYZ;
-	}
+	};
 
 	public static fromJson = (json: IColorXYZJson, out: IColorXYZ = new ColorXYZ()): IColorXYZ => {
 		out[0] = json.x;
@@ -42,7 +45,12 @@ export class ColorXYZ extends Float32Array implements IColorXYZ {
 		return out;
 	};
 
-	public static fromRGBUnsignedNormal = (r: number, g: number, b: number, out: IColorXYZ = new ColorXYZ()): IColorXYZ => {
+	public static fromRGBUnsignedNormal = (
+		r: number,
+		g: number,
+		b: number,
+		out: IColorXYZ = new ColorXYZ(),
+	): IColorXYZ => {
 		tmpVec3[0] = r;
 		tmpVec3[1] = g;
 		tmpVec3[2] = b;

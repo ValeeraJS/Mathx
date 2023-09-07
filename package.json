@@ -1,6 +1,6 @@
 {
 	"name": "@valeera/mathx",
-	"version": "0.1.65",
+	"version": "0.1.67",
 	"description": "A math library written in TS.",
 	"main": "build/Mathx.js",
 	"repository": "ValeeraJS/Mathx",
@@ -47,7 +47,7 @@
 		"chai": "latest",
 		"concurrently": "latest",
 		"eslint": "latest",
-		"eslint-config-valeera": "latest",
+		"eslint-config-valeera": ">=0.1.4",
 		"eslint-plugin-html": "latest",
 		"eslint-plugin-prettier": "latest",
 		"eslint-plugin-tslint": "latest",

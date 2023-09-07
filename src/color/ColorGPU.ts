@@ -16,6 +16,8 @@ let r: number;
 let g: number;
 let b: number;
 
+export type ColorGPULike = number[] | Float32Array | ColorGPU;
+
 export class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {
 		return (color[0] + color[1] + color[2]) / 3;
@@ -265,6 +267,20 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		return out;
 	};
 
+	public static lerp = <T extends ColorGPULike>(
+		a: ColorGPULike,
+		b: ColorGPULike,
+		alpha: number,
+		out: T = new ColorGPU() as T,
+	): T => {
+		out[0] = (b[0] - a[0]) * alpha + a[0];
+		out[1] = (b[1] - a[1]) * alpha + a[1];
+		out[2] = (b[2] - a[2]) * alpha + a[2];
+		out[3] = (b[3] - a[3]) * alpha + a[3];
+
+		return out;
+	};
+
 	public readonly dataType = ArraybufferDataType.COLOR_GPU;
 
 	public constructor(r = 0, g = 0, b = 0, a = 0) {
@@ -307,5 +323,3 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		this[3] = val;
 	}
 }
-
-export type ColorGPULike = ColorGPU | number[] | Float32Array;

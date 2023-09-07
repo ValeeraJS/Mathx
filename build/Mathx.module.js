@@ -1270,8 +1270,12 @@ class Vector4 extends Float32Array {
     }
 }
 
-const MATRIX_XYZ2RGB = new Float32Array([3.2404542, -0.9692660, 0.0556434, -1.5371385, 1.8760108, -0.2040259, -0.4985314, 0.0415560, 1.0572252]);
-const MATRIX_RGB2XYZ = new Float32Array([0.4124564, 0.2126729, 0.0193339, 0.3575761, 0.7151522, 0.1191920, 0.1804375, 0.0721750, 0.9503041]);
+const MATRIX_XYZ2RGB = new Float32Array([
+    3.2404542, -0.969266, 0.0556434, -1.5371385, 1.8760108, -0.2040259, -0.4985314, 0.041556, 1.0572252,
+]);
+const MATRIX_RGB2XYZ = new Float32Array([
+    0.4124564, 0.2126729, 0.0193339, 0.3575761, 0.7151522, 0.119192, 0.1804375, 0.072175, 0.9503041,
+]);
 const tmpVec3 = new Float32Array(3);
 class ColorXYZ extends Float32Array {
     static clone = (color) => {
@@ -1533,6 +1537,13 @@ class ColorGPU extends Float32Array {
     static grayscale = (color, wr = WEIGHT_GRAY_RED, wg = WEIGHT_GRAY_GREEN, wb = WEIGHT_GRAY_BLUE, out = new ColorGPU()) => {
         const gray = ColorGPU.averageWeighted(color, wr, wg, wb);
         ColorGPU.fromScalar(gray, out);
+        return out;
+    };
+    static lerp = (a, b, alpha, out = new ColorGPU()) => {
+        out[0] = (b[0] - a[0]) * alpha + a[0];
+        out[1] = (b[1] - a[1]) * alpha + a[1];
+        out[2] = (b[2] - a[2]) * alpha + a[2];
+        out[3] = (b[3] - a[3]) * alpha + a[3];
         return out;
     };
     dataType = ArraybufferDataType.COLOR_GPU;
