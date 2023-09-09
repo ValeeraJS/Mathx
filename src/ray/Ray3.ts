@@ -3,7 +3,9 @@ import { IRay3 } from "./interfaces/IRay3";
 import { ISphere } from "../shape/interfaces/ISphere";
 import { Plane3 } from "../shape/Plane3";
 
-let dis: number, r2: number, d2: number;
+let dis: number;
+let r2: number;
+let d2: number;
 const v = new Vector3();
 
 export class Ray3 implements IRay3 {
@@ -22,10 +24,10 @@ export class Ray3 implements IRay3 {
 			return null;
 		}
 
-		const t = - (Vector3.dot(ray.position, plane.normal) + plane.distance) / denominator;
+		const t = -(Vector3.dot(ray.position, plane.normal) + plane.distance) / denominator;
 
 		return t >= 0 ? t : null;
-	}
+	};
 
 	public static distanceToPoint = (a: IRay3, point: Vector3Like): number => {
 		return Math.sqrt(Ray3.distanceSqToPoint(a, point));
@@ -55,7 +57,11 @@ export class Ray3 implements IRay3 {
 		return out;
 	};
 
-	public static intersectPlanePoint = <T extends Vector3Like = Vector3>(ray: Ray3, plane: Plane3, out: T = new Vector3() as T): T | null => {
+	public static intersectPlanePoint = <T extends Vector3Like = Vector3>(
+		ray: Ray3,
+		plane: Plane3,
+		out: T = new Vector3() as T,
+	): T | null => {
 		const t = Ray3.distanceToPlane(ray, plane);
 
 		if (t === null) {
@@ -63,12 +69,12 @@ export class Ray3 implements IRay3 {
 		}
 
 		return Ray3.at(ray, t, out);
-	}
+	};
 
 	public static intersectSpherePoint = <T extends Vector3Like = Vector3>(
 		ray: IRay3,
 		sphere: ISphere,
-		out: T = new Vector3() as T
+		out: T = new Vector3() as T,
 	): null | T => {
 		Vector3.minus(sphere.position, ray.position, v);
 		dis = Vector3.dot(v, ray.direction);
@@ -108,22 +114,19 @@ export class Ray3 implements IRay3 {
 		}
 
 		return false;
-	}
+	};
 
 	public static recast = (ray: IRay3, distance: number, out: Ray3 = new Ray3()): Ray3 => {
 		v.set(Ray3.at(ray, distance));
 		out.direction.set(v);
 
 		return out;
-	}
+	};
 
 	public position: Vector3 = new Vector3();
 	public direction: Vector3 = new Vector3();
-	public constructor(
-		position: Vector3Like = Vector3.VECTOR3_ZERO,
-		direction: Vector3Like = Vector3.VECTOR3_BACK
-	) {
-		this.position.set(position)
+	public constructor(position: Vector3Like = Vector3.VECTOR3_ZERO, direction: Vector3Like = Vector3.VECTOR3_BACK) {
+		this.position.set(position);
 		Vector3.normalize(direction, this.direction);
 	}
 }
