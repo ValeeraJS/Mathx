@@ -594,6 +594,13 @@
 	    static toString = (a) => {
 	        return `(${a[0]}, ${a[1]})`;
 	    };
+	    static transformDirection = (a, m, out = new Vector2()) => {
+	        x$4 = a[0];
+	        y$4 = a[1];
+	        out[0] = m[0] * x$4 + m[3] * y$4;
+	        out[1] = m[1] * x$4 + m[4] * y$4;
+	        return Vector2.normalize(out, out);
+	    };
 	    static transformMatrix3 = (a, m, out = new Vector2()) => {
 	        x$4 = a[0];
 	        y$4 = a[1];
@@ -917,6 +924,15 @@
 	        out[1] = ax$1 * m[1] + ay$1 * m[4] + az$1 * m[7];
 	        out[2] = ax$1 * m[2] + ay$1 * m[5] + az$1 * m[8];
 	        return out;
+	    };
+	    static transformDirection = (a, m, out = new Vector3()) => {
+	        ax$1 = a[0];
+	        ay$1 = a[1];
+	        az$1 = a[2];
+	        out[0] = m[0] * ax$1 + m[4] * ay$1 + m[8] * az$1;
+	        out[1] = m[1] * ax$1 + m[5] * ay$1 + m[9] * az$1;
+	        out[2] = m[2] * ax$1 + m[6] * ay$1 + m[10] * az$1;
+	        return Vector3.normalize(out, out);
 	    };
 	    static transformMatrix4 = (a, m, out = new Vector3()) => {
 	        ax$1 = a[0];

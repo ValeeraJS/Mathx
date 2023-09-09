@@ -4,7 +4,8 @@ import clampCommon from "../common/clamp";
 import clampSafeCommon from "../common/clampSafe";
 import closeToCommon from "../common/closeTo";
 import floorToZeroCommon from "../common/floorToZero";
-import { IPolar } from "../polar";
+import type { IPolar } from "../polar";
+import type { Matrix3Like } from "../matrix/Matrix3";
 
 let x = 0;
 let y = 0;
@@ -420,6 +421,20 @@ export class Vector2 extends Float32Array implements IVector2 {
 
 	public static toString = (a: Vector2Like): string => {
 		return `(${a[0]}, ${a[1]})`;
+	};
+
+	public static transformDirection = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		m: Matrix3Like,
+		out: T = new Vector2() as T,
+	): T => {
+		x = a[0];
+		y = a[1];
+
+		out[0] = m[0] * x + m[3] * y;
+		out[1] = m[1] * x + m[4] * y;
+
+		return Vector2.normalize(out, out);
 	};
 
 	public static transformMatrix3 = <T extends Vector2Like = Vector2>(

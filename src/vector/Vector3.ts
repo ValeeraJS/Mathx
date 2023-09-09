@@ -517,6 +517,22 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
+	public static transformDirection = <T extends Vector3Like = Vector3>(
+		a: Vector3Like,
+		m: Matrix4Like,
+		out: T = new Vector3() as T,
+	): T => {
+		ax = a[0];
+		ay = a[1];
+		az = a[2];
+
+		out[0] = m[0] * ax + m[4] * ay + m[8] * az;
+		out[1] = m[1] * ax + m[5] * ay + m[9] * az;
+		out[2] = m[2] * ax + m[6] * ay + m[10] * az;
+
+		return Vector3.normalize(out, out);
+	};
+
 	public static transformMatrix4 = <T extends Vector3Like = Vector3>(
 		a: Vector3Like,
 		m: Matrix4Like,

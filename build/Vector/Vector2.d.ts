@@ -1,4 +1,5 @@
-import { IPolar } from "../polar";
+import type { IPolar } from "../polar";
+import type { Matrix3Like } from "../matrix/Matrix3";
 export interface IVector2Json {
     x: number;
     y: number;
@@ -66,6 +67,7 @@ export declare class Vector2 extends Float32Array implements IVector2 {
         r: number;
     }) => IPolar;
     static toString: (a: Vector2Like) => string;
+    static transformDirection: <T extends Vector2Like = Vector2>(a: Vector2Like, m: Matrix3Like, out?: T) => T;
     static transformMatrix3: <T extends Vector2Like = Vector2>(a: Vector2Like, m: Float32Array | number[], out?: T) => T;
     readonly dataType: string;
     constructor(x?: number, y?: number);

@@ -62,6 +62,7 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static slerp: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, t: number, out?: T) => T;
     static toString: (a: Vector3Like) => string;
     static transformMatrix3: <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix3Like, out?: T) => T;
+    static transformDirection: <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix4Like, out?: T) => T;
     static transformMatrix4: <T extends Vector3Like = Vector3>(a: Vector3Like, m: Matrix4Like, out?: T) => T;
     static transformQuat: <T extends Vector3Like = Vector3>(a: Vector3Like, q: Vector3Like, out?: T) => T;
     static volume: (a: Vector3Like) => number;
