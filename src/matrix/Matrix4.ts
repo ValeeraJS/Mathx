@@ -363,6 +363,42 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
+	public static fromReflectPlane = <T extends Matrix4Like>(
+		plane: Plane3,
+		out: T = new Matrix4() as T,
+	): T => {
+		x = plane.normal.x;
+		y = plane.normal.y;
+		z = plane.normal.z;
+		d = plane.distance;
+
+		a = x * 2;
+		b = y * 2;
+		c = z * 2;
+
+		out[0] = 1 - a * x;
+		out[1] = -a * y;
+		out[2] = -a * z;
+		out[3] = 0;
+
+		out[4] = out[1];
+		out[5] = 1 - b * y;
+		out[6] = -b * z;
+		out[7] = 0;
+
+		out[8] = out[2];
+		out[9] = out[6];
+		out[10] = 1 - c * z;
+		out[11] = 0;
+
+		out[8] = -d * a;
+		out[9] = -d * b;
+		out[10] = -d * c;
+		out[11] = 1;
+
+		return out;
+	};
+
 	public static fromRotation = <T extends Matrix4Like>(
 		rad: number,
 		axis: Vector3Like,
