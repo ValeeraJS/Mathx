@@ -391,6 +391,17 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
 	};
 
+	public static opposite = <T extends Vector3Like = Vector3>(a: Vector3Like, center: Vector3Like, out: T = new Vector3() as T): T => {
+		ax = center[0];
+		ay = center[1];
+		az = center[2];
+		out[0] = ax + ax - a[0];
+		out[1] = ay + ay - a[1];
+		out[2] = az + az - a[2];
+
+		return out;
+	};
+
 	public static reflect = <T extends Vector3Like = Vector3>(
 		origin: Vector3Like,
 		normal: Vector3Like,
