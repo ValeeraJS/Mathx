@@ -353,6 +353,15 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return Vector2.divideScalar(a, Vector2.norm(a) || 1, out);
 	};
 
+	public static opposite = <T extends Vector2Like = Vector2>(a: Vector2Like, center: Vector2Like, out: T = new Vector2() as T): T => {
+		x = center[0];
+		y = center[1];
+		out[0] = x + x - a[0];
+		out[1] = y + y - a[1];
+
+		return out;
+	};
+
 	public static random = <T extends Vector2Like = Vector2>(norm = 1, out: T = new Vector2() as T): T => {
 		x = Math.random() * DEG_360_RAD;
 		out[0] = Math.cos(x) * norm;
