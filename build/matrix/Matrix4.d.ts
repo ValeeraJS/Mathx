@@ -1,6 +1,7 @@
 import { IEulerAngle } from "../euler/IEulerAngle";
 import { Vector3, Vector3Like } from "../vector/Vector3";
 import { Matrix3Like } from "./Matrix3";
+import { Plane3 } from "../shape/Plane3";
 import { QuaternionLike } from "../quaternion";
 export type Matrix4Like = Matrix4 | Float32Array | number[];
 export declare class Matrix4 extends Float32Array {
@@ -13,6 +14,7 @@ export declare class Matrix4 extends Float32Array {
     static fromMatrix3: <T extends Matrix4Like>(data: Matrix3Like, out?: T) => T;
     static fromMatrix3MVP: <T extends Matrix4Like>(data: Matrix3Like, out?: T) => T;
     static fromQuaternion: <T extends Matrix4Like>(q: QuaternionLike, out?: T) => T;
+    static fromReflectPlane: <T extends Matrix4Like>(plane: Plane3, out?: T) => T;
     static fromRotation: <T extends Matrix4Like>(rad: number, axis: Vector3Like, out?: T) => T | null;
     static fromRotationX: <T extends Matrix4Like>(rad: number, out?: T) => T;
     static fromRotationY: <T extends Matrix4Like>(rad: number, out?: T) => T;

@@ -53,6 +53,7 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static multiplyScalar: <T extends Vector3Like = Vector3>(a: Vector3Like, scalar: number, out?: T) => T;
     static negate: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;
     static normalize: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;
+    static opposite: <T extends Vector3Like = Vector3>(a: Vector3Like, center: Vector3Like, out?: T) => T;
     static reflect: <T extends Vector3Like = Vector3>(origin: Vector3Like, normal: Vector3Like, out?: T) => T;
     static rotateX: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, rad: number, out?: T) => T;
     static rotateY: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, rad: number, out?: T) => T;

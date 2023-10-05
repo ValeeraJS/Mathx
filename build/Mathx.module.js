@@ -547,6 +547,13 @@ class Vector2 extends Float32Array {
     static normalize = (a, out = new Vector2()) => {
         return Vector2.divideScalar(a, Vector2.norm(a) || 1, out);
     };
+    static opposite = (a, center, out = new Vector2()) => {
+        x$4 = center[0];
+        y$4 = center[1];
+        out[0] = x$4 + x$4 - a[0];
+        out[1] = y$4 + y$4 - a[1];
+        return out;
+    };
     static random = (norm = 1, out = new Vector2()) => {
         x$4 = Math.random() * DEG_360_RAD;
         out[0] = Math.cos(x$4) * norm;
@@ -847,6 +854,15 @@ class Vector3 extends Float32Array {
     };
     static normalize = (a, out = new Vector3()) => {
         return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
+    };
+    static opposite = (a, center, out = new Vector3()) => {
+        ax$1 = center[0];
+        ay$1 = center[1];
+        az$1 = center[2];
+        out[0] = ax$1 + ax$1 - a[0];
+        out[1] = ay$1 + ay$1 - a[1];
+        out[2] = az$1 + az$1 - a[2];
+        return out;
     };
     static reflect = (origin, normal, out = new Vector3()) => {
         Vector3.multiplyScalar(normal, 2 * Vector3.dot(origin, normal), out);
@@ -2167,6 +2183,10 @@ var mapRange = (value, range1, range2) => {
     return (value - d1 * 0.5) / d2$1 / d1;
 };
 
+const opposite = (v, center = 0) => {
+    return center + center - v;
+};
+
 var randFloat = (min = 0, max = 1) => {
     return min + Math.random() * (max - min);
 };
@@ -3473,6 +3493,32 @@ class Matrix4 extends Float32Array {
         out[15] = 1;
         return out;
     };
+    static fromReflectPlane = (plane, out = new Matrix4()) => {
+        x$1 = plane.normal.x;
+        y$1 = plane.normal.y;
+        z = plane.normal.z;
+        d = plane.distance;
+        a = x$1 * 2;
+        b = y$1 * 2;
+        c = z * 2;
+        out[0] = 1 - a * x$1;
+        out[1] = -a * y$1;
+        out[2] = -a * z;
+        out[3] = 0;
+        out[4] = out[1];
+        out[5] = 1 - b * y$1;
+        out[6] = -b * z;
+        out[7] = 0;
+        out[8] = out[2];
+        out[9] = out[6];
+        out[10] = 1 - c * z;
+        out[11] = 0;
+        out[8] = -d * a;
+        out[9] = -d * b;
+        out[10] = -d * c;
+        out[11] = 1;
+        return out;
+    };
     static fromRotation = (rad, axis, out = new Matrix4()) => {
         x$1 = axis[0];
         y$1 = axis[1];
@@ -4480,7 +4526,9 @@ var rndInt = (low, high) => {
     return low + Math.floor(Math.random() * (high - low + 1));
 };
 
-let dis, r2, d2;
+let dis;
+let r2;
+let d2;
 const v = new Vector3();
 class Ray3 {
     static at = (a, b, out = new Vector3()) => {
@@ -5317,4 +5365,4 @@ class Spherical extends Float32Array {
     }
 }
 
-export { ArraybufferDataType, COLOR_HEX_MAP, ColorCMYK, ColorGPU, ColorHSL, ColorHSV, ColorRGB, ColorRGBA, ColorRYB, ColorXYZ, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, MATRIX_RGB2XYZ, MATRIX_XYZ2RGB, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, UNIT_MATRIX3_DATA, Vector2, Vector3, Vector4, catmullRom, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, cubicBezier, floorPowerOfTwo, floorToZero, generateLagrange, hue2rgb, isPowerOfTwo, lerp, linearToSrgb, mapRange, quadraticBezier, randFloat, randInt, rndFloat, rndFloatRange, rndInt, srgbToLinear, sum, sumArray };
+export { ArraybufferDataType, COLOR_HEX_MAP, ColorCMYK, ColorGPU, ColorHSL, ColorHSV, ColorRGB, ColorRGBA, ColorRYB, ColorXYZ, constants as Constants, Cube, index as Easing, EulerAngle, EulerRotationOrders, Frustum, Line3, MATRIX_RGB2XYZ, MATRIX_XYZ2RGB, Matrix2, Matrix3, Matrix4, Plane3, Polar, Ray3, Rectangle2, Sphere, Spherical, Triangle2, Triangle3, UNIT_MATRIX3_DATA, Vector2, Vector3, Vector4, catmullRom, ceilPowerOfTwo, clamp, clampCircle, clampSafeCommon as clampSafe, closeTo, cubicBezier, floorPowerOfTwo, floorToZero, generateLagrange, hue2rgb, isPowerOfTwo, lerp, linearToSrgb, mapRange, opposite, quadraticBezier, randFloat, randInt, rndFloat, rndFloatRange, rndInt, srgbToLinear, sum, sumArray };

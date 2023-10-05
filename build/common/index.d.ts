@@ -8,6 +8,7 @@ export { default as floorToZero } from "./floorToZero";
 export { default as isPowerOfTwo } from "./isPowerOfTwo";
 export { default as lerp } from "./lerp";
 export { default as mapRange } from "./mapRange";
+export * from "./opposite";
 export { default as randFloat } from "./randFloat";
 export { default as randInt } from "./randInt";
 export { default as sum } from "./sum";

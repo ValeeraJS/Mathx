@@ -4,6 +4,7 @@ import { Vector3, Vector3Like } from "../vector/Vector3";
 import { closeTo } from "../common";
 import { EPSILON } from "../constants";
 import { Matrix3Like } from "./Matrix3";
+import { Plane3 } from "../shape/Plane3";
 import { QuaternionLike } from "../quaternion";
 
 let a00 = 0;
@@ -363,10 +364,7 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
-	public static fromReflectPlane = <T extends Matrix4Like>(
-		plane: Plane3,
-		out: T = new Matrix4() as T,
-	): T => {
+	public static fromReflectPlane = <T extends Matrix4Like>(plane: Plane3, out: T = new Matrix4() as T): T => {
 		x = plane.normal.x;
 		y = plane.normal.y;
 		z = plane.normal.z;
