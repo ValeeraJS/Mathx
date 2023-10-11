@@ -4,16 +4,16 @@ import { ISphere } from "./interfaces/ISphere";
 import { ITriangle3 } from "./interfaces/ITriangle3";
 // import Matrix3 from "../matrix/Matrix3";
 
-const v1: Vector3 = new Vector3(),
-	v2: Vector3 = new Vector3(),
-	v0: Vector3 = new Vector3(),
-	f1: Vector3 = new Vector3(),
-	f2: Vector3 = new Vector3(),
-	f0: Vector3 = new Vector3();
+const v1: Vector3 = new Vector3();
+const v2: Vector3 = new Vector3();
+const v0: Vector3 = new Vector3();
+const f1: Vector3 = new Vector3();
+const f2: Vector3 = new Vector3();
+const f0: Vector3 = new Vector3();
 const ta: Vector3 = new Vector3();
 // const ma: Matrix3 = new Matrix3();
-const tb: Vector3 = new Vector3(),
-	vA: Vector3 = new Vector3();
+const tb: Vector3 = new Vector3();
+const vA: Vector3 = new Vector3();
 
 export class Cube implements ICube {
 	public static center = <T extends Vector3Like = Vector3>(a: ICube, out: T = new Vector3() as T): T => {
@@ -25,7 +25,7 @@ export class Cube implements ICube {
 	public static clampPoint = <T extends Vector3Like = Vector3>(
 		a: ICube,
 		point: Vector3Like,
-		out: T = new Vector3() as T
+		out: T = new Vector3() as T,
 	): T => {
 		return Vector3.clamp(point, a.min, a.max, out);
 	};
@@ -142,7 +142,7 @@ export class Cube implements ICube {
 			0,
 			-f2[1],
 			f2[0],
-			0
+			0,
 		];
 
 		if (!satForAxes(axes, v0, v1, v2, tb)) {
@@ -183,7 +183,7 @@ export class Cube implements ICube {
 		a: ICube,
 		b: Float32Array | number[] | IVector3,
 		c: Float32Array | number[] | IVector3,
-		out: Cube = new Cube()
+		out: Cube = new Cube(),
 	): Cube => {
 		Vector3.add(a.min, b, out.min);
 		Vector3.add(a.max, c, out.max);
@@ -197,11 +197,7 @@ export class Cube implements ICube {
 		return (ta.x * ta.y + ta.x * ta.z + ta.y * ta.z) * 2;
 	};
 
-	public static translate = (
-		a: ICube,
-		b: Float32Array | number[] | IVector3,
-		out: Cube = new Cube()
-	): Cube => {
+	public static translate = (a: ICube, b: Float32Array | number[] | IVector3, out: Cube = new Cube()): Cube => {
 		Vector3.add(a.min, b, out.min);
 		Vector3.add(a.max, b, out.max);
 
@@ -231,22 +227,24 @@ export class Cube implements ICube {
 	}
 }
 
-let i: number, j: number, p0: number, p1: number, p2: number, r: number;
+let i: number;
+let j: number;
+let p0: number;
+let p1: number;
+let p2: number;
+let r: number;
 
 function satForAxes(
 	axes: number[] | Float32Array,
 	v0: Float32Array,
 	v1: Float32Array,
 	v2: Float32Array,
-	extents: Float32Array
+	extents: Float32Array,
 ) {
 	for (i = 0, j = axes.length - 3; i <= j; i += 3) {
 		Vector3.fromArray(axes, i, vA);
 		// project the aabb onto the seperating axis
-		r =
-			extents[0] * Math.abs(vA[0]) +
-			extents[1] * Math.abs(vA[1]) +
-			extents[2] * Math.abs(vA[2]);
+		r = extents[0] * Math.abs(vA[0]) + extents[1] * Math.abs(vA[1]) + extents[2] * Math.abs(vA[2]);
 		// project all 3 vertices of the triangle onto the seperating axis
 		p0 = Vector3.dot(v0, vA);
 		p1 = Vector3.dot(v1, vA);

@@ -6,7 +6,7 @@ const v2 = new Vector3();
 const v3 = new Vector3();
 
 export class Plane3 {
-	static normalize(p: Plane3, out: Plane3 = new Plane3): Plane3 {
+	static normalize(p: Plane3, out: Plane3 = new Plane3()): Plane3 {
 		const normal = p.normal;
 
 		const factor = 1.0 / Vector3.norm(normal);
@@ -48,18 +48,16 @@ export class Plane3 {
 
 	formCoplanarPointAndNormal(point: Vector3Like, normal: Vector3Like): this {
 		this.normal.set(normal);
-		this.distance = - Vector3.dot(point, normal);
+		this.distance = -Vector3.dot(point, normal);
 
 		return this;
 	}
 
 	negate(): this {
-
-		this.distance *= - 1;
+		this.distance *= -1;
 		Vector3.negate(this.normal, this.normal);
 
 		return this;
-
 	}
 
 	normalize(): this {
@@ -70,7 +68,7 @@ export class Plane3 {
 
 	projectPoint<T extends Vector3Like = Vector3>(point: Vector3Like, out: T = new Vector3() as T): T {
 		Vector3.fromArray(this.normal, 0, out);
-		Vector3.multiplyScalar(out, - this.distanceToPoint(point), out);
+		Vector3.multiplyScalar(out, -this.distanceToPoint(point), out);
 
 		return Vector3.add(out, point, out);
 	}

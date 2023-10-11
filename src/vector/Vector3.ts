@@ -229,7 +229,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static fromValues = <T extends Vector3Like = Vector3>(
+	public static fromXYZ = <T extends Vector3Like = Vector3>(
 		x: number,
 		y: number,
 		z: number,
@@ -391,7 +391,11 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return Vector3.divideScalar(a, Vector3.norm(a) || 1, out);
 	};
 
-	public static opposite = <T extends Vector3Like = Vector3>(a: Vector3Like, center: Vector3Like, out: T = new Vector3() as T): T => {
+	public static opposite = <T extends Vector3Like = Vector3>(
+		a: Vector3Like,
+		center: Vector3Like,
+		out: T = new Vector3() as T,
+	): T => {
 		ax = center[0];
 		ay = center[1];
 		az = center[2];

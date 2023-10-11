@@ -4,6 +4,8 @@ import { IPolar } from "./interfaces/IPolar";
 let x: number;
 let y: number;
 
+export type PolarLike = Float32Array | Polar | number[];
+
 /**
  * @class
  * @classdesc 极坐标
@@ -25,6 +27,12 @@ export class Polar extends Float32Array implements IPolar {
 	 */
 	public static create(r = 0, a = 0): Polar {
 		return new Polar(r, a);
+	}
+
+	public static fromRA<T extends PolarLike>(r = 0, a = 0, out: T = new Polar() as T): T {
+		out[0] = r;
+		out[1] = a;
+		return out;
 	}
 
 	public get a(): number {

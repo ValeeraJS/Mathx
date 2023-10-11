@@ -171,7 +171,7 @@ export class Vector4 extends Float32Array implements IVector4 {
 		return out;
 	};
 
-	public static fromValues = <T extends Vector4Like = Vector4>(
+	public static fromXYZW = <T extends Vector4Like = Vector4>(
 		x: number,
 		y: number,
 		z: number,

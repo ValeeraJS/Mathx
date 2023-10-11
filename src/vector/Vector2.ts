@@ -234,11 +234,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static fromValues = <T extends Vector2Like = Vector2>(
-		x: number,
-		y: number,
-		out: T = new Vector2() as T,
-	): T => {
+	public static fromXY = <T extends Vector2Like = Vector2>(x: number, y: number, out: T = new Vector2() as T): T => {
 		out[0] = x;
 		out[1] = y;
 
@@ -353,7 +349,11 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return Vector2.divideScalar(a, Vector2.norm(a) || 1, out);
 	};
 
-	public static opposite = <T extends Vector2Like = Vector2>(a: Vector2Like, center: Vector2Like, out: T = new Vector2() as T): T => {
+	public static opposite = <T extends Vector2Like = Vector2>(
+		a: Vector2Like,
+		center: Vector2Like,
+		out: T = new Vector2() as T,
+	): T => {
 		x = center[0];
 		y = center[1];
 		out[0] = x + x - a[0];

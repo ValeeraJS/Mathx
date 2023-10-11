@@ -1,5 +1,5 @@
-import {ITriangle2} from "./interfaces/ITriangle2";
-import {Vector2} from "../vector/Vector2";
+import { ITriangle2 } from "./interfaces/ITriangle2";
+import { Vector2 } from "../vector/Vector2";
 
 const ab = new Vector2();
 const bc = new Vector2();
@@ -17,7 +17,7 @@ export class Triangle2 implements ITriangle2 {
 	public static create = (
 		a: Vector2 = new Vector2(-1, -1),
 		b: Vector2 = new Vector2(1, -1),
-		c: Vector2 = new Vector2(0, 1)
+		c: Vector2 = new Vector2(0, 1),
 	): ITriangle2 => {
 		return new Triangle2(a, b, c);
 	};
@@ -50,10 +50,7 @@ export class Triangle2 implements ITriangle2 {
 		return 0;
 	};
 
-	public static toFloat32Array = (
-		t: ITriangle2,
-		out: Float32Array = new Float32Array(2)
-	): Float32Array => {
+	public static toFloat32Array = (t: ITriangle2, out: Float32Array = new Float32Array(2)): Float32Array => {
 		out.set(t.a, 0);
 		out.set(t.b, 2);
 		out.set(t.c, 4);
@@ -68,7 +65,7 @@ export class Triangle2 implements ITriangle2 {
 	public constructor(
 		a: Vector2 = new Vector2(-1, -1),
 		b: Vector2 = new Vector2(1, -1),
-		c: Vector2 = new Vector2(0, 1)
+		c: Vector2 = new Vector2(0, 1),
 	) {
 		this.a = a;
 		this.b = b;

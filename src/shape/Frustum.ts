@@ -43,27 +43,27 @@ export class Frustum {
 		const m43 = matrix[14];
 		const m44 = matrix[15];
 
-		Vector3.fromValues(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
+		Vector3.fromXYZ(m14 + m13, m24 + m23, m34 + m33, this.near.normal);
 		this.near.distance = m44 + m43;
 		this.near.normalize();
 
-		Vector3.fromValues(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
+		Vector3.fromXYZ(m14 - m13, m24 - m23, m34 - m33, this.far.normal);
 		this.far.distance = m44 - m43;
 		this.far.normalize();
 
-		Vector3.fromValues(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
+		Vector3.fromXYZ(m14 + m11, m24 + m21, m34 + m31, this.left.normal);
 		this.left.distance = m44 + m41;
 		this.left.normalize();
 
-		Vector3.fromValues(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
+		Vector3.fromXYZ(m14 - m11, m24 - m21, m34 - m31, this.right.normal);
 		this.right.distance = m44 - m41;
 		this.right.normalize();
 
-		Vector3.fromValues(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
+		Vector3.fromXYZ(m14 + m12, m24 + m22, m34 + m32, this.bottom.normal);
 		this.bottom.distance = m44 + m42;
 		this.bottom.normalize();
 
-		Vector3.fromValues(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
+		Vector3.fromXYZ(m14 - m12, m24 - m22, m34 - m32, this.top.normal);
 		this.top.distance = m44 - m42;
 		this.top.normalize();
 

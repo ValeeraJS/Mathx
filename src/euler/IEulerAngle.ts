@@ -4,7 +4,7 @@ export enum EulerRotationOrders {
 	YZX = "yzx",
 	XZY = "xzy",
 	ZYX = "zyx",
-	YXZ = "yxz"
+	YXZ = "yxz",
 }
 
 export interface IEulerAngle {

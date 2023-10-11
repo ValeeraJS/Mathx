@@ -17,7 +17,7 @@ export class Triangle3 implements ITriangle3 {
 	public static create = (
 		a: Vector3 = new Vector3(-1, -1, 0),
 		b: Vector3 = new Vector3(1, -1, 0),
-		c: Vector3 = new Vector3(0, 1, 0)
+		c: Vector3 = new Vector3(0, 1, 0),
 	): ITriangle3 => {
 		return { a, b, c };
 	};
@@ -43,10 +43,7 @@ export class Triangle3 implements ITriangle3 {
 		return Vector3.normalize(out);
 	};
 
-	public static toFloat32Array = (
-		t: ITriangle3,
-		out: Float32Array = new Float32Array(9)
-	): Float32Array => {
+	public static toFloat32Array = (t: ITriangle3, out: Float32Array = new Float32Array(9)): Float32Array => {
 		out.set(t.a, 0);
 		out.set(t.b, 3);
 		out.set(t.c, 6);
@@ -61,7 +58,7 @@ export class Triangle3 implements ITriangle3 {
 	public constructor(
 		a: Vector3 = new Vector3(-1, -1, 0),
 		b: Vector3 = new Vector3(1, -1, 0),
-		c: Vector3 = new Vector3(0, 1, 0)
+		c: Vector3 = new Vector3(0, 1, 0),
 	) {
 		this.a = a;
 		this.b = b;

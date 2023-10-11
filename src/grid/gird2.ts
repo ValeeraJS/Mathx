@@ -11,7 +11,7 @@ export class Grid2 {
 	public constructor(
 		size: Vector2Like = new Vector2(Infinity, Infinity),
 		gridSize: Vector2Like = new Vector2(1, 1),
-		min: Vector2Like = new Vector2()
+		min: Vector2Like = new Vector2(),
 	) {
 		this.size = size;
 		this.gridSize = gridSize;

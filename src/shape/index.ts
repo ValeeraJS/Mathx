@@ -10,4 +10,3 @@ export * from "./Rectangle2";
 export * from "./Sphere";
 export * from "./Triangle2";
 export * from "./Triangle3";
-

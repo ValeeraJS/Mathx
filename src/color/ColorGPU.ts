@@ -202,7 +202,10 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		return out;
 	}
 
-	public static fromColorXYZ = (color: IColorXYZ | number[] | Float32Array, out: IColorGPU = new ColorGPU()): IColorGPU => {
+	public static fromColorXYZ = (
+		color: IColorXYZ | number[] | Float32Array,
+		out: IColorGPU = new ColorGPU(),
+	): IColorGPU => {
 		Vector3.transformMatrix3(color, MATRIX_XYZ2RGB, out);
 
 		return out;

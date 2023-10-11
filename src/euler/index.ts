@@ -1,2 +1,2 @@
-export * from './IEulerAngle';
-export * from './EulerAngle';
+export * from "./IEulerAngle";
+export * from "./EulerAngle";
