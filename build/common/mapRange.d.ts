@@ -9,5 +9,4 @@
  * Mathx.clamp(150, [100, 200], [0, -100]); // -50;
  * Mathx.clamp(10, [0, 1], [0, -2]); // -20;
  */
-declare const _default: (value: number, range1: number[] | Float32Array, range2: number[] | Float32Array) => number;
-export default _default;
+export declare const mapRange: (value: number, range1: number[] | Float32Array, range2: number[] | Float32Array) => number;

@@ -29,4 +29,4 @@ import QuinticOut from "./QuinticOut";
 import SinusoidalIn from "./SinusoidalIn";
 import SinusoidalInOut from "./SinusoidalInOut";
 import SinusoidalOut from "./SinusoidalOut";
-export { BackIn, BackOut, BackInOut, BounceIn, BounceInOut, BounceOut, CircularIn, CircularInOut, CircularOut, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, QuinticIn, QuinticInOut, QuinticOut, SinusoidalIn, SinusoidalInOut, SinusoidalOut };
+export { BackIn, BackOut, BackInOut, BounceIn, BounceInOut, BounceOut, CircularIn, CircularInOut, CircularOut, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, QuinticIn, QuinticInOut, QuinticOut, SinusoidalIn, SinusoidalInOut, SinusoidalOut, };

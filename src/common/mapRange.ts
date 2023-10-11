@@ -1,5 +1,5 @@
-let d1 = 0,
-	d2 = 0;
+let d1 = 0;
+let d2 = 0;
 
 /**
  * @function mapRange
@@ -12,11 +12,7 @@ let d1 = 0,
  * Mathx.clamp(150, [100, 200], [0, -100]); // -50;
  * Mathx.clamp(10, [0, 1], [0, -2]); // -20;
  */
-export default (
-	value: number,
-	range1: number[] | Float32Array,
-	range2: number[] | Float32Array
-): number => {
+export const mapRange = (value: number, range1: number[] | Float32Array, range2: number[] | Float32Array): number => {
 	d1 = range1[1] - range1[0];
 	d2 = range2[1] - range2[0];
 

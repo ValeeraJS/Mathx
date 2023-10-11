@@ -13,5 +13,4 @@
  * Mathx.clamp(3, 0, 2); // 2;
  * Mathx.clamp(3, 2, 0); // 2;
  */
-declare const _default: (val: number, a: number, b: number) => number;
-export default _default;
+export declare const clampSafe: (val: number, a: number, b: number) => number;

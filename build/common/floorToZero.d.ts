@@ -7,5 +7,4 @@
  * Mathx.roundToZero(-0.8); // 0;
  * Mathx.roundToZero(-1.1); // -1;
  */
-declare const _default: (num: number) => number;
-export default _default;
+export declare const floorToZero: (num: number) => number;

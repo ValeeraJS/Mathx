@@ -1,7 +1,7 @@
 import { ArraybufferDataType } from "../ArraybufferDataType";
-import clampCommon from "../common/clamp";
-import clampSafeCommon from "../common/clampSafe";
-import closeToCommon from "../common/closeTo";
+import { clamp } from "../common/clamp";
+import { clampSafe } from "../common/clampSafe";
+import { closeTo } from "../common/closeTo";
 import type { Matrix3Like } from "../matrix/Matrix3";
 import type { Matrix4Like } from "../matrix/Matrix4";
 
@@ -69,7 +69,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 		const mag = mag1 * mag2;
 		const cosine = mag && Vector3.dot(a, b) / mag;
 
-		return Math.acos(clampCommon(cosine, -1, 1));
+		return Math.acos(clamp(cosine, -1, 1));
 	};
 
 	public static clamp = <T extends Vector3Like = Vector3>(
@@ -78,9 +78,9 @@ export class Vector3 extends Float32Array implements IVector3 {
 		max: Vector3Like,
 		out: T = new Vector3() as T,
 	): T => {
-		out[0] = clampCommon(a[0], min[0], max[0]);
-		out[1] = clampCommon(a[1], min[1], max[1]);
-		out[2] = clampCommon(a[2], min[2], max[2]);
+		out[0] = clamp(a[0], min[0], max[0]);
+		out[1] = clamp(a[1], min[1], max[1]);
+		out[2] = clamp(a[2], min[2], max[2]);
 
 		return out;
 	};
@@ -91,9 +91,9 @@ export class Vector3 extends Float32Array implements IVector3 {
 		max: Vector3Like,
 		out: T = new Vector3() as T,
 	): T => {
-		out[0] = clampSafeCommon(a[0], min[0], max[0]);
-		out[1] = clampSafeCommon(a[1], min[1], max[1]);
-		out[1] = clampSafeCommon(a[2], min[2], max[2]);
+		out[0] = clampSafe(a[0], min[0], max[0]);
+		out[1] = clampSafe(a[1], min[1], max[1]);
+		out[1] = clampSafe(a[2], min[2], max[2]);
 
 		return out;
 	};
@@ -104,9 +104,9 @@ export class Vector3 extends Float32Array implements IVector3 {
 		max: number,
 		out: T = new Vector3() as T,
 	): T => {
-		out[0] = clampCommon(a[0], min, max);
-		out[1] = clampCommon(a[1], min, max);
-		out[2] = clampCommon(a[2], min, max);
+		out[0] = clamp(a[0], min, max);
+		out[1] = clamp(a[1], min, max);
+		out[2] = clamp(a[2], min, max);
 
 		return out;
 	};
@@ -120,7 +120,7 @@ export class Vector3 extends Float32Array implements IVector3 {
 	};
 
 	public static closeTo = (a: Vector3Like, b: Vector3Like): boolean => {
-		return closeToCommon(a[0], b[0]) && closeToCommon(a[1], b[1]) && closeToCommon(a[2], b[2]);
+		return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]);
 	};
 
 	public static create = (x = 0, y = 0, z = 0): Vector3 => {

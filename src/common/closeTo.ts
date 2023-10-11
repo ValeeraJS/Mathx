@@ -10,6 +10,6 @@ import { EPSILON } from "../constants";
  * Mathx.clamp(2, 3, 1); // true;
  * Mathx.clamp(2, 3, 0.5); // false;
  */
-export default (val: number, target: number, epsilon: number = EPSILON): boolean => {
+export const closeTo = (val: number, target: number, epsilon: number = EPSILON): boolean => {
 	return Math.abs(val - target) <= epsilon;
 };

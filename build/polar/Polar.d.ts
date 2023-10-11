@@ -1,4 +1,5 @@
 import { IPolar } from "./interfaces/IPolar";
+export type PolarLike = Float32Array | Polar | number[];
 /**
  * @class
  * @classdesc 极坐标
@@ -19,6 +20,7 @@ export declare class Polar extends Float32Array implements IPolar {
      * @returns {Mathx.Polar} 新的极坐标实例
      */
     static create(r?: number, a?: number): Polar;
+    static fromRA<T extends PolarLike>(r?: number, a?: number, out?: T): T;
     get a(): number;
     set a(v: number);
     get r(): number;

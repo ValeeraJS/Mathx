@@ -8,5 +8,4 @@
  * Mathx.clamp(2, 3, 1); // true;
  * Mathx.clamp(2, 3, 0.5); // false;
  */
-declare const _default: (val: number, target: number, epsilon?: number) => boolean;
-export default _default;
+export declare const closeTo: (val: number, target: number, epsilon?: number) => boolean;

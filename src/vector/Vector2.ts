@@ -1,9 +1,9 @@
 import { DEG_360_RAD, EPSILON } from "../constants";
 import { ArraybufferDataType } from "../ArraybufferDataType";
-import clampCommon from "../common/clamp";
-import clampSafeCommon from "../common/clampSafe";
-import closeToCommon from "../common/closeTo";
-import floorToZeroCommon from "../common/floorToZero";
+import { clamp } from "../common/clamp";
+import { clampSafe } from "../common/clampSafe";
+import { closeTo } from "../common/closeTo";
+import { floorToZero } from "../common/floorToZero";
 import type { IPolar } from "../polar";
 import type { Matrix3Like } from "../matrix/Matrix3";
 
@@ -71,8 +71,8 @@ export class Vector2 extends Float32Array implements IVector2 {
 		max: Vector2Like,
 		out: T = new Vector2() as T,
 	): T => {
-		out[0] = clampCommon(a[0], min[0], max[0]);
-		out[1] = clampCommon(a[1], min[1], max[1]);
+		out[0] = clamp(a[0], min[0], max[0]);
+		out[1] = clamp(a[1], min[1], max[1]);
 
 		return out;
 	};
@@ -83,8 +83,8 @@ export class Vector2 extends Float32Array implements IVector2 {
 		max: Vector2Like,
 		out: T = new Vector2() as T,
 	): T => {
-		out[0] = clampSafeCommon(a[0], min[0], max[0]);
-		out[1] = clampSafeCommon(a[1], min[1], max[1]);
+		out[0] = clampSafe(a[0], min[0], max[0]);
+		out[1] = clampSafe(a[1], min[1], max[1]);
 
 		return out;
 	};
@@ -95,8 +95,8 @@ export class Vector2 extends Float32Array implements IVector2 {
 		max: Vector2Like,
 		out: T = new Vector2() as T,
 	): T => {
-		out[0] = clampSafeCommon(a[0], min[0], max[0]);
-		out[1] = clampSafeCommon(a[1], min[1], max[1]);
+		out[0] = clampSafe(a[0], min[0], max[0]);
+		out[1] = clampSafe(a[1], min[1], max[1]);
 
 		return out;
 	};
@@ -107,8 +107,8 @@ export class Vector2 extends Float32Array implements IVector2 {
 		max: number,
 		out: T = new Vector2() as T,
 	): T => {
-		out[0] = clampCommon(a[0], min, max);
-		out[1] = clampCommon(a[1], min, max);
+		out[0] = clamp(a[0], min, max);
+		out[1] = clamp(a[1], min, max);
 
 		return out;
 	};
@@ -118,7 +118,7 @@ export class Vector2 extends Float32Array implements IVector2 {
 	};
 
 	public static closeToRect = (a: Vector2Like, b: Vector2Like, epsilon = EPSILON): boolean => {
-		return closeToCommon(a[0], b[0], epsilon) && closeToCommon(a[1], b[1], epsilon);
+		return closeTo(a[0], b[0], epsilon) && closeTo(a[1], b[1], epsilon);
 	};
 
 	public static closeToManhattan = (a: Vector2Like, b: Vector2Like, epsilon = EPSILON): boolean => {
@@ -197,8 +197,8 @@ export class Vector2 extends Float32Array implements IVector2 {
 	};
 
 	public static floorToZero = <T extends Vector2Like = Vector2>(a: Vector2Like, out: T = new Vector2() as T): T => {
-		out[0] = floorToZeroCommon(a[0]);
-		out[1] = floorToZeroCommon(a[1]);
+		out[0] = floorToZero(a[0]);
+		out[1] = floorToZero(a[1]);
 
 		return out;
 	};

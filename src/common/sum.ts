@@ -1,4 +1,4 @@
-import sumArray from "./sumArray";
+import { sumArray } from "./sumArray";
 
 /**
  * @function sum
@@ -9,6 +9,6 @@ import sumArray from "./sumArray";
  * @example Mathx.sumArray(1, 2, 3); // 6;
  * Mathx.sumArray(1, 2, 3, 4, 5); // 15;
  */
-export default (...arr: number[]): number => {
+export const sum = (...arr: number[]): number => {
 	return sumArray(arr);
 };

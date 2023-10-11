@@ -1,5 +1,5 @@
-let len = 0,
-	sum = 0;
+let len = 0;
+let sum = 0;
 
 /**
  * @function sumArray
@@ -9,7 +9,7 @@ let len = 0,
  * @returns {number} 和
  * @example Mathx.sumArray([1, 2, 3]); // 6;
  */
-export default (arr: number[]): number => {
+export const sumArray = (arr: number[]): number => {
 	sum = 0;
 	len = arr.length;
 	for (let i = 0; i < len; i++) {

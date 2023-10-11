@@ -7,6 +7,6 @@
  * Mathx.roundToZero(-0.8); // 0;
  * Mathx.roundToZero(-1.1); // -1;
  */
-export default (num: number): number => {
+export const floorToZero = (num: number): number => {
 	return num < 0 ? Math.ceil(num) : Math.floor(num);
 };

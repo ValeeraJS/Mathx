@@ -1,6 +1,7 @@
-import floorToZero from "./floorToZero";
+import { floorToZero } from "./floorToZero";
 
-let circle: number, v: number;
+let circle: number;
+let v: number;
 
 /**
  * @function clampCircle
@@ -12,7 +13,7 @@ let circle: number, v: number;
  * @example Mathx.clampCircle(3 * Math.PI, 0, 2 * Math.PI); // Math.PI;
  * Mathx.clampCircle(2 * Math.PI, -Math.PI, Math.PI); // 0;
  */
-export default (val: number, min: number, max: number): number => {
+export const clampCircle = (val: number, min: number, max: number): number => {
 	circle = max - min;
 	v = floorToZero(min / circle) * circle + (val % circle);
 	if (v < min) {

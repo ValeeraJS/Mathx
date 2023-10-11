@@ -1,3 +1,3 @@
-export default (low: number, high: number): number => {
-	return low + Math.random() * (high - low);
+export const rndFloat = (min = 0, max = 1): number => {
+	return min + Math.random() * (max - min);
 };

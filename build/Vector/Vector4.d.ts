@@ -24,7 +24,7 @@ export declare class Vector4 extends Float32Array implements IVector4 {
     static floor: <T extends Vector4Like = Vector4>(a: Vector4Like, out?: T) => T;
     static fromArray: <T extends Vector4Like = Vector4>(a: ArrayLike<number> | Vector4Like, offset?: number, out?: T) => T;
     static fromScalar: <T extends Vector4Like = Vector4>(num: number, out?: T) => T;
-    static fromValues: <T extends Vector4Like = Vector4>(x: number, y: number, z: number, w: number, out?: T) => T;
+    static fromXYZW: <T extends Vector4Like = Vector4>(x: number, y: number, z: number, w: number, out?: T) => T;
     static inverse: <T extends Vector4Like = Vector4>(a: Vector4Like, out?: T) => T;
     static norm: (a: Vector4Like) => number;
     static lengthSquared: (a: Vector4Like) => number;

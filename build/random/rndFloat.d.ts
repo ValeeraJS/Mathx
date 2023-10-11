@@ -1,2 +1,1 @@
-declare const _default: (low: number, high: number) => number;
-export default _default;
+export declare const rndFloat: (min?: number, max?: number) => number;

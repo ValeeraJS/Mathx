@@ -61,5 +61,5 @@ export {
 	QuinticOut,
 	SinusoidalIn,
 	SinusoidalInOut,
-	SinusoidalOut
+	SinusoidalOut,
 };

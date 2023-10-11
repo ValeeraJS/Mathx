@@ -8,5 +8,4 @@
  * @example Mathx.clampCircle(3 * Math.PI, 0, 2 * Math.PI); // Math.PI;
  * Mathx.clampCircle(2 * Math.PI, -Math.PI, Math.PI); // 0;
  */
-declare const _default: (val: number, min: number, max: number) => number;
-export default _default;
+export declare const clampCircle: (val: number, min: number, max: number) => number;

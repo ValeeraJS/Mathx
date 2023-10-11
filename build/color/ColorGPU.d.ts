@@ -1,11 +1,16 @@
 import { IColorGPU, IColorGPUJson } from "./interfaces/IColorGPU";
-import { IColorRGB } from "./interfaces/IColorRGB";
-import { IColorRGBA } from "./interfaces/IColorRGBA";
+import { IColorRGB, IColorRGBJson } from "./interfaces/IColorRGB";
+import { IColorRGBA, IColorRGBAJson } from "./interfaces/IColorRGBA";
 import { IColorRYB } from "./interfaces/IColorRYB";
 import { IColorHSV } from "./interfaces/IColorHSV";
 import { IColorCMYK } from "./interfaces/IColorCMYK";
 import { IColorXYZ } from "./interfaces/IColorXYZ";
+import { ColorCMYK } from "./ColorCMYK";
+import { ColorHSV } from "./ColorHSV";
+import { IColorRYBA } from "./interfaces/IColorRYBA";
 export type ColorGPULike = number[] | Float32Array | ColorGPU;
+export type ColorFormatType = IColorGPU | string | Float32Array | number[] | number | IColorRGB | IColorRGBA | IColorRGBAJson | IColorRGBJson | IColorRYB | IColorRYBA | ColorHSV | IColorHSV | IColorCMYK | ColorCMYK;
+export declare const getColorGPU: (color: ColorFormatType, result?: ColorGPU) => ColorGPU;
 export declare class ColorGPU extends Float32Array implements IColorGPU {
     static average: (color: IColorGPU | ArrayLike<number>) => number;
     static averageWeighted: (color: IColorGPU | ArrayLike<number>, wr?: number, wg?: number, wb?: number) => number;

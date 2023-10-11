@@ -10,5 +10,4 @@
  * Mathx.clamp(-1, 0, 2); // 0;
  * Mathx.clamp(3, 0, 2); // 2;
  */
-declare const _default: (val: number, min: number, max: number) => number;
-export default _default;
+export declare const clamp: (val: number, min: number, max: number) => number;

@@ -10,6 +10,6 @@
  * Mathx.clamp(-1, 0, 2); // 0;
  * Mathx.clamp(3, 0, 2); // 2;
  */
-export default (val: number, min: number, max: number): number => {
+export const clamp = (val: number, min: number, max: number): number => {
 	return Math.max(min, Math.min(max, val));
 };

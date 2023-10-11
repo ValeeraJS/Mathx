@@ -13,7 +13,7 @@
  * Mathx.clamp(3, 0, 2); // 2;
  * Mathx.clamp(3, 2, 0); // 2;
  */
-export default (val: number, a: number, b: number): number => {
+export const clampSafe = (val: number, a: number, b: number): number => {
 	if (a > b) {
 		return Math.max(b, Math.min(a, val));
 	} else if (b > a) {

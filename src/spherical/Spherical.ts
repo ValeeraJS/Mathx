@@ -1,5 +1,5 @@
 import { ArraybufferDataType } from "../ArraybufferDataType";
-import clamp from "../common/clamp";
+import { clamp } from "../common/clamp";
 import { Vector3, Vector3Like } from "../vector";
 
 export interface ISphericalJson {

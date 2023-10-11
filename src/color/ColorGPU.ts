@@ -1,7 +1,7 @@
 import { IColorGPU, IColorGPUJson } from "./interfaces/IColorGPU";
 import { COLOR_HEX_MAP } from "./COLOR_HEX_MAP";
-import { IColorRGB } from "./interfaces/IColorRGB";
-import { IColorRGBA } from "./interfaces/IColorRGBA";
+import { IColorRGB, IColorRGBJson } from "./interfaces/IColorRGB";
+import { IColorRGBA, IColorRGBAJson } from "./interfaces/IColorRGBA";
 import { ArraybufferDataType } from "../ArraybufferDataType";
 import { WEIGHT_GRAY_BLUE, WEIGHT_GRAY_GREEN, WEIGHT_GRAY_RED } from "../constants";
 import { hue2rgb } from "./utils";
@@ -11,12 +11,73 @@ import { IColorCMYK } from "./interfaces/IColorCMYK";
 import { IColorXYZ } from "./interfaces/IColorXYZ";
 import { Vector3 } from "../vector";
 import { MATRIX_XYZ2RGB } from "./ColorXYZ";
+import { ColorCMYK } from "./ColorCMYK";
+import { ColorHSL } from "./ColorHSL";
+import { ColorHSV } from "./ColorHSV";
+import { ColorRGB } from "./ColorRGB";
+import { ColorRGBA } from "./ColorRGBA";
+import { ColorRYB } from "./ColorRYB";
+import { IColorRYBA } from "./interfaces/IColorRYBA";
 
 let r: number;
 let g: number;
 let b: number;
 
 export type ColorGPULike = number[] | Float32Array | ColorGPU;
+
+export type ColorFormatType =
+	| IColorGPU
+	| string
+	| Float32Array
+	| number[]
+	| number
+	| IColorRGB
+	| IColorRGBA
+	| IColorRGBAJson
+	| IColorRGBJson
+	| IColorRYB
+	| IColorRYBA
+	| ColorHSV
+	| IColorHSV
+	| IColorCMYK
+	| ColorCMYK;
+
+export const getColorGPU = (color: ColorFormatType, result = new ColorGPU()) => {
+	if (color instanceof ColorGPU) {
+		result.set(color);
+	} else if (typeof color === "string") {
+		ColorGPU.fromString(color, result);
+	} else if (typeof color === "number") {
+		ColorGPU.fromHex(color, 1, result);
+	} else if (color instanceof ColorRGB) {
+		ColorGPU.fromColorRGB(color, result);
+	} else if (color instanceof ColorRYB) {
+		ColorGPU.fromColorRYB(color, result);
+	} else if (color instanceof ColorRGBA) {
+		ColorGPU.fromColorRGBA(color, result);
+	} else if (color instanceof ColorHSL) {
+		ColorGPU.fromColorHSL(color, result);
+	} else if (color instanceof ColorHSV) {
+		ColorGPU.fromColorHSV(color, result);
+	} else if (color instanceof ColorCMYK) {
+		ColorGPU.fromColorCMYK(color, result);
+	} else if (color instanceof Float32Array || color instanceof Array) {
+		ColorGPU.fromArray(color, result);
+	} else {
+		if ("a" in color) {
+			ColorGPU.fromJson(color as IColorRGBAJson, result);
+		} else {
+			ColorGPU.fromJson(
+				{
+					...(color as IColorRGBJson),
+					a: 1,
+				},
+				result,
+			);
+		}
+	}
+	return result;
+};
 
 export class ColorGPU extends Float32Array implements IColorGPU {
 	public static average = (color: IColorGPU | ArrayLike<number>): number => {

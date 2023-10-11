@@ -1,5 +1,5 @@
 import { ArraybufferDataType } from "../ArraybufferDataType";
-import closeToCommon from "../common/closeTo";
+import { closeTo } from "../common/closeTo";
 import type { Matrix4Like } from "../matrix";
 
 export interface IVector4Json {
@@ -61,12 +61,7 @@ export class Vector4 extends Float32Array implements IVector4 {
 	};
 
 	public static closeTo = (a: Vector4Like, b: Vector4Like): boolean => {
-		return (
-			closeToCommon(a[0], b[0]) &&
-			closeToCommon(a[1], b[1]) &&
-			closeToCommon(a[2], b[2]) &&
-			closeToCommon(a[3], b[3])
-		);
+		return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]) && closeTo(a[3], b[3]);
 	};
 
 	public static create = (x = 0, y = 0, z = 0, w = 0): Vector4 => {

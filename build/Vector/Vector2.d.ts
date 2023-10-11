@@ -42,7 +42,7 @@ export declare class Vector2 extends Float32Array implements IVector2 {
     static fromJson: <T extends Vector2Like = Vector2>(j: IVector2Json, out?: T) => T;
     static fromPolar: <T extends Vector2Like = Vector2>(p: IPolar, out?: T) => T;
     static fromScalar: <T extends Vector2Like = Vector2>(value?: number, out?: T) => T;
-    static fromValues: <T extends Vector2Like = Vector2>(x: number, y: number, out?: T) => T;
+    static fromXY: <T extends Vector2Like = Vector2>(x: number, y: number, out?: T) => T;
     static inverse: <T extends Vector2Like = Vector2>(a: Vector2Like, out?: T) => T;
     static norm: (a: Vector2Like) => number;
     static lengthManhattan: (a: Vector2Like) => number;

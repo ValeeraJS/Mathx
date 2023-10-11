@@ -1,4 +1,4 @@
-import closeToCommon from "../common/closeTo";
+import { closeTo } from "../common/closeTo";
 import { Vector2Like } from "./../vector/Vector2";
 
 let a00 = 0;
@@ -57,7 +57,7 @@ export class Matrix2 extends Float32Array {
 		b01 = b[2];
 		b11 = b[3];
 
-		return closeToCommon(a00, b00) && closeToCommon(a01, b01) && closeToCommon(a10, b10) && closeToCommon(a11, b11);
+		return closeTo(a00, b00) && closeTo(a01, b01) && closeTo(a10, b10) && closeTo(a11, b11);
 	};
 
 	public static create = (a: Matrix2Like = UNIT_MATRIX2_DATA): Matrix2 => {

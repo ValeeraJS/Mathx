@@ -1,6 +1,6 @@
 import { IEulerAngle, EulerRotationOrders } from "./IEulerAngle";
 import { ArraybufferDataType } from "../ArraybufferDataType";
-import clamp from "../common/clamp";
+import { clamp } from "../common/clamp";
 
 export class EulerAngle extends Float32Array implements IEulerAngle {
 	public static readonly ORDERS = EulerRotationOrders;
@@ -12,19 +12,16 @@ export class EulerAngle extends Float32Array implements IEulerAngle {
 		return new EulerAngle(x, y, z, order);
 	}
 
-	public static fromMatrix4(
-		matrix4: Float32Array,
-		out: IEulerAngle = new EulerAngle()
-	): IEulerAngle {
-		const m11 = matrix4[0],
-			m12 = matrix4[4],
-			m13 = matrix4[8];
-		const m21 = matrix4[1],
-			m22 = matrix4[5],
-			m23 = matrix4[9];
-		const m31 = matrix4[2],
-			m32 = matrix4[6],
-			m33 = matrix4[10];
+	public static fromMatrix4(matrix4: Float32Array, out: IEulerAngle = new EulerAngle()): IEulerAngle {
+		const m11 = matrix4[0];
+		const m12 = matrix4[4];
+		const m13 = matrix4[8];
+		const m21 = matrix4[1];
+		const m22 = matrix4[5];
+		const m23 = matrix4[9];
+		const m31 = matrix4[2];
+		const m32 = matrix4[6];
+		const m33 = matrix4[10];
 
 		switch (out.order) {
 			case EulerRotationOrders.XYZ:
