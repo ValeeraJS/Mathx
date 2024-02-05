@@ -24,7 +24,8 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static clampSafe: <T extends Vector3Like = Vector3>(a: Vector3Like, min: Vector3Like, max: Vector3Like, out?: T) => T;
     static clampScalar: <T extends Vector3Like = Vector3>(a: Vector3Like, min: number, max: number, out?: T) => T;
     static clone: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;
-    static closeTo: (a: Vector3Like, b: Vector3Like) => boolean;
+    static closeTo: (a: Vector3Like, b: Vector3Like, epsilon?: number) => boolean;
+    static closeToRect: (a: Vector3Like, b: Vector3Like, epsilon?: number) => boolean;
     static create: (x?: number, y?: number, z?: number) => Vector3;
     static cross: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, out?: T) => T;
     static distanceTo: (a: Vector3Like, b: Vector3Like) => number;
@@ -38,6 +39,7 @@ export declare class Vector3 extends Float32Array implements IVector3 {
     static fromArray: <T extends Vector3Like = Vector3>(a: ArrayLike<number> | Vector3Like, offset?: number, out?: T) => T;
     static fromScalar: <T extends Vector3Like = Vector3>(num: number, out?: T) => T;
     static fromXYZ: <T extends Vector3Like = Vector3>(x: number, y: number, z: number, out?: T) => T;
+    static fromMatrix4Scale: <T extends Vector3Like = Vector3>(mat: Matrix4Like, out?: T) => T;
     static fromMatrix4Translate: <T extends Vector3Like = Vector3>(mat: Matrix4Like, out?: T) => T;
     static hermite: <T extends Vector3Like = Vector3>(a: Vector3Like, b: Vector3Like, c: Vector3Like, d: Vector3Like, t: number, out?: T) => T;
     static inverse: <T extends Vector3Like = Vector3>(a: Vector3Like, out?: T) => T;

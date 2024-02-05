@@ -41,6 +41,7 @@ export declare class Vector2 extends Float32Array implements IVector2 {
     static fromArray: <T extends Vector2Like = Vector2>(arr: Vector2Like, index?: number, out?: T) => T;
     static fromJson: <T extends Vector2Like = Vector2>(j: IVector2Json, out?: T) => T;
     static fromPolar: <T extends Vector2Like = Vector2>(p: IPolar, out?: T) => T;
+    static fromPointerEvent: <T extends Vector2Like = Vector2>(e: PointerEvent, out?: T) => T;
     static fromScalar: <T extends Vector2Like = Vector2>(value?: number, out?: T) => T;
     static fromXY: <T extends Vector2Like = Vector2>(x: number, y: number, out?: T) => T;
     static inverse: <T extends Vector2Like = Vector2>(a: Vector2Like, out?: T) => T;

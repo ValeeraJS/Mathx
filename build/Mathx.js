@@ -1,8 +1,5 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.Mathx = {}));
-})(this, (function (exports) { 'use strict';
+var Mathx = (function (exports) {
+	'use strict';
 
 	const ArraybufferDataType = {
 	    COLOR_CMYK: "col_cmyk",
@@ -487,6 +484,13 @@
 	        out[1] = Math.sin(p.a) * p.r;
 	        return out;
 	    };
+	    static fromPointerEvent = (e, out = new Vector2()) => {
+	        if (e.target) {
+	            out[0] = (e.clientX / e.target.offsetWidth) * 2 - 1;
+	            out[1] = 1 - (e.clientY / e.target.offsetHeight) * 2;
+	        }
+	        return out;
+	    };
 	    static fromScalar = (value = 0, out = new Vector2()) => {
 	        out[0] = out[1] = value;
 	        return out;
@@ -701,8 +705,11 @@
 	        out[2] = a[2];
 	        return out;
 	    };
-	    static closeTo = (a, b) => {
-	        return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]);
+	    static closeTo = (a, b, epsilon = EPSILON) => {
+	        return Vector3.distanceTo(a, b) <= epsilon;
+	    };
+	    static closeToRect = (a, b, epsilon = EPSILON) => {
+	        return closeTo(a[0], b[0], epsilon) && closeTo(a[1], b[1], epsilon) && closeTo(a[2], b[2], epsilon);
 	    };
 	    static create = (x = 0, y = 0, z = 0) => {
 	        const out = new Vector3();
@@ -776,6 +783,12 @@
 	        out[0] = x;
 	        out[1] = y;
 	        out[2] = z;
+	        return out;
+	    };
+	    static fromMatrix4Scale = (mat, out = new Vector3()) => {
+	        out[0] = mat[0];
+	        out[1] = mat[5];
+	        out[2] = mat[10];
 	        return out;
 	    };
 	    static fromMatrix4Translate = (mat, out = new Vector3()) => {
@@ -1062,8 +1075,11 @@
 	        out[3] = Math.ceil(a[3]);
 	        return out;
 	    };
-	    static closeTo = (a, b) => {
-	        return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]) && closeTo(a[3], b[3]);
+	    static closeTo = (a, b, epsilon = EPSILON) => {
+	        return Vector4.distanceTo(a, b) <= epsilon;
+	    };
+	    static closeToRect = (a, b, epsilon = EPSILON) => {
+	        return closeTo(a[0], b[0], epsilon) && closeTo(a[1], b[1], epsilon) && closeTo(a[2], b[2], epsilon) && closeTo(a[3], b[3], epsilon);
 	    };
 	    static create = (x = 0, y = 0, z = 0, w = 0) => {
 	        const out = new Vector4();
@@ -2173,6 +2189,21 @@
 	    }
 	}
 
+	const tmpResult = [];
+	const factorialNaturalNumber = (n) => {
+	    if (n === 0 || n === 1) {
+	        return 1;
+	    }
+	    if (tmpResult[n] > 0) {
+	        return tmpResult[n];
+	    }
+	    return tmpResult[n] = factorialNaturalNumber(n - 1) * n;
+	};
+
+	const arrangement = (a, b) => {
+	    return factorialNaturalNumber(a) / factorialNaturalNumber(a - b);
+	};
+
 	const ceilPowerOfTwo = (value) => {
 	    return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2));
 	};
@@ -2199,6 +2230,10 @@
 	        return v$1 - circle;
 	    }
 	    return v$1;
+	};
+
+	const combination = (a, b) => {
+	    return factorialNaturalNumber(a) / factorialNaturalNumber(b) / factorialNaturalNumber(a - b);
 	};
 
 	const floorPowerOfTwo = (value) => {
@@ -2230,6 +2265,42 @@
 	    d1 = range1[1] - range1[0];
 	    d2$1 = range2[1] - range2[0];
 	    return (value - d1 * 0.5) / d2$1 / d1;
+	};
+
+	const swap = (arr, a, b) => {
+	    const tmp = arr[a];
+	    arr[a] = arr[b];
+	    arr[b] = tmp;
+	    return arr;
+	};
+
+	function findPartition(arr, low, high, compare) {
+	    let pivot = arr[high];
+	    let pivotloc = low;
+	    for (let i = low; i <= high; i++) {
+	        if (compare(pivot, arr[i])) {
+	            swap(arr, i, pivotloc);
+	            pivotloc++;
+	        }
+	    }
+	    swap(arr, high, pivotloc);
+	    return pivotloc;
+	}
+	function kthSmallest(arr, low, high, k, compare) {
+	    let partition = findPartition(arr, low, high, compare);
+	    if (partition == k - 1) {
+	        return arr[partition];
+	    }
+	    else if (partition < k - 1) {
+	        return kthSmallest(arr, partition + 1, high, k, compare);
+	    }
+	    return kthSmallest(arr, low, partition - 1, k, compare);
+	}
+	const defaultCompare = (a, b) => {
+	    return a > b;
+	};
+	const minKth = (arr, k = 0, compare = defaultCompare) => {
+	    return kthSmallest(arr, 0, arr.length - 1, k, compare);
 	};
 
 	const opposite = (v, center = 0) => {
@@ -4605,99 +4676,73 @@
 	    return min + Math.floor(Math.random() * (max - min + 1));
 	};
 
-	let dis;
-	let r2;
-	let d2;
-	const v = new Vector3();
-	class Ray3 {
-	    static at = (a, b, out = new Vector3()) => {
-	        return Vector3.multiplyScalar(a.direction, b, out);
-	    };
-	    static distanceToPlane = (ray, plane) => {
-	        const denominator = Vector3.dot(plane.normal, ray.direction);
-	        if (denominator === 0) {
-	            // line is coplanar, return origin
-	            if (plane.distanceToPoint(ray.position) === 0) {
-	                return 0;
-	            }
-	            return null;
-	        }
-	        const t = -(Vector3.dot(ray.position, plane.normal) + plane.distance) / denominator;
-	        return t >= 0 ? t : null;
-	    };
-	    static distanceToPoint = (a, point) => {
-	        return Math.sqrt(Ray3.distanceSqToPoint(a, point));
-	    };
-	    static distanceSqToPoint = (a, point) => {
-	        Vector3.minus(point, a.position, v);
-	        dis = Vector3.dot(v, a.direction);
-	        if (dis < 0) {
-	            return Vector3.distanceToSquared(a.position, point);
-	        }
-	        Vector3.multiplyScalar(a.direction, dis, v);
-	        Vector3.add(v, a.position, v);
-	        return Vector3.distanceToSquared(v, point);
-	    };
-	    static lookAt = (a, b, out = new Ray3()) => {
-	        if (a !== out) {
-	            Vector3.fromArray(a.position, 0, out.position);
-	        }
-	        Vector3.normalize(Vector3.minus(b, a.position, out.direction));
+	const v1$1 = new Vector3();
+	const v2$1 = new Vector3();
+	const v3 = new Vector3();
+	class Plane3 {
+	    static normalize(p, out = new Plane3()) {
+	        const normal = p.normal;
+	        const factor = 1.0 / Vector3.norm(normal);
+	        Vector3.multiplyScalar(normal, factor, out.normal);
+	        out.distance = p.distance * factor;
 	        return out;
-	    };
-	    static intersectPlanePoint = (ray, plane, out = new Vector3()) => {
-	        const t = Ray3.distanceToPlane(ray, plane);
-	        if (t === null) {
-	            return null;
-	        }
-	        return Ray3.at(ray, t, out);
-	    };
-	    static intersectSpherePoint = (ray, sphere, out = new Vector3()) => {
-	        Vector3.minus(sphere.position, ray.position, v);
-	        dis = Vector3.dot(v, ray.direction);
-	        d2 = Vector3.dot(v, v) - dis * dis;
-	        r2 = sphere.radius * sphere.radius;
-	        if (d2 > r2)
-	            return null;
-	        const thc = Math.sqrt(r2 - d2);
-	        const t0 = dis - thc;
-	        const t1 = dis + thc;
-	        if (t0 < 0 && t1 < 0)
-	            return null;
-	        if (t0 < 0)
-	            return Ray3.at(ray, t1, out);
-	        return Ray3.at(ray, t0, out);
-	    };
-	    static isIntersectSphere = (ray, sphere) => {
-	        return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
-	    };
-	    static intersectsPlane = (ray, plane) => {
-	        const distToPoint = plane.distanceToPoint(ray.position);
-	        if (distToPoint === 0) {
-	            return true;
-	        }
-	        const denominator = Vector3.dot(plane.normal, ray.direction);
-	        if (denominator * distToPoint < 0) {
-	            return true;
-	        }
-	        return false;
-	    };
-	    static recast = (ray, distance, out = new Ray3()) => {
-	        v.set(Ray3.at(ray, distance));
-	        out.direction.set(v);
-	        return out;
-	    };
-	    position = new Vector3();
-	    direction = new Vector3();
-	    constructor(position = Vector3.VECTOR3_ZERO, direction = Vector3.VECTOR3_BACK) {
-	        this.position.set(position);
-	        Vector3.normalize(direction, this.direction);
+	    }
+	    normal = new Vector3();
+	    distance;
+	    constructor(normal = Vector3.VECTOR3_TOP, distance = 0) {
+	        this.normal.set(normal);
+	        this.distance = distance;
+	    }
+	    distanceToPoint(point) {
+	        return Vector3.dot(this.normal, point) + this.distance;
+	    }
+	    distanceToSphere(sphere) {
+	        return this.distanceToPoint(sphere.position) - sphere.radius;
+	    }
+	    from(p) {
+	        this.distance = p.distance;
+	        this.normal.set(p.normal);
+	    }
+	    fromCoplanarPoints(a, b, c) {
+	        Vector3.minus(b, a, v1$1);
+	        Vector3.minus(c, a, v2$1);
+	        Vector3.cross(v1$1, v2$1, v3);
+	        Vector3.normalize(v3, v3);
+	        // TODO check zero vec
+	        return this.formCoplanarPointAndNormal(a, v3);
+	    }
+	    formCoplanarPointAndNormal(point, normal) {
+	        this.normal.set(normal);
+	        this.distance = -Vector3.dot(point, normal);
+	        return this;
+	    }
+	    fromTriangle3(triangle) {
+	        return this.fromCoplanarPoints(triangle.a, triangle.b, triangle.c);
+	    }
+	    negate() {
+	        this.distance *= -1;
+	        Vector3.negate(this.normal, this.normal);
+	        return this;
+	    }
+	    normalize() {
+	        Plane3.normalize(this, this);
+	        return this;
+	    }
+	    projectPoint(point, out = new Vector3()) {
+	        Vector3.fromArray(this.normal, 0, out);
+	        Vector3.multiplyScalar(out, -this.distanceToPoint(point), out);
+	        return Vector3.add(out, point, out);
+	    }
+	    set(normal, distance = this.distance) {
+	        this.normal.set(normal);
+	        this.distance = distance;
+	        return this;
 	    }
 	}
 
 	// import Matrix3 from "../matrix/Matrix3";
-	const v1$1 = new Vector3();
-	const v2$1 = new Vector3();
+	const v1 = new Vector3();
+	const v2 = new Vector3();
 	const v0 = new Vector3();
 	const f1 = new Vector3();
 	const f2 = new Vector3();
@@ -4767,12 +4812,12 @@
 	        Vector3.minus(a.max, ta, tb);
 	        // translate triangle to aabb origin
 	        Vector3.minus(b.a, ta, v0);
-	        Vector3.minus(b.b, ta, v1$1);
-	        Vector3.minus(b.c, ta, v2$1);
+	        Vector3.minus(b.b, ta, v1);
+	        Vector3.minus(b.c, ta, v2);
 	        // compute edge vectors for triangle
-	        Vector3.minus(v1$1, v0, f0);
-	        Vector3.minus(v2$1, v1$1, f1);
-	        Vector3.minus(v0, v2$1, f2);
+	        Vector3.minus(v1, v0, f0);
+	        Vector3.minus(v2, v1, f1);
+	        Vector3.minus(v0, v2, f2);
 	        // test against axes that are given by cross product combinations of the edges of the triangle and the edges of the aabb
 	        // make an axis testing of each of the 3 sides of the aabb against each of the 3 sides of the triangle = 9 axis of separation
 	        // axis_ij = u_i x f_j (u0, u1, u2 = face normals of aabb = x,y,z axes vectors since aabb is axis aligned)
@@ -4805,19 +4850,19 @@
 	            f2[0],
 	            0,
 	        ];
-	        if (!satForAxes(axes, v0, v1$1, v2$1, tb)) {
+	        if (!satForAxes(axes, v0, v1, v2, tb)) {
 	            return false;
 	        }
 	        // test 3 face normals from the aabb
 	        // ta = Matrix3.identity(); ???
-	        if (!satForAxes(axes, v0, v1$1, v2$1, tb)) {
+	        if (!satForAxes(axes, v0, v1, v2, tb)) {
 	            return false;
 	        }
 	        // finally testing the face normal of the triangle
 	        // use already existing triangle edge vectors here
 	        Vector3.cross(f0, f1, ta);
 	        // axes = [_triangleNormal.x, _triangleNormal.y, _triangleNormal.z];
-	        return satForAxes(ta, v0, v1$1, v2$1, tb);
+	        return satForAxes(ta, v0, v1, v2, tb);
 	    };
 	    static isEmpty = (a) => {
 	        return a.max[0] < a.min[0] || a.max[0] < a.min[0] || a.max[0] < a.min[0];
@@ -4885,67 +4930,6 @@
 	        }
 	    }
 	    return true;
-	}
-
-	const v1 = new Vector3();
-	const v2 = new Vector3();
-	const v3 = new Vector3();
-	class Plane3 {
-	    static normalize(p, out = new Plane3()) {
-	        const normal = p.normal;
-	        const factor = 1.0 / Vector3.norm(normal);
-	        Vector3.multiplyScalar(normal, factor, out.normal);
-	        out.distance = p.distance * factor;
-	        return out;
-	    }
-	    normal = new Vector3();
-	    distance;
-	    constructor(normal = Vector3.VECTOR3_TOP, distance = 0) {
-	        this.normal.set(normal);
-	        this.distance = distance;
-	    }
-	    distanceToPoint(point) {
-	        return Vector3.dot(this.normal, point) + this.distance;
-	    }
-	    distanceToSphere(sphere) {
-	        return this.distanceToPoint(sphere.position) - sphere.radius;
-	    }
-	    from(p) {
-	        this.distance = p.distance;
-	        this.normal.set(p.normal);
-	    }
-	    fromCoplanarPoints(a, b, c) {
-	        Vector3.minus(b, a, v1);
-	        Vector3.minus(c, a, v2);
-	        Vector3.cross(v1, v2, v3);
-	        Vector3.normalize(v3, v3);
-	        // TODO check zero vec
-	        return this.formCoplanarPointAndNormal(a, v3);
-	    }
-	    formCoplanarPointAndNormal(point, normal) {
-	        this.normal.set(normal);
-	        this.distance = -Vector3.dot(point, normal);
-	        return this;
-	    }
-	    negate() {
-	        this.distance *= -1;
-	        Vector3.negate(this.normal, this.normal);
-	        return this;
-	    }
-	    normalize() {
-	        Plane3.normalize(this, this);
-	        return this;
-	    }
-	    projectPoint(point, out = new Vector3()) {
-	        Vector3.fromArray(this.normal, 0, out);
-	        Vector3.multiplyScalar(out, -this.distanceToPoint(point), out);
-	        return Vector3.add(out, point, out);
-	    }
-	    set(normal, distance = this.distance) {
-	        this.normal.set(normal);
-	        this.distance = distance;
-	        return this;
-	    }
 	}
 
 	const _vector = new Vector3();
@@ -5352,6 +5336,7 @@
 
 	const ab = new Vector3();
 	const bc = new Vector3();
+	const ca = new Vector3();
 	class Triangle3 {
 	    static area = (t) => {
 	        const c = Triangle3.getABLength(t);
@@ -5360,8 +5345,67 @@
 	        const p = (c + a + b) / 2;
 	        return Math.sqrt(p * (p - a) * (p - b) * (p - c));
 	    };
+	    static centerOfGravity = (t, out = new Vector3()) => {
+	        out[0] = t.a[0] + t.b[0] + t.c[0];
+	        out[1] = t.a[1] + t.b[1] + t.c[1];
+	        out[2] = t.a[2] + t.b[2] + t.c[2];
+	        return Vector3.multiplyScalar(out, 1 / 3, out);
+	    };
+	    static containsPoint = (t, epsilon = EPSILON, point) => {
+	        Vector3.minus(t.b, t.a, ab);
+	        Vector3.minus(t.c, t.b, bc);
+	        Vector3.minus(t.a, t.c, ca);
+	        const v1 = Vector3.minus(t.a, point);
+	        const v2 = Vector3.minus(t.b, point);
+	        const v3 = Vector3.minus(t.c, point);
+	        Vector3.normalize(Vector3.cross(v1, v2, ab), ab);
+	        Vector3.normalize(Vector3.cross(v2, v3, bc), bc);
+	        Vector3.normalize(Vector3.cross(v3, v1, ca), ca);
+	        if (Vector3.closeToRect(ab, bc, epsilon) && Vector3.closeToRect(ab, ca, epsilon)) {
+	            return true;
+	        }
+	        return false;
+	    };
+	    static cosAngle = (t, point) => {
+	        let a, other = [];
+	        const a2 = Vector3.lengthSquared(t.a);
+	        const b2 = Vector3.lengthSquared(t.b);
+	        const c2 = Vector3.lengthSquared(t.c);
+	        if (typeof point === 'string') {
+	            if (point === "a") {
+	                a = a2;
+	                other.push(b2, c2);
+	            }
+	            else if (point === "b") {
+	                a = b2;
+	                other.push(a2, c2);
+	            }
+	            else {
+	                a = c2;
+	                other.push(a2, b2);
+	            }
+	        }
+	        else {
+	            if (point === t.a) {
+	                a = a2;
+	                other.push(b2, c2);
+	            }
+	            else if (point === t.b) {
+	                a = b2;
+	                other.push(a2, c2);
+	            }
+	            else if (point === t.c) {
+	                a = c2;
+	                other.push(a2, b2);
+	            }
+	            else {
+	                throw new Error("The point is not in triangle.");
+	            }
+	        }
+	        return (other[0] + other[1] - a) * 0.5 / Math.sqrt(other[0] * other[1]);
+	    };
 	    static create = (a = new Vector3(-1, -1, 0), b = new Vector3(1, -1, 0), c = new Vector3(0, 1, 0)) => {
-	        return { a, b, c };
+	        return new Triangle3(a, b, c);
 	    };
 	    static getABLength = (t) => {
 	        return Vector3.distanceTo(t.a, t.b);
@@ -5391,6 +5435,118 @@
 	        this.a = a;
 	        this.b = b;
 	        this.c = c;
+	    }
+	}
+
+	let dis;
+	let r2;
+	let d2;
+	const v = new Vector3();
+	class Ray3 {
+	    static at = (a, b, out = new Vector3()) => {
+	        Vector3.multiplyScalar(a.direction, b, out);
+	        return Vector3.add(a.position, out, out);
+	    };
+	    static distanceToPlane = (ray, plane) => {
+	        const denominator = Vector3.dot(plane.normal, ray.direction);
+	        if (denominator === 0) {
+	            // line is coplanar, return origin
+	            if (plane.distanceToPoint(ray.position) === 0) {
+	                return 0;
+	            }
+	            return null;
+	        }
+	        const t = -(Vector3.dot(ray.position, plane.normal) + plane.distance) / denominator;
+	        return t >= 0 ? t : null;
+	    };
+	    static distanceToPoint = (a, point) => {
+	        return Math.sqrt(Ray3.distanceSqToPoint(a, point));
+	    };
+	    static distanceSqToPoint = (a, point) => {
+	        Vector3.minus(point, a.position, v);
+	        dis = Vector3.dot(v, a.direction);
+	        if (dis < 0) {
+	            return Vector3.distanceToSquared(a.position, point);
+	        }
+	        Vector3.multiplyScalar(a.direction, dis, v);
+	        Vector3.add(v, a.position, v);
+	        return Vector3.distanceToSquared(v, point);
+	    };
+	    static fromCameraMatrixAndScreenCoord(projectionMatrix, worldMatrix, screenCoord, out = new Ray3) {
+	        Vector3.fromMatrix4Translate(worldMatrix, out.position);
+	        Vector3.fromXYZ(screenCoord[0], screenCoord[1], 0.5, out.direction);
+	        Matrix4.unproject(out.direction, projectionMatrix, worldMatrix, out.direction);
+	        Vector3.minus(out.direction, out.position, out.direction);
+	        Vector3.normalize(out.direction, out.direction);
+	        return out;
+	    }
+	    static lookAt = (a, b, out = new Ray3()) => {
+	        if (a !== out) {
+	            Vector3.fromArray(a.position, 0, out.position);
+	        }
+	        Vector3.normalize(Vector3.minus(b, a.position, out.direction));
+	        return out;
+	    };
+	    static intersectPlane3Point = (ray, plane, out = new Vector3()) => {
+	        const t = Ray3.distanceToPlane(ray, plane);
+	        if (t === null) {
+	            return null;
+	        }
+	        return Ray3.at(ray, t, out);
+	    };
+	    static intersectSpherePoint = (ray, sphere, out = new Vector3()) => {
+	        Vector3.minus(sphere.position, ray.position, v);
+	        dis = Vector3.dot(v, ray.direction);
+	        d2 = Vector3.dot(v, v) - dis * dis;
+	        r2 = sphere.radius * sphere.radius;
+	        if (d2 > r2)
+	            return null;
+	        const thc = Math.sqrt(r2 - d2);
+	        const t0 = dis - thc;
+	        const t1 = dis + thc;
+	        if (t0 < 0 && t1 < 0)
+	            return null;
+	        if (t0 < 0)
+	            return Ray3.at(ray, t1, out);
+	        return Ray3.at(ray, t0, out);
+	    };
+	    static intersectsTriangle3Point = (ray, triangle, epsilon = EPSILON, out) => {
+	        const plane = new Plane3();
+	        plane.fromTriangle3(triangle);
+	        const result = Ray3.intersectPlane3Point(ray, plane, out);
+	        if (!result) {
+	            return null;
+	        }
+	        const isInTriangle = Triangle3.containsPoint(triangle, epsilon, out);
+	        if (!isInTriangle) {
+	            return null;
+	        }
+	        return out;
+	    };
+	    static intersectsPlane3 = (ray, plane) => {
+	        const distToPoint = plane.distanceToPoint(ray.position);
+	        if (distToPoint === 0) {
+	            return true;
+	        }
+	        const denominator = Vector3.dot(plane.normal, ray.direction);
+	        if (denominator * distToPoint < 0) {
+	            return true;
+	        }
+	        return false;
+	    };
+	    static intersectsSphere = (ray, sphere) => {
+	        return Ray3.distanceSqToPoint(ray, sphere.position) <= sphere.radius * sphere.radius;
+	    };
+	    static recast = (ray, distance, out = new Ray3()) => {
+	        v.set(Ray3.at(ray, distance));
+	        out.direction.set(v);
+	        return out;
+	    };
+	    position = new Vector3();
+	    direction = new Vector3();
+	    constructor(position = Vector3.VECTOR3_ZERO, direction = Vector3.VECTOR3_BACK) {
+	        this.position.set(position);
+	        Vector3.normalize(direction, this.direction);
 	    }
 	}
 
@@ -5485,13 +5641,16 @@
 	exports.Vector2 = Vector2;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;
+	exports.arrangement = arrangement;
 	exports.catmullRom = catmullRom;
 	exports.ceilPowerOfTwo = ceilPowerOfTwo;
 	exports.clamp = clamp;
 	exports.clampCircle = clampCircle;
 	exports.clampSafe = clampSafe;
 	exports.closeTo = closeTo;
+	exports.combination = combination;
 	exports.cubicBezier = cubicBezier;
+	exports.factorialNaturalNumber = factorialNaturalNumber;
 	exports.floorPowerOfTwo = floorPowerOfTwo;
 	exports.floorToZero = floorToZero;
 	exports.generateLagrange = generateLagrange;
@@ -5501,6 +5660,7 @@
 	exports.lerp = lerp;
 	exports.linearToSrgb = linearToSrgb;
 	exports.mapRange = mapRange;
+	exports.minKth = minKth;
 	exports.opposite = opposite;
 	exports.quadraticBezier = quadraticBezier;
 	exports.rndFloat = rndFloat;
@@ -5509,5 +5669,8 @@
 	exports.srgbToLinear = srgbToLinear;
 	exports.sum = sum;
 	exports.sumArray = sumArray;
+	exports.swap = swap;
 
-}));
+	return exports;
+
+})({});

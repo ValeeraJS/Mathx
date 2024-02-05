@@ -228,10 +228,13 @@ export class Vector2 extends Float32Array implements IVector2 {
 		return out;
 	};
 
-	public static fromPointerEvent = <T extends Vector2Like = Vector2>(e: PointerEvent, out: T = new Vector2() as T): T => {
+	public static fromPointerEvent = <T extends Vector2Like = Vector2>(
+		e: PointerEvent,
+		out: T = new Vector2() as T,
+	): T => {
 		if (e.target) {
-			out[0] = e.clientX / (e.target as HTMLElement).offsetWidth * 2 - 1;
-			out[1] = 1 - e.clientY / (e.target as HTMLElement).offsetHeight * 2;
+			out[0] = (e.clientX / (e.target as HTMLElement).offsetWidth) * 2 - 1;
+			out[1] = 1 - (e.clientY / (e.target as HTMLElement).offsetHeight) * 2;
 		}
 
 		return out;

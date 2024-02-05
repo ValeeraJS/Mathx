@@ -13,7 +13,8 @@ export declare class Vector4 extends Float32Array implements IVector4 {
     static readonly VECTOR4_ONE: Vector4;
     static add: <T extends Vector4Like = Vector4>(a: Vector4Like, b: Vector4Like, out?: T) => T;
     static ceil: <T extends Vector4Like = Vector4>(a: Vector4Like, out?: T) => T;
-    static closeTo: (a: Vector4Like, b: Vector4Like) => boolean;
+    static closeTo: (a: Vector4Like, b: Vector4Like, epsilon?: number) => boolean;
+    static closeToRect: (a: Vector4Like, b: Vector4Like, epsilon?: number) => boolean;
     static create: (x?: number, y?: number, z?: number, w?: number) => Vector4;
     static cross: <T extends Vector4Like = Vector4>(u: Vector4Like, v: Vector4Like, w: Vector4Like, out?: T) => T;
     static distanceTo: (a: Vector4Like, b: Vector4Like) => number;

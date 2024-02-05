@@ -9,7 +9,6 @@ import { IColorRYB } from "./interfaces/IColorRYB";
 import { IColorHSV } from "./interfaces/IColorHSV";
 import { IColorCMYK } from "./interfaces/IColorCMYK";
 import { IColorXYZ } from "./interfaces/IColorXYZ";
-import { Vector3 } from "../vector";
 import { MATRIX_XYZ2RGB } from "./ColorXYZ";
 import { ColorCMYK } from "./ColorCMYK";
 import { ColorHSL } from "./ColorHSL";
@@ -18,6 +17,7 @@ import { ColorRGB } from "./ColorRGB";
 import { ColorRGBA } from "./ColorRGBA";
 import { ColorRYB } from "./ColorRYB";
 import { IColorRYBA } from "./interfaces/IColorRYBA";
+import { Vector3 } from "../vector/Vector3";
 
 let r: number;
 let g: number;

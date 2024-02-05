@@ -1,7 +1,8 @@
 import { swap } from "./swap";
 
 function findPartition<T>(arr: T[], low: number, high: number, compare: (a: T, b: T) => boolean): number {
-	let pivot = arr[high], pivotloc = low;
+	let pivot = arr[high];
+	let pivotloc = low;
 
 	for (let i = low; i <= high; i++) {
 		if (compare(pivot, arr[i])) {
@@ -29,8 +30,8 @@ function kthSmallest<T>(arr: T[], low: number, high: number, k: number, compare:
 
 const defaultCompare = <T>(a: T, b: T) => {
 	return a > b;
-}
+};
 
 export const minKth = <T>(arr: T[], k: number = 0, compare = defaultCompare): T => {
 	return kthSmallest(arr, 0, arr.length - 1, k, compare);
-}
+};

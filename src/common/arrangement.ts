@@ -1,5 +1,5 @@
-import { factorialNaturalNumber } from "./factorialInt";
+import { factorialNaturalNumber } from "./factorialNaturalNumber";
 
 export const arrangement = (a: number, b: number) => {
-    return factorialNaturalNumber(a) / factorialNaturalNumber(a-b);
-}
+	return factorialNaturalNumber(a) / factorialNaturalNumber(a - b);
+};

@@ -5,6 +5,7 @@ export * from "./clampCircle";
 export * from "./clampSafe";
 export * from "./closeTo";
 export * from "./combination";
+export * from "./factorialNaturalNumber";
 export * from "./floorPowerOfTwo";
 export * from "./floorToZero";
 export * from "./isPowerOf2";
