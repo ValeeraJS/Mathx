@@ -6,7 +6,7 @@ export default {
 	output: [
 		{
 			file: "build/Mathx.js",
-			format: "umd",
+			format: "iife",
 			indent: "\t",
 			name: "Mathx",
 			sourcemap: false
