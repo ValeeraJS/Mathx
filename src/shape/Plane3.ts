@@ -1,5 +1,6 @@
 import { Sphere } from "./Sphere";
 import { Vector3, Vector3Like } from "../vector/Vector3";
+import { ITriangle3 } from "./interfaces/ITriangle3";
 
 const v1 = new Vector3();
 const v2 = new Vector3();
@@ -51,6 +52,10 @@ export class Plane3 {
 		this.distance = -Vector3.dot(point, normal);
 
 		return this;
+	}
+
+	fromTriangle3(triangle: ITriangle3): this {
+		return this.fromCoplanarPoints(triangle.a, triangle.b, triangle.c);
 	}
 
 	negate(): this {
