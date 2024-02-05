@@ -2,6 +2,7 @@ import { ArraybufferDataType } from "../ArraybufferDataType";
 import { clamp } from "../common/clamp";
 import { clampSafe } from "../common/clampSafe";
 import { closeTo } from "../common/closeTo";
+import { EPSILON } from "../constants";
 import type { Matrix3Like } from "../matrix/Matrix3";
 import type { Matrix4Like } from "../matrix/Matrix4";
 
@@ -119,8 +120,12 @@ export class Vector3 extends Float32Array implements IVector3 {
 		return out;
 	};
 
-	public static closeTo = (a: Vector3Like, b: Vector3Like): boolean => {
-		return closeTo(a[0], b[0]) && closeTo(a[1], b[1]) && closeTo(a[2], b[2]);
+	public static closeTo = (a: Vector3Like, b: Vector3Like, epsilon = EPSILON): boolean => {
+		return Vector3.distanceTo(a, b) <= epsilon;
+	};
+
+	public static closeToRect = (a: Vector3Like, b: Vector3Like, epsilon = EPSILON): boolean => {
+		return closeTo(a[0], b[0], epsilon) && closeTo(a[1], b[1], epsilon) && closeTo(a[2], b[2], epsilon);
 	};
 
 	public static create = (x = 0, y = 0, z = 0): Vector3 => {
@@ -238,6 +243,17 @@ export class Vector3 extends Float32Array implements IVector3 {
 		out[0] = x;
 		out[1] = y;
 		out[2] = z;
+
+		return out;
+	};
+
+	public static fromMatrix4Scale = <T extends Vector3Like = Vector3>(
+		mat: Matrix4Like,
+		out: T = new Vector3() as T,
+	): T => {
+		out[0] = mat[0];
+		out[1] = mat[5];
+		out[2] = mat[10];
 
 		return out;
 	};
