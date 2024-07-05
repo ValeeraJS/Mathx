@@ -726,6 +726,14 @@ export class Matrix4 extends Float32Array {
 		return out;
 	};
 
+	public static maxScale = (a: Matrix4Like): number => {
+		const scaleXSq = a[ 0 ] * a[ 0 ] + a[ 1 ] * a[ 1 ] + a[ 2 ] * a[ 2 ];
+		const scaleYSq = a[ 4 ] * a[ 4 ] + a[ 5 ] * a[ 5 ] + a[ 6 ] * a[ 6 ];
+		const scaleZSq = a[ 8 ] * a[ 8 ] + a[ 9 ] * a[ 9 ] + a[ 10 ] * a[ 10 ];
+
+		return Math.sqrt( Math.max( scaleXSq, scaleYSq, scaleZSq ) );
+	}
+
 	public static multiply = <T extends Matrix4Like>(
 		a: Matrix4Like,
 		b: Matrix4Like,
