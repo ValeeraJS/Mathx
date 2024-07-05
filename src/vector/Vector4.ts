@@ -39,6 +39,16 @@ let J: number;
 export class Vector4 extends Float32Array implements IVector4 {
 	public static readonly VECTOR4_ZERO = new Vector4(0, 0, 0, 0);
 	public static readonly VECTOR4_ONE = new Vector4(1, 1, 1, 1);
+
+	public static abs  = <T extends Vector4Like = Vector4>(a: Vector4Like, out: T) => {
+		out[0] = Math.abs(a[0]);
+		out[1] = Math.abs(a[1]);
+		out[2] = Math.abs(a[2]);
+		out[3] = Math.abs(a[3]);
+
+		return out;
+	}
+
 	public static add = <T extends Vector4Like = Vector4>(
 		a: Vector4Like,
 		b: Vector4Like,
