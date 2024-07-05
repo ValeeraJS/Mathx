@@ -18,6 +18,7 @@ import { ColorRGBA } from "./ColorRGBA";
 import { ColorRYB } from "./ColorRYB";
 import { IColorRYBA } from "./interfaces/IColorRYBA";
 import { Vector3 } from "../vector/Vector3";
+import { IColorRGBE } from "./interfaces/IColorRGBE";
 
 let r: number;
 let g: number;
@@ -211,6 +212,16 @@ export class ColorGPU extends Float32Array implements IColorGPU {
 		out[1] = color[1] / 255;
 		out[2] = color[2] / 255;
 		out[3] = color[3] / 255;
+
+		return out;
+	}
+
+	public static fromColorRGBE(color: IColorRGBE | number[] | Uint8Array, out: IColorGPU = new ColorGPU()): IColorGPU {
+		const d = Math.pow(2, color[3] - 128) / 255;
+		out[0] = color[0] * d;
+		out[1] = color[1] * d;
+		out[2] = color[2] * d;
+		out[3] = 1;
 
 		return out;
 	}
