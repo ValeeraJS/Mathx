@@ -34,6 +34,14 @@ export class Vector3 extends Float32Array implements IVector3 {
 	public static readonly VECTOR3_FRONT = new Vector3(0, 0, -1);
 	public static readonly VECTOR3_BACK = new Vector3(0, 0, 1);
 
+	public static abs  = <T extends Vector3Like = Vector3>(a: Vector3Like, out: T) => {
+		out[0] = Math.abs(a[0]);
+		out[1] = Math.abs(a[1]);
+		out[2] = Math.abs(a[2]);
+
+		return out;
+	}
+
 	public static add = <T extends Vector3Like = Vector3>(
 		a: Vector3Like,
 		b: Vector3Like,
