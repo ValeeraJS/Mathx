@@ -28,6 +28,13 @@ export class Vector2 extends Float32Array implements IVector2 {
 	public static readonly VECTOR2_RIGHT = new Vector2(1, 0);
 	public static readonly VECTOR2_ONE = new Vector2(1, 1);
 
+	public static abs  = <T extends Vector2Like = Vector2>(a: Vector2Like, out: T) => {
+		out[0] = Math.abs(a[0]);
+		out[1] = Math.abs(a[1]);
+
+		return out;
+	}
+
 	public static add = <T extends Vector2Like = Vector2>(
 		a: Vector2Like,
 		b: Vector2Like,
@@ -134,6 +141,13 @@ export class Vector2 extends Float32Array implements IVector2 {
 
 	public static cross = (a: Vector2Like, b: Vector2Like): number => {
 		return a[0] * b[1] - a[1] * b[0];
+	};
+
+	public static crossAOB = (a: Vector2Like, o: Vector2Like, b: Vector2Like): number => {
+		Vector2.minus(a, o, tmpA);
+		Vector2.minus(b, o, tmpB);
+
+		return Vector2.cross(tmpA, tmpB);
 	};
 
 	public static create = (x = 0, y = 0): Vector2 => {
@@ -494,3 +508,6 @@ export class Vector2 extends Float32Array implements IVector2 {
 		this[1] = value;
 	}
 }
+
+const tmpA = new Vector2();
+const tmpB = new Vector2();
