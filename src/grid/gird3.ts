@@ -1,5 +1,4 @@
 import { Vector3, Vector3Like } from "../vector/Vector3";
-import { Sphere } from "../shape/Sphere";
 import { ICube } from "../shape/interfaces/ICube";
 import { ISphere } from "../shape/interfaces/ISphere";
 import { Cube } from "../shape/Cube";
@@ -63,7 +62,7 @@ export const dataFromSolidCube = (a: ICube, out: Grid3 = new Grid3()): Grid3 => 
 
 // 将球信息转化为格子数组，方块与格子重合部分才会记录信息
 export const dataFromSolidSphere = (a: ISphere, out: Grid3 = new Grid3()): Grid3 => {
-	Sphere.boundingBox(a, tmpCude);
+	Cube.fromBoundingSphere(a, tmpCude);
 	Vector3.max(tmpCude.min, out.min, min3); // 起始遍历位置
 	Vector3.min(tmpCude.max, out.max, max3);
 
