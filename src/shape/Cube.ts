@@ -2,7 +2,6 @@ import { Vector3, IVector3, Vector3Like } from "../vector/Vector3";
 import { ICube } from "./interfaces/ICube";
 import { ISphere } from "./interfaces/ISphere";
 import { ITriangle3 } from "./interfaces/ITriangle3";
-// import Matrix3 from "../matrix/Matrix3";
 
 const v1: Vector3 = new Vector3();
 const v2: Vector3 = new Vector3();
@@ -11,7 +10,6 @@ const f1: Vector3 = new Vector3();
 const f2: Vector3 = new Vector3();
 const f0: Vector3 = new Vector3();
 const ta: Vector3 = new Vector3();
-// const ma: Matrix3 = new Matrix3();
 const tb: Vector3 = new Vector3();
 const vA: Vector3 = new Vector3();
 
@@ -59,6 +57,44 @@ export class Cube implements ICube {
 	public static equals = (a: ICube, b: ICube): boolean => {
 		return Vector3.equals(a.min, b.min) && Vector3.equals(a.max, b.max);
 	};
+
+	public static expandByPoint = (a: ICube, b: Vector3Like, out: ICube): ICube => {
+		Vector3.min(a.min, b, out.min);
+		Vector3.max(a.max, b, out.max);
+
+		return out;
+	};
+
+	public static expandByVector3 = (a: ICube, b: Vector3Like, out: ICube): ICube => {
+		Vector3.minus(a.min, b, out.min);
+		Vector3.add(a.max, b, out.max);
+
+		return out;
+	};
+
+	public static expandByScalar = (a: ICube, v: number, out: ICube): ICube => {
+		Vector3.addScalar(a.min, -v, out.min);
+		Vector3.addScalar(a.max, v, out.max);
+
+		return out;
+	};
+
+	public static fromBoundingSphere = (a: ISphere, out: ICube): ICube => {
+		Vector3.minusScalar(a.position, a.radius, out.min);
+		Vector3.addScalar(a.position, a.radius, out.min);
+
+		return out;
+	}
+
+	public static fromPoints = (points: Vector3Like[], out: ICube): ICube => {
+		Cube.makeEmpty(out);
+
+		for (let i = 0, len = points.length; i < len; i++) {
+			Cube.expandByPoint(out, points[i], out);
+		}
+
+		return out;
+	}
 
 	public static getSize = <T extends Vector3Like = Vector3>(a: ICube, out: T = new Vector3() as T): T => {
 		return Vector3.minus(a.max, a.min, out);
@@ -167,6 +203,13 @@ export class Cube implements ICube {
 	public static isEmpty = (a: ICube): boolean => {
 		return a.max[0] < a.min[0] || a.max[0] < a.min[0] || a.max[0] < a.min[0];
 	};
+
+	public static makeEmpty = (a: ICube): ICube => {
+		a.min[0] = a.min[1] = a.min[2] = Infinity;
+		a.max[0] = a.max[1] = a.max[2] = -Infinity;
+
+		return a;
+	}
 
 	public static round = (a: ICube, out: Cube = new Cube()): Cube => {
 		Vector3.round(a.min, out.min);
