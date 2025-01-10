@@ -8,7 +8,7 @@ export const ArraybufferDataType = {
 	COLOR_RGB: "col_rgb",
 	COLOR_RGBA: "col_rgba",
 	COLOR_RGBE: "col_rgbe",
-	COLOR_RGBE: "col_rgbm",
+	COLOR_RGBM: "col_rgbm",
 	COLOR_RYB: "col_ryb",
 	COLOR_RYBA: "col_ryba",
 	COLOR_XYZ: "col_xyz",
