@@ -136,6 +136,10 @@ export class Matrix2 extends Float32Array {
 		return out;
 	};
 
+	public static invertible = (a: Matrix2Like): boolean => {
+		return Matrix2.determinant(a) !== 0;
+	};
+
 	public static lerp = <T extends Matrix2Like>(
 		a: Matrix2Like,
 		b: Matrix2Like,
