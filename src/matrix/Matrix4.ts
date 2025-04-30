@@ -635,6 +635,10 @@ export class Matrix4 extends Float32Array {
 
 		return out;
 	};
+	
+	public static invertible = (a: Matrix4Like): boolean => {
+		return Matrix4.determinant(a) !== 0;
+	};
 
 	public static lookAt = <T extends Matrix4Like>(
 		eye: Vector3Like,
